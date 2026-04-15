@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>GiftCase — Minimal Profile</title>
+    <title>GiftCase — Upgrade & PvP</title>
     <style>
         * {
             margin: 0;
@@ -19,7 +19,6 @@
             overflow: hidden;
         }
 
-        /* Основной скролл-контейнер */
         .app {
             height: 100vh;
             overflow-y: auto;
@@ -28,7 +27,6 @@
             scroll-behavior: smooth;
         }
 
-        /* Скрываем скроллбар для красоты (но скролл работает) */
         .app::-webkit-scrollbar {
             width: 4px;
         }
@@ -40,13 +38,12 @@
             border-radius: 4px;
         }
 
-        /* Контейнер */
         .container {
             max-width: 500px;
             margin: 0 auto;
         }
 
-        /* Шапка с балансом */
+        /* Шапка */
         .header {
             background: #111;
             border-radius: 24px;
@@ -88,36 +85,34 @@
             font-weight: 600;
             cursor: pointer;
             transition: 0.2s;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
         }
         .add-stars:active { transform: scale(0.96); background: #3a3a3a; }
 
         /* Вкладки */
         .tabs {
             display: flex;
-            gap: 12px;
+            gap: 8px;
             margin-bottom: 20px;
+            flex-wrap: wrap;
         }
         .tab-btn {
             flex: 1;
             background: #111;
             border: 1px solid #2a2a2a;
-            padding: 12px;
+            padding: 10px;
             border-radius: 28px;
             color: #aaa;
             font-weight: 600;
             cursor: pointer;
             transition: 0.2s;
-            font-size: 16px;
+            font-size: 14px;
         }
         .tab-btn.active {
             background: #333;
             color: white;
             border-color: #555;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.4);
         }
 
-        /* Панели */
         .panel { display: none; }
         .panel.active { display: block; animation: fadeIn 0.2s ease; }
         @keyframes fadeIn {
@@ -137,7 +132,6 @@
             padding: 16px;
             border: 1px solid #2a2a2a;
             transition: 0.2s;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.4);
         }
         .case-card:active { transform: scale(0.99); background: #151515; }
         .case-header {
@@ -153,7 +147,6 @@
             border-radius: 30px;
             color: #ccc;
             font-weight: bold;
-            font-size: 14px;
         }
         .case-chance { font-size: 11px; color: #666; margin-bottom: 8px; }
         .gift-preview { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0; }
@@ -170,59 +163,96 @@
             padding: 12px;
             border-radius: 40px;
             font-weight: bold;
-            font-size: 15px;
             color: #eee;
             width: 100%;
             margin-top: 10px;
             cursor: pointer;
-            transition: 0.2s;
         }
         .open-btn:active { background: #3a3a3a; transform: scale(0.97); }
 
-        /* Модалка выбора: оставить / продать */
-        .choice-modal {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
+        /* Upgrade секция */
+        .upgrade-card {
             background: #111;
-            border-top-left-radius: 32px;
-            border-top-right-radius: 32px;
-            padding: 24px 20px 30px;
-            box-shadow: 0 -4px 20px rgba(0,0,0,0.8);
-            z-index: 1000;
-            animation: slideUp 0.3s ease;
-            border-top: 1px solid #333;
+            border-radius: 24px;
+            padding: 20px;
+            border: 1px solid #2a2a2a;
+            margin-bottom: 20px;
         }
-        @keyframes slideUp {
-            from { transform: translateY(100%); }
-            to { transform: translateY(0); }
-        }
-        .choice-modal h3 { margin-bottom: 16px; text-align: center; color: #ddd; }
-        .choice-buttons {
-            display: flex;
-            gap: 12px;
-            margin-top: 10px;
-        }
-        .choice-buttons button {
-            flex: 1;
+        .upgrade-select {
+            width: 100%;
             padding: 14px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 40px;
+            color: white;
+            font-size: 16px;
+            margin: 12px 0;
+        }
+        .upgrade-info {
+            background: #1a1a1a;
+            border-radius: 20px;
+            padding: 16px;
+            margin: 16px 0;
+            text-align: center;
+        }
+        .upgrade-chance {
+            font-size: 28px;
+            font-weight: bold;
+            color: #ffaa66;
+        }
+        .upgrade-result {
+            font-size: 14px;
+            color: #888;
+            margin-top: 8px;
+        }
+        .upgrade-btn {
+            background: #3a3a3a;
+            border: none;
+            padding: 16px;
             border-radius: 40px;
             font-weight: bold;
-            border: none;
+            font-size: 18px;
+            color: #ffaa66;
+            width: 100%;
             cursor: pointer;
+        }
+        .upgrade-btn:active { transform: scale(0.97); background: #4a4a4a; }
+
+        /* PvP секция */
+        .pvp-create {
+            background: #111;
+            border-radius: 24px;
+            padding: 20px;
+            border: 1px solid #2a2a2a;
+            margin-bottom: 20px;
+        }
+        .pvp-create select, .pvp-create button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 12px;
+            border-radius: 40px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            color: white;
             font-size: 16px;
         }
-        .keep-btn { background: #2a2a2a; color: white; }
-        .sell-btn { background: #3a3a3a; color: #ffaa66; }
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
-            z-index: 999;
+        .pvp-create button {
+            background: #2a2a2a;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .pvp-battle {
+            background: #111;
+            border-radius: 24px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid #444;
+        }
+        .vs {
+            font-size: 28px;
+            font-weight: bold;
+            margin: 12px 0;
+            color: #ffaa66;
         }
 
         /* Инвентарь */
@@ -230,7 +260,7 @@
             background: #0e0e0e;
             border-radius: 24px;
             padding: 16px;
-            margin-top: 24px;
+            margin-top: 20px;
             border: 1px solid #222;
         }
         .inventory h3 { margin-bottom: 12px; font-size: 17px; color: #ccc; }
@@ -264,26 +294,25 @@
         /* Профиль */
         .profile-stats {
             background: #111;
-            border-radius: 28px;
+            border-radius: 24px;
             padding: 20px;
             margin-bottom: 20px;
             border: 1px solid #2a2a2a;
             text-align: center;
         }
         .stat-number {
-            font-size: 36px;
+            font-size: 32px;
             font-weight: bold;
             color: #eee;
         }
         .stat-label {
             color: #777;
-            font-size: 13px;
-            margin-top: 4px;
+            font-size: 12px;
         }
         .stats-row {
             display: flex;
             justify-content: space-around;
-            margin: 20px 0;
+            margin: 16px 0;
         }
         .action-buttons {
             display: flex;
@@ -300,9 +329,8 @@
             font-weight: bold;
             cursor: pointer;
         }
-        .withdraw-btn { background: #2a2a2a; color: #ffaa66; }
 
-        /* Анимация открытия */
+        /* Анимация */
         .opening-animation {
             position: fixed;
             top: 0;
@@ -336,6 +364,47 @@
         }
 
         button { font-family: inherit; }
+        .choice-modal {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #111;
+            border-top-left-radius: 32px;
+            border-top-right-radius: 32px;
+            padding: 24px 20px 30px;
+            z-index: 1000;
+            animation: slideUp 0.3s ease;
+            border-top: 1px solid #333;
+        }
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+        .choice-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+        .choice-buttons button {
+            flex: 1;
+            padding: 14px;
+            border-radius: 40px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+        }
+        .keep-btn { background: #2a2a2a; color: white; }
+        .sell-btn { background: #3a3a3a; color: #ffaa66; }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 999;
+        }
     </style>
 </head>
 <body>
@@ -351,10 +420,12 @@
 
         <div class="tabs">
             <button class="tab-btn active" data-tab="cases">🎁 Кейсы</button>
+            <button class="tab-btn" data-tab="upgrade">⬆️ Апгрейд</button>
+            <button class="tab-btn" data-tab="pvp">⚔️ PvP</button>
             <button class="tab-btn" data-tab="profile">👤 Профиль</button>
         </div>
 
-        <!-- Панель Кейсов -->
+        <!-- Кейсы -->
         <div id="casesPanel" class="panel active">
             <div class="cases-grid" id="casesContainer"></div>
             <div class="inventory">
@@ -363,44 +434,63 @@
             </div>
         </div>
 
-        <!-- Панель Профиль -->
+        <!-- Апгрейд -->
+        <div id="upgradePanel" class="panel">
+            <div class="upgrade-card">
+                <h3>⬆️ Апгрейд подарка</h3>
+                <p style="color:#888; margin-bottom:12px;">Поставь свой подарок — есть шанс получить подарок на уровень выше!</p>
+                <select id="upgradeGiftSelect" class="upgrade-select">
+                    <option value="">Выбери подарок</option>
+                </select>
+                <div class="upgrade-info" id="upgradeInfo">
+                    <div>📊 Шанс успеха</div>
+                    <div class="upgrade-chance" id="upgradeChance">—</div>
+                    <div class="upgrade-result" id="upgradeResultPreview"></div>
+                </div>
+                <button class="upgrade-btn" id="upgradeBtn">⬆️ Улучшить!</button>
+            </div>
+            <div class="inventory">
+                <h3>📦 Мои подарки</h3>
+                <div class="inventory-list" id="upgradeInventoryList"></div>
+            </div>
+        </div>
+
+        <!-- PvP -->
+        <div id="pvpPanel" class="panel">
+            <div class="pvp-create">
+                <h3>🔥 Создать батл</h3>
+                <select id="stakeGiftSelect">
+                    <option value="">Выбери подарок для ставки</option>
+                </select>
+                <button id="createBattleBtn">⚔️ Создать батл</button>
+            </div>
+            <div id="activeBattleArea"></div>
+            <div class="inventory">
+                <h3>📦 Мои подарки</h3>
+                <div class="inventory-list" id="pvpInventoryList"></div>
+            </div>
+        </div>
+
+        <!-- Профиль -->
         <div id="profilePanel" class="panel">
             <div class="profile-stats">
                 <div class="stats-row">
-                    <div>
-                        <div class="stat-number" id="totalGiftsCount">0</div>
-                        <div class="stat-label">Всего подарков</div>
-                    </div>
-                    <div>
-                        <div class="stat-number" id="totalStarsValue">0</div>
-                        <div class="stat-label">⭐️ Общая ценность</div>
-                    </div>
+                    <div><div class="stat-number" id="totalGiftsCount">0</div><div class="stat-label">Всего</div></div>
+                    <div><div class="stat-number" id="totalStarsValue">0</div><div class="stat-label">⭐️ Ценность</div></div>
                 </div>
                 <div class="stats-row">
-                    <div>
-                        <div class="stat-number" id="commonCount">0</div>
-                        <div class="stat-label">Обычные</div>
-                    </div>
-                    <div>
-                        <div class="stat-number" id="rareCount">0</div>
-                        <div class="stat-label">Редкие</div>
-                    </div>
-                    <div>
-                        <div class="stat-number" id="epicCount">0</div>
-                        <div class="stat-label">Эпические</div>
-                    </div>
-                    <div>
-                        <div class="stat-number" id="legendaryCount">0</div>
-                        <div class="stat-label">Легенд.</div>
-                    </div>
+                    <div><div class="stat-number" id="commonCount">0</div><div class="stat-label">Обычные</div></div>
+                    <div><div class="stat-number" id="rareCount">0</div><div class="stat-label">Редкие</div></div>
+                    <div><div class="stat-number" id="epicCount">0</div><div class="stat-label">Эпические</div></div>
+                    <div><div class="stat-number" id="legendaryCount">0</div><div class="stat-label">Легенд.</div></div>
                 </div>
                 <div class="action-buttons">
                     <button class="action-btn" id="depositBtn">💎 Пополнить</button>
-                    <button class="action-btn withdraw-btn" id="withdrawBtn">💰 Вывести</button>
+                    <button class="action-btn" id="withdrawBtn">💰 Вывести</button>
                 </div>
             </div>
             <div class="inventory">
-                <h3>🎁 Мои подарки (продать)</h3>
+                <h3>🎁 Продать подарок</h3>
                 <div class="inventory-list" id="profileInventoryList"></div>
             </div>
         </div>
@@ -409,129 +499,121 @@
 
 <script>
     // ---------- БАЗА ДАННЫХ ----------
+    const RARITY_ORDER = ["common", "rare", "epic", "legendary"];
+    const RARITY_NAMES = { common: "Обычный", rare: "Редкий", epic: "Эпический", legendary: "Легендарный" };
+    
     const GIFTS_DB = {
-        "Розовый мишка": { icon: "🧸", starsValue: 15, rarity: "common" },
-        "Букет цветов": { icon: "💐", starsValue: 15, rarity: "common" },
-        "Шоколадка": { icon: "🍫", starsValue: 15, rarity: "common" },
-        "Золотая звезда": { icon: "⭐️", starsValue: 50, rarity: "rare" },
-        "Алмазное сердце": { icon: "💎", starsValue: 50, rarity: "rare" },
-        "Легендарный дракон": { icon: "🐉", starsValue: 200, rarity: "epic" },
-        "Космический корабль": { icon: "🚀", starsValue: 200, rarity: "epic" },
-        "Трон короля": { icon: "👑", starsValue: 1000, rarity: "legendary" }
+        "Розовый мишка": { icon: "🧸", starsValue: 15, rarity: "common", upgradeTo: "Золотая звезда" },
+        "Букет цветов": { icon: "💐", starsValue: 15, rarity: "common", upgradeTo: "Алмазное сердце" },
+        "Шоколадка": { icon: "🍫", starsValue: 15, rarity: "common", upgradeTo: "Золотая звезда" },
+        "Золотая звезда": { icon: "⭐️", starsValue: 50, rarity: "rare", upgradeTo: "Легендарный дракон" },
+        "Алмазное сердце": { icon: "💎", starsValue: 50, rarity: "rare", upgradeTo: "Космический корабль" },
+        "Легендарный дракон": { icon: "🐉", starsValue: 200, rarity: "epic", upgradeTo: "Трон короля" },
+        "Космический корабль": { icon: "🚀", starsValue: 200, rarity: "epic", upgradeTo: "Трон короля" },
+        "Трон короля": { icon: "👑", starsValue: 1000, rarity: "legendary", upgradeTo: null }
+    };
+
+    // Шансы апгрейда (в %)
+    const UPGRADE_CHANCES = {
+        common: 70,
+        rare: 50,
+        epic: 30,
+        legendary: 0
     };
 
     const CASES = [
-        {
-            id: "common", name: "🎁 Обычный кейс", price: 30,
-            gifts: [
-                { name: "Розовый мишка", chance: 40 },
-                { name: "Букет цветов", chance: 35 },
-                { name: "Шоколадка", chance: 25 }
-            ]
-        },
-        {
-            id: "rare", name: "✨ Редкий кейс", price: 80,
-            gifts: [
-                { name: "Розовый мишка", chance: 30 }, { name: "Букет цветов", chance: 20 },
-                { name: "Шоколадка", chance: 20 }, { name: "Золотая звезда", chance: 20 },
-                { name: "Алмазное сердце", chance: 10 }
-            ]
-        },
-        {
-            id: "epic", name: "🔥 Эпический кейс", price: 200,
-            gifts: [
-                { name: "Золотая звезда", chance: 35 }, { name: "Алмазное сердце", chance: 35 },
-                { name: "Легендарный дракон", chance: 20 }, { name: "Космический корабль", chance: 10 }
-            ]
-        },
-        {
-            id: "legendary", name: "👑 Легендарный кейс", price: 500,
-            gifts: [
-                { name: "Легендарный дракон", chance: 40 }, { name: "Космический корабль", chance: 35 },
-                { name: "Трон короля", chance: 25 }
-            ]
-        }
+        { id: "common", name: "🎁 Обычный кейс", price: 30, gifts: [
+            { name: "Розовый мишка", chance: 40 }, { name: "Букет цветов", chance: 35 }, { name: "Шоколадка", chance: 25 }
+        ]},
+        { id: "rare", name: "✨ Редкий кейс", price: 80, gifts: [
+            { name: "Розовый мишка", chance: 30 }, { name: "Букет цветов", chance: 20 }, { name: "Шоколадка", chance: 20 },
+            { name: "Золотая звезда", chance: 20 }, { name: "Алмазное сердце", chance: 10 }
+        ]},
+        { id: "epic", name: "🔥 Эпический кейс", price: 200, gifts: [
+            { name: "Золотая звезда", chance: 35 }, { name: "Алмазное сердце", chance: 35 },
+            { name: "Легендарный дракон", chance: 20 }, { name: "Космический корабль", chance: 10 }
+        ]},
+        { id: "legendary", name: "👑 Легендарный кейс", price: 500, gifts: [
+            { name: "Легендарный дракон", chance: 40 }, { name: "Космический корабль", chance: 35 }, { name: "Трон короля", chance: 25 }
+        ]}
     ];
 
-    // Состояние
     let userBalance = 250;
-    let inventory = []; // { name, icon, starsValue, rarity }
+    let inventory = [];
+    let currentBattle = null;
 
     // DOM
     const balanceSpan = document.getElementById("balanceValue");
     const casesContainer = document.getElementById("casesContainer");
     const inventoryListDiv = document.getElementById("inventoryList");
+    const upgradeInventoryList = document.getElementById("upgradeInventoryList");
+    const pvpInventoryList = document.getElementById("pvpInventoryList");
     const profileInventoryDiv = document.getElementById("profileInventoryList");
+    const upgradeGiftSelect = document.getElementById("upgradeGiftSelect");
+    const stakeSelect = document.getElementById("stakeGiftSelect");
+    const activeBattleArea = document.getElementById("activeBattleArea");
 
-    // Вспомогательные функции
-    function saveToLocalStorage() {
+    // Сохранение
+    function save() {
         localStorage.setItem("gc_balance", userBalance);
         localStorage.setItem("gc_inventory", JSON.stringify(inventory));
     }
 
-    function loadFromLocalStorage() {
-        const savedBalance = localStorage.getItem("gc_balance");
-        if (savedBalance !== null) userBalance = parseInt(savedBalance);
-        const savedInv = localStorage.getItem("gc_inventory");
-        if (savedInv !== null) {
-            try { inventory = JSON.parse(savedInv); } catch(e) { inventory = []; }
-        }
-        updateBalanceUI();
-        renderAllInventories();
+    function load() {
+        const b = localStorage.getItem("gc_balance");
+        if (b !== null) userBalance = parseInt(b);
+        const inv = localStorage.getItem("gc_inventory");
+        if (inv !== null) { try { inventory = JSON.parse(inv); } catch(e) {} }
+        updateUI();
     }
 
-    function updateBalanceUI() {
+    function updateUI() {
         balanceSpan.innerText = userBalance;
-        saveToLocalStorage();
+        renderAllInventories();
         updateProfileStats();
+        updateUpgradeSelect();
+        updateStakeSelect();
     }
 
     function renderAllInventories() {
-        // Инвентарь на вкладке Кейсы
+        const emptyMsg = '<div style="opacity:0.5;">Нет подарков</div>';
+        
         if (inventory.length === 0) {
-            inventoryListDiv.innerHTML = '<div style="opacity:0.5;">Здесь будут твои подарки</div>';
-        } else {
-            let html = "";
-            inventory.forEach(g => {
-                html += `<div class="inv-item">${g.icon} ${g.name} (⭐️ ${g.starsValue})</div>`;
-            });
-            inventoryListDiv.innerHTML = html;
+            inventoryListDiv.innerHTML = emptyMsg;
+            upgradeInventoryList.innerHTML = emptyMsg;
+            pvpInventoryList.innerHTML = emptyMsg;
+            profileInventoryDiv.innerHTML = emptyMsg;
+            return;
         }
-        // Инвентарь в профиле (с кнопкой продать)
-        if (inventory.length === 0) {
-            profileInventoryDiv.innerHTML = '<div style="opacity:0.5;">Нет подарков для продажи</div>';
-        } else {
+        
+        const makeList = (container, withSellBtn=false) => {
             let html = "";
             inventory.forEach((g, idx) => {
-                html += `<div class="inv-item">
-                            ${g.icon} ${g.name} (⭐️ ${g.starsValue})
-                            <button class="inv-sell" data-index="${idx}">Продать</button>
-                         </div>`;
+                html += `<div class="inv-item">${g.icon} ${g.name} (⭐️ ${g.starsValue})`;
+                if (withSellBtn) html += `<button class="inv-sell" data-index="${idx}">Продать</button>`;
+                html += `</div>`;
             });
-            profileInventoryDiv.innerHTML = html;
-            // Вешаем обработчики на кнопки продажи в профиле
-            document.querySelectorAll('#profileInventoryList .inv-sell').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const idx = parseInt(btn.dataset.index);
-                    sellGiftFromInventory(idx);
+            container.innerHTML = html;
+            if (withSellBtn) {
+                container.querySelectorAll('.inv-sell').forEach(btn => {
+                    btn.onclick = () => sellGift(parseInt(btn.dataset.index));
                 });
-            });
-        }
-        updateProfileStats();
+            }
+        };
+        
+        makeList(inventoryListDiv, false);
+        makeList(upgradeInventoryList, false);
+        makeList(pvpInventoryList, false);
+        makeList(profileInventoryDiv, true);
     }
 
     function updateProfileStats() {
-        const total = inventory.length;
-        let totalStars = 0;
-        let counts = { common:0, rare:0, epic:0, legendary:0 };
+        let totalStars = 0, counts = { common:0, rare:0, epic:0, legendary:0 };
         inventory.forEach(g => {
             totalStars += g.starsValue;
-            if (g.rarity === 'common') counts.common++;
-            else if (g.rarity === 'rare') counts.rare++;
-            else if (g.rarity === 'epic') counts.epic++;
-            else if (g.rarity === 'legendary') counts.legendary++;
+            counts[g.rarity]++;
         });
-        document.getElementById("totalGiftsCount").innerText = total;
+        document.getElementById("totalGiftsCount").innerText = inventory.length;
         document.getElementById("totalStarsValue").innerText = totalStars;
         document.getElementById("commonCount").innerText = counts.common;
         document.getElementById("rareCount").innerText = counts.rare;
@@ -539,56 +621,82 @@
         document.getElementById("legendaryCount").innerText = counts.legendary;
     }
 
-    function sellGiftFromInventory(index) {
+    function updateUpgradeSelect() {
+        upgradeGiftSelect.innerHTML = '<option value="">Выбери подарок</option>';
+        inventory.forEach((g, idx) => {
+            const chance = UPGRADE_CHANCES[g.rarity];
+            if (chance > 0) {
+                const option = document.createElement("option");
+                option.value = idx;
+                option.textContent = `${g.icon} ${g.name} (${chance}% → ${GIFTS_DB[g.name]?.upgradeTo || "—"})`;
+                upgradeGiftSelect.appendChild(option);
+            }
+        });
+        upgradeGiftSelect.onchange = () => {
+            const idx = parseInt(upgradeGiftSelect.value);
+            if (!isNaN(idx) && inventory[idx]) {
+                const g = inventory[idx];
+                const chance = UPGRADE_CHANCES[g.rarity];
+                const target = GIFTS_DB[g.name]?.upgradeTo;
+                document.getElementById("upgradeChance").innerText = chance + "%";
+                document.getElementById("upgradeResultPreview").innerHTML = target ? `🎯 При успехе: ${target}` : `🎯 Максимальный уровень!`;
+            } else {
+                document.getElementById("upgradeChance").innerText = "—";
+                document.getElementById("upgradeResultPreview").innerHTML = "";
+            }
+        };
+    }
+
+    function updateStakeSelect() {
+        stakeSelect.innerHTML = '<option value="">Выбери подарок</option>';
+        inventory.forEach((g, idx) => {
+            const option = document.createElement("option");
+            option.value = idx;
+            option.textContent = `${g.icon} ${g.name} (⭐️ ${g.starsValue})`;
+            stakeSelect.appendChild(option);
+        });
+    }
+
+    function sellGift(index) {
         if (!inventory[index]) return;
-        const gift = inventory[index];
-        const sellPrice = Math.floor(gift.starsValue * 0.7); // продажа за 70% цены
+        const sellPrice = Math.floor(inventory[index].starsValue * 0.7);
         userBalance += sellPrice;
         inventory.splice(index, 1);
-        updateBalanceUI();
-        renderAllInventories();
-        if (window.Telegram?.WebApp) window.Telegram.WebApp.showAlert(`✅ Продано! +${sellPrice} Stars`);
+        updateUI();
+        if (window.Telegram?.WebApp) window.Telegram.WebApp.showAlert(`✅ +${sellPrice} Stars`);
         else alert(`✅ Продано за ${sellPrice} Stars`);
     }
 
-    // Анимация и выбор: оставить / продать
-    let pendingGift = null;
+    // Анимация и выбор оставить/продать
+    let pendingCallback = null;
     function showChoiceModal(giftName, onComplete) {
-        const giftInfo = GIFTS_DB[giftName];
-        if (!giftInfo) return;
+        const info = GIFTS_DB[giftName];
         const overlay = document.createElement('div');
         overlay.className = 'overlay';
         const modal = document.createElement('div');
         modal.className = 'choice-modal';
         modal.innerHTML = `
             <h3>🎁 ${giftName}</h3>
-            <p style="text-align:center; margin-bottom:12px;">⭐️ Стоимость: ${giftInfo.starsValue} Stars</p>
+            <p style="text-align:center;">⭐️ ${info.starsValue} Stars</p>
             <div class="choice-buttons">
                 <button class="keep-btn">📦 Оставить</button>
-                <button class="sell-btn">💰 Продать (${Math.floor(giftInfo.starsValue * 0.7)} Stars)</button>
+                <button class="sell-btn">💰 Продать (${Math.floor(info.starsValue * 0.7)} Stars)</button>
             </div>
         `;
         document.body.appendChild(overlay);
         document.body.appendChild(modal);
-        const keepBtn = modal.querySelector('.keep-btn');
-        const sellBtn = modal.querySelector('.sell-btn');
-        const closeModal = (choice) => {
-            overlay.remove();
-            modal.remove();
-            if (choice === 'keep') {
-                addGiftToInventory(giftName);
-                if (onComplete) onComplete();
-            } else if (choice === 'sell') {
-                const sellPrice = Math.floor(giftInfo.starsValue * 0.7);
-                userBalance += sellPrice;
-                updateBalanceUI();
-                if (window.Telegram?.WebApp) window.Telegram.WebApp.showAlert(`💰 Продано за ${sellPrice} Stars`);
-                else alert(`💰 Продано за ${sellPrice} Stars`);
-                if (onComplete) onComplete();
-            }
+        modal.querySelector('.keep-btn').onclick = () => {
+            overlay.remove(); modal.remove();
+            addGiftToInventory(giftName);
+            if (onComplete) onComplete();
         };
-        keepBtn.onclick = () => closeModal('keep');
-        sellBtn.onclick = () => closeModal('sell');
+        modal.querySelector('.sell-btn').onclick = () => {
+            overlay.remove(); modal.remove();
+            userBalance += Math.floor(info.starsValue * 0.7);
+            updateUI();
+            if (window.Telegram?.WebApp) window.Telegram.WebApp.showAlert(`💰 Продано за ${Math.floor(info.starsValue * 0.7)} Stars`);
+            if (onComplete) onComplete();
+        };
     }
 
     function addGiftToInventory(giftName) {
@@ -600,17 +708,18 @@
             starsValue: info.starsValue,
             rarity: info.rarity
         });
-        renderAllInventories();
-        saveToLocalStorage();
+        updateUI();
+        save();
     }
 
-    // Анимация открытия кейса
     function createConfetti() {
         for (let i=0; i<60; i++) {
             const c = document.createElement('div');
             c.className = 'confetti';
             c.style.left = Math.random() * 100 + '%';
             c.style.backgroundColor = `hsl(${Math.random() * 360}, 30%, 60%)`;
+            c.style.position = 'fixed';
+            c.style.top = '-10px';
             c.style.width = Math.random() * 6 + 3 + 'px';
             c.style.height = c.style.width;
             document.body.appendChild(c);
@@ -618,42 +727,31 @@
         }
     }
 
-    function showOpeningAnimation(wonGiftName, callback) {
+    function showAnimation(wonGiftName, callback) {
         const overlay = document.createElement('div');
         overlay.className = 'opening-animation';
-        overlay.innerHTML = `<div class="case-opening"><div style="font-size:70px;">🎁</div><div style="margin-top:20px;">Открываем...</div></div>`;
+        overlay.innerHTML = `<div class="case-opening"><div style="font-size:70px;">🎁</div><div>Открываем...</div></div>`;
         document.body.appendChild(overlay);
         setTimeout(() => {
             const info = GIFTS_DB[wonGiftName];
-            overlay.innerHTML = `<div class="case-opening"><div style="font-size:80px;">${info?.icon || '🎁'}</div><h2 style="margin-top:16px;">${wonGiftName}</h2><p>⭐️ ${info?.starsValue || 0} Stars</p></div>`;
+            overlay.innerHTML = `<div class="case-opening"><div style="font-size:80px;">${info?.icon || '🎁'}</div><h2>${wonGiftName}</h2><p>⭐️ ${info?.starsValue || 0}</p></div>`;
             createConfetti();
-            setTimeout(() => {
-                overlay.remove();
-                if (callback) callback();
-            }, 1500);
+            setTimeout(() => { overlay.remove(); if(callback) callback(); }, 1500);
         }, 1000);
     }
 
+    // Открытие кейса
     function openCaseLogic(caseData) {
-        if (userBalance < caseData.price) {
-            alert("❌ Недостаточно Stars");
-            return;
-        }
+        if (userBalance < caseData.price) { alert("❌ Недостаточно Stars"); return; }
         userBalance -= caseData.price;
-        updateBalanceUI();
-
-        // Выбор случайного подарка
+        updateUI();
         const totalChance = caseData.gifts.reduce((s,g) => s + g.chance, 0);
-        let rand = Math.random() * totalChance;
-        let acc = 0;
-        let wonName = caseData.gifts[0].name;
+        let rand = Math.random() * totalChance, acc = 0, wonName = caseData.gifts[0].name;
         for (let g of caseData.gifts) {
             acc += g.chance;
             if (rand <= acc) { wonName = g.name; break; }
         }
-        showOpeningAnimation(wonName, () => {
-            showChoiceModal(wonName, null);
-        });
+        showAnimation(wonName, () => showChoiceModal(wonName, null));
     }
 
     function renderCases() {
@@ -661,59 +759,144 @@
         for (let c of CASES) {
             const card = document.createElement('div');
             card.className = 'case-card';
-            let chances = c.gifts.map(g => `${g.name}(${g.chance}%)`).join(' ');
             card.innerHTML = `
-                <div class="case-header">
-                    <span class="case-name">${c.name}</span>
-                    <span class="case-price">⭐️ ${c.price}</span>
-                </div>
-                <div class="case-chance">${chances}</div>
+                <div class="case-header"><span class="case-name">${c.name}</span><span class="case-price">⭐️ ${c.price}</span></div>
+                <div class="case-chance">${c.gifts.map(g => `${g.name}(${g.chance}%)`).join(' ')}</div>
                 <div class="gift-preview">${c.gifts.slice(0,3).map(g => `<span class="gift-tag">${GIFTS_DB[g.name]?.icon || '🎁'} ${g.name}</span>`).join('')}</div>
-                <button class="open-btn">🔓 Открыть кейс</button>
+                <button class="open-btn">🔓 Открыть</button>
             `;
             card.querySelector('.open-btn').onclick = () => openCaseLogic(c);
             casesContainer.appendChild(card);
         }
     }
 
-    // Вкладки
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-            document.getElementById(`${btn.dataset.tab}Panel`).classList.add('active');
-            if (btn.dataset.tab === 'profile') renderAllInventories();
-        });
-    });
-
-    // Кнопки профиля
-    document.getElementById("addStarsBtn").onclick = () => {
-        userBalance += 100;
-        updateBalanceUI();
-        if (window.Telegram?.WebApp) window.Telegram.WebApp.showAlert("+100 Stars");
-        else alert("+100 Stars");
-    };
-    document.getElementById("depositBtn").onclick = () => {
-        if (window.Telegram?.WebApp) window.Telegram.WebApp.showAlert("💎 Демо-пополнение: +500 Stars");
-        else alert("💎 Демо: +500 Stars");
-        userBalance += 500;
-        updateBalanceUI();
-    };
-    document.getElementById("withdrawBtn").onclick = () => {
-        if (window.Telegram?.WebApp) window.Telegram.WebApp.showAlert("💰 Вывод: доступно только в реальной версии с ботом");
-        else alert("💰 Демо-вывод: нужно подключить бота");
-    };
-
-    // Telegram WebApp
-    if (window.Telegram?.WebApp) {
-        window.Telegram.WebApp.expand();
-        window.Telegram.WebApp.ready();
-        window.Telegram.WebApp.enableClosingConfirmation();
+    // ========== АПГРЕЙД ==========
+    function upgradeGift() {
+        const idx = parseInt(upgradeGiftSelect.value);
+        if (isNaN(idx) || !inventory[idx]) { alert("Выбери подарок!"); return; }
+        const gift = inventory[idx];
+        const chance = UPGRADE_CHANCES[gift.rarity];
+        if (chance === 0) { alert("Этот подарок нельзя улучшить!"); return; }
+        
+        const targetName = GIFTS_DB[gift.name]?.upgradeTo;
+        if (!targetName) { alert("Нет цели для апгрейда"); return; }
+        
+        const isSuccess = Math.random() * 100 < chance;
+        
+        // Удаляем исходный подарок
+        inventory.splice(idx, 1);
+        
+        if (isSuccess) {
+            const targetInfo = GIFTS_DB[targetName];
+            showAnimation(targetName, () => {
+                inventory.push({ name: targetName, icon: targetInfo.icon, starsValue: targetInfo.starsValue, rarity: targetInfo.rarity });
+                updateUI();
+                if (window.Telegram?.WebApp) window.Telegram.WebApp.showAlert(`✅ Успех! ${targetName} добавлен в инвентарь!`);
+                else alert(`✅ Успех! Получен ${targetName}`);
+            });
+        } else {
+            // Проигрыш — подарок потерян
+            updateUI();
+            if (window.Telegram?.WebApp) window.Telegram.WebApp.showAlert(`💀 Неудача! Ты потерял ${gift.name}`);
+            else alert(`💀 Неудача! Подарок потерян`);
+        }
+        updateUI();
     }
 
-    loadFromLocalStorage();
+    // ========== PvP ==========
+    function createBattle(giftIndex) {
+        if (!inventory[giftIndex]) { alert("Выбери подарок!"); return; }
+        const stakedGift = inventory[giftIndex];
+        inventory.splice(giftIndex, 1);
+        updateUI();
+        currentBattle = { id: Date.now(), playerGift: stakedGift, opponent: null };
+        const battleLink = `${window.location.origin}${window.location.pathname}?battle=${currentBattle.id}`;
+        activeBattleArea.innerHTML = `
+            <div class="pvp-battle">
+                <h3>⚔️ Ожидание соперника</h3>
+                <div>Твоя ставка: ${stakedGift.icon} ${stakedGift.name}</div>
+                <div class="vs">VS</div>
+                <button id="copyLinkBtn" style="background:#2a2a2a; border:none; padding:10px 20px; border-radius:40px; margin:10px;">🔗 Копировать ссылку</button>
+                <button id="cancelBattleBtn" style="background:#3a3a3a; border:none; padding:10px 20px; border-radius:40px;">❌ Отменить</button>
+            </div>
+        `;
+        document.getElementById("copyLinkBtn")?.onclick = () => { navigator.clipboard.writeText(battleLink); alert("Ссылка скопирована!"); };
+        document.getElementById("cancelBattleBtn")?.onclick = () => {
+            inventory.push(stakedGift);
+            updateUI();
+            currentBattle = null;
+            activeBattleArea.innerHTML = "<div style='text-align:center; opacity:0.6;'>Нет активных батлов</div>";
+        };
+    }
+
+    function simulateBattle(playerGift, opponentGift) {
+        const pRoll = Math.random() * playerGift.starsValue;
+        const oRoll = Math.random() * opponentGift.starsValue;
+        if (pRoll > oRoll) return { winner: "player", reward: [playerGift, opponentGift] };
+        if (oRoll > pRoll) return { winner: "opponent", reward: [opponentGift, playerGift] };
+        return { winner: "draw", reward: [playerGift, opponentGift] };
+    }
+
+    function joinBattle(battleId, myGiftIndex) {
+        if (!currentBattle || currentBattle.id != battleId || currentBattle.opponent) { alert("Батл недоступен"); return false; }
+        const myGift = inventory[myGiftIndex];
+        if (!myGift) { alert("Выбери подарок!"); return false; }
+        inventory.splice(myGiftIndex, 1);
+        currentBattle.opponent = { gift: myGift };
+        updateUI();
+        const result = simulateBattle(currentBattle.playerGift, myGift);
+        let resultText = "";
+        if (result.winner === "player") {
+            resultText = `💀 Ты проиграл... ${currentBattle.playerGift.icon} ${currentBattle.playerGift.name} уходит победителю`;
+        } else if (result.winner === "opponent") {
+            resultText = `🏆 ПОБЕДА! Ты забираешь оба подарка!`;
+            inventory.push(...result.reward);
+        } else {
+            resultText = `🤝 Ничья! Подарки возвращены.`;
+            inventory.push(currentBattle.playerGift, myGift);
+        }
+        updateUI();
+        activeBattleArea.innerHTML = `<div class="pvp-battle"><h3>Результат</h3><div>${resultText}</div><button id="closeBattleBtn" style="background:#2a2a2a; margin-top:16px; padding:10px; border-radius:40px;">Закрыть</button></div>`;
+        document.getElementById("closeBattleBtn")?.onclick = () => { currentBattle = null; activeBattleArea.innerHTML = "<div style='text-align:center; opacity:0.6;'>Нет активных батлов</div>"; };
+        return true;
+    }
+
+    function checkBattleInvite() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const battleId = urlParams.get("battle");
+        if (battleId && currentBattle && currentBattle.id == battleId && !currentBattle.opponent && inventory.length > 0) {
+            setTimeout(() => {
+                let options = inventory.map((g,i) => `${i}: ${g.icon} ${g.name}`).join("\n");
+                let idx = prompt(`Соперник ждёт! Поставь подарок:\n${options}\nВведи номер:`);
+                if (idx !== null && !isNaN(parseInt(idx)) && inventory[parseInt(idx)]) joinBattle(battleId, parseInt(idx));
+            }, 500);
+        }
+    }
+
+    // Кнопки
+    document.getElementById("addStarsBtn").onclick = () => { userBalance += 100; updateUI(); if(window.Telegram?.WebApp) window.Telegram.WebApp.showAlert("+100 Stars"); };
+    document.getElementById("depositBtn").onclick = () => { userBalance += 500; updateUI(); alert("💎 +500 Stars (демо)"); };
+    document.getElementById("withdrawBtn").onclick = () => alert("💰 Вывод: в разработке");
+    document.getElementById("upgradeBtn").onclick = upgradeGift;
+    document.getElementById("createBattleBtn").onclick = () => { let idx = parseInt(stakeSelect.value); if (!isNaN(idx)) createBattle(idx); else alert("Выбери подарок!"); };
+
+    // Вкладки
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+        btn.onclick = () => {
+            document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+            document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+            document.getElementById(`${btn.dataset.tab}Panel`).classList.add("active");
+            if (btn.dataset.tab === "profile") updateUI();
+            if (btn.dataset.tab === "upgrade") updateUpgradeSelect();
+            if (btn.dataset.tab === "pvp") updateStakeSelect();
+        };
+    });
+
+    if (window.Telegram?.WebApp) { window.Telegram.WebApp.expand(); window.Telegram.WebApp.ready(); }
+    load();
     renderCases();
+    checkBattleInvite();
 </script>
 </body>
 </html>
