@@ -133,7 +133,7 @@ body::before {
 .section-title { font-family:var(--font-display); font-size:28px; letter-spacing:2px; color:var(--white); }
 .section-sub { font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; }
 
-/* КЕЙСЫ - СТРОГО 2 РЯДА + ИСПРАВЛЕНА ЦЕНА */
+/* КЕЙСЫ - СТРОГО 2 РЯДА */
 .cases-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -223,7 +223,6 @@ body::before {
 .sell-chip:hover { color:var(--danger); border-color:var(--danger); }
 .empty-inv { grid-column:1/-1; text-align:center; color:var(--text-muted); padding:20px; font-size:11px; }
 
-/* GIFT PICKER MODAL */
 .gift-picker-overlay {
   position:fixed; inset:0;
   background:rgba(0,0,0,0.88);
@@ -263,7 +262,6 @@ body::before {
 .picker-confirm:active { transform:scale(0.98); }
 .picker-none { color:var(--text-muted); text-align:center; padding:20px; font-size:12px; }
 
-/* UPGRADE */
 .upgrade-layout { display:grid; grid-template-columns:1fr 50px 1fr; gap:10px; align-items:center; }
 .upgrade-card { background:var(--surface-1); border:1px solid var(--border); border-radius:var(--radius-lg); padding:16px; display:flex; flex-direction:column; align-items:center; gap:8px; min-height:130px; justify-content:center; transition:var(--transition); }
 .upgrade-card.has-item { border-color:var(--border-light); }
@@ -286,7 +284,6 @@ body::before {
 .big-btn:active { transform:scale(0.98); }
 .big-btn:disabled { background:var(--surface-3); color:var(--text-muted); cursor:not-allowed; }
 
-/* CRAFT */
 .craft-section { background:var(--surface-1); border:1px solid var(--border); border-radius:var(--radius-lg); padding:16px; margin-bottom:16px; }
 .craft-title { font-family:var(--font-display); font-size:22px; letter-spacing:1px; margin-bottom:10px; }
 .craft-desc { font-size:11px; color:var(--text-muted); margin-bottom:12px; }
@@ -300,7 +297,6 @@ body::before {
 .craft-result-icon { font-size:44px; margin-bottom:6px; }
 .craft-result-name { font-size:16px; font-weight:700; color:var(--gold); }
 
-/* PVP */
 .pvp-create { background:var(--surface-1); border:1px solid var(--border); border-radius:var(--radius-lg); padding:16px; margin-bottom:14px; }
 .pvp-stake { background:var(--surface-2); border:1px solid var(--border); border-radius:var(--radius-md); padding:10px; text-align:center; cursor:pointer; margin-bottom:10px; }
 .pvp-lobby { display:flex; flex-direction:column; gap:10px; }
@@ -312,13 +308,9 @@ body::before {
 .battle-gift-name { font-size:9px; color:var(--text-muted); text-align:center; max-width:65px; }
 .battle-gift-val { font-size:11px; font-weight:700; color:var(--gold); }
 .battle-vs { flex:1; text-align:center; font-family:var(--font-display); font-size:22px; color:var(--text-muted); letter-spacing:2px; }
-.battle-creator { font-size:10px; color:var(--text-muted); text-align:center; }
 .battle-join-btn { padding:8px 16px; background:var(--surface-3); border:1px solid var(--border-light); color:var(--white); border-radius:var(--radius-full); font-family:var(--font-body); font-size:11px; font-weight:700; cursor:pointer; transition:var(--transition); }
 .battle-join-btn:hover { background:var(--white); color:var(--black); }
-.battle-waiting { font-size:10px; color:var(--success); display:flex; align-items:center; gap:3px; }
-.battle-waiting::before { content:''; width:4px; height:4px; background:var(--success); border-radius:50%; animation:pulse-online 1.5s infinite; }
 
-/* PROFILE */
 .profile-hero {
   background:var(--surface-1); border:1px solid var(--border);
   border-radius:var(--radius-lg); padding:20px;
@@ -557,17 +549,13 @@ body::before {
 </div>
 
 <script>
-// ============================================================
 // SUPABASE КОНФИГУРАЦИЯ
-// ============================================================
 const SUPABASE_URL = 'https://riwzrplciliebgexltll.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJpd3pycGxjaWxpZWJnZXhsdGxsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyNjM5MjEsImV4cCI6MjA5MTgzOTkyMX0.jrrI78rQ-3VARU0I1eazM6iKHbSJLpcK5HCjJ4VRxnQ';
 
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// ============================================================
 // ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
-// ============================================================
 let userId = null;
 let telegramUser = null;
 let state = {
@@ -587,11 +575,8 @@ let currentCraftResult = null;
 let saveTimeout = null;
 let cachedStats = null;
 let lastInventoryHash = '';
-let currentBattleSubscription = null;
 
-// ============================================================
 // ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
-// ============================================================
 function getUserId() {
   let id = localStorage.getItem('gc_uid');
   if (!id) { id = 'u_' + Math.random().toString(36).slice(2,10); localStorage.setItem('gc_uid', id); }
@@ -721,9 +706,7 @@ function burstConfetti() {
   animate();
 }
 
-// ============================================================
 // ЗВУКИ И ВИБРАЦИЯ
-// ============================================================
 const SoundFX = {
   play(type) {
     try {
@@ -758,9 +741,7 @@ const SoundFX = {
   }
 };
 
-// ============================================================
 // БАЗА ДАННЫХ ПОДАРКОВ И КЕЙСОВ
-// ============================================================
 const GIFTS_DB = {
   "Розовый мишка": { icon:"🧸", starsValue:15, rarity:"common", upgradeTo:"Золотая звезда" },
   "Букет цветов": { icon:"💐", starsValue:15, rarity:"common", upgradeTo:"Алмазное сердце" },
@@ -785,9 +766,7 @@ const CASES = [
     gifts:[{name:"Легендарный дракон",chance:40},{name:"Космический корабль",chance:35},{name:"Трон короля",chance:25}]}
 ];
 
-// ============================================================
 // РЕНДЕР ИНВЕНТАРЯ
-// ============================================================
 function renderInventory(containerId, withSell = false, mode = null) {
   const container = document.getElementById(containerId);
   if (!container) return;
@@ -841,9 +820,7 @@ function sellGift(idx) {
   SoundFX.play('open');
 }
 
-// ============================================================
 // КЕЙСЫ
-// ============================================================
 function renderCases() {
   const container = document.getElementById('casesContainer');
   container.innerHTML = '';
@@ -955,9 +932,7 @@ function showResultModal(giftName, isUpgradeSuccess, callback) {
   if (sellBtn) sellBtn.onclick = () => { overlay.remove(); if (callback) callback('sell'); };
 }
 
-// ============================================================
 // АПГРЕЙД
-// ============================================================
 function selectForUpgrade(idx) {
   upgradeSelectedIdx = idx;
   const g = state.inventory[idx];
@@ -1034,9 +1009,7 @@ function renderUpgradeUI() {
   document.getElementById('upgradeFromCard').classList.remove('has-item');
 }
 
-// ============================================================
 // КРАФТ
-// ============================================================
 function selectForCraft(idx) {
   for (let i = 0; i < 3; i++) {
     if (craftSlots[i] === null) {
@@ -1109,13 +1082,12 @@ function doCraft() {
   SoundFX.play('win');
 }
 
-// ============================================================
-// PVP С SUPABASE REALTIME
-// ============================================================
+// PVP С SUPABASE
 let currentPvpChannel = null;
+let pvpSelectedIdxSup = null;
 
 function selectForPvp(idx) {
-  pvpSelectedIdx = idx;
+  pvpSelectedIdxSup = idx;
   const g = state.inventory[idx];
   if (!g) return;
   document.getElementById('pvpStakeText').innerHTML = `${g.icon} ${g.name} ★${g.starsValue}`;
@@ -1123,10 +1095,10 @@ function selectForPvp(idx) {
 }
 
 async function createBattle() {
-  if (pvpSelectedIdx === null || !state.inventory[pvpSelectedIdx]) { showToast('Выбери подарок!'); return; }
-  const gift = state.inventory[pvpSelectedIdx];
-  state.inventory.splice(pvpSelectedIdx, 1);
-  pvpSelectedIdx = null;
+  if (pvpSelectedIdxSup === null || !state.inventory[pvpSelectedIdxSup]) { showToast('Выбери подарок!'); return; }
+  const gift = state.inventory[pvpSelectedIdxSup];
+  state.inventory.splice(pvpSelectedIdxSup, 1);
+  pvpSelectedIdxSup = null;
   document.getElementById('createBattleBtn').disabled = true;
   document.getElementById('pvpStakeText').innerHTML = '⚔ Нажми на подарок в инвентаре';
   
@@ -1134,7 +1106,7 @@ async function createBattle() {
   const creatorName = telegramUser?.username || userId.slice(-6);
   
   try {
-    const { error } = await supabase.from('battles').insert({
+    const { error } = await supabaseClient.from('battles').insert({
       id: battleId,
       creator_id: userId,
       creator_name: creatorName,
@@ -1158,7 +1130,7 @@ async function createBattle() {
 }
 
 async function joinBattle(battleId) {
-  const { data: battle, error: fetchError } = await supabase
+  const { data: battle, error: fetchError } = await supabaseClient
     .from('battles')
     .select('*')
     .eq('id', battleId)
@@ -1176,7 +1148,7 @@ async function joinBattle(battleId) {
   
   const opponentName = telegramUser?.username || userId.slice(-6);
   
-  const { error: updateError } = await supabase
+  const { error: updateError } = await supabaseClient
     .from('battles')
     .update({
       opponent_id: userId,
@@ -1212,7 +1184,7 @@ async function joinBattle(battleId) {
     SoundFX.play('error');
   }
   
-  await supabase.from('battles').update({ status: 'finished', winner_id: winnerId }).eq('id', battleId);
+  await supabaseClient.from('battles').update({ status: 'finished', winner_id: winnerId }).eq('id', battleId);
   
   renderAllInventories();
   updateProfileStats();
@@ -1223,7 +1195,7 @@ async function renderPvpLobby() {
   const lobby = document.getElementById('pvpLobby');
   if (!lobby) return;
   
-  const { data: battles, error } = await supabase
+  const { data: battles, error } = await supabaseClient
     .from('battles')
     .select('*')
     .eq('status', 'waiting')
@@ -1260,7 +1232,7 @@ async function renderPvpLobby() {
 }
 
 async function cancelBattle(battleId) {
-  const { data: battle, error: fetchError } = await supabase
+  const { data: battle, error: fetchError } = await supabaseClient
     .from('battles')
     .select('*')
     .eq('id', battleId)
@@ -1272,14 +1244,14 @@ async function cancelBattle(battleId) {
   state.inventory.push(battle.creator_gift);
   renderAllInventories();
   
-  await supabase.from('battles').delete().eq('id', battleId);
+  await supabaseClient.from('battles').delete().eq('id', battleId);
   renderPvpLobby();
   showToast('Батл отменён, подарок возвращён');
 }
 
 function subscribeToBattles() {
-  if (currentBattleSubscription) return;
-  currentBattleSubscription = supabase
+  if (currentPvpChannel) return;
+  currentPvpChannel = supabaseClient
     .channel('battles-channel')
     .on('postgres_changes', { event: '*', schema: 'public', table: 'battles' }, () => {
       renderPvpLobby();
@@ -1287,9 +1259,7 @@ function subscribeToBattles() {
     .subscribe();
 }
 
-// ============================================================
 // РЕФЕРАЛЬНАЯ СИСТЕМА
-// ============================================================
 function initReferral() {
   if (!state.referralCode) state.referralCode = userId;
   const urlParams = new URLSearchParams(window.location.search);
@@ -1321,9 +1291,7 @@ function showReferralModal() {
   overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
 }
 
-// ============================================================
 // TELEGRAM ИНИЦИАЛИЗАЦИЯ
-// ============================================================
 function initTelegramUser() {
   if (window.Telegram?.WebApp) {
     const tg = window.Telegram.WebApp;
@@ -1344,16 +1312,12 @@ function initTelegramUser() {
   }
 }
 
-// ============================================================
 // ОНЛАЙН КАУНТЕР
-// ============================================================
 function updateOnlineCount() { document.getElementById('onlineCount').innerText = 128 + Math.floor(Math.random() * 40); }
 setInterval(updateOnlineCount, 5000);
 updateOnlineCount();
 
-// ============================================================
 // ТАБЫ
-// ============================================================
 document.querySelectorAll('.tab-item').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.tab-item').forEach(b => b.classList.remove('active'));
@@ -1367,9 +1331,7 @@ document.querySelectorAll('.tab-item').forEach(btn => {
   });
 });
 
-// ============================================================
 // КНОПКИ
-// ============================================================
 document.getElementById('addStarsBtn').onclick = () => { setBalance(state.balance + 100); addHistory('⭐', 'Пополнение', '+100 ★', true); showToast('+100 Stars'); renderAllInventories(); SoundFX.play('open'); };
 document.getElementById('balancePill').onclick = () => { setBalance(state.balance + 100); addHistory('⭐', 'Пополнение', '+100 ★', true); showToast('+100 Stars'); renderAllInventories(); };
 document.getElementById('upgradeBtn').onclick = doUpgrade;
@@ -1380,9 +1342,7 @@ document.getElementById('shareBtn').onclick = () => { navigator.clipboard.writeT
 document.getElementById('referralBtn').onclick = showReferralModal;
 document.getElementById('craftBtn').onclick = doCraft;
 
-// ============================================================
 // ИНИЦИАЛИЗАЦИЯ
-// ============================================================
 loadState();
 initReferral();
 initTelegramUser();
@@ -1400,13 +1360,12 @@ if (window.Telegram?.WebApp) {
   window.Telegram.WebApp.ready();
 }
 
-// Проверка приглашения по ссылке
 const urlParams = new URLSearchParams(window.location.search);
-const battleId = urlParams.get('battle');
-if (battleId) {
+const battleIdFromUrl = urlParams.get('battle');
+if (battleIdFromUrl) {
   setTimeout(() => {
     if (confirm('Вас пригласили на PvP батл! Присоединиться?')) {
-      joinBattle(battleId);
+      joinBattle(battleIdFromUrl);
     }
   }, 1000);
 }
