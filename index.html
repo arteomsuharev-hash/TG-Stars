@@ -553,7 +553,7 @@ img{display:block}
       </div>
       <div class="ref-box"><div class="ref-title">РЕФЕРАЛЬНАЯ ПРОГРАММА</div><p style="font-size:12px;color:var(--tm)">Приглашай друзей и получай 10% от их первого пополнения</p><div class="ref-link-row"><input class="ref-link-input" id="refLinkInput" readonly><button class="btn btn-outline btn-sm" id="copyRefBtn">Копировать</button></div><div class="ref-stats"><div class="ref-stat"><div class="ref-stat-n" id="refCount">0</div><div class="ref-stat-l">Рефералов</div></div><div class="ref-stat"><div class="ref-stat-n" id="refEarned">0</div><div class="ref-stat-l">★ Заработано</div></div></div></div>
       <div class="inv-section"><h3>МОИ ПОДАРКИ</h3><div class="inv-grid" id="invProfile"></div></div>
-      <div class="inv-section" style="margin-top:10px"><h3>ИСТОРИЯ</h3><table class="hist-table"><thead><tr><th>Предмет</th><th>Действие</th><th>Итог</th></tr></thead><tbody id="histBody"></tbody></table></div>
+      <div class="inv-section" style="margin-top:10px"><h3>ИСТОРИЯ</h3><table class="hist-table"><thead><tr><th>Предмет</th><th>Действие</th><th>Итог</th></tr></thead><tbody id="histBody"></tbody><tr></div>
     </div>
   </div>
 
@@ -774,11 +774,19 @@ function initRealtime(){
               battles=battles.filter(b=>b.id!==row.id);
               renderPvpLobby();
             }
-            if(row.opponent_id===userId&&row.status==='fighting'){handleBattleResult(row);}
+            if(row.opponent_id===userId && row.status==='fighting'){
+              handleBattleResult(row);
+            }
           }
           if(msg.topic==='realtime:public:gc_users'){
             if(row.id===userId){loadUserFromDB();}
           }
+        }
+        // Обработка широковещательных сообщений для анимации
+        if(msg.type === 'broadcast' && msg.payload?.type === 'battle_start'){
+          const {creatorGift, opponentGift, battleId} = msg.payload;
+          const battle = {id:battleId, creator_gift:creatorGift, opponent_gift:opponentGift};
+          showCoinFlip(creatorGift, opponentGift, battle, msg.payload.creatorId);
         }
       }catch(err){}
     };
@@ -853,7 +861,7 @@ function renderAvatar(){
 function renderHistory(){
   const el=document.getElementById('histBody');if(!el)return;
   if(!state.history.length){el.innerHTML='<tr><td colspan="3" style="color:var(--tm);text-align:center;padding:16px;font-size:12px">Нет истории</td></tr>';return;}
-  el.innerHTML=state.history.slice(0,25).map(h=>`<tr><td style="font-size:16px">${h.icon}</td><td>${h.action}</td><td class="${h.pos?'hist-pos':'hist-neg'}">${h.result}</td></tr>`).join('');
+  el.innerHTML=state.history.slice(0,25).map(h=>`<tr><td style="font-size:16px">${h.icon}</td><td>${h.action}</td><td class="${h.pos?'hist-pos':'hist-neg'}">${h.result}</td></td>`).join('');
 }
 
 function updateAllUI(){
@@ -1035,7 +1043,7 @@ function doCraft(){
 }
 
 // ═══════════════════════════════════════════════════════
-// PVP (исправлен приватный батл по ссылке)
+// PVP (с анимацией для обоих игроков)
 // ═══════════════════════════════════════════════════════
 function selectForPvp(idx){pvpStakeIdx=idx;const g=state.inventory[idx];if(!g)return;document.getElementById('pvpStakeText').innerHTML=g.icon+' '+g.name;document.getElementById('pvpStakeVal').innerHTML='★ '+g.val;document.getElementById('createBattleBtn').disabled=false;}
 
@@ -1079,15 +1087,30 @@ async function joinBattle(battleId){
   if(state.inventory.length===0){toast('Нет подарков для ставки');return;}
   const myGift={...state.inventory[0]};
   state.inventory.splice(0,1);
+  
   battle.status='fighting';
   battle.opponent_id=userId;
   battle.opponent_gift=JSON.stringify(myGift);
   await updateBattle(battleId,{status:'fighting',opponent_id:userId,opponent_gift:JSON.stringify(myGift)});
+  
   battles=battles.filter(b=>b.id!==battleId);
   saveUserToDB();
   renderPvpLobby();
+  
   const creatorGift=safeJSON(battle.creator_gift,{});
+  
+  // Запускаем анимацию у присоединившегося
   showCoinFlip(creatorGift,myGift,battle,userId);
+  
+  // Отправляем сообщение создателю через WebSocket, чтобы он тоже запустил анимацию
+  if(ws && ws.readyState===WebSocket.OPEN){
+    ws.send(JSON.stringify({
+      topic:'realtime:public:battles',
+      event:'broadcast',
+      payload:{type:'battle_start',battleId:battle.id,creatorGift:creatorGift,opponentGift:myGift,creatorId:battle.creator_id},
+      ref:Date.now()
+    }));
+  }
 }
 
 function handleBattleResult(row){
@@ -1095,6 +1118,7 @@ function handleBattleResult(row){
   const oppGift=safeJSON(row.opponent_gift,{});
   battles=battles.filter(b=>b.id!==row.id);
   renderPvpLobby();
+  // Запускаем анимацию у создателя
   showCoinFlip(myGift,oppGift,row,row.creator_id);
 }
 
