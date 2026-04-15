@@ -2,9 +2,9 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#000000">
-<title>GIFTCASE — Кейсы | Апгрейд | Крафт | PvP</title>
+<title>GIFTCASE — Premium Cases</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -38,8 +38,10 @@
   --shadow-lg: 0 24px 80px rgba(0,0,0,0.95);
 }
 
-* { margin:0; padding:0; box-sizing:border-box; }
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
 html { height:100%; overflow:hidden; }
+
 body {
   background: var(--bg);
   font-family: var(--font-body);
@@ -47,44 +49,44 @@ body {
   height: 100vh;
   overflow: hidden;
   -webkit-font-smoothing: antialiased;
+  cursor: default;
 }
+
+/* GRAIN OVERLAY */
 body::before {
   content:'';
   position:fixed; inset:0;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
   pointer-events:none; z-index:9999; opacity:0.5;
 }
+
+/* SCROLLBAR */
 ::-webkit-scrollbar { width:3px; height:3px; }
 ::-webkit-scrollbar-track { background:transparent; }
-::-webkit-scrollbar-thumb { background:var(--border-light); border-radius:3px; }
+::-webkit-scrollbar-thumb { background:var(--border-light); border-radius:2px; }
 
+/* ======================== LAYOUT ======================== */
 .app {
-  display:flex;
-  flex-direction:column;
-  height:100vh;
-  overflow:hidden;
+  display:flex; flex-direction:column;
+  height:100vh; overflow:hidden;
 }
 
-/* TOPBAR */
 .topbar {
   flex-shrink:0;
   background: var(--surface-1);
   border-bottom: 1px solid var(--border);
-  padding: 0 16px;
+  padding: 0 20px;
   height: 60px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  z-index:100;
+  display:flex; align-items:center; justify-content:space-between;
+  position:relative; z-index:100;
 }
+
 .logo {
   font-family: var(--font-display);
-  font-size: 24px;
-  letter-spacing: 2px;
+  font-size: 28px;
+  letter-spacing: 3px;
   color: var(--white);
-  display:flex;
-  align-items:center;
-  gap:6px;
+  display:flex; align-items:center; gap:8px;
 }
 .logo-dot {
   width:6px; height:6px;
@@ -92,53 +94,66 @@ body::before {
   border-radius:50%;
   animation: pulse-gold 2s infinite;
 }
-@keyframes pulse-gold { 0%,100%{ opacity:1; transform:scale(1); } 50%{ opacity:0.5; transform:scale(1.5); } }
+@keyframes pulse-gold {
+  0%,100%{ opacity:1; transform:scale(1); }
+  50%{ opacity:0.5; transform:scale(1.5); }
+}
+
 .balance-pill {
-  display:flex; align-items:center; gap:8px;
+  display:flex; align-items:center; gap:10px;
   background: var(--surface-2);
   border: 1px solid var(--border);
-  padding: 5px 12px;
+  padding: 6px 14px;
   border-radius: var(--radius-full);
   cursor:pointer;
   transition: var(--transition);
 }
 .balance-pill:hover { border-color:var(--border-light); background:var(--surface-3); }
 .balance-pill:active { transform:scale(0.97); }
-.balance-star { color:var(--gold); font-size:12px; }
+.balance-star { color:var(--gold); font-size:14px; }
 .balance-val {
-  font-size: 16px; font-weight:700; color:var(--white);
+  font-size: 18px; font-weight:700; color:var(--white);
+  font-variant-numeric: tabular-nums;
   transition: color 0.3s;
 }
 .balance-val.flash-up { color:var(--success); }
 .balance-val.flash-down { color:var(--danger); }
 .add-btn {
   background:var(--surface-3); border:1px solid var(--border-light);
-  color:var(--text-secondary); padding:5px 12px;
-  border-radius:var(--radius-full); font-size:11px; font-weight:600;
-  cursor:pointer; transition:var(--transition);
+  color:var(--text-secondary); padding:6px 14px;
+  border-radius:var(--radius-full); font-size:12px; font-weight:600;
+  cursor:pointer; transition:var(--transition); white-space:nowrap;
 }
 .add-btn:hover { color:var(--white); border-color:#555; }
 .add-btn:active { transform:scale(0.96); }
-.online-count { display:flex; align-items:center; gap:5px; font-size:10px; color:var(--text-muted); }
-.online-dot { width:5px; height:5px; border-radius:50%; background:var(--success); box-shadow:0 0 6px var(--success); animation: pulse-online 2s infinite; }
-@keyframes pulse-online { 0%,100%{ opacity:1; } 50%{ opacity:0.4; } }
 
-/* CONTENT */
-.content-area {
-  flex:1;
-  overflow-y:auto;
-  overflow-x:hidden;
-  padding:16px;
-  padding-bottom:80px;
+/* ONLINE INDICATOR */
+.online-count {
+  display:flex; align-items:center; gap:6px;
+  font-size:11px; color:var(--text-muted);
+}
+.online-dot {
+  width:6px; height:6px; border-radius:50%;
+  background:var(--success);
+  box-shadow:0 0 8px var(--success);
+  animation: pulse-online 2s infinite;
+}
+@keyframes pulse-online {
+  0%,100%{ opacity:1; }
+  50%{ opacity:0.4; }
 }
 
-/* SIDEBAR TABS (DESKTOP) - ЛЕВАЯ СТОРОНА */
+/* MAIN CONTENT */
+.content-area {
+  flex:1; overflow-y:auto; overflow-x:hidden;
+  padding:20px;
+  padding-bottom:90px;
+}
+
+/* TABS */
 .tabs-bar {
   flex-shrink:0;
-  position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
+  position:fixed; bottom:0; left:0; right:0;
   background:var(--surface-1);
   border-top:1px solid var(--border);
   display:flex;
@@ -146,39 +161,58 @@ body::before {
   padding-bottom: env(safe-area-inset-bottom);
 }
 .tab-item {
-  flex:1;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:2px;
-  padding:8px 4px;
-  cursor:pointer;
-  transition:var(--transition);
-  border:none;
-  background:none;
-  color:var(--text-muted);
+  flex:1; display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  gap:3px; padding:10px 4px;
+  cursor:pointer; transition:var(--transition);
+  position:relative; overflow:hidden;
+  border:none; background:none; color:var(--text-muted);
   font-family:var(--font-body);
 }
-.tab-item.active { color:var(--white); }
-.tab-item:active { transform:scale(0.95); }
-.tab-icon { font-size:18px; }
-.tab-label { font-size:9px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; }
-.panel { display:none; animation:panelIn 0.25s ease; }
-.panel.active { display:block; }
-@keyframes panelIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
-
-/* HEADERS */
-.section-header { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:12px; }
-.section-title { font-family:var(--font-display); font-size:28px; letter-spacing:1px; color:var(--white); }
-.section-sub { font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; }
-
-/* ========== КЕЙСЫ - 2 РЯДА НА ТЕЛЕФОНЕ ========== */
-.cases-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
+.tab-item::before {
+  content:''; position:absolute; top:0; left:50%;
+  transform:translateX(-50%);
+  width:0; height:2px;
+  background:var(--white);
+  border-radius:0 0 2px 2px;
+  transition:width 0.3s cubic-bezier(0.4,0,0.2,1);
 }
+.tab-item.active::before { width:40px; }
+.tab-item.active { color:var(--white); }
+.tab-item:active { transform:scale(0.94); }
+.tab-icon { font-size:20px; line-height:1; }
+.tab-label { font-size:10px; font-weight:600; letter-spacing:0.5px; text-transform:uppercase; }
+
+/* PANELS */
+.panel { display:none; animation:panelIn 0.25s cubic-bezier(0.4,0,0.2,1); }
+.panel.active { display:block; }
+@keyframes panelIn {
+  from { opacity:0; transform:translateY(12px); }
+  to { opacity:1; transform:translateY(0); }
+}
+
+/* ======================== SECTION HEADERS ======================== */
+.section-header {
+  display:flex; align-items:baseline; justify-content:space-between;
+  margin-bottom:16px;
+}
+.section-title {
+  font-family:var(--font-display);
+  font-size:32px; letter-spacing:2px;
+  color:var(--white);
+}
+.section-sub {
+  font-size:12px; color:var(--text-muted);
+  text-transform:uppercase; letter-spacing:1px;
+}
+
+/* ======================== CASES ======================== */
+.cases-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));
+  gap:12px;
+}
+
 .case-card {
   background:var(--surface-1);
   border:1px solid var(--border);
@@ -186,218 +220,215 @@ body::before {
   overflow:hidden;
   transition:var(--transition);
   cursor:pointer;
+  position:relative;
 }
-.case-card:hover { border-color:var(--border-light); transform:translateY(-2px); box-shadow:var(--shadow-md); }
-.case-card:active { transform:scale(0.98); }
-.case-visual { height:110px; display:flex; align-items:center; justify-content:center; overflow:hidden; }
-.case-emoji { font-size:52px; filter:drop-shadow(0 8px 24px rgba(0,0,0,0.8)); transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1); }
-.case-card:hover .case-emoji { transform:scale(1.1) translateY(-3px); }
-.case-body { padding:10px; }
-.case-meta { display:flex; justify-content:space-between; margin-bottom:6px; }
-.case-name { font-family:var(--font-display); font-size:18px; letter-spacing:0.5px; color:var(--white); }
-.case-price-tag { background:var(--surface-2); border:1px solid var(--border); padding:3px 8px; border-radius:var(--radius-full); font-size:11px; font-weight:700; color:var(--gold); }
-.case-items { display:flex; flex-wrap:wrap; gap:3px; margin-bottom:8px; }
-.case-item-tag { background:var(--surface-2); border:1px solid var(--border); padding:2px 5px; border-radius:var(--radius-sm); font-size:8px; color:var(--text-secondary); display:flex; align-items:center; gap:2px; }
+.case-card:hover {
+  border-color:var(--border-light);
+  transform:translateY(-2px);
+  box-shadow:var(--shadow-md);
+}
+.case-card:active { transform:translateY(0) scale(0.99); }
+
+.case-card::before {
+  content:'';
+  position:absolute; top:0; left:0; right:0;
+  height:1px;
+  background:linear-gradient(90deg, transparent, var(--border-light), transparent);
+}
+
+.case-visual {
+  height:140px;
+  display:flex; align-items:center; justify-content:center;
+  position:relative;
+  overflow:hidden;
+}
+.case-bg-pattern {
+  position:absolute; inset:0;
+  opacity:0.05;
+}
+.case-emoji {
+  font-size:64px; position:relative; z-index:1;
+  filter:drop-shadow(0 8px 24px rgba(0,0,0,0.8));
+  transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+.case-card:hover .case-emoji { transform:scale(1.12) translateY(-4px); }
+
+.case-body { padding:16px; }
+.case-meta {
+  display:flex; justify-content:space-between; align-items:center;
+  margin-bottom:10px;
+}
+.case-name {
+  font-family:var(--font-display);
+  font-size:22px; letter-spacing:1px;
+  color:var(--white);
+}
+.case-price-tag {
+  display:flex; align-items:center; gap:4px;
+  background:var(--surface-2);
+  border:1px solid var(--border);
+  padding:4px 12px; border-radius:var(--radius-full);
+  font-size:14px; font-weight:700; color:var(--gold);
+}
+
+.case-items {
+  display:flex; flex-wrap:wrap; gap:4px; margin-bottom:14px;
+}
+.case-item-tag {
+  background:var(--surface-2); border:1px solid var(--border);
+  padding:2px 8px; border-radius:var(--radius-sm);
+  font-size:11px; color:var(--text-secondary);
+  display:flex; align-items:center; gap:4px;
+}
+.rarity-legendary .case-item-tag { border-color:#504030; color:var(--gold); }
+
 .open-case-btn {
-  width:100%; padding:8px; background:var(--surface-3); border:1px solid var(--border-light);
-  border-radius:var(--radius-full); color:var(--white); font-size:11px; font-weight:700;
-  text-transform:uppercase; cursor:pointer; transition:var(--transition);
+  width:100%; padding:13px;
+  background:var(--surface-3); border:1px solid var(--border-light);
+  border-radius:var(--radius-full);
+  color:var(--white); font-family:var(--font-body);
+  font-size:14px; font-weight:700;
+  letter-spacing:1px; text-transform:uppercase;
+  cursor:pointer; transition:var(--transition);
+  position:relative; overflow:hidden;
 }
-.open-case-btn:hover { background:var(--border-light); }
-.open-case-btn:active { transform:scale(0.97); }
+.open-case-btn::after {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.06),transparent);
+  transform:translateX(-100%);
+  transition:transform 0.5s;
+}
+.open-case-btn:hover::after { transform:translateX(100%); }
+.open-case-btn:hover { background:var(--border-light); border-color:#555; }
+.open-case-btn:active { transform:scale(0.98); }
+
+/* RARITY COLORS per card */
 .rarity-common .case-visual { background:linear-gradient(160deg,#111,#181818); }
 .rarity-rare .case-visual { background:linear-gradient(160deg,#111,#1a1a22); }
 .rarity-epic .case-visual { background:linear-gradient(160deg,#111,#1c1a18); }
 .rarity-legendary .case-visual { background:linear-gradient(160deg,#131108,#1e1a0e); }
 .rarity-legendary .case-name { color:var(--gold); }
+.rarity-legendary { border-color:#3a3020; }
+.rarity-legendary:hover { border-color:var(--gold); box-shadow:0 8px 32px rgba(200,169,110,0.1); }
 
-/* АПГРЕЙД */
-.upgrade-card {
-  background:var(--surface-1);
-  border:1px solid var(--border);
-  border-radius:var(--radius-lg);
-  padding:20px;
-  text-align:center;
-  cursor:pointer;
-  transition:var(--transition);
-  margin-bottom:16px;
-}
-.upgrade-card:hover { border-color:var(--border-light); background:var(--surface-2); }
-.upgrade-card .selected-gift { font-size:56px; margin-bottom:8px; }
-.upgrade-chance {
-  background:var(--surface-2);
-  border:1px solid var(--border);
-  border-radius:var(--radius-lg);
-  padding:16px;
-  text-align:center;
-  margin-bottom:16px;
-}
-.upgrade-chance-value { font-family:var(--font-display); font-size:48px; color:var(--gold); }
-.upgrade-progress { height:4px; background:var(--surface-3); border-radius:var(--radius-full); margin-top:10px; overflow:hidden; }
-.upgrade-progress-fill { height:100%; background:var(--gold); border-radius:var(--radius-full); transition:width 0.5s ease; }
-
-/* КРАФТ */
-.craft-slots { display:flex; gap:10px; margin-bottom:20px; justify-content:center; flex-wrap:wrap; }
-.craft-slot {
-  width:85px; height:95px;
-  background:var(--surface-2);
-  border:2px dashed var(--border);
+/* ======================== ROULETTE STRIP ======================== */
+.roulette-container {
+  position:relative; overflow:hidden;
+  height:120px;
   border-radius:var(--radius-md);
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
-  gap:5px; cursor:pointer; transition:var(--transition); position:relative;
-}
-.craft-slot.filled { border:2px solid var(--gold); background:var(--surface-3); }
-.craft-slot-icon { font-size:36px; }
-.craft-slot-name { font-size:9px; color:var(--text-secondary); text-align:center; max-width:75px; overflow:hidden; }
-.craft-slot-remove {
-  position:absolute; top:-8px; right:-8px;
-  width:20px; height:20px; background:var(--danger); border-radius:50%;
-  display:flex; align-items:center; justify-content:center;
-  font-size:10px; color:white; cursor:pointer; transition:var(--transition);
-}
-.craft-slot-remove:hover { transform:scale(1.1); }
-.craft-result {
-  background:var(--surface-2);
   border:1px solid var(--border);
-  border-radius:var(--radius-lg);
-  padding:16px;
-  text-align:center;
-  margin-bottom:16px;
+  background:var(--surface-1);
+  margin:20px 0;
 }
-.craft-result-icon { font-size:48px; margin-bottom:8px; }
-.craft-result-name { font-size:16px; font-weight:700; color:var(--gold); }
-.craft-desc { font-size:11px; color:var(--text-muted); text-align:center; margin-bottom:16px; }
+.roulette-track {
+  display:flex; align-items:center;
+  height:100%;
+  position:absolute; left:0; top:0;
+  will-change:transform;
+}
+.roulette-item {
+  flex-shrink:0; width:100px; height:100px;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  margin:0 4px; border-radius:var(--radius-md);
+  background:var(--surface-2); border:1px solid var(--border);
+  font-size:36px; gap:4px;
+}
+.roulette-item .gift-label { font-size:9px; color:var(--text-muted); text-align:center; max-width:90px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.roulette-center-line {
+  position:absolute; left:50%; top:0; bottom:0;
+  width:2px; margin-left:-1px;
+  background:var(--white);
+  box-shadow:0 0 12px rgba(255,255,255,0.5);
+  z-index:2;
+}
+.roulette-overlay-l, .roulette-overlay-r {
+  position:absolute; top:0; bottom:0; width:100px; z-index:1;
+}
+.roulette-overlay-l { left:0; background:linear-gradient(90deg,var(--surface-1),transparent); }
+.roulette-overlay-r { right:0; background:linear-gradient(-90deg,var(--surface-1),transparent); }
 
-/* ИНВЕНТАРЬ */
+/* ======================== INVENTORY SECTION ======================== */
 .inventory-section {
   background:var(--surface-1);
   border:1px solid var(--border);
   border-radius:var(--radius-lg);
-  padding:14px;
-  margin-top:14px;
+  padding:20px;
+  margin-top:20px;
 }
-.inventory-section h3 { font-family:var(--font-display); font-size:20px; margin-bottom:10px; }
+.inventory-section h3 {
+  font-family:var(--font-display);
+  font-size:22px; letter-spacing:1px; margin-bottom:14px;
+}
 .inventory-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(140px, 1fr));
   gap:8px;
-  max-height:240px;
-  overflow-y:auto;
+  max-height:280px; overflow-y:auto;
 }
 .inv-card {
   background:var(--surface-2); border:1px solid var(--border);
-  border-radius:var(--radius-md); padding:10px;
-  display:flex; flex-direction:column; align-items:center; gap:4px;
+  border-radius:var(--radius-md); padding:12px;
+  display:flex; flex-direction:column; align-items:center; gap:6px;
   position:relative;
   transition:var(--transition);
 }
-.inv-card:hover { border-color:var(--border-light); transform:translateY(-2px); }
-.inv-card-icon { font-size:28px; }
-.inv-card-name { font-size:9px; font-weight:600; color:var(--text-secondary); text-align:center; }
-.inv-card-val { font-size:10px; font-weight:700; color:var(--gold); }
-.inv-card-rarity { position:absolute; top:5px; right:5px; width:5px; height:5px; border-radius:50%; }
+.inv-card:hover { border-color:var(--border-light); }
+.inv-card-icon { font-size:32px; }
+.inv-card-name { font-size:11px; font-weight:600; color:var(--text-secondary); text-align:center; }
+.inv-card-val { font-size:12px; font-weight:700; color:var(--gold); }
+.inv-card-rarity {
+  position:absolute; top:6px; right:6px;
+  width:6px; height:6px; border-radius:50%;
+}
 .r-common { background:#555; }
 .r-rare { background:#6688cc; }
 .r-epic { background:#aa66cc; }
-.r-legendary { background:var(--gold); box-shadow:0 0 5px var(--gold); }
+.r-legendary { background:var(--gold); box-shadow:0 0 6px var(--gold); }
 .sell-chip {
   background:var(--surface-3); border:1px solid var(--border-light);
-  color:var(--text-secondary); font-size:9px; font-weight:600;
-  padding:2px 8px; border-radius:var(--radius-full);
-  cursor:pointer; transition:var(--transition);
+  color:var(--text-secondary); font-size:10px; font-weight:600;
+  padding:3px 10px; border-radius:var(--radius-full);
+  cursor:pointer; transition:var(--transition); font-family:var(--font-body);
 }
 .sell-chip:hover { color:var(--danger); border-color:var(--danger); }
-.empty-inv { text-align:center; color:var(--text-muted); padding:20px; font-size:11px; }
+.empty-inv {
+  grid-column:1/-1; text-align:center;
+  color:var(--text-muted); padding:32px;
+  font-size:13px;
+}
 
-/* PVP */
-.pvp-create {
-  background:var(--surface-1);
-  border:1px solid var(--border);
-  border-radius:var(--radius-lg);
-  padding:14px;
-  margin-bottom:14px;
+/* ======================== CUSTOM SELECT ======================== */
+.select-wrapper {
+  position:relative; margin:10px 0;
 }
-.pvp-stake {
-  background:var(--surface-2);
-  border:1px solid var(--border);
-  border-radius:var(--radius-md);
-  padding:12px;
-  text-align:center;
-  cursor:pointer;
-  transition:var(--transition);
-  margin-bottom:10px;
-}
-.pvp-stake:hover { border-color:var(--border-light); background:var(--surface-3); }
-.battle-card {
-  background:var(--surface-1);
-  border:1px solid var(--border);
-  border-radius:var(--radius-lg);
-  padding:12px;
-  display:flex;
-  align-items:center;
-  gap:10px;
-  margin-bottom:8px;
-  transition:var(--transition);
-}
-.battle-card:hover { border-color:var(--border-light); }
-.battle-gift-icon { font-size:32px; }
-.battle-gift-name { font-size:9px; color:var(--text-muted); }
-.battle-gift-val { font-size:10px; font-weight:700; color:var(--gold); }
-.battle-vs { flex:1; text-align:center; font-family:var(--font-display); font-size:20px; color:var(--text-muted); }
-.battle-join-btn {
-  padding:6px 14px;
-  background:var(--surface-3);
-  border:1px solid var(--border-light);
-  border-radius:var(--radius-full);
-  font-size:10px; font-weight:700;
-  cursor:pointer;
-  transition:var(--transition);
-}
-.battle-join-btn:hover { background:var(--white); color:var(--black); }
-
-/* ПРОФИЛЬ */
-.profile-hero {
-  background:var(--surface-1);
-  border:1px solid var(--border);
-  border-radius:var(--radius-lg);
-  padding:20px;
-  margin-bottom:14px;
-  position:relative;
-  overflow:hidden;
-}
-.profile-avatar { width:56px; height:56px; border-radius:50%; background:var(--surface-2); border:2px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:28px; margin-bottom:10px; }
-.profile-name { font-family:var(--font-display); font-size:24px; letter-spacing:1px; }
-.profile-id { font-size:9px; color:var(--text-muted); margin-top:2px; }
-.stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-top:14px; }
-.stat-box { background:var(--surface-2); border:1px solid var(--border); border-radius:var(--radius-md); padding:8px; text-align:center; }
-.stat-num { font-family:var(--font-display); font-size:20px; color:var(--white); }
-.stat-lbl { font-size:8px; color:var(--text-muted); text-transform:uppercase; }
-.profile-actions { display:flex; gap:8px; margin-top:12px; flex-wrap:wrap; }
-.profile-btn {
-  flex:1; padding:8px;
+.custom-select {
+  width:100%; padding:14px 40px 14px 16px;
   background:var(--surface-2); border:1px solid var(--border);
-  border-radius:var(--radius-full); color:var(--white);
-  font-size:10px; font-weight:600; cursor:pointer;
+  border-radius:var(--radius-full);
+  color:var(--white); font-family:var(--font-body);
+  font-size:15px; cursor:pointer;
+  appearance:none; -webkit-appearance:none;
   transition:var(--transition);
+  outline:none;
 }
-.profile-btn:hover { border-color:var(--border-light); background:var(--surface-3); }
+.custom-select:hover, .custom-select:focus {
+  border-color:var(--border-light);
+  background:var(--surface-3);
+}
+.select-arrow {
+  position:absolute; right:16px; top:50%;
+  transform:translateY(-50%);
+  color:var(--text-muted); pointer-events:none;
+  font-size:12px;
+}
 
-/* ИСТОРИЯ */
-.history-table { width:100%; border-collapse:collapse; margin-top:6px; }
-.history-table th { font-size:8px; color:var(--text-muted); padding:6px; border-bottom:1px solid var(--border); text-align:left; }
-.history-table td { padding:8px 6px; border-bottom:1px solid var(--border); font-size:10px; color:var(--text-secondary); }
-.hist-icon { font-size:14px; }
-.hist-gain { color:var(--success); font-weight:700; }
-.hist-loss { color:var(--danger); font-weight:700; }
-
-/* ПИКЕР */
+/* GIFT PICKER MODAL */
 .gift-picker-overlay {
   position:fixed; inset:0;
-  background:rgba(0,0,0,0.95);
+  background:rgba(0,0,0,0.88);
   z-index:500;
-  display:flex;
-  align-items:flex-end;
-  justify-content:center;
+  display:flex; align-items:flex-end; justify-content:center;
   animation:fadeIn 0.2s;
 }
 @keyframes fadeIn { from{opacity:0} to{opacity:1} }
@@ -406,157 +437,392 @@ body::before {
   border:1px solid var(--border);
   border-top-left-radius:var(--radius-xl);
   border-top-right-radius:var(--radius-xl);
-  padding:20px;
-  width:100%;
-  max-width:500px;
-  max-height:65vh;
-  overflow-y:auto;
+  padding:24px 20px 32px;
+  width:100%; max-width:600px;
+  max-height:70vh; overflow-y:auto;
   animation:slideUp 0.3s cubic-bezier(0.34,1.56,0.64,1);
 }
-@keyframes slideUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
-.gift-picker-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
-.gift-picker-title { font-family:var(--font-display); font-size:22px; letter-spacing:1px; }
-.picker-close { width:28px; height:28px; border-radius:50%; background:var(--surface-3); border:1px solid var(--border); color:var(--text-secondary); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:14px; }
+@keyframes slideUp {
+  from{transform:translateY(100%)}
+  to{transform:translateY(0)}
+}
+.gift-picker-header {
+  display:flex; justify-content:space-between; align-items:center;
+  margin-bottom:16px;
+}
+.gift-picker-title {
+  font-family:var(--font-display); font-size:26px; letter-spacing:1px;
+}
+.picker-close {
+  width:32px; height:32px; border-radius:50%;
+  background:var(--surface-3); border:1px solid var(--border);
+  color:var(--text-secondary); cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  font-size:16px; transition:var(--transition); font-family:inherit;
+}
 .picker-close:hover { color:var(--white); border-color:#555; }
-.gift-picker-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(90px, 1fr)); gap:8px; }
+.gift-picker-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(130px, 1fr));
+  gap:8px;
+}
 .picker-item {
   background:var(--surface-2); border:2px solid var(--border);
-  border-radius:var(--radius-md); padding:10px;
-  display:flex; flex-direction:column; align-items:center; gap:4px;
+  border-radius:var(--radius-md); padding:14px 10px;
+  display:flex; flex-direction:column; align-items:center; gap:6px;
   cursor:pointer; transition:var(--transition);
 }
 .picker-item:hover { border-color:var(--border-light); background:var(--surface-3); }
 .picker-item.selected { border-color:var(--white); }
-.picker-item-icon { font-size:28px; }
-.picker-item-name { font-size:9px; font-weight:600; color:var(--text-secondary); text-align:center; }
-.picker-item-val { font-size:10px; font-weight:700; color:var(--gold); }
+.picker-item-icon { font-size:36px; }
+.picker-item-name { font-size:11px; font-weight:600; color:var(--text-secondary); text-align:center; }
+.picker-item-val { font-size:12px; font-weight:700; color:var(--gold); }
 .picker-confirm {
-  width:100%; padding:12px;
+  width:100%; padding:14px;
   background:var(--white); color:var(--black);
   border:none; border-radius:var(--radius-full);
-  font-size:14px; font-weight:700;
-  cursor:pointer; margin-top:14px;
+  font-family:var(--font-body); font-size:15px; font-weight:700;
+  letter-spacing:0.5px; cursor:pointer; margin-top:16px;
   transition:var(--transition);
 }
+.picker-confirm:hover { background:var(--accent); }
 .picker-confirm:active { transform:scale(0.98); }
+.picker-none { color:var(--text-muted); text-align:center; padding:24px; font-size:13px; }
 
-/* РЕЗУЛЬТАТ МОДАЛ */
-.result-overlay {
-  position:fixed; inset:0;
-  background:rgba(0,0,0,0.96);
-  z-index:600;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  animation:fadeIn 0.2s;
+/* ======================== UPGRADE ======================== */
+.upgrade-layout {
+  display:grid;
+  grid-template-columns:1fr 60px 1fr;
+  gap:12px; align-items:center;
 }
-.result-modal {
-  text-align:center; padding:28px 24px;
-  max-width:300px; width:90%;
-  animation:popIn 0.45s cubic-bezier(0.34,1.56,0.64,1);
+.upgrade-card {
+  background:var(--surface-1); border:1px solid var(--border);
+  border-radius:var(--radius-lg); padding:20px;
+  display:flex; flex-direction:column; align-items:center; gap:10px;
+  min-height:160px; justify-content:center;
+  transition:var(--transition);
 }
-@keyframes popIn { 0% { opacity:0; transform:scale(0.3) rotate(-10deg); } 100% { opacity:1; transform:scale(1) rotate(0deg); } }
-.result-icon { font-size:72px; margin-bottom:12px; filter:drop-shadow(0 0 24px rgba(255,255,255,0.2)); }
-.result-title { font-family:var(--font-display); font-size:34px; letter-spacing:2px; color:var(--white); }
-.result-sub { color:var(--text-secondary); margin-top:4px; font-size:12px; }
-.result-actions { display:flex; flex-direction:column; gap:8px; margin-top:18px; }
-.result-actions .big-btn { padding:10px; background:var(--white); color:var(--black); border:none; border-radius:var(--radius-full); font-weight:700; cursor:pointer; }
-.result-actions .big-btn.secondary { background:transparent; color:var(--white); border:1px solid var(--border-light); }
+.upgrade-card.has-item { border-color:var(--border-light); }
+.upgrade-card.target { border-style:dashed; }
+.upgrade-card .card-icon { font-size:48px; }
+.upgrade-card .card-name { font-size:13px; font-weight:600; color:var(--text-secondary); text-align:center; }
+.upgrade-card .card-val { font-size:14px; font-weight:700; color:var(--gold); }
+.upgrade-card .pick-hint { font-size:12px; color:var(--text-muted); }
+.upgrade-arrow {
+  display:flex; align-items:center; justify-content:center;
+  font-size:28px; color:var(--text-muted);
+}
+.upgrade-chance-display {
+  background:var(--surface-2); border:1px solid var(--border);
+  border-radius:var(--radius-lg); padding:24px;
+  text-align:center; margin:16px 0;
+}
+.chance-label { font-size:11px; color:var(--text-muted); text-transform:uppercase; letter-spacing:2px; margin-bottom:8px; }
+.chance-value {
+  font-family:var(--font-display); font-size:64px;
+  color:var(--white); line-height:1;
+  transition:color 0.3s;
+}
+.chance-value.low { color:var(--danger); }
+.chance-value.med { color:#e8c96e; }
+.chance-value.high { color:var(--success); }
+.chance-sub { font-size:12px; color:var(--text-muted); margin-top:6px; }
 
-/* КОНФЕТТИ И ТОСТ */
-#confettiCanvas { position:fixed; inset:0; pointer-events:none; z-index:700; }
-.toast {
-  position:fixed; bottom:80px; left:50%; transform:translateX(-50%);
-  background:var(--surface-2); border:1px solid var(--border-light);
-  border-radius:var(--radius-full); padding:8px 16px;
-  font-size:12px; font-weight:600; color:var(--white);
-  z-index:800;
-  animation: toastIn 0.3s cubic-bezier(0.34,1.56,0.64,1), toastOut 0.3s 2s ease forwards;
-  white-space:nowrap;
+.upgrade-progress {
+  height:4px; background:var(--surface-3);
+  border-radius:var(--radius-full); margin:8px 0;
+  overflow:hidden;
 }
-@keyframes toastIn { from { opacity:0; transform:translateX(-50%) translateY(20px) scale(0.9); } to { opacity:1; transform:translateX(-50%) translateY(0) scale(1); } }
-@keyframes toastOut { to { opacity:0; transform:translateX(-50%) translateY(10px); } }
+.upgrade-progress-fill {
+  height:100%; background:var(--white);
+  border-radius:var(--radius-full);
+  transition:width 0.5s cubic-bezier(0.4,0,0.2,1);
+}
 
 .big-btn {
-  width:100%; padding:12px;
+  width:100%; padding:15px;
   background:var(--white); color:var(--black);
   border:none; border-radius:var(--radius-full);
-  font-size:14px; font-weight:700;
-  text-transform:uppercase; cursor:pointer; transition:var(--transition);
+  font-family:var(--font-body); font-size:15px; font-weight:700;
+  letter-spacing:0.5px; cursor:pointer; transition:var(--transition);
+  text-transform:uppercase;
 }
 .big-btn:hover { background:var(--accent); }
 .big-btn:active { transform:scale(0.98); }
 .big-btn:disabled { background:var(--surface-3); color:var(--text-muted); cursor:not-allowed; }
+.big-btn.danger { background:var(--surface-3); color:var(--danger); border:1px solid #3a2020; }
+.big-btn.danger:hover { background:#2a1010; border-color:var(--danger); }
 
-/* BATTLE FIGHT OVERLAY */
+/* ======================== PVP ======================== */
+.pvp-lobby {
+  display:flex; flex-direction:column; gap:12px;
+}
+.battle-card {
+  background:var(--surface-1); border:1px solid var(--border);
+  border-radius:var(--radius-lg); padding:20px;
+  display:flex; align-items:center; gap:16px;
+  transition:var(--transition);
+  position:relative; overflow:hidden;
+}
+.battle-card::before {
+  content:''; position:absolute; left:0; top:0; bottom:0;
+  width:3px;
+  background:linear-gradient(180deg, transparent, var(--border-light), transparent);
+}
+.battle-card:hover { border-color:var(--border-light); }
+.battle-gift-slot {
+  display:flex; flex-direction:column; align-items:center; gap:4px;
+  min-width:80px;
+}
+.battle-gift-icon { font-size:40px; }
+.battle-gift-name { font-size:10px; color:var(--text-muted); text-align:center; max-width:80px; }
+.battle-gift-val { font-size:13px; font-weight:700; color:var(--gold); }
+.battle-vs {
+  flex:1; text-align:center;
+  font-family:var(--font-display); font-size:28px;
+  color:var(--text-muted); letter-spacing:2px;
+}
+.battle-creator { font-size:11px; color:var(--text-muted); text-align:center; }
+.battle-join-btn {
+  padding:10px 20px;
+  background:var(--surface-3); border:1px solid var(--border-light);
+  color:var(--white); border-radius:var(--radius-full);
+  font-family:var(--font-body); font-size:13px; font-weight:700;
+  cursor:pointer; transition:var(--transition); white-space:nowrap;
+}
+.battle-join-btn:hover { background:var(--white); color:var(--black); }
+.battle-join-btn:active { transform:scale(0.96); }
+.battle-waiting {
+  font-size:11px; color:var(--success);
+  display:flex; align-items:center; gap:4px;
+}
+.battle-waiting::before {
+  content:''; width:5px; height:5px;
+  background:var(--success); border-radius:50%;
+  animation:pulse-online 1.5s infinite;
+}
+
+/* ======================== PROFILE ======================== */
+.profile-hero {
+  background:var(--surface-1); border:1px solid var(--border);
+  border-radius:var(--radius-lg); padding:28px 24px;
+  margin-bottom:16px;
+  position:relative; overflow:hidden;
+}
+.profile-hero::after {
+  content:'';
+  position:absolute; top:-40px; right:-40px;
+  width:200px; height:200px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(200,169,110,0.05), transparent 70%);
+  pointer-events:none;
+}
+.profile-avatar {
+  width:64px; height:64px; border-radius:50%;
+  background:var(--surface-2); border:2px solid var(--border);
+  display:flex; align-items:center; justify-content:center;
+  font-size:32px; margin-bottom:12px;
+}
+.profile-name { font-family:var(--font-display); font-size:28px; letter-spacing:1px; }
+.profile-id { font-size:11px; color:var(--text-muted); margin-top:2px; }
+.stats-grid {
+  display:grid; grid-template-columns:repeat(4,1fr);
+  gap:8px; margin-top:20px;
+}
+.stat-box {
+  background:var(--surface-2); border:1px solid var(--border);
+  border-radius:var(--radius-md); padding:12px;
+  text-align:center;
+}
+.stat-num { font-family:var(--font-display); font-size:26px; color:var(--white); }
+.stat-lbl { font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px; }
+.profile-actions { display:flex; gap:10px; margin-top:16px; }
+.profile-btn {
+  flex:1; padding:12px;
+  background:var(--surface-2); border:1px solid var(--border);
+  border-radius:var(--radius-full); color:var(--white);
+  font-family:var(--font-body); font-size:13px; font-weight:600;
+  cursor:pointer; transition:var(--transition);
+}
+.profile-btn:hover { border-color:var(--border-light); background:var(--surface-3); }
+.profile-btn:active { transform:scale(0.97); }
+
+/* HISTORY TABLE */
+.history-table { width:100%; border-collapse:collapse; margin-top:8px; }
+.history-table th {
+  font-size:10px; color:var(--text-muted);
+  text-transform:uppercase; letter-spacing:0.5px;
+  padding:8px; border-bottom:1px solid var(--border);
+  text-align:left;
+}
+.history-table td {
+  padding:10px 8px; border-bottom:1px solid var(--border);
+  font-size:13px; color:var(--text-secondary);
+}
+.history-table tr:last-child td { border-bottom:none; }
+.hist-icon { font-size:18px; }
+.hist-gain { color:var(--success); font-weight:700; }
+.hist-loss { color:var(--danger); font-weight:700; }
+
+/* ======================== RESULT MODAL ======================== */
+.result-overlay {
+  position:fixed; inset:0;
+  background:rgba(0,0,0,0.96);
+  z-index:600;
+  display:flex; align-items:center; justify-content:center;
+  animation:fadeIn 0.2s;
+}
+.result-modal {
+  text-align:center; padding:40px 32px;
+  max-width:340px; width:90%;
+  animation:popIn 0.45s cubic-bezier(0.34,1.56,0.64,1);
+  position:relative;
+}
+@keyframes popIn {
+  0% { opacity:0; transform:scale(0.3) rotate(-10deg); }
+  100% { opacity:1; transform:scale(1) rotate(0deg); }
+}
+.result-glow {
+  position:absolute; inset:-40px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(255,255,255,0.05), transparent 70%);
+  pointer-events:none;
+}
+.result-icon { font-size:96px; margin-bottom:16px; filter:drop-shadow(0 0 32px rgba(255,255,255,0.2)); }
+.result-title { font-family:var(--font-display); font-size:42px; letter-spacing:2px; color:var(--white); }
+.result-sub { color:var(--text-secondary); margin-top:6px; }
+.result-actions { display:flex; flex-direction:column; gap:10px; margin-top:24px; }
+.result-actions .big-btn.secondary {
+  background:transparent; color:var(--white);
+  border:1px solid var(--border-light);
+}
+.result-actions .big-btn.secondary:hover { background:var(--surface-2); }
+
+/* CONFETTI CANVAS */
+#confettiCanvas {
+  position:fixed; inset:0; pointer-events:none; z-index:700;
+}
+
+/* TOAST */
+.toast {
+  position:fixed; bottom:100px; left:50%; transform:translateX(-50%);
+  background:var(--surface-2); border:1px solid var(--border-light);
+  border-radius:var(--radius-full); padding:12px 24px;
+  font-size:14px; font-weight:600; color:var(--white);
+  z-index:800;
+  animation: toastIn 0.3s cubic-bezier(0.34,1.56,0.64,1), toastOut 0.3s 2s ease forwards;
+  white-space:nowrap;
+}
+@keyframes toastIn {
+  from { opacity:0; transform:translateX(-50%) translateY(20px) scale(0.9); }
+  to { opacity:1; transform:translateX(-50%) translateY(0) scale(1); }
+}
+@keyframes toastOut {
+  from { opacity:1; }
+  to { opacity:0; transform:translateX(-50%) translateY(10px); }
+}
+
+/* ======================== RESPONSIVE ======================== */
+@media (min-width:768px) {
+  .topbar { padding:0 40px; }
+  .content-area { padding:28px 40px; padding-bottom:90px; }
+  .cases-grid { grid-template-columns:repeat(auto-fill, minmax(240px, 1fr)); }
+  .inventory-grid { grid-template-columns:repeat(auto-fill, minmax(120px, 1fr)); }
+  .tabs-bar { padding:0; }
+  .tab-label { font-size:11px; }
+}
+@media (min-width:1024px) {
+  .app { flex-direction:row; }
+  .tabs-bar {
+    position:relative; flex-direction:column;
+    width:80px; border-top:none; border-right:1px solid var(--border);
+    height:100vh; padding:0;
+  }
+  .tab-item { padding:16px 4px; }
+  .tab-item::before { top:auto; bottom:0; left:0; right:0; width:auto; height:0; margin:0; }
+  .tab-item.active::before { height:40px; width:3px; left:0; top:50%; transform:translateY(-50%); }
+  .content-area { padding:32px 48px; padding-bottom:32px; }
+  .cases-grid { grid-template-columns:repeat(3,1fr); }
+  .tabs-bar { order:-1; }
+  .upgrade-layout { max-width:500px; }
+}
+@media (min-width:1400px) {
+  .cases-grid { grid-template-columns:repeat(4,1fr); }
+}
+
+/* LOADING STATE */
+.shimmer {
+  background:linear-gradient(90deg, var(--surface-2) 25%, var(--surface-3) 50%, var(--surface-2) 75%);
+  background-size:400% 100%;
+  animation:shimmer 1.5s infinite;
+}
+@keyframes shimmer { from{background-position:200% 0} to{background-position:-200% 0} }
+
+/* RATE LIMIT BANNER */
+.rate-limit-msg {
+  position:fixed; top:70px; left:50%; transform:translateX(-50%);
+  background:#2a1010; border:1px solid #4a2020;
+  border-radius:var(--radius-full); padding:8px 20px;
+  font-size:13px; color:var(--danger); z-index:200;
+  animation:toastIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  display:none;
+}
+
+/* USER ONLINE LIST */
+.online-users {
+  display:flex; align-items:center; gap:-8px;
+  margin-left:12px;
+}
+.user-bubble {
+  width:24px; height:24px; border-radius:50%;
+  background:var(--surface-3); border:2px solid var(--bg);
+  display:flex; align-items:center; justify-content:center;
+  font-size:12px; margin-left:-8px;
+}
+
+/* BATTLE LIVE ANIMATION */
 .battle-fight-overlay {
   position:fixed; inset:0;
   background:rgba(0,0,0,0.97);
   z-index:600;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  flex-direction:column;
-  gap:20px;
+  display:flex; align-items:center; justify-content:center;
+  flex-direction:column; gap:24px;
 }
-.battle-fighters { display:flex; align-items:center; gap:30px; }
-.fighter { display:flex; flex-direction:column; align-items:center; gap:6px; animation:fighterIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both; }
+.battle-fighters {
+  display:flex; align-items:center; gap:40px;
+}
+.fighter {
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+  animation:fighterIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+}
 .fighter:first-child { animation-delay:0.1s; animation-name:fighterInLeft; }
 .fighter:last-child { animation-delay:0.2s; animation-name:fighterInRight; }
-@keyframes fighterInLeft { from{opacity:0; transform:translateX(-60px)} to{opacity:1;transform:translateX(0)} }
-@keyframes fighterInRight { from{opacity:0;transform:translateX(60px)} to{opacity:1;transform:translateX(0)} }
-.fighter-icon { font-size:60px; filter:drop-shadow(0 0 20px rgba(255,255,255,0.15)); }
-.fighter-name { font-size:10px; color:var(--text-secondary); text-align:center; max-width:80px; }
-.battle-vs-big { font-family:var(--font-display); font-size:48px; color:var(--text-muted); letter-spacing:4px; animation:vsPulse 0.8s 0.5s cubic-bezier(0.34,1.56,0.64,1) both; }
-@keyframes vsPulse { 0%{opacity:0;transform:scale(0.5)} 100%{opacity:1;transform:scale(1)} }
-.battle-countdown { font-family:var(--font-display); font-size:64px; color:var(--white); animation:countPulse 1s ease; }
-@keyframes countPulse { 0%{transform:scale(1.5);opacity:0} 30%{opacity:1} 100%{transform:scale(1)} }
-.winner-banner { font-family:var(--font-display); font-size:44px; color:var(--gold); animation:popIn 0.5s cubic-bezier(0.34,1.56,0.64,1); }
-
-.rate-limit-msg {
-  position:fixed; top:60px; left:50%; transform:translateX(-50%);
-  background:#2a1010; border:1px solid #4a2020;
-  border-radius:var(--radius-full); padding:6px 16px;
-  font-size:11px; color:var(--danger); z-index:200;
-  display:none;
+@keyframes fighterInLeft {
+  from{opacity:0; transform:translateX(-80px)} to{opacity:1;transform:translateX(0)}
 }
-
-/* ========== АДАПТИВ: ПЛАНШЕТ ========== */
-@media (min-width: 768px) and (max-width: 1023px) {
-  .topbar { padding: 0 24px; }
-  .content-area { padding: 20px 24px; padding-bottom: 80px; }
-  .cases-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
-  .case-visual { height: 130px; }
-  .case-emoji { font-size: 60px; }
-  .inventory-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+@keyframes fighterInRight {
+  from{opacity:0;transform:translateX(80px)} to{opacity:1;transform:translateX(0)}
 }
-
-/* ========== АДАПТИВ: ПК (БОКОВАЯ ПАНЕЛЬ СЛЕВА) ========== */
-@media (min-width: 1024px) {
-  .app { flex-direction: row; }
-  .tabs-bar {
-    position: relative;
-    flex-direction: column;
-    width: 90px;
-    height: 100vh;
-    border-top: none;
-    border-right: 1px solid var(--border);
-    padding: 24px 0;
-    order: -1;
-  }
-  .tab-item { padding: 16px 4px; }
-  .tab-icon { font-size: 26px; }
-  .tab-label { font-size: 11px; margin-top: 6px; }
-  .content-area { padding: 28px 32px; padding-bottom: 28px; }
-  .cases-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
-  .case-visual { height: 150px; }
-  .case-emoji { font-size: 68px; }
-  .inventory-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
+.fighter-icon { font-size:72px; filter:drop-shadow(0 0 24px rgba(255,255,255,0.15)); }
+.fighter-name { font-size:12px; color:var(--text-secondary); text-align:center; max-width:100px; }
+.battle-vs-big {
+  font-family:var(--font-display); font-size:56px; color:var(--text-muted);
+  letter-spacing:4px;
+  animation:vsPulse 0.8s 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
 }
-
-@media (min-width: 1400px) {
-  .cases-grid { grid-template-columns: repeat(4, 1fr); }
-  .content-area { padding: 32px 48px; }
+@keyframes vsPulse {
+  0%{opacity:0;transform:scale(0.5)} 100%{opacity:1;transform:scale(1)}
+}
+.battle-countdown {
+  font-family:var(--font-display); font-size:80px; color:var(--white);
+  animation:countPulse 1s ease;
+}
+@keyframes countPulse {
+  0%{transform:scale(1.5);opacity:0} 30%{opacity:1} 100%{transform:scale(1)}
+}
+.winner-banner {
+  font-family:var(--font-display); font-size:52px; color:var(--gold);
+  animation:popIn 0.5s cubic-bezier(0.34,1.56,0.64,1);
 }
 </style>
 </head>
@@ -566,71 +832,105 @@ body::before {
 <div class="rate-limit-msg" id="rateLimitMsg">⚠️ Слишком много действий. Подождите секунду.</div>
 
 <div class="app">
+  <!-- TOP BAR -->
   <div class="topbar">
-    <div class="logo">GIFTCASE<div class="logo-dot"></div></div>
-    <div style="display:flex;align-items:center;gap:8px;">
-      <div class="online-count"><div class="online-dot"></div><span id="onlineCount">—</span></div>
-      <div class="balance-pill" id="balancePill"><span class="balance-star">★</span><span class="balance-val" id="balanceValue">250</span></div>
-      <button class="add-btn" id="addStarsBtn">+100</button>
+    <div class="logo">
+      GIFTCASE
+      <div class="logo-dot"></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div class="online-count">
+        <div class="online-dot"></div>
+        <span id="onlineCount">—</span> online
+      </div>
+      <div class="balance-pill" id="balancePill">
+        <span class="balance-star">★</span>
+        <span class="balance-val" id="balanceValue">0</span>
+      </div>
+      <button class="add-btn" id="addStarsBtn">+100 ★</button>
     </div>
   </div>
 
+  <!-- CONTENT -->
   <div class="content-area" id="contentArea">
-    <!-- КЕЙСЫ -->
+
+    <!-- CASES PANEL -->
     <div id="casesPanel" class="panel active">
-      <div class="section-header"><div class="section-title">КЕЙСЫ</div><div class="section-sub">выбери и открой</div></div>
+      <div class="section-header">
+        <div class="section-title">КЕЙСЫ</div>
+        <div class="section-sub">выбери и открой</div>
+      </div>
       <div class="cases-grid" id="casesContainer"></div>
-      <div class="inventory-section"><h3>МОИ ПОДАРКИ</h3><div class="inventory-grid" id="inventoryList"></div></div>
+      <div class="inventory-section">
+        <h3>МОИ ПОДАРКИ</h3>
+        <div class="inventory-grid" id="inventoryList"></div>
+      </div>
     </div>
 
-    <!-- АПГРЕЙД -->
+    <!-- UPGRADE PANEL -->
     <div id="upgradePanel" class="panel">
-      <div class="section-header"><div class="section-title">АПГРЕЙД</div><div class="section-sub">рискни — прокачай</div></div>
-      <div class="upgrade-card" id="upgradeSelectCard" onclick="openUpgradePicker()">
-        <div class="selected-gift" id="upgradeSelectedIcon">📦</div>
-        <div id="upgradeSelectedName" style="color:var(--text-muted); font-size:13px;">Нажми чтобы выбрать подарок</div>
+      <div class="section-header">
+        <div class="section-title">АПГРЕЙД</div>
+        <div class="section-sub">рискни — прокачай</div>
       </div>
-      <div class="upgrade-chance" id="upgradeChanceBlock" style="display:none;">
-        <div style="font-size:11px; color:var(--text-muted); margin-bottom:6px;">🎲 Шанс успеха</div>
-        <div class="upgrade-chance-value" id="upgradeChanceValue">0%</div>
+      <div class="upgrade-layout">
+        <div class="upgrade-card" id="upgradeFromCard" onclick="openGiftPicker('upgrade')">
+          <div class="card-icon" id="upgradeFromIcon">📦</div>
+          <div class="card-name" id="upgradeFromName" style="color:var(--text-muted);">Нажми чтобы выбрать</div>
+          <div class="card-val" id="upgradeFromVal"></div>
+        </div>
+        <div class="upgrade-arrow">→</div>
+        <div class="upgrade-card target" id="upgradeToCard">
+          <div class="card-icon" id="upgradeToIcon">❓</div>
+          <div class="card-name" id="upgradeToName" style="color:var(--text-muted);">Результат</div>
+          <div class="card-val" id="upgradeToVal"></div>
+        </div>
+      </div>
+      <div class="upgrade-chance-display">
+        <div class="chance-label">Шанс успеха</div>
+        <div class="chance-value" id="upgradeChanceVal">—</div>
         <div class="upgrade-progress"><div class="upgrade-progress-fill" id="upgradeProgressFill" style="width:0%"></div></div>
+        <div class="chance-sub" id="upgradeChanceSub">Выберите подарок</div>
       </div>
       <button class="big-btn" id="upgradeBtn" disabled>УЛУЧШИТЬ</button>
-      <div class="inventory-section"><h3>МОИ ПОДАРКИ</h3><div class="inventory-grid" id="upgradeInventoryList"></div></div>
-    </div>
-
-    <!-- КРАФТ -->
-    <div id="craftPanel" class="panel">
-      <div class="section-header"><div class="section-title">КРАФТ</div><div class="section-sub">3 → 1</div></div>
-      <div class="craft-desc">Выбери 3 подарка → получишь подарок, чья ценность зависит от суммы</div>
-      <div class="craft-slots" id="craftSlotsContainer"></div>
-      <div class="craft-result" id="craftResult">
-        <div class="craft-result-icon">❓</div>
-        <div class="craft-result-name">Выберите подарки</div>
+      <div class="inventory-section" style="margin-top:16px;">
+        <h3>МОИ ПОДАРКИ</h3>
+        <div class="inventory-grid" id="upgradeInventoryList"></div>
       </div>
-      <button class="big-btn" id="craftBtn" disabled>СОЗДАТЬ</button>
-      <div class="inventory-section"><h3>МОИ ПОДАРКИ</h3><div class="inventory-grid" id="craftInventoryList"></div></div>
     </div>
 
-    <!-- PVP -->
+    <!-- PVP PANEL -->
     <div id="pvpPanel" class="panel">
-      <div class="section-header"><div class="section-title">PvP БАТЛЫ</div><div class="section-sub">сразись с игроком</div></div>
-      <div class="pvp-create">
-        <div class="pvp-stake" id="pvpStakeDisplay" onclick="openPvpPicker()">
-          <div id="pvpStakeText">⚔ Нажмите чтобы выбрать подарок</div>
-        </div>
-        <button class="big-btn" id="createBattleBtn" disabled style="margin-top:0;">Создать батл</button>
+      <div class="section-header">
+        <div class="section-title">PvP БАТЛЫ</div>
+        <div class="section-sub">сразись с игроком</div>
       </div>
-      <div class="section-header"><div class="section-title" style="font-size:18px;">ОТКРЫТЫЕ БАТЛЫ</div></div>
-      <div class="pvp-lobby" id="pvpLobby"></div>
-      <div class="inventory-section"><h3>МОИ ПОДАРКИ</h3><div class="inventory-grid" id="pvpInventoryList"></div></div>
+      <div style="background:var(--surface-1);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;margin-bottom:16px;">
+        <div style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">Поставь подарок и создай батл. Победитель забирает оба.</div>
+        <div style="display:flex;gap:12px;align-items:center;">
+          <div style="flex:1;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-md);padding:12px;cursor:pointer;transition:var(--transition);" id="pvpStakeDisplay" onclick="openGiftPicker('pvp')">
+            <div id="pvpStakeText" style="color:var(--text-muted);font-size:13px;">⚔ Нажмите чтобы выбрать подарок</div>
+          </div>
+          <button class="big-btn" id="createBattleBtn" style="width:auto;padding:13px 24px;flex-shrink:0;" disabled>Создать</button>
+        </div>
+      </div>
+      <div class="section-header" style="margin-top:20px;">
+        <div class="section-title" style="font-size:22px;">ОТКРЫТЫЕ БАТЛЫ</div>
+      </div>
+      <div class="pvp-lobby" id="pvpLobby">
+        <div style="color:var(--text-muted);text-align:center;padding:40px;font-size:13px;">Нет активных батлов.<br>Создай первый!</div>
+      </div>
+      <div class="inventory-section" style="margin-top:16px;">
+        <h3>МОИ ПОДАРКИ</h3>
+        <div class="inventory-grid" id="pvpInventoryList"></div>
+      </div>
     </div>
 
-    <!-- ПРОФИЛЬ -->
+    <!-- PROFILE PANEL -->
     <div id="profilePanel" class="panel">
       <div class="profile-hero">
-        <div class="profile-avatar">👤</div>
-        <div class="profile-name">ИГРОК</div>
+        <div class="profile-avatar" id="profileAvatar">👤</div>
+        <div class="profile-name" id="profileName">ИГРОК</div>
         <div class="profile-id" id="profileIdText">ID: —</div>
         <div class="stats-grid">
           <div class="stat-box"><div class="stat-num" id="pTotalGifts">0</div><div class="stat-lbl">Всего</div></div>
@@ -642,39 +942,88 @@ body::before {
           <button class="profile-btn" id="depositBtn">💎 Пополнить</button>
           <button class="profile-btn" id="withdrawBtn">💰 Вывести</button>
           <button class="profile-btn" id="shareBtn">🔗 Поделиться</button>
-          <button class="profile-btn" id="referralBtn">👥 Рефералы</button>
         </div>
       </div>
-      <div class="inventory-section"><h3>МОИ ПОДАРКИ</h3><div class="inventory-grid" id="profileInventoryList"></div></div>
-      <div class="inventory-section"><h3>ИСТОРИЯ</h3><table class="history-table"><thead><tr><th>Предмет</th><th>Действие</th><th>Результат</th></tr></thead><tbody id="historyBody"></tbody></table></div>
-    </div>
-  </div>
 
+      <div class="inventory-section">
+        <h3>МОИ ПОДАРКИ</h3>
+        <div class="inventory-grid" id="profileInventoryList"></div>
+      </div>
+
+      <div class="inventory-section" style="margin-top:12px;">
+        <h3>ИСТОРИЯ</h3>
+        <table class="history-table">
+          <thead><tr><th>Предмет</th><th>Действие</th><th>Результат</th></tr></thead>
+          <tbody id="historyBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- /content-area -->
+
+  <!-- BOTTOM TABS -->
   <div class="tabs-bar">
-    <button class="tab-item active" data-tab="cases"><span class="tab-icon">🎁</span><span class="tab-label">Кейсы</span></button>
-    <button class="tab-item" data-tab="upgrade"><span class="tab-icon">⬆️</span><span class="tab-label">Апгрейд</span></button>
-    <button class="tab-item" data-tab="craft"><span class="tab-icon">⚙️</span><span class="tab-label">Крафт</span></button>
-    <button class="tab-item" data-tab="pvp"><span class="tab-icon">⚔️</span><span class="tab-label">PvP</span></button>
-    <button class="tab-item" data-tab="profile"><span class="tab-icon">👤</span><span class="tab-label">Профиль</span></button>
+    <button class="tab-item active" data-tab="cases">
+      <span class="tab-icon">🎁</span>
+      <span class="tab-label">Кейсы</span>
+    </button>
+    <button class="tab-item" data-tab="upgrade">
+      <span class="tab-icon">⬆️</span>
+      <span class="tab-label">Апгрейд</span>
+    </button>
+    <button class="tab-item" data-tab="pvp">
+      <span class="tab-icon">⚔️</span>
+      <span class="tab-label">PvP</span>
+    </button>
+    <button class="tab-item" data-tab="profile">
+      <span class="tab-icon">👤</span>
+      <span class="tab-label">Профиль</span>
+    </button>
   </div>
 </div>
 
 <script>
 // ============================================================
-// БАЗА ДАННЫХ
+// RATE LIMITER — DDoS protection
+// ============================================================
+const RateLimiter = (() => {
+  const limits = {};
+  const msgEl = document.getElementById('rateLimitMsg');
+  let msgTimer = null;
+
+  function check(action, maxPerSec = 3) {
+    const now = Date.now();
+    if (!limits[action]) limits[action] = [];
+    limits[action] = limits[action].filter(t => now - t < 1000);
+    if (limits[action].length >= maxPerSec) {
+      clearTimeout(msgTimer);
+      msgEl.style.display = 'block';
+      msgTimer = setTimeout(() => { msgEl.style.display = 'none'; }, 2000);
+      return false;
+    }
+    limits[action].push(now);
+    return true;
+  }
+  return { check };
+})();
+
+// ============================================================
+// DATABASE
 // ============================================================
 const GIFTS_DB = {
-  "Розовый мишка": { icon:"🧸", starsValue:15, rarity:"common", upgradeTo:"Золотая звезда" },
-  "Букет цветов": { icon:"💐", starsValue:15, rarity:"common", upgradeTo:"Алмазное сердце" },
-  "Шоколадка": { icon:"🍫", starsValue:15, rarity:"common", upgradeTo:"Золотая звезда" },
-  "Золотая звезда": { icon:"⭐️", starsValue:50, rarity:"rare", upgradeTo:"Легендарный дракон" },
-  "Алмазное сердце": { icon:"💎", starsValue:50, rarity:"rare", upgradeTo:"Космический корабль" },
-  "Легендарный дракон": { icon:"🐉", starsValue:200, rarity:"epic", upgradeTo:"Трон короля" },
-  "Космический корабль": { icon:"🚀", starsValue:200, rarity:"epic", upgradeTo:"Трон короля" },
-  "Трон короля": { icon:"👑", starsValue:1000, rarity:"legendary", upgradeTo:null }
+  "Розовый мишка":      { icon:"🧸", starsValue:15,   rarity:"common",    upgradeTo:"Золотая звезда" },
+  "Букет цветов":       { icon:"💐", starsValue:15,   rarity:"common",    upgradeTo:"Алмазное сердце" },
+  "Шоколадка":          { icon:"🍫", starsValue:15,   rarity:"common",    upgradeTo:"Золотая звезда" },
+  "Золотая звезда":     { icon:"⭐️", starsValue:50,  rarity:"rare",      upgradeTo:"Легендарный дракон" },
+  "Алмазное сердце":    { icon:"💎", starsValue:50,   rarity:"rare",      upgradeTo:"Космический корабль" },
+  "Легендарный дракон": { icon:"🐉", starsValue:200,  rarity:"epic",      upgradeTo:"Трон короля" },
+  "Космический корабль":{ icon:"🚀", starsValue:200,  rarity:"epic",      upgradeTo:"Трон короля" },
+  "Трон короля":        { icon:"👑", starsValue:1000, rarity:"legendary", upgradeTo:null }
 };
-const RARITY_LABELS = { common:"Обычный", rare:"Редкий", epic:"Эпический", legendary:"Легендарный" };
 const UPGRADE_CHANCES = { common:70, rare:50, epic:30, legendary:0 };
+const RARITY_LABELS = { common:"Обычный", rare:"Редкий", epic:"Эпический", legendary:"Легендарный" };
+const RARITY_COLORS = { common:"#555", rare:"#6688cc", epic:"#aa66cc", legendary:"#c8a96e" };
+
 const CASES = [
   { id:"common", name:"ОБЫЧНЫЙ", emoji:"📦", price:30, rarity:"rarity-common",
     gifts:[{name:"Розовый мишка",chance:40},{name:"Букет цветов",chance:35},{name:"Шоколадка",chance:25}]},
@@ -687,8 +1036,9 @@ const CASES = [
 ];
 
 // ============================================================
-// STATE + СОХРАНЕНИЕ
+// STATE + STORAGE  (multi-user via userId key)
 // ============================================================
+const STATE_VERSION = 2;
 let userId = null;
 let state = {
   balance: 250,
@@ -696,52 +1046,131 @@ let state = {
   casesOpened: 0,
   pvpWins: 0,
   history: [],
-  referralCode: null,
-  referredBy: null
+  battles: []  // shared battles (stored per-session)
 };
-let globalBattles = [];
+let globalBattles = []; // In-memory battles (would be server in prod)
 let upgradeSelectedIdx = null;
 let pvpSelectedIdx = null;
-let craftSlots = [null, null, null];
-let craftPickerSlot = null;
 
 function getUserId() {
   let id = localStorage.getItem('gc_uid');
-  if (!id) { id = 'u_' + Math.random().toString(36).slice(2,10); localStorage.setItem('gc_uid', id); }
+  if (!id) {
+    id = 'u_' + Math.random().toString(36).slice(2,10);
+    localStorage.setItem('gc_uid', id);
+  }
   return id;
 }
-function saveState() { try { localStorage.setItem('gc_state_' + userId, JSON.stringify({ v: 3, state })); } catch(e) {} }
+
+function saveState() {
+  const data = { v: STATE_VERSION, state, ts: Date.now() };
+  try {
+    localStorage.setItem('gc_state_' + userId, JSON.stringify(data));
+    // Simulate server sync indicator
+    syncPulse();
+  } catch(e) {}
+}
+
 function loadState() {
   userId = getUserId();
-  if (!state.referralCode) state.referralCode = userId;
   const raw = localStorage.getItem('gc_state_' + userId);
   if (raw) {
-    try { const data = JSON.parse(raw); if (data.state) state = { ...state, ...data.state }; } catch(e) {}
+    try {
+      const data = JSON.parse(raw);
+      if (data.v === STATE_VERSION && data.state) {
+        state = { ...state, ...data.state };
+      }
+    } catch(e) {}
   }
+  // Load shared battles
   const braw = localStorage.getItem('gc_battles');
-  if (braw) { try { globalBattles = JSON.parse(braw); } catch(e) {} }
-  document.getElementById('balanceValue').innerText = state.balance;
+  if (braw) {
+    try { globalBattles = JSON.parse(braw); } catch(e) { globalBattles = []; }
+  }
 }
-function saveBattles() { try { localStorage.setItem('gc_battles', JSON.stringify(globalBattles)); } catch(e) {} }
+
+function saveBattles() {
+  try { localStorage.setItem('gc_battles', JSON.stringify(globalBattles)); } catch(e) {}
+}
+
+let syncTimeout = null;
+function syncPulse() {
+  const dot = document.querySelector('.logo-dot');
+  if (!dot) return;
+  dot.style.background = '#55e095';
+  clearTimeout(syncTimeout);
+  syncTimeout = setTimeout(() => { dot.style.background = '#c8a96e'; }, 500);
+}
+
+// ============================================================
+// CONFETTI ENGINE
+// ============================================================
+const confetti = (() => {
+  const canvas = document.getElementById('confettiCanvas');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  let animId = null;
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  function burst(x, y, count = 80) {
+    for (let i = 0; i < count; i++) {
+      const angle = (Math.PI * 2 / count) * i + Math.random() * 0.3;
+      const speed = Math.random() * 8 + 3;
+      particles.push({
+        x, y, vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed - 4,
+        life: 1, decay: Math.random() * 0.015 + 0.008,
+        size: Math.random() * 6 + 2,
+        color: `hsl(${Math.random()*40 + 30}, 20%, ${Math.random()*30+60}%)`,
+        rotation: Math.random() * Math.PI * 2,
+        rotSpeed: (Math.random() - 0.5) * 0.2
+      });
+    }
+    if (!animId) animate();
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles = particles.filter(p => p.life > 0);
+    particles.forEach(p => {
+      p.x += p.vx; p.y += p.vy;
+      p.vy += 0.25; p.vx *= 0.99;
+      p.life -= p.decay;
+      p.rotation += p.rotSpeed;
+      ctx.save();
+      ctx.globalAlpha = p.life;
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rotation);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
+      ctx.restore();
+    });
+    animId = particles.length > 0 ? requestAnimationFrame(animate) : null;
+  }
+  return { burst };
+})();
+
+// ============================================================
+// TOAST
+// ============================================================
 function showToast(msg) {
   const existing = document.querySelector('.toast');
   if (existing) existing.remove();
-  const t = document.createElement('div'); t.className = 'toast'; t.innerHTML = msg;
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.innerHTML = msg;
   document.body.appendChild(t);
   setTimeout(() => t.remove(), 2500);
 }
-function addHistory(icon, action, result, isPositive) {
-  state.history.unshift({ icon, action, result, isPositive, ts: Date.now() });
-  if (state.history.length > 50) state.history = state.history.slice(0, 50);
-  renderHistory();
-  saveState();
-}
-function renderHistory() {
-  const tbody = document.getElementById('historyBody');
-  if (!tbody) return;
-  if (state.history.length === 0) { tbody.innerHTML = `<tr><td colspan="3" style="color:var(--text-muted);text-align:center;padding:16px;">Нет истории</td></tr>`; return; }
-  tbody.innerHTML = state.history.slice(0,20).map(h => `<tr><td class="hist-icon">${h.icon}</td><td>${h.action}</td><td class="${h.isPositive ? 'hist-gain' : 'hist-loss'}">${h.result}</td></tr>`).join('');
-}
+
+// ============================================================
+// BALANCE
+// ============================================================
 function setBalance(val, animate = true) {
   const prev = state.balance;
   state.balance = Math.max(0, Math.floor(val));
@@ -755,57 +1184,42 @@ function setBalance(val, animate = true) {
   }
   saveState();
 }
-function updateProfileStats() {
-  let totalStars = 0;
-  state.inventory.forEach(g => totalStars += g.starsValue);
-  document.getElementById('pTotalGifts').innerText = state.inventory.length;
-  document.getElementById('pTotalStars').innerText = totalStars;
-  document.getElementById('pCasesOpened').innerText = state.casesOpened || 0;
-  document.getElementById('pWins').innerText = state.pvpWins || 0;
-  document.getElementById('profileIdText').innerText = 'ID: ' + userId.slice(-8).toUpperCase();
+
+// ============================================================
+// HISTORY
+// ============================================================
+function addHistory(icon, action, result, isPositive) {
+  state.history.unshift({ icon, action, result, isPositive, ts: Date.now() });
+  if (state.history.length > 50) state.history = state.history.slice(0, 50);
 }
 
-// КОНФЕТТИ
-function burstConfetti() {
-  const canvas = document.getElementById('confettiCanvas');
-  const ctx = canvas.getContext('2d');
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-  let particles = [];
-  for (let i = 0; i < 100; i++) {
-    particles.push({
-      x: canvas.width/2, y: canvas.height/2,
-      vx: (Math.random() - 0.5) * 14, vy: (Math.random() - 0.5) * 14 - 7,
-      size: Math.random() * 7 + 2, life: 1,
-      color: `hsl(${Math.random() * 360}, 70%, 60%)`
-    });
+function renderHistory() {
+  const tbody = document.getElementById('historyBody');
+  if (!tbody) return;
+  if (state.history.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="3" style="color:var(--text-muted);text-align:center;padding:20px;">Нет истории</td></tr>`;
+    return;
   }
-  function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    let alive = false;
-    particles.forEach(p => {
-      p.x += p.vx; p.y += p.vy;
-      p.vy += 0.2;
-      p.life -= 0.012;
-      if (p.life > 0) {
-        alive = true;
-        ctx.globalAlpha = p.life;
-        ctx.fillStyle = p.color;
-        ctx.fillRect(p.x - p.size/2, p.y - p.size/2, p.size, p.size);
-      }
-    });
-    particles = particles.filter(p => p.life > 0);
-    if (alive) requestAnimationFrame(animate);
-  }
-  animate();
+  tbody.innerHTML = state.history.slice(0,20).map(h => `
+    <tr>
+      <td class="hist-icon">${h.icon}</td>
+      <td>${h.action}</td>
+      <td class="${h.isPositive ? 'hist-gain' : 'hist-loss'}">${h.result}</td>
+    </tr>
+  `).join('');
 }
 
-// РЕНДЕР ИНВЕНТАРЯ
+// ============================================================
+// INVENTORY RENDER
+// ============================================================
 function renderInventory(containerId, withSell = false) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-  if (state.inventory.length === 0) { container.innerHTML = `<div class="empty-inv">📭 Нет подарков</div>`; return; }
-  container.innerHTML = state.inventory.map((g, i) => `
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  if (state.inventory.length === 0) {
+    el.innerHTML = `<div class="empty-inv">📭 Нет подарков</div>`;
+    return;
+  }
+  el.innerHTML = state.inventory.map((g, i) => `
     <div class="inv-card">
       <div class="inv-card-rarity r-${g.rarity}"></div>
       <div class="inv-card-icon">${g.icon}</div>
@@ -815,33 +1229,200 @@ function renderInventory(containerId, withSell = false) {
     </div>
   `).join('');
   if (withSell) {
-    container.querySelectorAll('.sell-chip').forEach(btn => {
+    el.querySelectorAll('.sell-chip').forEach(btn => {
       btn.onclick = (e) => { e.stopPropagation(); sellGift(parseInt(btn.dataset.idx)); };
     });
   }
 }
+
 function renderAllInventories() {
   renderInventory('inventoryList', false);
   renderInventory('upgradeInventoryList', false);
-  renderInventory('craftInventoryList', false);
   renderInventory('pvpInventoryList', false);
   renderInventory('profileInventoryList', true);
 }
+
+// ============================================================
+// PROFILE STATS
+// ============================================================
+function updateProfileStats() {
+  let totalStars = 0;
+  state.inventory.forEach(g => totalStars += g.starsValue);
+  document.getElementById('pTotalGifts').innerText = state.inventory.length;
+  document.getElementById('pTotalStars').innerText = totalStars;
+  document.getElementById('pCasesOpened').innerText = state.casesOpened || 0;
+  document.getElementById('pWins').innerText = state.pvpWins || 0;
+  document.getElementById('profileIdText').innerText = 'ID: ' + userId.toUpperCase();
+}
+
+function updateAllUI() {
+  document.getElementById('balanceValue').innerText = state.balance;
+  renderAllInventories();
+  updateProfileStats();
+  renderHistory();
+  renderPvpLobby();
+  saveState();
+}
+
+// ============================================================
+// SELL GIFT
+// ============================================================
 function sellGift(idx) {
+  if (!RateLimiter.check('sell', 5)) return;
   if (!state.inventory[idx]) return;
   const g = state.inventory[idx];
   const price = Math.floor(g.starsValue * 0.7);
   state.inventory.splice(idx, 1);
   setBalance(state.balance + price);
   addHistory(g.icon, `Продан ${g.name}`, `+${price} ★`, true);
-  renderAllInventories();
-  updateProfileStats();
-  renderUpgradeUI();
-  renderCraftUI();
+  updateAllUI();
   showToast(`💰 Продано за ${price} ★`);
 }
 
-// КЕЙСЫ
+// ============================================================
+// GIFT PICKER MODAL
+// ============================================================
+let pickerPurpose = null;
+let pickerSelected = null;
+
+function openGiftPicker(purpose) {
+  if (!RateLimiter.check('picker', 5)) return;
+  pickerPurpose = purpose;
+  pickerSelected = null;
+
+  const overlay = document.createElement('div');
+  overlay.className = 'gift-picker-overlay';
+  overlay.id = 'giftPickerOverlay';
+
+  const picker = document.createElement('div');
+  picker.className = 'gift-picker';
+
+  const items = state.inventory.length === 0
+    ? `<div class="picker-none">📭 Инвентарь пуст. Сначала открой кейс!</div>`
+    : state.inventory.map((g, i) => `
+        <div class="picker-item" data-idx="${i}">
+          <div class="picker-item-icon">${g.icon}</div>
+          <div class="picker-item-name">${g.name}</div>
+          <div class="picker-item-val">★ ${g.starsValue}</div>
+        </div>
+      `).join('');
+
+  picker.innerHTML = `
+    <div class="gift-picker-header">
+      <div class="gift-picker-title">ВЫБЕРИ ПОДАРОК</div>
+      <button class="picker-close" id="pickerCloseBtn">✕</button>
+    </div>
+    <div class="gift-picker-grid">${items}</div>
+    <button class="picker-confirm" id="pickerConfirmBtn" disabled>ВЫБРАТЬ</button>
+  `;
+
+  overlay.appendChild(picker);
+  document.body.appendChild(overlay);
+
+  document.getElementById('pickerCloseBtn').onclick = () => overlay.remove();
+  overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+
+  picker.querySelectorAll('.picker-item').forEach(item => {
+    item.onclick = () => {
+      picker.querySelectorAll('.picker-item').forEach(i => i.classList.remove('selected'));
+      item.classList.add('selected');
+      pickerSelected = parseInt(item.dataset.idx);
+      document.getElementById('pickerConfirmBtn').disabled = false;
+    };
+  });
+
+  document.getElementById('pickerConfirmBtn').onclick = () => {
+    if (pickerSelected === null) return;
+    overlay.remove();
+    if (pickerPurpose === 'upgrade') applyUpgradeSelection(pickerSelected);
+    if (pickerPurpose === 'pvp') applyPvpSelection(pickerSelected);
+  };
+}
+
+// ============================================================
+// UPGRADE
+// ============================================================
+function applyUpgradeSelection(idx) {
+  upgradeSelectedIdx = idx;
+  const g = state.inventory[idx];
+  if (!g) return;
+  const chance = UPGRADE_CHANCES[g.rarity];
+  const targetName = GIFTS_DB[g.name]?.upgradeTo;
+  const target = targetName ? GIFTS_DB[targetName] : null;
+
+  document.getElementById('upgradeFromIcon').innerText = g.icon;
+  document.getElementById('upgradeFromName').innerText = g.name;
+  document.getElementById('upgradeFromName').style.color = 'var(--text-primary)';
+  document.getElementById('upgradeFromVal').innerText = `★ ${g.starsValue}`;
+  document.getElementById('upgradeFromCard').classList.add('has-item');
+
+  if (target) {
+    document.getElementById('upgradeToIcon').innerText = target.icon;
+    document.getElementById('upgradeToName').innerText = targetName;
+    document.getElementById('upgradeToName').style.color = 'var(--text-primary)';
+    document.getElementById('upgradeToVal').innerText = `★ ${target.starsValue}`;
+  }
+
+  const cv = document.getElementById('upgradeChanceVal');
+  cv.innerText = chance > 0 ? chance + '%' : '—';
+  cv.className = 'chance-value ' + (chance >= 60 ? 'high' : chance >= 40 ? 'med' : 'low');
+  document.getElementById('upgradeProgressFill').style.width = chance + '%';
+  document.getElementById('upgradeChanceSub').innerText = target
+    ? `При успехе: ${targetName} (★ ${target.starsValue})`
+    : 'Максимальный уровень';
+  document.getElementById('upgradeBtn').disabled = (chance === 0 || !target);
+}
+
+function doUpgrade() {
+  if (!RateLimiter.check('upgrade', 2)) return;
+  if (upgradeSelectedIdx === null) return;
+  const g = state.inventory[upgradeSelectedIdx];
+  if (!g) return;
+  const chance = UPGRADE_CHANCES[g.rarity];
+  const targetName = GIFTS_DB[g.name]?.upgradeTo;
+  if (!targetName || chance === 0) return;
+
+  state.inventory.splice(upgradeSelectedIdx, 1);
+  upgradeSelectedIdx = null;
+  document.getElementById('upgradeBtn').disabled = true;
+
+  const success = Math.random() * 100 < chance;
+  if (success) {
+    const targetInfo = GIFTS_DB[targetName];
+    state.inventory.push({ name:targetName, icon:targetInfo.icon, starsValue:targetInfo.starsValue, rarity:targetInfo.rarity });
+    addHistory(targetInfo.icon, `Апгрейд → ${targetName}`, `✅ Успех`, true);
+    showResultModal(targetName, true, () => {});
+    confetti.burst(window.innerWidth/2, window.innerHeight/2);
+  } else {
+    addHistory(g.icon, `Апгрейд ${g.name}`, `💀 Провал`, false);
+    updateAllUI();
+    showToast(`💀 Неудача! ${g.name} потерян`);
+    resetUpgradeUI();
+  }
+  updateAllUI();
+}
+
+function resetUpgradeUI() {
+  upgradeSelectedIdx = null;
+  document.getElementById('upgradeFromIcon').innerText = '📦';
+  document.getElementById('upgradeFromName').innerText = 'Нажми чтобы выбрать';
+  document.getElementById('upgradeFromName').style.color = 'var(--text-muted)';
+  document.getElementById('upgradeFromVal').innerText = '';
+  document.getElementById('upgradeToIcon').innerText = '❓';
+  document.getElementById('upgradeToName').innerText = 'Результат';
+  document.getElementById('upgradeToName').style.color = 'var(--text-muted)';
+  document.getElementById('upgradeToVal').innerText = '';
+  document.getElementById('upgradeChanceVal').innerText = '—';
+  document.getElementById('upgradeChanceVal').className = 'chance-value';
+  document.getElementById('upgradeProgressFill').style.width = '0%';
+  document.getElementById('upgradeChanceSub').innerText = 'Выберите подарок';
+  document.getElementById('upgradeBtn').disabled = true;
+  document.getElementById('upgradeFromCard').classList.remove('has-item');
+}
+
+// ============================================================
+// CASES
+// ============================================================
 function renderCases() {
   const container = document.getElementById('casesContainer');
   container.innerHTML = '';
@@ -849,352 +1430,345 @@ function renderCases() {
     const card = document.createElement('div');
     card.className = `case-card ${c.rarity}`;
     card.innerHTML = `
-      <div class="case-visual"><div class="case-emoji">${c.emoji}</div></div>
+      <div class="case-visual">
+        <div class="case-emoji">${c.emoji}</div>
+      </div>
       <div class="case-body">
-        <div class="case-meta"><div class="case-name">${c.name}</div><div class="case-price-tag">★ ${c.price}</div></div>
-        <div class="case-items">${c.gifts.slice(0,3).map(g => `<span class="case-item-tag">${GIFTS_DB[g.name]?.icon} ${g.name} ${g.chance}%</span>`).join('')}</div>
-        <button class="open-case-btn">ОТКРЫТЬ</button>
+        <div class="case-meta">
+          <div class="case-name">${c.name}</div>
+          <div class="case-price-tag">★ ${c.price}</div>
+        </div>
+        <div class="case-items">
+          ${c.gifts.slice(0,4).map(g => `<span class="case-item-tag">${GIFTS_DB[g.name]?.icon} ${g.name} <span style="color:var(--text-muted)">${g.chance}%</span></span>`).join('')}
+        </div>
+        <button class="open-case-btn">ОТКРЫТЬ КЕЙС</button>
       </div>
     `;
-    card.querySelector('.open-case-btn').onclick = () => openCase(c);
+    card.querySelector('.open-case-btn').onclick = (e) => {
+      e.stopPropagation();
+      openCase(c);
+    };
     container.appendChild(card);
   });
 }
+
 function openCase(caseData) {
-  if (state.balance < caseData.price) { showToast(`❌ Недостаточно Stars (нужно ${caseData.price})`); return; }
+  if (!RateLimiter.check('openCase', 2)) return;
+  if (state.balance < caseData.price) {
+    showToast(`❌ Недостаточно Stars (нужно ${caseData.price})`);
+    return;
+  }
   setBalance(state.balance - caseData.price);
   state.casesOpened = (state.casesOpened || 0) + 1;
+
+  // Roll item
   const total = caseData.gifts.reduce((s, g) => s + g.chance, 0);
-  let rand = Math.random() * total, acc = 0, wonName = caseData.gifts[0].name;
+  let rand = Math.random() * total, acc = 0;
+  let wonName = caseData.gifts[0].name;
   for (let g of caseData.gifts) { acc += g.chance; if (rand <= acc) { wonName = g.name; break; } }
-  const info = GIFTS_DB[wonName];
-  state.inventory.push({ name:wonName, icon:info.icon, starsValue:info.starsValue, rarity:info.rarity });
-  addHistory(info.icon, `Кейс: ${caseData.name}`, `+${wonName}`, true);
-  showToast(`📦 ${wonName} добавлен в инвентарь`);
-  renderAllInventories();
-  updateProfileStats();
-  renderUpgradeUI();
-  renderCraftUI();
-  if (info.rarity === 'legendary') burstConfetti();
-}
 
-// АПГРЕЙД
-function openUpgradePicker() {
-  if (state.inventory.length === 0) { showToast('Нет подарков'); return; }
-  const overlay = document.createElement('div');
-  overlay.className = 'gift-picker-overlay';
-  overlay.innerHTML = `
-    <div class="gift-picker">
-      <div class="gift-picker-header"><div class="gift-picker-title">ВЫБЕРИ ПОДАРОК</div><button class="picker-close" id="pickerCloseBtn">✕</button></div>
-      <div class="gift-picker-grid" id="upgradePickerGrid"></div>
-    </div>
-  `;
-  document.body.appendChild(overlay);
-  const grid = overlay.querySelector('#upgradePickerGrid');
-  grid.innerHTML = state.inventory.map((g, i) => `
-    <div class="picker-item" data-idx="${i}">
-      <div class="picker-item-icon">${g.icon}</div>
-      <div class="picker-item-name">${g.name}</div>
-      <div class="picker-item-val">★ ${g.starsValue}</div>
-    </div>
-  `).join('');
-  grid.querySelectorAll('.picker-item').forEach(item => {
-    item.onclick = () => {
-      const idx = parseInt(item.dataset.idx);
-      upgradeSelectedIdx = idx;
-      const g = state.inventory[idx];
-      document.getElementById('upgradeSelectedIcon').innerHTML = g.icon;
-      document.getElementById('upgradeSelectedName').innerHTML = g.name;
-      document.getElementById('upgradeSelectedName').style.color = 'var(--text-primary)';
-      const chance = UPGRADE_CHANCES[g.rarity];
-      const target = GIFTS_DB[g.name]?.upgradeTo;
-      if (target && chance > 0) {
-        document.getElementById('upgradeChanceBlock').style.display = 'block';
-        document.getElementById('upgradeChanceValue').innerHTML = chance + '%';
-        document.getElementById('upgradeProgressFill').style.width = chance + '%';
-        document.getElementById('upgradeBtn').disabled = false;
+  // Build roulette strip with many items
+  const allNames = caseData.gifts.map(g => g.name);
+  const strip = [];
+  for (let i = 0; i < 60; i++) strip.push(allNames[Math.floor(Math.random() * allNames.length)]);
+  const wonPos = 48;
+  strip[wonPos] = wonName;
+
+  showRoulette(strip, wonPos, () => {
+    showResultModal(wonName, null, (action) => {
+      if (action === 'keep') {
+        const info = GIFTS_DB[wonName];
+        state.inventory.push({ name:wonName, icon:info.icon, starsValue:info.starsValue, rarity:info.rarity });
+        addHistory(info.icon, `Кейс: ${caseData.name}`, `+${wonName}`, true);
+        showToast(`📦 ${wonName} добавлен в инвентарь`);
       } else {
-        document.getElementById('upgradeChanceBlock').style.display = 'none';
-        document.getElementById('upgradeBtn').disabled = true;
+        const price = Math.floor(GIFTS_DB[wonName].starsValue * 0.7);
+        setBalance(state.balance + price);
+        addHistory(GIFTS_DB[wonName].icon, `Продан сразу: ${wonName}`, `+${price} ★`, true);
+        showToast(`💰 Продано за ${price} ★`);
       }
-      overlay.remove();
-    };
+      updateAllUI();
+    });
   });
-  document.getElementById('pickerCloseBtn').onclick = () => overlay.remove();
-  overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
 }
-function doUpgrade() {
-  if (upgradeSelectedIdx === null) return;
-  const g = state.inventory[upgradeSelectedIdx];
+
+// ============================================================
+// ROULETTE STRIP ANIMATION
+// ============================================================
+function showRoulette(strip, wonPos, callback) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = `position:fixed;inset:0;background:rgba(0,0,0,0.97);z-index:600;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;`;
+
+  const title = document.createElement('div');
+  title.style.cssText = `font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:3px;color:#888;`;
+  title.innerText = 'ОТКРЫВАЕМ';
+  overlay.appendChild(title);
+
+  const container = document.createElement('div');
+  container.className = 'roulette-container';
+  container.style.cssText = `width:min(600px,90vw);`;
+  container.innerHTML = `
+    <div class="roulette-center-line"></div>
+    <div class="roulette-overlay-l"></div>
+    <div class="roulette-overlay-r"></div>
+    <div class="roulette-track" id="rouletteTrack"></div>
+  `;
+  overlay.appendChild(container);
+  document.body.appendChild(overlay);
+
+  const track = container.querySelector('#rouletteTrack');
+  const ITEM_W = 108;
+
+  strip.forEach(name => {
+    const info = GIFTS_DB[name] || { icon:'🎁' };
+    const item = document.createElement('div');
+    item.className = 'roulette-item';
+    item.innerHTML = `<div style="font-size:36px">${info.icon}</div><div class="gift-label">${name}</div>`;
+    track.appendChild(item);
+  });
+
+  const containerW = container.offsetWidth || 400;
+  const centerOffset = containerW / 2 - ITEM_W / 2;
+  const finalX = -(wonPos * ITEM_W - centerOffset + Math.floor(Math.random() * 40 - 20));
+
+  track.style.transform = 'translateX(0)';
+  requestAnimationFrame(() => {
+    track.style.transition = `transform 4.5s cubic-bezier(0.08,0.82,0.17,1)`;
+    track.style.transform = `translateX(${finalX}px)`;
+  });
+
+  setTimeout(() => {
+    overlay.remove();
+    if (callback) callback();
+  }, 5000);
+}
+
+// ============================================================
+// RESULT MODAL
+// ============================================================
+function showResultModal(giftName, isUpgradeSuccess, callback) {
+  const info = GIFTS_DB[giftName];
+  if (!info) return;
+
+  const overlay = document.createElement('div');
+  overlay.className = 'result-overlay';
+
+  overlay.innerHTML = `
+    <div class="result-modal">
+      <div class="result-glow"></div>
+      <div class="result-icon">${info.icon}</div>
+      <div class="result-title">${giftName}</div>
+      <div class="result-sub" style="color:${RARITY_COLORS[info.rarity]}">
+        ${RARITY_LABELS[info.rarity].toUpperCase()} · ★ ${info.starsValue}
+      </div>
+      ${isUpgradeSuccess !== null ? `
+        <div class="result-actions">
+          <button class="big-btn" id="resultKeepBtn">📦 Забрать</button>
+        </div>
+      ` : `
+        <div class="result-actions">
+          <button class="big-btn" id="resultKeepBtn">📦 Забрать</button>
+          <button class="big-btn secondary" id="resultSellBtn">💰 Продать за ${Math.floor(info.starsValue*0.7)} ★</button>
+        </div>
+      `}
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+  confetti.burst(window.innerWidth/2, window.innerHeight*0.4, 60);
+
+  document.getElementById('resultKeepBtn').onclick = () => {
+    overlay.remove();
+    if (callback) callback('keep');
+  };
+  const sellBtn = document.getElementById('resultSellBtn');
+  if (sellBtn) {
+    sellBtn.onclick = () => {
+      overlay.remove();
+      if (callback) callback('sell');
+    };
+  }
+}
+
+// ============================================================
+// PVP BATTLES
+// ============================================================
+function applyPvpSelection(idx) {
+  pvpSelectedIdx = idx;
+  const g = state.inventory[idx];
   if (!g) return;
-  const chance = UPGRADE_CHANCES[g.rarity];
-  const targetName = GIFTS_DB[g.name]?.upgradeTo;
-  if (!targetName || chance === 0) return;
-  state.inventory.splice(upgradeSelectedIdx, 1);
-  upgradeSelectedIdx = null;
-  document.getElementById('upgradeBtn').disabled = true;
-  document.getElementById('upgradeSelectedIcon').innerHTML = '📦';
-  document.getElementById('upgradeSelectedName').innerHTML = 'Нажми чтобы выбрать подарок';
-  document.getElementById('upgradeSelectedName').style.color = 'var(--text-muted)';
-  document.getElementById('upgradeChanceBlock').style.display = 'none';
-  const success = Math.random() * 100 < chance;
-  if (success) {
-    const targetInfo = GIFTS_DB[targetName];
-    state.inventory.push({ name:targetName, icon:targetInfo.icon, starsValue:targetInfo.starsValue, rarity:targetInfo.rarity });
-    addHistory(targetInfo.icon, `Апгрейд → ${targetName}`, `✅ Успех!`, true);
-    showToast(`✨ Успех! Получен ${targetName}`);
-    if (targetInfo.rarity === 'legendary') burstConfetti();
-  } else {
-    addHistory(g.icon, `Апгрейд ${g.name}`, `💀 Провал`, false);
-    showToast(`💀 Неудача! ${g.name} потерян`);
-  }
-  renderAllInventories();
-  updateProfileStats();
-  renderUpgradeUI();
-  renderCraftUI();
-}
-function renderUpgradeUI() {
-  upgradeSelectedIdx = null;
-  document.getElementById('upgradeSelectedIcon').innerHTML = '📦';
-  document.getElementById('upgradeSelectedName').innerHTML = 'Нажми чтобы выбрать подарок';
-  document.getElementById('upgradeSelectedName').style.color = 'var(--text-muted)';
-  document.getElementById('upgradeChanceBlock').style.display = 'none';
-  document.getElementById('upgradeBtn').disabled = true;
+  document.getElementById('pvpStakeText').innerHTML = `
+    <span style="font-size:20px">${g.icon}</span>
+    <strong style="color:var(--white)">${g.name}</strong>
+    <span style="color:var(--gold)">★ ${g.starsValue}</span>
+  `;
+  document.getElementById('createBattleBtn').disabled = false;
 }
 
-// КРАФТ (НОВАЯ ЛОГИКА: СУММА ЦЕННОСТЕЙ)
-function renderCraftUI() {
-  const container = document.getElementById('craftSlotsContainer');
-  if (!container) return;
-  container.innerHTML = '';
-  for (let i = 0; i < 3; i++) {
-    const gift = craftSlots[i];
-    const slotDiv = document.createElement('div');
-    slotDiv.className = gift ? 'craft-slot filled' : 'craft-slot empty';
-    if (gift) {
-      slotDiv.innerHTML = `
-        <div class="craft-slot-icon">${gift.icon}</div>
-        <div class="craft-slot-name">${gift.name}</div>
-        <div class="craft-slot-remove" data-slot="${i}">✕</div>
-      `;
-    } else {
-      slotDiv.innerHTML = `<div class="craft-slot-icon">❓</div><div class="craft-slot-name">Выбрать</div>`;
-    }
-    slotDiv.onclick = (e) => { if (!e.target.classList.contains('craft-slot-remove')) openCraftPicker(i); };
-    container.appendChild(slotDiv);
-  }
-  document.querySelectorAll('.craft-slot-remove').forEach(btn => {
-    btn.onclick = (e) => { e.stopPropagation(); removeCraftSlot(parseInt(btn.dataset.slot)); };
-  });
-  const allFilled = craftSlots.every(s => s !== null);
-  if (allFilled) {
-    const totalValue = craftSlots.reduce((sum, g) => sum + g.starsValue, 0);
-    let resultRarity = 'common';
-    if (totalValue >= 3000) resultRarity = 'legendary';
-    else if (totalValue >= 600) resultRarity = 'epic';
-    else if (totalValue >= 150) resultRarity = 'rare';
-    const possibleGifts = Object.entries(GIFTS_DB).filter(([_, info]) => info.rarity === resultRarity);
-    const randomGift = possibleGifts[Math.floor(Math.random() * possibleGifts.length)];
-    const resultGift = { name: randomGift[0], ...randomGift[1] };
-    document.getElementById('craftResult').innerHTML = `
-      <div class="craft-result-icon">${resultGift.icon}</div>
-      <div class="craft-result-name">${resultGift.name}</div>
-      <div class="craft-result-sub" style="font-size:10px; color:var(--text-muted);">★ ${resultGift.starsValue} · ${RARITY_LABELS[resultGift.rarity]}</div>
-    `;
-    document.getElementById('craftBtn').disabled = false;
-    window.currentCraftResult = resultGift;
-  } else {
-    document.getElementById('craftResult').innerHTML = `<div class="craft-result-icon">❓</div><div class="craft-result-name">Выберите 3 подарка</div>`;
-    document.getElementById('craftBtn').disabled = true;
-  }
-}
-function openCraftPicker(slotIndex) {
-  craftPickerSlot = slotIndex;
-  if (state.inventory.length === 0) { showToast('Нет подарков'); return; }
-  const overlay = document.createElement('div');
-  overlay.className = 'gift-picker-overlay';
-  overlay.innerHTML = `
-    <div class="gift-picker">
-      <div class="gift-picker-header"><div class="gift-picker-title">ВЫБЕРИ ПОДАРОК</div><button class="picker-close" id="pickerCloseBtn">✕</button></div>
-      <div class="gift-picker-grid" id="craftPickerGrid"></div>
-    </div>
-  `;
-  document.body.appendChild(overlay);
-  const grid = overlay.querySelector('#craftPickerGrid');
-  grid.innerHTML = state.inventory.map((g, i) => `
-    <div class="picker-item" data-idx="${i}">
-      <div class="picker-item-icon">${g.icon}</div>
-      <div class="picker-item-name">${g.name}</div>
-      <div class="picker-item-val">★ ${g.starsValue}</div>
-    </div>
-  `).join('');
-  grid.querySelectorAll('.picker-item').forEach(item => {
-    item.onclick = () => {
-      const idx = parseInt(item.dataset.idx);
-      const gift = state.inventory[idx];
-      if (gift) {
-        craftSlots[craftPickerSlot] = { ...gift };
-        state.inventory.splice(idx, 1);
-        renderAllInventories();
-        renderCraftUI();
-        overlay.remove();
-      }
-    };
-  });
-  document.getElementById('pickerCloseBtn').onclick = () => overlay.remove();
-  overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
-}
-function removeCraftSlot(slotIndex) {
-  if (craftSlots[slotIndex]) {
-    state.inventory.push(craftSlots[slotIndex]);
-    craftSlots[slotIndex] = null;
-    renderAllInventories();
-    renderCraftUI();
-  }
-}
-function doCraft() {
-  const allFilled = craftSlots.every(s => s !== null);
-  if (!allFilled) { showToast('Заполните все 3 слота'); return; }
-  const resultGift = window.currentCraftResult;
-  if (!resultGift) return;
-  craftSlots = [null, null, null];
-  state.inventory.push({ name:resultGift.name, icon:resultGift.icon, starsValue:resultGift.starsValue, rarity:resultGift.rarity });
-  addHistory(resultGift.icon, `Крафт`, `+${resultGift.name}`, true);
-  showToast(`✨ Получен ${resultGift.name}`);
-  renderAllInventories();
-  renderCraftUI();
-  updateProfileStats();
-  if (resultGift.rarity === 'legendary') burstConfetti();
-}
-
-// PVP
-function openPvpPicker() {
-  if (state.inventory.length === 0) { showToast('Нет подарков'); return; }
-  const overlay = document.createElement('div');
-  overlay.className = 'gift-picker-overlay';
-  overlay.innerHTML = `
-    <div class="gift-picker">
-      <div class="gift-picker-header"><div class="gift-picker-title">ВЫБЕРИ ПОДАРОК</div><button class="picker-close" id="pickerCloseBtn">✕</button></div>
-      <div class="gift-picker-grid" id="pvpPickerGrid"></div>
-    </div>
-  `;
-  document.body.appendChild(overlay);
-  const grid = overlay.querySelector('#pvpPickerGrid');
-  grid.innerHTML = state.inventory.map((g, i) => `
-    <div class="picker-item" data-idx="${i}">
-      <div class="picker-item-icon">${g.icon}</div>
-      <div class="picker-item-name">${g.name}</div>
-      <div class="picker-item-val">★ ${g.starsValue}</div>
-    </div>
-  `).join('');
-  grid.querySelectorAll('.picker-item').forEach(item => {
-    item.onclick = () => {
-      const idx = parseInt(item.dataset.idx);
-      pvpSelectedIdx = idx;
-      const g = state.inventory[idx];
-      document.getElementById('pvpStakeText').innerHTML = `${g.icon} ${g.name} ★${g.starsValue}`;
-      document.getElementById('createBattleBtn').disabled = false;
-      overlay.remove();
-    };
-  });
-  document.getElementById('pickerCloseBtn').onclick = () => overlay.remove();
-  overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
-}
 function createBattle() {
-  if (pvpSelectedIdx === null || !state.inventory[pvpSelectedIdx]) { showToast('Выбери подарок!'); return; }
+  if (!RateLimiter.check('createBattle', 1)) return;
+  if (pvpSelectedIdx === null || !state.inventory[pvpSelectedIdx]) {
+    showToast('Выбери подарок!'); return;
+  }
   const g = state.inventory[pvpSelectedIdx];
   state.inventory.splice(pvpSelectedIdx, 1);
   pvpSelectedIdx = null;
-  const battle = { id: Date.now() + '_' + Math.random().toString(36).slice(2,6), creatorId: userId, creatorGift: g, opponentId: null, opponentGift: null, status: 'waiting', ts: Date.now() };
+
+  const battle = {
+    id: Date.now() + '_' + Math.random().toString(36).slice(2,6),
+    creatorId: userId,
+    creatorGift: g,
+    opponentId: null,
+    opponentGift: null,
+    status: 'waiting',
+    ts: Date.now()
+  };
   globalBattles.push(battle);
   saveBattles();
-  renderAllInventories();
-  renderPvpLobby();
-  const link = `${window.location.origin}${window.location.pathname}?battle=${battle.id}`;
-  showToast(`⚔️ Батл создан! Ссылка скопирована`);
-  if (navigator.clipboard) navigator.clipboard.writeText(link);
+  updateAllUI();
+  showToast('⚔️ Батл создан! Жди соперника');
   document.getElementById('pvpStakeText').innerHTML = '⚔ Нажмите чтобы выбрать подарок';
   document.getElementById('createBattleBtn').disabled = true;
 }
+
 function joinBattle(battleId) {
+  if (!RateLimiter.check('joinBattle', 2)) return;
   const battle = globalBattles.find(b => b.id === battleId);
   if (!battle || battle.status !== 'waiting') { showToast('Батл недоступен'); return; }
   if (battle.creatorId === userId) { showToast('Нельзя присоединиться к своему батлу'); return; }
   if (state.inventory.length === 0) { showToast('Нет подарков для ставки!'); return; }
+
+  openGiftPicker('join_' + battleId);
+}
+
+// Override picker to handle join
+const originalOpenPicker = openGiftPicker;
+function openGiftPicker(purpose) {
+  if (!RateLimiter.check('picker', 5)) return;
+  pickerPurpose = purpose;
+  pickerSelected = null;
+
   const overlay = document.createElement('div');
   overlay.className = 'gift-picker-overlay';
-  overlay.innerHTML = `
-    <div class="gift-picker">
-      <div class="gift-picker-header"><div class="gift-picker-title">ВЫБЕРИ ПОДАРОК</div><button class="picker-close" id="pickerCloseBtn">✕</button></div>
-      <div class="gift-picker-grid" id="joinPickerGrid"></div>
+
+  const picker = document.createElement('div');
+  picker.className = 'gift-picker';
+
+  const items = state.inventory.length === 0
+    ? `<div class="picker-none">📭 Инвентарь пуст. Сначала открой кейс!</div>`
+    : state.inventory.map((g, i) => `
+        <div class="picker-item" data-idx="${i}">
+          <div class="picker-item-icon">${g.icon}</div>
+          <div class="picker-item-name">${g.name}</div>
+          <div class="picker-item-val">★ ${g.starsValue}</div>
+        </div>
+      `).join('');
+
+  picker.innerHTML = `
+    <div class="gift-picker-header">
+      <div class="gift-picker-title">ВЫБЕРИ ПОДАРОК</div>
+      <button class="picker-close" id="pickerCloseBtn">✕</button>
     </div>
+    <div class="gift-picker-grid">${items}</div>
+    <button class="picker-confirm" id="pickerConfirmBtn" disabled>ВЫБРАТЬ</button>
   `;
+
+  overlay.appendChild(picker);
   document.body.appendChild(overlay);
-  const grid = overlay.querySelector('#joinPickerGrid');
-  grid.innerHTML = state.inventory.map((g, i) => `
-    <div class="picker-item" data-idx="${i}">
-      <div class="picker-item-icon">${g.icon}</div>
-      <div class="picker-item-name">${g.name}</div>
-      <div class="picker-item-val">★ ${g.starsValue}</div>
-    </div>
-  `).join('');
-  grid.querySelectorAll('.picker-item').forEach(item => {
-    item.onclick = () => {
-      const idx = parseInt(item.dataset.idx);
-      const myGift = state.inventory[idx];
-      if (!myGift) return;
-      const battleNow = globalBattles.find(b => b.id === battleId);
-      if (!battleNow || battleNow.status !== 'waiting') { showToast('Батл уже неактивен'); overlay.remove(); return; }
-      state.inventory.splice(idx, 1);
-      battleNow.opponentId = userId;
-      battleNow.opponentGift = myGift;
-      battleNow.status = 'fighting';
-      saveBattles();
-      renderAllInventories();
-      renderPvpLobby();
-      showBattleFight(battleNow, () => {
-        const pRoll = Math.random() * battleNow.creatorGift.starsValue;
-        const oRoll = Math.random() * myGift.starsValue;
-        if (pRoll >= oRoll) {
-          battleNow.status = 'done';
-          addHistory(myGift.icon, `PvP проигрыш`, `−${myGift.starsValue} ★`, false);
-          showToast(`💀 Проигрыш! ${battleNow.creatorGift.icon} уходит победителю`);
-        } else {
-          state.inventory.push(battleNow.creatorGift, myGift);
-          state.pvpWins = (state.pvpWins || 0) + 1;
-          battleNow.status = 'done';
-          addHistory(myGift.icon, `PvP победа!`, `+${battleNow.creatorGift.starsValue + myGift.starsValue} ★`, true);
-          showToast(`🏆 ПОБЕДА! Ты забрал оба подарка!`);
-          burstConfetti();
-        }
-        globalBattles = globalBattles.filter(b => b.status !== 'done');
-        saveBattles();
-        renderAllInventories();
-        renderPvpLobby();
-        updateProfileStats();
-      });
-      overlay.remove();
-    };
-  });
+
   document.getElementById('pickerCloseBtn').onclick = () => overlay.remove();
   overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+
+  picker.querySelectorAll('.picker-item').forEach(item => {
+    item.onclick = () => {
+      picker.querySelectorAll('.picker-item').forEach(i => i.classList.remove('selected'));
+      item.classList.add('selected');
+      pickerSelected = parseInt(item.dataset.idx);
+      document.getElementById('pickerConfirmBtn').disabled = false;
+    };
+  });
+
+  document.getElementById('pickerConfirmBtn').onclick = () => {
+    if (pickerSelected === null) return;
+    overlay.remove();
+    if (pickerPurpose === 'upgrade') applyUpgradeSelection(pickerSelected);
+    else if (pickerPurpose === 'pvp') applyPvpSelection(pickerSelected);
+    else if (pickerPurpose.startsWith('join_')) {
+      const battleId = pickerPurpose.replace('join_','');
+      executeBattleJoin(battleId, pickerSelected);
+    }
+  };
 }
+
+function executeBattleJoin(battleId, myIdx) {
+  const battle = globalBattles.find(b => b.id === battleId);
+  if (!battle) return;
+  const myGift = state.inventory[myIdx];
+  if (!myGift) return;
+
+  state.inventory.splice(myIdx, 1);
+  battle.opponentId = userId;
+  battle.opponentGift = myGift;
+  battle.status = 'fighting';
+  saveBattles();
+  updateAllUI();
+
+  // Show fight animation
+  showBattleFight(battle, () => {
+    const pRoll = Math.random() * battle.creatorGift.starsValue;
+    const oRoll = Math.random() * myGift.starsValue;
+    let winner, loser;
+    if (pRoll >= oRoll) {
+      winner = battle.creatorGift; loser = myGift;
+      // We lost (we're opponent)
+      battle.status = 'done'; battle.winnerId = battle.creatorId;
+      addHistory(loser.icon, `PvP проигрыш`, `−${loser.starsValue} ★`, false);
+      saveBattles();
+      updateAllUI();
+      setTimeout(() => { showToast(`💀 Проигрыш! ${battle.creatorGift.icon} уходит победителю`); }, 200);
+    } else {
+      winner = myGift; loser = battle.creatorGift;
+      // We won
+      state.inventory.push(battle.creatorGift, myGift);
+      state.pvpWins = (state.pvpWins || 0) + 1;
+      battle.status = 'done'; battle.winnerId = userId;
+      addHistory(winner.icon, `PvP победа!`, `+${battle.creatorGift.starsValue + myGift.starsValue} ★`, true);
+      saveBattles();
+      updateAllUI();
+      confetti.burst(window.innerWidth/2, window.innerHeight/2, 100);
+      setTimeout(() => { showToast(`🏆 ПОБЕДА! Ты забрал оба подарка!`); }, 200);
+    }
+    // Clean old battles
+    globalBattles = globalBattles.filter(b => b.status !== 'done' || Date.now() - b.ts < 30000);
+    saveBattles();
+    updateAllUI();
+  });
+}
+
 function showBattleFight(battle, callback) {
   const overlay = document.createElement('div');
   overlay.className = 'battle-fight-overlay';
   overlay.innerHTML = `
     <div class="battle-fighters">
-      <div class="fighter"><div class="fighter-icon">${battle.creatorGift.icon}</div><div class="fighter-name">${battle.creatorGift.name}</div></div>
+      <div class="fighter">
+        <div class="fighter-icon">${battle.creatorGift.icon}</div>
+        <div class="fighter-name">${battle.creatorGift.name}</div>
+      </div>
       <div class="battle-vs-big">VS</div>
-      <div class="fighter"><div class="fighter-icon">${battle.opponentGift.icon}</div><div class="fighter-name">${battle.opponentGift.name}</div></div>
+      <div class="fighter">
+        <div class="fighter-icon">${battle.opponentGift.icon}</div>
+        <div class="fighter-name">${battle.opponentGift.name}</div>
+      </div>
     </div>
   `;
   document.body.appendChild(overlay);
+
   let count = 3;
   const countEl = document.createElement('div');
   countEl.className = 'battle-countdown';
   countEl.innerText = count;
   overlay.appendChild(countEl);
+
   const timer = setInterval(() => {
     count--;
     if (count > 0) {
@@ -1212,21 +1786,45 @@ function showBattleFight(battle, callback) {
     }
   }, 1000);
 }
+
 function renderPvpLobby() {
   const lobby = document.getElementById('pvpLobby');
   if (!lobby) return;
-  const active = globalBattles.filter(b => b.status === 'waiting');
-  if (active.length === 0) { lobby.innerHTML = `<div style="color:var(--text-muted);text-align:center;padding:25px;">Нет активных батлов.<br>Создай первый!</div>`; return; }
+  // Filter out done + old
+  const active = globalBattles.filter(b => b.status === 'waiting' || (b.status !== 'done' && Date.now() - b.ts < 60000));
+  if (active.length === 0) {
+    lobby.innerHTML = `<div style="color:var(--text-muted);text-align:center;padding:40px;font-size:13px;">Нет активных батлов.<br>Создай первый!</div>`;
+    return;
+  }
   lobby.innerHTML = active.map(b => `
     <div class="battle-card">
-      <div class="battle-gift-slot"><div class="battle-gift-icon">${b.creatorGift.icon}</div><div class="battle-gift-name">${b.creatorGift.name}</div><div class="battle-gift-val">★ ${b.creatorGift.starsValue}</div></div>
-      <div class="battle-vs">VS</div>
-      <div>${b.creatorId !== userId ? `<button class="battle-join-btn" data-bid="${b.id}">Войти</button>` : `<button class="battle-join-btn" data-cancel="${b.id}">Отменить</button>`}</div>
+      <div class="battle-gift-slot">
+        <div class="battle-gift-icon">${b.creatorGift.icon}</div>
+        <div class="battle-gift-name">${b.creatorGift.name}</div>
+        <div class="battle-gift-val">★ ${b.creatorGift.starsValue}</div>
+      </div>
+      <div style="flex:1;text-align:center;">
+        <div class="battle-vs">VS</div>
+        <div class="battle-waiting">Ожидание</div>
+        <div class="battle-creator" style="margin-top:4px;">${b.creatorId === userId ? 'Мой батл' : 'Чужой батл'}</div>
+      </div>
+      <div>
+        ${b.creatorId !== userId
+          ? `<button class="battle-join-btn" data-bid="${b.id}">Войти</button>`
+          : `<button class="big-btn danger" style="width:auto;padding:8px 16px;font-size:12px;" data-cancel="${b.id}">Отменить</button>`
+        }
+      </div>
     </div>
   `).join('');
-  lobby.querySelectorAll('[data-bid]').forEach(btn => btn.onclick = () => joinBattle(btn.dataset.bid));
-  lobby.querySelectorAll('[data-cancel]').forEach(btn => btn.onclick = () => cancelBattle(btn.dataset.cancel));
+
+  lobby.querySelectorAll('.battle-join-btn').forEach(btn => {
+    btn.onclick = () => joinBattle(btn.dataset.bid);
+  });
+  lobby.querySelectorAll('[data-cancel]').forEach(btn => {
+    btn.onclick = () => cancelBattle(btn.dataset.cancel);
+  });
 }
+
 function cancelBattle(battleId) {
   const idx = globalBattles.findIndex(b => b.id === battleId);
   if (idx < 0) return;
@@ -1235,84 +1833,97 @@ function cancelBattle(battleId) {
   state.inventory.push(b.creatorGift);
   globalBattles.splice(idx, 1);
   saveBattles();
-  renderAllInventories();
-  renderPvpLobby();
+  updateAllUI();
   showToast('Батл отменён, подарок возвращён');
 }
 
-// РЕФЕРАЛЫ
-function initReferral() {
-  if (!state.referralCode) state.referralCode = userId;
-  const urlParams = new URLSearchParams(window.location.search);
-  const ref = urlParams.get('ref');
-  if (ref && ref !== userId && !state.referredBy) {
-    state.referredBy = ref;
-    setBalance(state.balance + 50);
-    addHistory('👥', 'Реферальная программа', '+50 ★', true);
-    showToast('👥 +50 Stars по реферальной ссылке!');
-    saveState();
-  }
+// ============================================================
+// ONLINE COUNTER SIMULATION
+// ============================================================
+function updateOnlineCount() {
+  const base = 142;
+  const variation = Math.floor(Math.random() * 30 - 10);
+  document.getElementById('onlineCount').innerText = base + variation;
 }
-function showReferralModal() {
-  const link = `${window.location.origin}${window.location.pathname}?ref=${userId}`;
-  const overlay = document.createElement('div');
-  overlay.className = 'gift-picker-overlay';
-  overlay.innerHTML = `
-    <div class="gift-picker" style="text-align:center;">
-      <div class="gift-picker-header"><div class="gift-picker-title">👥 РЕФЕРАЛЬНАЯ ПРОГРАММА</div><button class="picker-close" id="refCloseBtn">✕</button></div>
-      <div style="margin:14px 0; font-size:12px;">Пригласи друга — получи 25 ★<br>Друг получит 50 ★ на старте!</div>
-      <div style="background:var(--surface-2);padding:10px;border-radius:var(--radius-md);margin:10px 0;word-break:break-all;font-size:11px;">${link}</div>
-      <button class="picker-confirm" id="copyRefLinkBtn">🔗 КОПИРОВАТЬ ССЫЛКУ</button>
-    </div>
-  `;
-  document.body.appendChild(overlay);
-  document.getElementById('refCloseBtn').onclick = () => overlay.remove();
-  document.getElementById('copyRefLinkBtn').onclick = () => { navigator.clipboard.writeText(link); showToast('🔗 Ссылка скопирована!'); overlay.remove(); };
-  overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
-}
-
-// ОНЛАЙН
-function updateOnlineCount() { document.getElementById('onlineCount').innerText = 128 + Math.floor(Math.random() * 40); }
 setInterval(updateOnlineCount, 5000);
 updateOnlineCount();
 
-// ТАБЫ
+// ============================================================
+// TABS
+// ============================================================
 document.querySelectorAll('.tab-item').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.tab-item').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
     document.getElementById(btn.dataset.tab + 'Panel').classList.add('active');
+    document.getElementById('contentArea').scrollTop = 0;
     if (btn.dataset.tab === 'pvp') renderPvpLobby();
     if (btn.dataset.tab === 'profile') updateProfileStats();
-    if (btn.dataset.tab === 'upgrade') renderUpgradeUI();
-    if (btn.dataset.tab === 'craft') renderCraftUI();
   });
 });
 
-// КНОПКИ
-document.getElementById('addStarsBtn').onclick = () => { setBalance(state.balance + 100); addHistory('⭐', 'Пополнение', '+100 ★', true); showToast('+100 Stars'); };
-document.getElementById('balancePill').onclick = () => { setBalance(state.balance + 100); addHistory('⭐', 'Пополнение', '+100 ★', true); showToast('+100 Stars'); };
-document.getElementById('depositBtn').onclick = () => { setBalance(state.balance + 500); addHistory('💎', 'Пополнение', '+500 ★', true); showToast('+500 Stars'); };
-document.getElementById('withdrawBtn').onclick = () => showToast('💰 Вывод: скоро будет доступно');
-document.getElementById('shareBtn').onclick = () => { navigator.clipboard.writeText(window.location.href); showToast('🔗 Ссылка скопирована!'); };
-document.getElementById('referralBtn').onclick = showReferralModal;
-document.getElementById('createBattleBtn').onclick = createBattle;
-document.getElementById('upgradeBtn').onclick = doUpgrade;
-document.getElementById('craftBtn').onclick = doCraft;
+// ============================================================
+// BUTTON HANDLERS
+// ============================================================
+document.getElementById('addStarsBtn').addEventListener('click', () => {
+  if (!RateLimiter.check('addStars', 3)) return;
+  setBalance(state.balance + 100);
+  addHistory('⭐', 'Пополнение', '+100 ★', true);
+  showToast('★ +100 Stars добавлено');
+  updateAllUI();
+});
 
+document.getElementById('balancePill').addEventListener('click', () => {
+  if (!RateLimiter.check('addStars', 3)) return;
+  setBalance(state.balance + 100);
+  addHistory('⭐', 'Пополнение', '+100 ★', true);
+  showToast('★ +100 Stars добавлено');
+  updateAllUI();
+});
+
+document.getElementById('upgradeBtn').addEventListener('click', doUpgrade);
+document.getElementById('createBattleBtn').addEventListener('click', createBattle);
+
+document.getElementById('depositBtn').addEventListener('click', () => {
+  setBalance(state.balance + 500);
+  addHistory('💎', 'Пополнение', '+500 ★', true);
+  showToast('💎 +500 Stars (демо)');
+  updateAllUI();
+});
+document.getElementById('withdrawBtn').addEventListener('click', () => {
+  showToast('💰 Вывод: скоро будет доступно');
+});
+document.getElementById('shareBtn').addEventListener('click', () => {
+  const link = window.location.href;
+  if (navigator.clipboard) navigator.clipboard.writeText(link);
+  showToast('🔗 Ссылка скопирована!');
+});
+
+// ============================================================
 // INIT
+// ============================================================
 loadState();
-initReferral();
 renderCases();
-renderAllInventories();
-updateProfileStats();
-renderHistory();
-renderPvpLobby();
-renderUpgradeUI();
-renderCraftUI();
+updateAllUI();
 
-if (window.Telegram?.WebApp) { window.Telegram.WebApp.expand(); window.Telegram.WebApp.ready(); }
+if (window.Telegram?.WebApp) {
+  window.Telegram.WebApp.expand();
+  window.Telegram.WebApp.ready();
+}
+
+// Auto-sync battles every 5 seconds (simulates server)
+setInterval(() => {
+  const braw = localStorage.getItem('gc_battles');
+  if (braw) {
+    try {
+      const fresh = JSON.parse(braw);
+      // Merge without overwriting our own pending
+      globalBattles = fresh.filter(b => b.status !== 'done' || Date.now() - b.ts < 30000);
+      renderPvpLobby();
+    } catch(e) {}
+  }
+}, 5000);
 </script>
 </body>
 </html>
