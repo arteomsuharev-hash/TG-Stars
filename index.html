@@ -20,6 +20,7 @@
   --text-secondary: #888888;
   --text-muted: #555555;
   --white: #ffffff;
+  --accent: #e8e8e8;
   --gold: #c8a96e;
   --gold-light: #e8c98e;
   --danger: #e05555;
@@ -56,38 +57,64 @@ body::before {
 ::-webkit-scrollbar { width:3px; height:3px; }
 ::-webkit-scrollbar-track { background:transparent; }
 ::-webkit-scrollbar-thumb { background:var(--border-light); border-radius:3px; }
-.app { display:flex; flex-direction:column; height:100vh; overflow:hidden; }
+
+.app {
+  display:flex;
+  flex-direction:column;
+  height:100vh;
+  overflow:hidden;
+}
 
 /* TOPBAR */
 .topbar {
-  flex-shrink:0; background: var(--surface-1); border-bottom: 1px solid var(--border);
-  padding: 0 16px; height: 60px; display:flex; align-items:center; justify-content:space-between;
-  position:relative; z-index:100;
+  flex-shrink:0;
+  background: var(--surface-1);
+  border-bottom: 1px solid var(--border);
+  padding: 0 16px;
+  height: 60px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  z-index:100;
 }
 .logo {
-  font-family: var(--font-display); font-size: 26px; letter-spacing: 2px;
-  color: var(--white); display:flex; align-items:center; gap:6px;
+  font-family: var(--font-display);
+  font-size: 24px;
+  letter-spacing: 2px;
+  color: var(--white);
+  display:flex;
+  align-items:center;
+  gap:6px;
 }
-.logo-dot { width:6px; height:6px; background: var(--gold); border-radius:50%; animation: pulse-gold 2s infinite; }
+.logo-dot {
+  width:6px; height:6px;
+  background: var(--gold);
+  border-radius:50%;
+  animation: pulse-gold 2s infinite;
+}
 @keyframes pulse-gold { 0%,100%{ opacity:1; transform:scale(1); } 50%{ opacity:0.5; transform:scale(1.5); } }
 .balance-pill {
-  display:flex; align-items:center; gap:8px; background: var(--surface-2);
-  border: 1px solid var(--border); padding: 6px 14px; border-radius: var(--radius-full);
-  cursor:pointer; transition: var(--transition);
+  display:flex; align-items:center; gap:8px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+  cursor:pointer;
+  transition: var(--transition);
 }
 .balance-pill:hover { border-color:var(--border-light); background:var(--surface-3); }
 .balance-pill:active { transform:scale(0.97); }
-.balance-star { color:var(--gold); font-size:13px; }
+.balance-star { color:var(--gold); font-size:12px; }
 .balance-val {
-  font-size: 17px; font-weight:700; color:var(--white);
+  font-size: 16px; font-weight:700; color:var(--white);
   transition: color 0.3s;
 }
 .balance-val.flash-up { color:var(--success); }
 .balance-val.flash-down { color:var(--danger); }
 .add-btn {
   background:var(--surface-3); border:1px solid var(--border-light);
-  color:var(--text-secondary); padding:6px 14px;
-  border-radius:var(--radius-full); font-size:12px; font-weight:600;
+  color:var(--text-secondary); padding:5px 12px;
+  border-radius:var(--radius-full); font-size:11px; font-weight:600;
   cursor:pointer; transition:var(--transition);
 }
 .add-btn:hover { color:var(--white); border-color:#555; }
@@ -97,11 +124,21 @@ body::before {
 @keyframes pulse-online { 0%,100%{ opacity:1; } 50%{ opacity:0.4; } }
 
 /* CONTENT */
-.content-area { flex:1; overflow-y:auto; overflow-x:hidden; padding:16px; padding-bottom:85px; }
+.content-area {
+  flex:1;
+  overflow-y:auto;
+  overflow-x:hidden;
+  padding:16px;
+  padding-bottom:80px;
+}
 
-/* TABS BOTTOM */
+/* SIDEBAR TABS (DESKTOP) - ЛЕВАЯ СТОРОНА */
 .tabs-bar {
-  flex-shrink:0; position:fixed; bottom:0; left:0; right:0;
+  flex-shrink:0;
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
   background:var(--surface-1);
   border-top:1px solid var(--border);
   display:flex;
@@ -109,31 +146,38 @@ body::before {
   padding-bottom: env(safe-area-inset-bottom);
 }
 .tab-item {
-  flex:1; display:flex; flex-direction:column;
-  align-items:center; justify-content:center;
-  gap:3px; padding:10px 4px;
-  cursor:pointer; transition:var(--transition);
-  border:none; background:none; color:var(--text-muted);
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:2px;
+  padding:8px 4px;
+  cursor:pointer;
+  transition:var(--transition);
+  border:none;
+  background:none;
+  color:var(--text-muted);
   font-family:var(--font-body);
 }
 .tab-item.active { color:var(--white); }
 .tab-item:active { transform:scale(0.95); }
-.tab-icon { font-size:20px; }
-.tab-label { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; }
+.tab-icon { font-size:18px; }
+.tab-label { font-size:9px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; }
 .panel { display:none; animation:panelIn 0.25s ease; }
 .panel.active { display:block; }
 @keyframes panelIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
 
 /* HEADERS */
-.section-header { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:16px; }
-.section-title { font-family:var(--font-display); font-size:32px; letter-spacing:2px; color:var(--white); }
-.section-sub { font-size:11px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; }
+.section-header { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:12px; }
+.section-title { font-family:var(--font-display); font-size:28px; letter-spacing:1px; color:var(--white); }
+.section-sub { font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; }
 
 /* ========== КЕЙСЫ - 2 РЯДА НА ТЕЛЕФОНЕ ========== */
 .cases-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
+  gap: 10px;
 }
 .case-card {
   background:var(--surface-1);
@@ -145,20 +189,19 @@ body::before {
 }
 .case-card:hover { border-color:var(--border-light); transform:translateY(-2px); box-shadow:var(--shadow-md); }
 .case-card:active { transform:scale(0.98); }
-.case-visual { height:130px; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; }
-.case-emoji { font-size:60px; filter:drop-shadow(0 8px 24px rgba(0,0,0,0.8)); transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1); }
-.case-card:hover .case-emoji { transform:scale(1.1) translateY(-4px); }
-.case-body { padding:14px; }
-.case-meta { display:flex; justify-content:space-between; margin-bottom:8px; }
-.case-name { font-family:var(--font-display); font-size:20px; letter-spacing:1px; color:var(--white); }
-.case-price-tag { background:var(--surface-2); border:1px solid var(--border); padding:4px 10px; border-radius:var(--radius-full); font-size:13px; font-weight:700; color:var(--gold); }
-.case-items { display:flex; flex-wrap:wrap; gap:4px; margin-bottom:12px; }
-.case-item-tag { background:var(--surface-2); border:1px solid var(--border); padding:2px 6px; border-radius:var(--radius-sm); font-size:9px; color:var(--text-secondary); display:flex; align-items:center; gap:3px; }
+.case-visual { height:110px; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+.case-emoji { font-size:52px; filter:drop-shadow(0 8px 24px rgba(0,0,0,0.8)); transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1); }
+.case-card:hover .case-emoji { transform:scale(1.1) translateY(-3px); }
+.case-body { padding:10px; }
+.case-meta { display:flex; justify-content:space-between; margin-bottom:6px; }
+.case-name { font-family:var(--font-display); font-size:18px; letter-spacing:0.5px; color:var(--white); }
+.case-price-tag { background:var(--surface-2); border:1px solid var(--border); padding:3px 8px; border-radius:var(--radius-full); font-size:11px; font-weight:700; color:var(--gold); }
+.case-items { display:flex; flex-wrap:wrap; gap:3px; margin-bottom:8px; }
+.case-item-tag { background:var(--surface-2); border:1px solid var(--border); padding:2px 5px; border-radius:var(--radius-sm); font-size:8px; color:var(--text-secondary); display:flex; align-items:center; gap:2px; }
 .open-case-btn {
-  width:100%; padding:10px; background:var(--surface-3); border:1px solid var(--border-light);
-  border-radius:var(--radius-full); color:var(--white); font-family:var(--font-body);
-  font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:1px;
-  cursor:pointer; transition:var(--transition);
+  width:100%; padding:8px; background:var(--surface-3); border:1px solid var(--border-light);
+  border-radius:var(--radius-full); color:var(--white); font-size:11px; font-weight:700;
+  text-transform:uppercase; cursor:pointer; transition:var(--transition);
 }
 .open-case-btn:hover { background:var(--border-light); }
 .open-case-btn:active { transform:scale(0.97); }
@@ -173,140 +216,140 @@ body::before {
   background:var(--surface-1);
   border:1px solid var(--border);
   border-radius:var(--radius-lg);
-  padding:24px;
+  padding:20px;
   text-align:center;
   cursor:pointer;
   transition:var(--transition);
   margin-bottom:16px;
 }
 .upgrade-card:hover { border-color:var(--border-light); background:var(--surface-2); }
-.upgrade-card .selected-gift { font-size:64px; margin-bottom:12px; transition:transform 0.2s; }
+.upgrade-card .selected-gift { font-size:56px; margin-bottom:8px; }
 .upgrade-chance {
   background:var(--surface-2);
   border:1px solid var(--border);
   border-radius:var(--radius-lg);
-  padding:20px;
+  padding:16px;
   text-align:center;
   margin-bottom:16px;
 }
-.upgrade-chance-value { font-family:var(--font-display); font-size:56px; color:var(--gold); }
-.upgrade-progress { height:6px; background:var(--surface-3); border-radius:var(--radius-full); margin-top:12px; overflow:hidden; }
+.upgrade-chance-value { font-family:var(--font-display); font-size:48px; color:var(--gold); }
+.upgrade-progress { height:4px; background:var(--surface-3); border-radius:var(--radius-full); margin-top:10px; overflow:hidden; }
 .upgrade-progress-fill { height:100%; background:var(--gold); border-radius:var(--radius-full); transition:width 0.5s ease; }
 
 /* КРАФТ */
-.craft-slots { display:flex; gap:12px; margin-bottom:20px; justify-content:center; flex-wrap:wrap; }
+.craft-slots { display:flex; gap:10px; margin-bottom:20px; justify-content:center; flex-wrap:wrap; }
 .craft-slot {
-  width:90px; height:100px;
+  width:85px; height:95px;
   background:var(--surface-2);
   border:2px dashed var(--border);
   border-radius:var(--radius-md);
   display:flex; flex-direction:column; align-items:center; justify-content:center;
-  gap:6px; cursor:pointer; transition:var(--transition); position:relative;
+  gap:5px; cursor:pointer; transition:var(--transition); position:relative;
 }
 .craft-slot.filled { border:2px solid var(--gold); background:var(--surface-3); }
-.craft-slot-icon { font-size:40px; }
-.craft-slot-name { font-size:10px; color:var(--text-secondary); text-align:center; max-width:80px; overflow:hidden; }
+.craft-slot-icon { font-size:36px; }
+.craft-slot-name { font-size:9px; color:var(--text-secondary); text-align:center; max-width:75px; overflow:hidden; }
 .craft-slot-remove {
   position:absolute; top:-8px; right:-8px;
-  width:22px; height:22px; background:var(--danger); border-radius:50%;
+  width:20px; height:20px; background:var(--danger); border-radius:50%;
   display:flex; align-items:center; justify-content:center;
-  font-size:11px; color:white; cursor:pointer; transition:var(--transition);
+  font-size:10px; color:white; cursor:pointer; transition:var(--transition);
 }
 .craft-slot-remove:hover { transform:scale(1.1); }
 .craft-result {
   background:var(--surface-2);
   border:1px solid var(--border);
   border-radius:var(--radius-lg);
-  padding:20px;
+  padding:16px;
   text-align:center;
   margin-bottom:16px;
 }
-.craft-result-icon { font-size:56px; margin-bottom:10px; }
-.craft-result-name { font-size:18px; font-weight:700; color:var(--gold); }
-.craft-desc { font-size:12px; color:var(--text-muted); text-align:center; margin-bottom:16px; }
+.craft-result-icon { font-size:48px; margin-bottom:8px; }
+.craft-result-name { font-size:16px; font-weight:700; color:var(--gold); }
+.craft-desc { font-size:11px; color:var(--text-muted); text-align:center; margin-bottom:16px; }
 
 /* ИНВЕНТАРЬ */
 .inventory-section {
   background:var(--surface-1);
   border:1px solid var(--border);
   border-radius:var(--radius-lg);
-  padding:16px;
-  margin-top:16px;
+  padding:14px;
+  margin-top:14px;
 }
-.inventory-section h3 { font-family:var(--font-display); font-size:22px; margin-bottom:12px; }
+.inventory-section h3 { font-family:var(--font-display); font-size:20px; margin-bottom:10px; }
 .inventory-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
   gap:8px;
-  max-height:260px;
+  max-height:240px;
   overflow-y:auto;
 }
 .inv-card {
   background:var(--surface-2); border:1px solid var(--border);
-  border-radius:var(--radius-md); padding:12px;
-  display:flex; flex-direction:column; align-items:center; gap:6px;
+  border-radius:var(--radius-md); padding:10px;
+  display:flex; flex-direction:column; align-items:center; gap:4px;
   position:relative;
   transition:var(--transition);
 }
 .inv-card:hover { border-color:var(--border-light); transform:translateY(-2px); }
-.inv-card-icon { font-size:32px; }
-.inv-card-name { font-size:11px; font-weight:600; color:var(--text-secondary); text-align:center; }
-.inv-card-val { font-size:12px; font-weight:700; color:var(--gold); }
-.inv-card-rarity { position:absolute; top:6px; right:6px; width:6px; height:6px; border-radius:50%; }
+.inv-card-icon { font-size:28px; }
+.inv-card-name { font-size:9px; font-weight:600; color:var(--text-secondary); text-align:center; }
+.inv-card-val { font-size:10px; font-weight:700; color:var(--gold); }
+.inv-card-rarity { position:absolute; top:5px; right:5px; width:5px; height:5px; border-radius:50%; }
 .r-common { background:#555; }
 .r-rare { background:#6688cc; }
 .r-epic { background:#aa66cc; }
-.r-legendary { background:var(--gold); box-shadow:0 0 6px var(--gold); }
+.r-legendary { background:var(--gold); box-shadow:0 0 5px var(--gold); }
 .sell-chip {
   background:var(--surface-3); border:1px solid var(--border-light);
-  color:var(--text-secondary); font-size:10px; font-weight:600;
-  padding:3px 10px; border-radius:var(--radius-full);
+  color:var(--text-secondary); font-size:9px; font-weight:600;
+  padding:2px 8px; border-radius:var(--radius-full);
   cursor:pointer; transition:var(--transition);
 }
 .sell-chip:hover { color:var(--danger); border-color:var(--danger); }
-.empty-inv { text-align:center; color:var(--text-muted); padding:24px; font-size:12px; }
+.empty-inv { text-align:center; color:var(--text-muted); padding:20px; font-size:11px; }
 
 /* PVP */
 .pvp-create {
   background:var(--surface-1);
   border:1px solid var(--border);
   border-radius:var(--radius-lg);
-  padding:16px;
-  margin-bottom:16px;
+  padding:14px;
+  margin-bottom:14px;
 }
 .pvp-stake {
   background:var(--surface-2);
   border:1px solid var(--border);
   border-radius:var(--radius-md);
-  padding:14px;
+  padding:12px;
   text-align:center;
   cursor:pointer;
   transition:var(--transition);
-  margin-bottom:12px;
+  margin-bottom:10px;
 }
 .pvp-stake:hover { border-color:var(--border-light); background:var(--surface-3); }
 .battle-card {
   background:var(--surface-1);
   border:1px solid var(--border);
   border-radius:var(--radius-lg);
-  padding:16px;
+  padding:12px;
   display:flex;
   align-items:center;
-  gap:12px;
-  margin-bottom:10px;
+  gap:10px;
+  margin-bottom:8px;
   transition:var(--transition);
 }
 .battle-card:hover { border-color:var(--border-light); }
-.battle-gift-icon { font-size:40px; }
-.battle-gift-name { font-size:10px; color:var(--text-muted); }
-.battle-gift-val { font-size:11px; font-weight:700; color:var(--gold); }
-.battle-vs { flex:1; text-align:center; font-family:var(--font-display); font-size:24px; color:var(--text-muted); }
+.battle-gift-icon { font-size:32px; }
+.battle-gift-name { font-size:9px; color:var(--text-muted); }
+.battle-gift-val { font-size:10px; font-weight:700; color:var(--gold); }
+.battle-vs { flex:1; text-align:center; font-family:var(--font-display); font-size:20px; color:var(--text-muted); }
 .battle-join-btn {
-  padding:8px 16px;
+  padding:6px 14px;
   background:var(--surface-3);
   border:1px solid var(--border-light);
   border-radius:var(--radius-full);
-  font-size:11px; font-weight:700;
+  font-size:10px; font-weight:700;
   cursor:pointer;
   transition:var(--transition);
 }
@@ -317,33 +360,33 @@ body::before {
   background:var(--surface-1);
   border:1px solid var(--border);
   border-radius:var(--radius-lg);
-  padding:24px;
-  margin-bottom:16px;
+  padding:20px;
+  margin-bottom:14px;
   position:relative;
   overflow:hidden;
 }
-.profile-avatar { width:64px; height:64px; border-radius:50%; background:var(--surface-2); border:2px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:32px; margin-bottom:12px; }
-.profile-name { font-family:var(--font-display); font-size:28px; letter-spacing:1px; }
-.profile-id { font-size:10px; color:var(--text-muted); margin-top:2px; }
-.stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:16px; }
-.stat-box { background:var(--surface-2); border:1px solid var(--border); border-radius:var(--radius-md); padding:12px; text-align:center; }
-.stat-num { font-family:var(--font-display); font-size:24px; color:var(--white); }
-.stat-lbl { font-size:9px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px; }
-.profile-actions { display:flex; gap:10px; margin-top:16px; flex-wrap:wrap; }
+.profile-avatar { width:56px; height:56px; border-radius:50%; background:var(--surface-2); border:2px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:28px; margin-bottom:10px; }
+.profile-name { font-family:var(--font-display); font-size:24px; letter-spacing:1px; }
+.profile-id { font-size:9px; color:var(--text-muted); margin-top:2px; }
+.stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-top:14px; }
+.stat-box { background:var(--surface-2); border:1px solid var(--border); border-radius:var(--radius-md); padding:8px; text-align:center; }
+.stat-num { font-family:var(--font-display); font-size:20px; color:var(--white); }
+.stat-lbl { font-size:8px; color:var(--text-muted); text-transform:uppercase; }
+.profile-actions { display:flex; gap:8px; margin-top:12px; flex-wrap:wrap; }
 .profile-btn {
-  flex:1; padding:12px;
+  flex:1; padding:8px;
   background:var(--surface-2); border:1px solid var(--border);
   border-radius:var(--radius-full); color:var(--white);
-  font-size:12px; font-weight:600; cursor:pointer;
+  font-size:10px; font-weight:600; cursor:pointer;
   transition:var(--transition);
 }
 .profile-btn:hover { border-color:var(--border-light); background:var(--surface-3); }
 
 /* ИСТОРИЯ */
-.history-table { width:100%; border-collapse:collapse; margin-top:8px; }
-.history-table th { font-size:9px; color:var(--text-muted); padding:8px; border-bottom:1px solid var(--border); text-align:left; }
-.history-table td { padding:10px 8px; border-bottom:1px solid var(--border); font-size:12px; color:var(--text-secondary); }
-.hist-icon { font-size:16px; }
+.history-table { width:100%; border-collapse:collapse; margin-top:6px; }
+.history-table th { font-size:8px; color:var(--text-muted); padding:6px; border-bottom:1px solid var(--border); text-align:left; }
+.history-table td { padding:8px 6px; border-bottom:1px solid var(--border); font-size:10px; color:var(--text-secondary); }
+.hist-icon { font-size:14px; }
 .hist-gain { color:var(--success); font-weight:700; }
 .hist-loss { color:var(--danger); font-weight:700; }
 
@@ -365,34 +408,34 @@ body::before {
   border-top-right-radius:var(--radius-xl);
   padding:20px;
   width:100%;
-  max-width:600px;
-  max-height:70vh;
+  max-width:500px;
+  max-height:65vh;
   overflow-y:auto;
   animation:slideUp 0.3s cubic-bezier(0.34,1.56,0.64,1);
 }
 @keyframes slideUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
-.gift-picker-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
-.gift-picker-title { font-family:var(--font-display); font-size:24px; letter-spacing:1px; }
-.picker-close { width:32px; height:32px; border-radius:50%; background:var(--surface-3); border:1px solid var(--border); color:var(--text-secondary); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:16px; }
+.gift-picker-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
+.gift-picker-title { font-family:var(--font-display); font-size:22px; letter-spacing:1px; }
+.picker-close { width:28px; height:28px; border-radius:50%; background:var(--surface-3); border:1px solid var(--border); color:var(--text-secondary); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:14px; }
 .picker-close:hover { color:var(--white); border-color:#555; }
-.gift-picker-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(110px, 1fr)); gap:8px; }
+.gift-picker-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(90px, 1fr)); gap:8px; }
 .picker-item {
   background:var(--surface-2); border:2px solid var(--border);
-  border-radius:var(--radius-md); padding:12px;
-  display:flex; flex-direction:column; align-items:center; gap:6px;
+  border-radius:var(--radius-md); padding:10px;
+  display:flex; flex-direction:column; align-items:center; gap:4px;
   cursor:pointer; transition:var(--transition);
 }
 .picker-item:hover { border-color:var(--border-light); background:var(--surface-3); }
 .picker-item.selected { border-color:var(--white); }
-.picker-item-icon { font-size:32px; }
-.picker-item-name { font-size:10px; font-weight:600; color:var(--text-secondary); text-align:center; }
-.picker-item-val { font-size:11px; font-weight:700; color:var(--gold); }
+.picker-item-icon { font-size:28px; }
+.picker-item-name { font-size:9px; font-weight:600; color:var(--text-secondary); text-align:center; }
+.picker-item-val { font-size:10px; font-weight:700; color:var(--gold); }
 .picker-confirm {
-  width:100%; padding:14px;
+  width:100%; padding:12px;
   background:var(--white); color:var(--black);
   border:none; border-radius:var(--radius-full);
-  font-size:15px; font-weight:700;
-  cursor:pointer; margin-top:16px;
+  font-size:14px; font-weight:700;
+  cursor:pointer; margin-top:14px;
   transition:var(--transition);
 }
 .picker-confirm:active { transform:scale(0.98); }
@@ -408,25 +451,25 @@ body::before {
   animation:fadeIn 0.2s;
 }
 .result-modal {
-  text-align:center; padding:32px;
-  max-width:320px; width:90%;
+  text-align:center; padding:28px 24px;
+  max-width:300px; width:90%;
   animation:popIn 0.45s cubic-bezier(0.34,1.56,0.64,1);
 }
 @keyframes popIn { 0% { opacity:0; transform:scale(0.3) rotate(-10deg); } 100% { opacity:1; transform:scale(1) rotate(0deg); } }
-.result-icon { font-size:80px; margin-bottom:16px; filter:drop-shadow(0 0 32px rgba(255,255,255,0.2)); }
-.result-title { font-family:var(--font-display); font-size:36px; letter-spacing:2px; color:var(--white); }
-.result-sub { color:var(--text-secondary); margin-top:6px; }
-.result-actions { display:flex; flex-direction:column; gap:10px; margin-top:20px; }
-.result-actions .big-btn { padding:12px; background:var(--white); color:var(--black); border:none; border-radius:var(--radius-full); font-weight:700; cursor:pointer; }
+.result-icon { font-size:72px; margin-bottom:12px; filter:drop-shadow(0 0 24px rgba(255,255,255,0.2)); }
+.result-title { font-family:var(--font-display); font-size:34px; letter-spacing:2px; color:var(--white); }
+.result-sub { color:var(--text-secondary); margin-top:4px; font-size:12px; }
+.result-actions { display:flex; flex-direction:column; gap:8px; margin-top:18px; }
+.result-actions .big-btn { padding:10px; background:var(--white); color:var(--black); border:none; border-radius:var(--radius-full); font-weight:700; cursor:pointer; }
 .result-actions .big-btn.secondary { background:transparent; color:var(--white); border:1px solid var(--border-light); }
 
 /* КОНФЕТТИ И ТОСТ */
 #confettiCanvas { position:fixed; inset:0; pointer-events:none; z-index:700; }
 .toast {
-  position:fixed; bottom:90px; left:50%; transform:translateX(-50%);
+  position:fixed; bottom:80px; left:50%; transform:translateX(-50%);
   background:var(--surface-2); border:1px solid var(--border-light);
-  border-radius:var(--radius-full); padding:10px 20px;
-  font-size:13px; font-weight:600; color:var(--white);
+  border-radius:var(--radius-full); padding:8px 16px;
+  font-size:12px; font-weight:600; color:var(--white);
   z-index:800;
   animation: toastIn 0.3s cubic-bezier(0.34,1.56,0.64,1), toastOut 0.3s 2s ease forwards;
   white-space:nowrap;
@@ -435,55 +478,15 @@ body::before {
 @keyframes toastOut { to { opacity:0; transform:translateX(-50%) translateY(10px); } }
 
 .big-btn {
-  width:100%; padding:14px;
+  width:100%; padding:12px;
   background:var(--white); color:var(--black);
   border:none; border-radius:var(--radius-full);
-  font-family:var(--font-body); font-size:15px; font-weight:700;
-  letter-spacing:0.5px; cursor:pointer; transition:var(--transition);
-  text-transform:uppercase;
+  font-size:14px; font-weight:700;
+  text-transform:uppercase; cursor:pointer; transition:var(--transition);
 }
 .big-btn:hover { background:var(--accent); }
 .big-btn:active { transform:scale(0.98); }
 .big-btn:disabled { background:var(--surface-3); color:var(--text-muted); cursor:not-allowed; }
-
-/* ========== АДАПТИВ: ТЕЛЕФОН / ПЛАНШЕТ / ПК ========== */
-/* Телефоны (до 768px) — уже настроено */
-@media (min-width: 768px) and (max-width: 1023px) {
-  .topbar { padding: 0 24px; }
-  .content-area { padding: 20px 24px; padding-bottom: 85px; }
-  .cases-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
-  .case-visual { height: 140px; }
-  .case-emoji { font-size: 64px; }
-  .inventory-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
-  .tabs-bar { padding: 0 16px; }
-  .tab-item { padding: 12px 4px; }
-  .tab-icon { font-size: 22px; }
-  .tab-label { font-size: 11px; }
-}
-@media (min-width: 1024px) {
-  .app { flex-direction: row; }
-  .tabs-bar {
-    position: relative;
-    flex-direction: column;
-    width: 90px;
-    border-top: none;
-    border-right: 1px solid var(--border);
-    height: 100vh;
-    padding: 20px 0;
-  }
-  .tab-item { padding: 16px 4px; }
-  .tab-icon { font-size: 28px; }
-  .tab-label { font-size: 12px; margin-top: 6px; }
-  .content-area { padding: 28px 32px; padding-bottom: 28px; }
-  .cases-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
-  .case-visual { height: 160px; }
-  .case-emoji { font-size: 72px; }
-  .inventory-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
-}
-@media (min-width: 1400px) {
-  .cases-grid { grid-template-columns: repeat(4, 1fr); }
-  .content-area { padding: 32px 48px; }
-}
 
 /* BATTLE FIGHT OVERLAY */
 .battle-fight-overlay {
@@ -494,33 +497,80 @@ body::before {
   align-items:center;
   justify-content:center;
   flex-direction:column;
-  gap:24px;
+  gap:20px;
 }
-.battle-fighters { display:flex; align-items:center; gap:40px; }
-.fighter { display:flex; flex-direction:column; align-items:center; gap:8px; animation:fighterIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both; }
+.battle-fighters { display:flex; align-items:center; gap:30px; }
+.fighter { display:flex; flex-direction:column; align-items:center; gap:6px; animation:fighterIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both; }
 .fighter:first-child { animation-delay:0.1s; animation-name:fighterInLeft; }
 .fighter:last-child { animation-delay:0.2s; animation-name:fighterInRight; }
-@keyframes fighterInLeft { from{opacity:0; transform:translateX(-80px)} to{opacity:1;transform:translateX(0)} }
-@keyframes fighterInRight { from{opacity:0;transform:translateX(80px)} to{opacity:1;transform:translateX(0)} }
-.fighter-icon { font-size:72px; filter:drop-shadow(0 0 24px rgba(255,255,255,0.15)); }
-.fighter-name { font-size:12px; color:var(--text-secondary); text-align:center; max-width:100px; }
-.battle-vs-big { font-family:var(--font-display); font-size:56px; color:var(--text-muted); letter-spacing:4px; animation:vsPulse 0.8s 0.5s cubic-bezier(0.34,1.56,0.64,1) both; }
+@keyframes fighterInLeft { from{opacity:0; transform:translateX(-60px)} to{opacity:1;transform:translateX(0)} }
+@keyframes fighterInRight { from{opacity:0;transform:translateX(60px)} to{opacity:1;transform:translateX(0)} }
+.fighter-icon { font-size:60px; filter:drop-shadow(0 0 20px rgba(255,255,255,0.15)); }
+.fighter-name { font-size:10px; color:var(--text-secondary); text-align:center; max-width:80px; }
+.battle-vs-big { font-family:var(--font-display); font-size:48px; color:var(--text-muted); letter-spacing:4px; animation:vsPulse 0.8s 0.5s cubic-bezier(0.34,1.56,0.64,1) both; }
 @keyframes vsPulse { 0%{opacity:0;transform:scale(0.5)} 100%{opacity:1;transform:scale(1)} }
-.battle-countdown { font-family:var(--font-display); font-size:80px; color:var(--white); animation:countPulse 1s ease; }
+.battle-countdown { font-family:var(--font-display); font-size:64px; color:var(--white); animation:countPulse 1s ease; }
 @keyframes countPulse { 0%{transform:scale(1.5);opacity:0} 30%{opacity:1} 100%{transform:scale(1)} }
-.winner-banner { font-family:var(--font-display); font-size:52px; color:var(--gold); animation:popIn 0.5s cubic-bezier(0.34,1.56,0.64,1); }
+.winner-banner { font-family:var(--font-display); font-size:44px; color:var(--gold); animation:popIn 0.5s cubic-bezier(0.34,1.56,0.64,1); }
+
+.rate-limit-msg {
+  position:fixed; top:60px; left:50%; transform:translateX(-50%);
+  background:#2a1010; border:1px solid #4a2020;
+  border-radius:var(--radius-full); padding:6px 16px;
+  font-size:11px; color:var(--danger); z-index:200;
+  display:none;
+}
+
+/* ========== АДАПТИВ: ПЛАНШЕТ ========== */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .topbar { padding: 0 24px; }
+  .content-area { padding: 20px 24px; padding-bottom: 80px; }
+  .cases-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .case-visual { height: 130px; }
+  .case-emoji { font-size: 60px; }
+  .inventory-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+}
+
+/* ========== АДАПТИВ: ПК (БОКОВАЯ ПАНЕЛЬ СЛЕВА) ========== */
+@media (min-width: 1024px) {
+  .app { flex-direction: row; }
+  .tabs-bar {
+    position: relative;
+    flex-direction: column;
+    width: 90px;
+    height: 100vh;
+    border-top: none;
+    border-right: 1px solid var(--border);
+    padding: 24px 0;
+    order: -1;
+  }
+  .tab-item { padding: 16px 4px; }
+  .tab-icon { font-size: 26px; }
+  .tab-label { font-size: 11px; margin-top: 6px; }
+  .content-area { padding: 28px 32px; padding-bottom: 28px; }
+  .cases-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .case-visual { height: 150px; }
+  .case-emoji { font-size: 68px; }
+  .inventory-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
+}
+
+@media (min-width: 1400px) {
+  .cases-grid { grid-template-columns: repeat(4, 1fr); }
+  .content-area { padding: 32px 48px; }
+}
 </style>
 </head>
 <body>
 
 <canvas id="confettiCanvas"></canvas>
+<div class="rate-limit-msg" id="rateLimitMsg">⚠️ Слишком много действий. Подождите секунду.</div>
 
 <div class="app">
   <div class="topbar">
     <div class="logo">GIFTCASE<div class="logo-dot"></div></div>
-    <div style="display:flex;align-items:center;gap:10px;">
-      <div class="online-count"><div class="online-dot"></div><span id="onlineCount">—</span> online</div>
-      <div class="balance-pill" id="balancePill"><span class="balance-star">★</span><span class="balance-val" id="balanceValue">0</span></div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div class="online-count"><div class="online-dot"></div><span id="onlineCount">—</span></div>
+      <div class="balance-pill" id="balancePill"><span class="balance-star">★</span><span class="balance-val" id="balanceValue">250</span></div>
       <button class="add-btn" id="addStarsBtn">+100</button>
     </div>
   </div>
@@ -538,10 +588,10 @@ body::before {
       <div class="section-header"><div class="section-title">АПГРЕЙД</div><div class="section-sub">рискни — прокачай</div></div>
       <div class="upgrade-card" id="upgradeSelectCard" onclick="openUpgradePicker()">
         <div class="selected-gift" id="upgradeSelectedIcon">📦</div>
-        <div id="upgradeSelectedName" style="color:var(--text-muted); font-size:14px;">Нажми чтобы выбрать подарок</div>
+        <div id="upgradeSelectedName" style="color:var(--text-muted); font-size:13px;">Нажми чтобы выбрать подарок</div>
       </div>
       <div class="upgrade-chance" id="upgradeChanceBlock" style="display:none;">
-        <div style="font-size:12px; color:var(--text-muted); margin-bottom:8px;">🎲 Шанс успеха</div>
+        <div style="font-size:11px; color:var(--text-muted); margin-bottom:6px;">🎲 Шанс успеха</div>
         <div class="upgrade-chance-value" id="upgradeChanceValue">0%</div>
         <div class="upgrade-progress"><div class="upgrade-progress-fill" id="upgradeProgressFill" style="width:0%"></div></div>
       </div>
@@ -571,7 +621,7 @@ body::before {
         </div>
         <button class="big-btn" id="createBattleBtn" disabled style="margin-top:0;">Создать батл</button>
       </div>
-      <div class="section-header"><div class="section-title" style="font-size:20px;">ОТКРЫТЫЕ БАТЛЫ</div></div>
+      <div class="section-header"><div class="section-title" style="font-size:18px;">ОТКРЫТЫЕ БАТЛЫ</div></div>
       <div class="pvp-lobby" id="pvpLobby"></div>
       <div class="inventory-section"><h3>МОИ ПОДАРКИ</h3><div class="inventory-grid" id="pvpInventoryList"></div></div>
     </div>
@@ -660,32 +710,19 @@ function getUserId() {
   if (!id) { id = 'u_' + Math.random().toString(36).slice(2,10); localStorage.setItem('gc_uid', id); }
   return id;
 }
-
-function saveState() {
-  try {
-    localStorage.setItem('gc_state_' + userId, JSON.stringify({ v: 3, state }));
-  } catch(e) {}
-}
-
+function saveState() { try { localStorage.setItem('gc_state_' + userId, JSON.stringify({ v: 3, state })); } catch(e) {} }
 function loadState() {
   userId = getUserId();
   if (!state.referralCode) state.referralCode = userId;
   const raw = localStorage.getItem('gc_state_' + userId);
   if (raw) {
-    try {
-      const data = JSON.parse(raw);
-      if (data.state) {
-        state = { ...state, ...data.state };
-      }
-    } catch(e) {}
+    try { const data = JSON.parse(raw); if (data.state) state = { ...state, ...data.state }; } catch(e) {}
   }
   const braw = localStorage.getItem('gc_battles');
   if (braw) { try { globalBattles = JSON.parse(braw); } catch(e) {} }
   document.getElementById('balanceValue').innerText = state.balance;
 }
-
 function saveBattles() { try { localStorage.setItem('gc_battles', JSON.stringify(globalBattles)); } catch(e) {} }
-
 function showToast(msg) {
   const existing = document.querySelector('.toast');
   if (existing) existing.remove();
@@ -693,21 +730,18 @@ function showToast(msg) {
   document.body.appendChild(t);
   setTimeout(() => t.remove(), 2500);
 }
-
 function addHistory(icon, action, result, isPositive) {
   state.history.unshift({ icon, action, result, isPositive, ts: Date.now() });
   if (state.history.length > 50) state.history = state.history.slice(0, 50);
   renderHistory();
   saveState();
 }
-
 function renderHistory() {
   const tbody = document.getElementById('historyBody');
   if (!tbody) return;
-  if (state.history.length === 0) { tbody.innerHTML = `<tr><td colspan="3" style="color:var(--text-muted);text-align:center;padding:20px;">Нет истории</td></tr>`; return; }
+  if (state.history.length === 0) { tbody.innerHTML = `<tr><td colspan="3" style="color:var(--text-muted);text-align:center;padding:16px;">Нет истории</td></tr>`; return; }
   tbody.innerHTML = state.history.slice(0,20).map(h => `<tr><td class="hist-icon">${h.icon}</td><td>${h.action}</td><td class="${h.isPositive ? 'hist-gain' : 'hist-loss'}">${h.result}</td></tr>`).join('');
 }
-
 function setBalance(val, animate = true) {
   const prev = state.balance;
   state.balance = Math.max(0, Math.floor(val));
@@ -721,7 +755,6 @@ function setBalance(val, animate = true) {
   }
   saveState();
 }
-
 function updateProfileStats() {
   let totalStars = 0;
   state.inventory.forEach(g => totalStars += g.starsValue);
@@ -732,20 +765,18 @@ function updateProfileStats() {
   document.getElementById('profileIdText').innerText = 'ID: ' + userId.slice(-8).toUpperCase();
 }
 
-// ============================================================
 // КОНФЕТТИ
-// ============================================================
 function burstConfetti() {
   const canvas = document.getElementById('confettiCanvas');
   const ctx = canvas.getContext('2d');
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
   let particles = [];
-  for (let i = 0; i < 120; i++) {
+  for (let i = 0; i < 100; i++) {
     particles.push({
       x: canvas.width/2, y: canvas.height/2,
-      vx: (Math.random() - 0.5) * 15, vy: (Math.random() - 0.5) * 15 - 8,
-      size: Math.random() * 8 + 3, life: 1,
+      vx: (Math.random() - 0.5) * 14, vy: (Math.random() - 0.5) * 14 - 7,
+      size: Math.random() * 7 + 2, life: 1,
       color: `hsl(${Math.random() * 360}, 70%, 60%)`
     });
   }
@@ -755,7 +786,7 @@ function burstConfetti() {
     particles.forEach(p => {
       p.x += p.vx; p.y += p.vy;
       p.vy += 0.2;
-      p.life -= 0.01;
+      p.life -= 0.012;
       if (p.life > 0) {
         alive = true;
         ctx.globalAlpha = p.life;
@@ -769,9 +800,7 @@ function burstConfetti() {
   animate();
 }
 
-// ============================================================
 // РЕНДЕР ИНВЕНТАРЯ
-// ============================================================
 function renderInventory(containerId, withSell = false) {
   const container = document.getElementById(containerId);
   if (!container) return;
@@ -791,7 +820,6 @@ function renderInventory(containerId, withSell = false) {
     });
   }
 }
-
 function renderAllInventories() {
   renderInventory('inventoryList', false);
   renderInventory('upgradeInventoryList', false);
@@ -799,7 +827,6 @@ function renderAllInventories() {
   renderInventory('pvpInventoryList', false);
   renderInventory('profileInventoryList', true);
 }
-
 function sellGift(idx) {
   if (!state.inventory[idx]) return;
   const g = state.inventory[idx];
@@ -814,9 +841,7 @@ function sellGift(idx) {
   showToast(`💰 Продано за ${price} ★`);
 }
 
-// ============================================================
 // КЕЙСЫ
-// ============================================================
 function renderCases() {
   const container = document.getElementById('casesContainer');
   container.innerHTML = '';
@@ -828,14 +853,13 @@ function renderCases() {
       <div class="case-body">
         <div class="case-meta"><div class="case-name">${c.name}</div><div class="case-price-tag">★ ${c.price}</div></div>
         <div class="case-items">${c.gifts.slice(0,3).map(g => `<span class="case-item-tag">${GIFTS_DB[g.name]?.icon} ${g.name} ${g.chance}%</span>`).join('')}</div>
-        <button class="open-case-btn">ОТКРЫТЬ КЕЙС</button>
+        <button class="open-case-btn">ОТКРЫТЬ</button>
       </div>
     `;
     card.querySelector('.open-case-btn').onclick = () => openCase(c);
     container.appendChild(card);
   });
 }
-
 function openCase(caseData) {
   if (state.balance < caseData.price) { showToast(`❌ Недостаточно Stars (нужно ${caseData.price})`); return; }
   setBalance(state.balance - caseData.price);
@@ -854,9 +878,7 @@ function openCase(caseData) {
   if (info.rarity === 'legendary') burstConfetti();
 }
 
-// ============================================================
 // АПГРЕЙД
-// ============================================================
 function openUpgradePicker() {
   if (state.inventory.length === 0) { showToast('Нет подарков'); return; }
   const overlay = document.createElement('div');
@@ -901,7 +923,6 @@ function openUpgradePicker() {
   document.getElementById('pickerCloseBtn').onclick = () => overlay.remove();
   overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
 }
-
 function doUpgrade() {
   if (upgradeSelectedIdx === null) return;
   const g = state.inventory[upgradeSelectedIdx];
@@ -932,7 +953,6 @@ function doUpgrade() {
   renderUpgradeUI();
   renderCraftUI();
 }
-
 function renderUpgradeUI() {
   upgradeSelectedIdx = null;
   document.getElementById('upgradeSelectedIcon').innerHTML = '📦';
@@ -942,9 +962,7 @@ function renderUpgradeUI() {
   document.getElementById('upgradeBtn').disabled = true;
 }
 
-// ============================================================
-// КРАФТ
-// ============================================================
+// КРАФТ (НОВАЯ ЛОГИКА: СУММА ЦЕННОСТЕЙ)
 function renderCraftUI() {
   const container = document.getElementById('craftSlotsContainer');
   if (!container) return;
@@ -981,7 +999,7 @@ function renderCraftUI() {
     document.getElementById('craftResult').innerHTML = `
       <div class="craft-result-icon">${resultGift.icon}</div>
       <div class="craft-result-name">${resultGift.name}</div>
-      <div class="craft-result-sub" style="font-size:11px; color:var(--text-muted);">★ ${resultGift.starsValue} · ${RARITY_LABELS[resultGift.rarity]}</div>
+      <div class="craft-result-sub" style="font-size:10px; color:var(--text-muted);">★ ${resultGift.starsValue} · ${RARITY_LABELS[resultGift.rarity]}</div>
     `;
     document.getElementById('craftBtn').disabled = false;
     window.currentCraftResult = resultGift;
@@ -990,7 +1008,6 @@ function renderCraftUI() {
     document.getElementById('craftBtn').disabled = true;
   }
 }
-
 function openCraftPicker(slotIndex) {
   craftPickerSlot = slotIndex;
   if (state.inventory.length === 0) { showToast('Нет подарков'); return; }
@@ -1027,7 +1044,6 @@ function openCraftPicker(slotIndex) {
   document.getElementById('pickerCloseBtn').onclick = () => overlay.remove();
   overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
 }
-
 function removeCraftSlot(slotIndex) {
   if (craftSlots[slotIndex]) {
     state.inventory.push(craftSlots[slotIndex]);
@@ -1036,7 +1052,6 @@ function removeCraftSlot(slotIndex) {
     renderCraftUI();
   }
 }
-
 function doCraft() {
   const allFilled = craftSlots.every(s => s !== null);
   if (!allFilled) { showToast('Заполните все 3 слота'); return; }
@@ -1052,9 +1067,7 @@ function doCraft() {
   if (resultGift.rarity === 'legendary') burstConfetti();
 }
 
-// ============================================================
 // PVP
-// ============================================================
 function openPvpPicker() {
   if (state.inventory.length === 0) { showToast('Нет подарков'); return; }
   const overlay = document.createElement('div');
@@ -1087,7 +1100,6 @@ function openPvpPicker() {
   document.getElementById('pickerCloseBtn').onclick = () => overlay.remove();
   overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
 }
-
 function createBattle() {
   if (pvpSelectedIdx === null || !state.inventory[pvpSelectedIdx]) { showToast('Выбери подарок!'); return; }
   const g = state.inventory[pvpSelectedIdx];
@@ -1104,7 +1116,6 @@ function createBattle() {
   document.getElementById('pvpStakeText').innerHTML = '⚔ Нажмите чтобы выбрать подарок';
   document.getElementById('createBattleBtn').disabled = true;
 }
-
 function joinBattle(battleId) {
   const battle = globalBattles.find(b => b.id === battleId);
   if (!battle || battle.status !== 'waiting') { showToast('Батл недоступен'); return; }
@@ -1168,7 +1179,6 @@ function joinBattle(battleId) {
   document.getElementById('pickerCloseBtn').onclick = () => overlay.remove();
   overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
 }
-
 function showBattleFight(battle, callback) {
   const overlay = document.createElement('div');
   overlay.className = 'battle-fight-overlay';
@@ -1202,12 +1212,11 @@ function showBattleFight(battle, callback) {
     }
   }, 1000);
 }
-
 function renderPvpLobby() {
   const lobby = document.getElementById('pvpLobby');
   if (!lobby) return;
   const active = globalBattles.filter(b => b.status === 'waiting');
-  if (active.length === 0) { lobby.innerHTML = `<div style="color:var(--text-muted);text-align:center;padding:30px;">Нет активных батлов.<br>Создай первый!</div>`; return; }
+  if (active.length === 0) { lobby.innerHTML = `<div style="color:var(--text-muted);text-align:center;padding:25px;">Нет активных батлов.<br>Создай первый!</div>`; return; }
   lobby.innerHTML = active.map(b => `
     <div class="battle-card">
       <div class="battle-gift-slot"><div class="battle-gift-icon">${b.creatorGift.icon}</div><div class="battle-gift-name">${b.creatorGift.name}</div><div class="battle-gift-val">★ ${b.creatorGift.starsValue}</div></div>
@@ -1218,7 +1227,6 @@ function renderPvpLobby() {
   lobby.querySelectorAll('[data-bid]').forEach(btn => btn.onclick = () => joinBattle(btn.dataset.bid));
   lobby.querySelectorAll('[data-cancel]').forEach(btn => btn.onclick = () => cancelBattle(btn.dataset.cancel));
 }
-
 function cancelBattle(battleId) {
   const idx = globalBattles.findIndex(b => b.id === battleId);
   if (idx < 0) return;
@@ -1232,9 +1240,7 @@ function cancelBattle(battleId) {
   showToast('Батл отменён, подарок возвращён');
 }
 
-// ============================================================
 // РЕФЕРАЛЫ
-// ============================================================
 function initReferral() {
   if (!state.referralCode) state.referralCode = userId;
   const urlParams = new URLSearchParams(window.location.search);
@@ -1254,8 +1260,8 @@ function showReferralModal() {
   overlay.innerHTML = `
     <div class="gift-picker" style="text-align:center;">
       <div class="gift-picker-header"><div class="gift-picker-title">👥 РЕФЕРАЛЬНАЯ ПРОГРАММА</div><button class="picker-close" id="refCloseBtn">✕</button></div>
-      <div style="margin:16px 0; font-size:13px;">Пригласи друга — получи 25 ★<br>Друг получит 50 ★ на старте!</div>
-      <div style="background:var(--surface-2);padding:12px;border-radius:var(--radius-md);margin:12px 0;word-break:break-all;font-size:12px;">${link}</div>
+      <div style="margin:14px 0; font-size:12px;">Пригласи друга — получи 25 ★<br>Друг получит 50 ★ на старте!</div>
+      <div style="background:var(--surface-2);padding:10px;border-radius:var(--radius-md);margin:10px 0;word-break:break-all;font-size:11px;">${link}</div>
       <button class="picker-confirm" id="copyRefLinkBtn">🔗 КОПИРОВАТЬ ССЫЛКУ</button>
     </div>
   `;
@@ -1265,16 +1271,12 @@ function showReferralModal() {
   overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
 }
 
-// ============================================================
 // ОНЛАЙН
-// ============================================================
 function updateOnlineCount() { document.getElementById('onlineCount').innerText = 128 + Math.floor(Math.random() * 40); }
 setInterval(updateOnlineCount, 5000);
 updateOnlineCount();
 
-// ============================================================
 // ТАБЫ
-// ============================================================
 document.querySelectorAll('.tab-item').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.tab-item').forEach(b => b.classList.remove('active'));
@@ -1288,9 +1290,7 @@ document.querySelectorAll('.tab-item').forEach(btn => {
   });
 });
 
-// ============================================================
 // КНОПКИ
-// ============================================================
 document.getElementById('addStarsBtn').onclick = () => { setBalance(state.balance + 100); addHistory('⭐', 'Пополнение', '+100 ★', true); showToast('+100 Stars'); };
 document.getElementById('balancePill').onclick = () => { setBalance(state.balance + 100); addHistory('⭐', 'Пополнение', '+100 ★', true); showToast('+100 Stars'); };
 document.getElementById('depositBtn').onclick = () => { setBalance(state.balance + 500); addHistory('💎', 'Пополнение', '+500 ★', true); showToast('+500 Stars'); };
@@ -1301,9 +1301,7 @@ document.getElementById('createBattleBtn').onclick = createBattle;
 document.getElementById('upgradeBtn').onclick = doUpgrade;
 document.getElementById('craftBtn').onclick = doCraft;
 
-// ============================================================
 // INIT
-// ============================================================
 loadState();
 initReferral();
 renderCases();
