@@ -218,12 +218,6 @@ img{display:block}
 .slot-val{font-size:11px;color:var(--gold)}
 .slot-remove{width:26px;height:26px;border-radius:50%;background:var(--s3);border:1px solid var(--borderL);color:var(--tm);font-size:12px;flex-shrink:0;transition:.15s;cursor:pointer}
 .slot-remove:hover{color:var(--red);border-color:var(--red)}
-.add-slot-btn{
-  width:100%;padding:12px;background:var(--s1);border:1px dashed var(--borderL);
-  border-radius:var(--r-lg);color:var(--tm);font-size:13px;font-weight:600;
-  transition:.15s;text-align:center;cursor:pointer
-}
-.add-slot-btn:hover{border-color:#555;color:var(--ts)}
 .chance-box{
   background:var(--s2);border:1px solid var(--border);
   border-radius:var(--r-lg);padding:20px;text-align:center;margin:12px 0
@@ -373,14 +367,6 @@ img{display:block}
 .hist-table td{padding:9px 8px;border-bottom:1px solid var(--border);font-size:12px;color:var(--ts)}
 .hist-table tr:last-child td{border:none}
 .hist-pos{color:var(--green);font-weight:700}.hist-neg{color:var(--red);font-weight:700}
-
-/* ── GIFT PICKER MODAL (оставлен для совместимости, но не используется) ── */
-.modal-overlay{
-  position:fixed;inset:0;background:rgba(0,0,0,.9);
-  z-index:200;display:flex;align-items:flex-end;justify-content:center;
-  animation:fadeIn .18s;display:none
-}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
 
 /* ── ROULETTE ── */
 .roulette-wrap{
@@ -538,34 +524,22 @@ img{display:block}
 <div class="rl-banner" id="rlBanner">⚠️ Слишком быстро, подождите</div>
 
 <div class="app" id="app">
-  <!-- TOPBAR -->
   <div class="topbar">
     <div class="logo">GIFTCASE<div class="logo-dot"></div></div>
     <div class="topbar-right">
       <div class="online-badge"><div class="online-dot"></div><span id="onlineCount">—</span></div>
-      <div class="balance-pill" id="balancePill">
-        <span class="bal-star">★</span>
-        <span class="bal-val" id="balVal">0</span>
-        <span class="sync-indicator" id="syncDot"></span>
-      </div>
+      <div class="balance-pill" id="balancePill"><span class="bal-star">★</span><span class="bal-val" id="balVal">250</span><span class="sync-indicator" id="syncDot"></span></div>
       <button class="add-btn" id="addBtn">+100 ★</button>
     </div>
   </div>
 
-  <!-- CONTENT AREA -->
   <div class="content" id="mainContent">
-
-    <!-- ===== CASES ===== -->
     <div class="panel active" id="casesPanel">
       <div class="sec-hdr"><div class="sec-title">КЕЙСЫ</div><div class="sec-sub">открой и выиграй</div></div>
       <div class="cases-grid" id="casesGrid"></div>
-      <div class="inv-section">
-        <h3>МОИ ПОДАРКИ</h3>
-        <div class="inv-grid" id="invCases"></div>
-      </div>
+      <div class="inv-section"><h3>МОИ ПОДАРКИ</h3><div class="inv-grid" id="invCases"></div></div>
     </div>
 
-    <!-- ===== UPGRADE ===== -->
     <div class="panel" id="upgradePanel">
       <div class="sec-hdr"><div class="sec-title">АПГРЕЙД</div><div class="sec-sub">рискни и прокачай</div></div>
       <div class="upgrade-slots" id="upgradeSlots"></div>
@@ -584,111 +558,45 @@ img{display:block}
       <div class="inv-section" style="margin-top:14px"><h3>МОИ ПОДАРКИ</h3><div class="inv-grid" id="invUpgrade"></div></div>
     </div>
 
-    <!-- ===== CRAFT ===== -->
     <div class="panel" id="craftPanel">
       <div class="sec-hdr"><div class="sec-title">КРАФТ</div><div class="sec-sub">3 → 1 гарантировано</div></div>
       <p style="font-size:12px;color:var(--tm);margin-bottom:12px">Нажми на 3 подарка <strong style="color:var(--ts)">одной редкости</strong> чтобы скрафтить</p>
-      <div class="craft-slots" id="craftSlots">
-        <div class="craft-slot empty" data-slot="0"><div class="craft-slot-icon">❓</div><div class="craft-slot-name">Выбрать</div></div>
-        <div class="craft-slot empty" data-slot="1"><div class="craft-slot-icon">❓</div><div class="craft-slot-name">Выбрать</div></div>
-        <div class="craft-slot empty" data-slot="2"><div class="craft-slot-icon">❓</div><div class="craft-slot-name">Выбрать</div></div>
-      </div>
+      <div class="craft-slots" id="craftSlots"><div class="craft-slot empty" data-slot="0"><div class="craft-slot-icon">❓</div><div class="craft-slot-name">Выбрать</div></div><div class="craft-slot empty" data-slot="1"><div class="craft-slot-icon">❓</div><div class="craft-slot-name">Выбрать</div></div><div class="craft-slot empty" data-slot="2"><div class="craft-slot-icon">❓</div><div class="craft-slot-name">Выбрать</div></div></div>
       <div class="craft-arrow">▼</div>
-      <div class="craft-result" id="craftResult">
-        <div class="cr-label">Результат</div>
-        <div class="cr-icon" id="crIcon">❓</div>
-        <div class="cr-name" id="crName">Добавьте 3 подарка</div>
-      </div>
+      <div class="craft-result" id="craftResult"><div class="cr-label">Результат</div><div class="cr-icon" id="crIcon">❓</div><div class="cr-name" id="crName">Добавьте 3 подарка</div></div>
       <button class="btn btn-gold" id="craftBtn" disabled>СКРАФТИТЬ</button>
       <div class="inv-section" style="margin-top:14px"><h3>МОИ ПОДАРКИ</h3><div class="inv-grid" id="invCraft"></div></div>
     </div>
 
-    <!-- ===== PVP ===== -->
     <div class="panel" id="pvpPanel">
       <div class="sec-hdr"><div class="sec-title">PvP БАТЛЫ</div><div class="sec-sub">победитель забирает всё</div></div>
-      <div class="pvp-tabs">
-        <button class="pvp-tab active" data-pvptab="public">Публичные</button>
-        <button class="pvp-tab" data-pvptab="private">Приватный</button>
-      </div>
+      <div class="pvp-tabs"><button class="pvp-tab active" data-pvptab="public">Публичные</button><button class="pvp-tab" data-pvptab="private">Приватный</button></div>
       <div class="battle-create-box">
         <div style="font-size:12px;color:var(--tm);margin-bottom:8px" id="pvpCreateLabel">Поставь подарок и создай публичный батл</div>
-        <div class="battle-stake-pick" id="pvpStakeDisplay">
-          <span class="bsp-icon">⚔️</span>
-          <span class="bsp-text" id="pvpStakeText">Нажми на подарок в инвентаре</span>
-          <span class="bsp-val" id="pvpStakeVal"></span>
-        </div>
+        <div class="battle-stake-pick" id="pvpStakeDisplay"><span class="bsp-icon">⚔️</span><span class="bsp-text" id="pvpStakeText">Нажми на подарок в инвентаре</span><span class="bsp-val" id="pvpStakeVal"></span></div>
         <button class="btn btn-primary" id="createBattleBtn" disabled>СОЗДАТЬ БАТЛ</button>
-        <div id="privateLinkRow" style="display:none;margin-top:10px">
-          <div style="font-size:11px;color:var(--tm);margin-bottom:6px">🔗 Ссылка для приглашения:</div>
-          <div style="display:flex;gap:8px">
-            <input class="ref-link-input" id="privateBattleLink" readonly>
-            <button class="btn btn-outline btn-sm" id="copyPrivateLinkBtn">Копировать</button>
-          </div>
-        </div>
+        <div id="privateLinkRow" style="display:none;margin-top:10px"><div style="font-size:11px;color:var(--tm);margin-bottom:6px">🔗 Ссылка для приглашения:</div><div style="display:flex;gap:8px"><input class="ref-link-input" id="privateBattleLink" readonly><button class="btn btn-outline btn-sm" id="copyPrivateLinkBtn">Копировать</button></div></div>
       </div>
       <div style="font-family:var(--font-d);font-size:18px;letter-spacing:1px;margin-bottom:8px;color:var(--ts)">АКТИВНЫЕ БАТЛЫ</div>
       <div id="pvpLobby"></div>
       <div class="inv-section"><h3>МОИ ПОДАРКИ</h3><div class="inv-grid" id="invPvp"></div></div>
     </div>
 
-    <!-- ===== PROFILE ===== -->
     <div class="panel" id="profilePanel">
       <div class="profile-hero">
-        <div class="avatar-wrap">
-          <div class="avatar-img" id="avatarDisplay" onclick="document.getElementById('avatarInput').click()">👤</div>
-          <div class="avatar-edit" onclick="document.getElementById('avatarInput').click()">✏️</div>
-          <input type="file" id="avatarInput" accept="image/*">
-        </div>
-        <div class="pname">
-          <span class="pname-text" id="pName">ИГРОК</span>
-          <button class="edit-name-btn" id="editNameBtn">✏️</button>
-        </div>
+        <div class="avatar-wrap"><div class="avatar-img" id="avatarDisplay" onclick="document.getElementById('avatarInput').click()">👤</div><div class="avatar-edit" onclick="document.getElementById('avatarInput').click()">✏️</div><input type="file" id="avatarInput" accept="image/*"></div>
+        <div class="pname"><span class="pname-text" id="pName">ИГРОК</span><button class="edit-name-btn" id="editNameBtn">✏️</button></div>
         <div class="pid" id="pId"></div>
-        <div class="luck-bar-wrap">
-          <div class="luck-label"><span>🍀 Удача</span><span id="luckPct">0%</span></div>
-          <div class="luck-bar"><div class="luck-fill" id="luckFill" style="width:0%"></div></div>
-        </div>
-        <div class="stats-grid">
-          <div class="stat-box"><div class="stat-n" id="sTotalGifts">0</div><div class="stat-l">Подарков</div></div>
-          <div class="stat-box"><div class="stat-n" id="sTotalStars">0</div><div class="stat-l">★ Ценность</div></div>
-          <div class="stat-box"><div class="stat-n" id="sCasesOpened">0</div><div class="stat-l">Кейсов</div></div>
-          <div class="stat-box"><div class="stat-n" id="sPvpWins">0</div><div class="stat-l">Победы</div></div>
-        </div>
-        <div class="p-actions">
-          <button class="p-btn" id="depositBtn">💎 Пополнить</button>
-          <button class="p-btn" id="withdrawBtn">💰 Вывести</button>
-          <button class="p-btn" id="shareProfileBtn">🔗 Поделиться</button>
-        </div>
+        <div class="luck-bar-wrap"><div class="luck-label"><span>🍀 Удача</span><span id="luckPct">0%</span></div><div class="luck-bar"><div class="luck-fill" id="luckFill" style="width:0%"></div></div></div>
+        <div class="stats-grid"><div class="stat-box"><div class="stat-n" id="sTotalGifts">0</div><div class="stat-l">Подарков</div></div><div class="stat-box"><div class="stat-n" id="sTotalStars">0</div><div class="stat-l">★ Ценность</div></div><div class="stat-box"><div class="stat-n" id="sCasesOpened">0</div><div class="stat-l">Кейсов</div></div><div class="stat-box"><div class="stat-n" id="sPvpWins">0</div><div class="stat-l">Победы</div></div></div>
+        <div class="p-actions"><button class="p-btn" id="depositBtn">💎 Пополнить</button><button class="p-btn" id="withdrawBtn">💰 Вывести</button><button class="p-btn" id="shareProfileBtn">🔗 Поделиться</button></div>
       </div>
-
-      <!-- REFERRAL -->
-      <div class="ref-box">
-        <div class="ref-title">РЕФЕРАЛЬНАЯ ПРОГРАММА</div>
-        <p style="font-size:12px;color:var(--tm)">Приглашай друзей и получай 10% от их первого пополнения</p>
-        <div class="ref-link-row">
-          <input class="ref-link-input" id="refLinkInput" readonly>
-          <button class="btn btn-outline btn-sm" id="copyRefBtn">Копировать</button>
-        </div>
-        <div class="ref-stats">
-          <div class="ref-stat"><div class="ref-stat-n" id="refCount">0</div><div class="ref-stat-l">Рефералов</div></div>
-          <div class="ref-stat"><div class="ref-stat-n" id="refEarned">0</div><div class="ref-stat-l">★ Заработано</div></div>
-        </div>
-      </div>
-
+      <div class="ref-box"><div class="ref-title">РЕФЕРАЛЬНАЯ ПРОГРАММА</div><p style="font-size:12px;color:var(--tm)">Приглашай друзей и получай 10% от их первого пополнения</p><div class="ref-link-row"><input class="ref-link-input" id="refLinkInput" readonly><button class="btn btn-outline btn-sm" id="copyRefBtn">Копировать</button></div><div class="ref-stats"><div class="ref-stat"><div class="ref-stat-n" id="refCount">0</div><div class="ref-stat-l">Рефералов</div></div><div class="ref-stat"><div class="ref-stat-n" id="refEarned">0</div><div class="ref-stat-l">★ Заработано</div></div></div></div>
       <div class="inv-section"><h3>МОИ ПОДАРКИ</h3><div class="inv-grid" id="invProfile"></div></div>
-
-      <div class="inv-section" style="margin-top:10px">
-        <h3>ИСТОРИЯ</h3>
-        <table class="hist-table">
-          <thead><tr><th>Предмет</th><th>Действие</th><th>Итог</th></tr></thead>
-          <tbody id="histBody"></tbody>
-        </table>
-      </div>
+      <div class="inv-section" style="margin-top:10px"><h3>ИСТОРИЯ</h3><table class="hist-table"><thead><tr><th>Предмет</th><th>Действие</th><th>Итог</th></tr></thead><tbody id="histBody"></tbody></table></div>
     </div>
+  </div>
 
-  </div><!-- /content -->
-
-  <!-- BOTTOM TABS -->
   <div class="tabs">
     <button class="tab active" data-tab="cases"><span class="tab-icon">🎁</span><span class="tab-lbl">Кейсы</span></button>
     <button class="tab" data-tab="upgrade"><span class="tab-icon">⬆️</span><span class="tab-lbl">Апгрейд</span></button>
@@ -709,74 +617,61 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
 // DATABASE
 // ═══════════════════════════════════════════════════════
 const GIFTS = {
-  "Розовый мишка":      {icon:"🧸",val:15,  rarity:"common",   upTo:"Золотая звезда"},
-  "Букет цветов":       {icon:"💐",val:15,  rarity:"common",   upTo:"Алмазное сердце"},
-  "Шоколадка":          {icon:"🍫",val:15,  rarity:"common",   upTo:"Золотая звезда"},
-  "Золотая звезда":     {icon:"⭐️",val:50, rarity:"rare",     upTo:"Легендарный дракон"},
-  "Алмазное сердце":    {icon:"💎",val:50,  rarity:"rare",     upTo:"Космический корабль"},
-  "Легендарный дракон": {icon:"🐉",val:200, rarity:"epic",     upTo:"Трон короля"},
-  "Космический корабль":{icon:"🚀",val:200, rarity:"epic",     upTo:"Трон короля"},
-  "Трон короля":        {icon:"👑",val:1000,rarity:"legendary",upTo:null}
+  "Розовый мишка":{icon:"🧸",val:15,rarity:"common",upTo:"Золотая звезда"},
+  "Букет цветов":{icon:"💐",val:15,rarity:"common",upTo:"Алмазное сердце"},
+  "Шоколадка":{icon:"🍫",val:15,rarity:"common",upTo:"Золотая звезда"},
+  "Золотая звезда":{icon:"⭐️",val:50,rarity:"rare",upTo:"Легендарный дракон"},
+  "Алмазное сердце":{icon:"💎",val:50,rarity:"rare",upTo:"Космический корабль"},
+  "Легендарный дракон":{icon:"🐉",val:200,rarity:"epic",upTo:"Трон короля"},
+  "Космический корабль":{icon:"🚀",val:200,rarity:"epic",upTo:"Трон короля"},
+  "Трон короля":{icon:"👑",val:1000,rarity:"legendary",upTo:null}
 };
-const RARITY_ORDER = ["common","rare","epic","legendary"];
-const RARITY_LABELS= {common:"Обычный",rare:"Редкий",epic:"Эпический",legendary:"Легендарный"};
-const RARITY_COLORS= {common:"#666",rare:"#5577cc",epic:"#9955cc",legendary:"#c8a96e"};
-const UPGRADE_CH  = {common:70,rare:50,epic:30,legendary:0};
-const CRAFT_RESULT= {common:"Золотая звезда",rare:"Легендарный дракон",epic:"Трон короля"};
+const RARITY_ORDER=["common","rare","epic","legendary"];
+const RARITY_LABELS={common:"Обычный",rare:"Редкий",epic:"Эпический",legendary:"Легендарный"};
+const RARITY_COLORS={common:"#666",rare:"#5577cc",epic:"#9955cc",legendary:"#c8a96e"};
+const UPGRADE_CH={common:70,rare:50,epic:30,legendary:0};
+const CRAFT_RESULT={common:"Золотая звезда",rare:"Легендарный дракон",epic:"Трон короля"};
 
 const CASES=[
-  {id:"common",name:"ОБЫЧНЫЙ",emoji:"📦",price:30,cls:"c-common",
-   gifts:[{n:"Розовый мишка",c:40},{n:"Букет цветов",c:35},{n:"Шоколадка",c:25}]},
-  {id:"rare",name:"РЕДКИЙ",emoji:"✨",price:80,cls:"c-rare",
-   gifts:[{n:"Розовый мишка",c:20},{n:"Букет цветов",c:15},{n:"Шоколадка",c:15},{n:"Золотая звезда",c:30},{n:"Алмазное сердце",c:20}]},
-  {id:"epic",name:"ЭПИЧЕСКИЙ",emoji:"🔥",price:200,cls:"c-epic",
-   gifts:[{n:"Золотая звезда",c:30},{n:"Алмазное сердце",c:30},{n:"Легендарный дракон",c:25},{n:"Космический корабль",c:15}]},
-  {id:"legendary",name:"ЛЕГЕНДАРНЫЙ",emoji:"👑",price:500,cls:"c-legendary",
-   gifts:[{n:"Легендарный дракон",c:40},{n:"Космический корабль",c:35},{n:"Трон короля",c:25}]}
+  {id:"common",name:"ОБЫЧНЫЙ",emoji:"📦",price:30,cls:"c-common",gifts:[{n:"Розовый мишка",c:40},{n:"Букет цветов",c:35},{n:"Шоколадка",c:25}]},
+  {id:"rare",name:"РЕДКИЙ",emoji:"✨",price:80,cls:"c-rare",gifts:[{n:"Розовый мишка",c:20},{n:"Букет цветов",c:15},{n:"Шоколадка",c:15},{n:"Золотая звезда",c:30},{n:"Алмазное сердце",c:20}]},
+  {id:"epic",name:"ЭПИЧЕСКИЙ",emoji:"🔥",price:200,cls:"c-epic",gifts:[{n:"Золотая звезда",c:30},{n:"Алмазное сердце",c:30},{n:"Легендарный дракон",c:25},{n:"Космический корабль",c:15}]},
+  {id:"legendary",name:"ЛЕГЕНДАРНЫЙ",emoji:"👑",price:500,cls:"c-legendary",gifts:[{n:"Легендарный дракон",c:40},{n:"Космический корабль",c:35},{n:"Трон короля",c:25}]}
 ];
 
 // ═══════════════════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════════════════
 let userId=null, tgUser=null;
-let state = {
-  balance:250, inventory:[], casesOpened:0,
-  pvpWins:0, history:[], luck:0, refCode:null,
-  refCount:0, refEarned:0, avatarUrl:null, displayName:null
-};
+let state={balance:250,inventory:[],casesOpened:0,pvpWins:0,history:[],luck:0,refCode:null,refCount:0,refEarned:0,avatarUrl:null,displayName:null};
 let upgradeSlots=[];
 let craftSlots=[null,null,null];
 let pvpStakeIdx=null;
 let pvpMode='public';
 let battles=[];
-let supabaseChannel=null;
 let debounceSave=null;
 
 // ═══════════════════════════════════════════════════════
 // RATE LIMITER
 // ═══════════════════════════════════════════════════════
-const RL={
-  _map:{},
-  check(k,max=4){
-    const now=Date.now();
-    if(!this._map[k])this._map[k]=[];
-    this._map[k]=this._map[k].filter(t=>now-t<1000);
-    if(this._map[k].length>=max){
-      const b=document.getElementById('rlBanner');
-      b.style.display='block';
-      clearTimeout(this._t);
-      this._t=setTimeout(()=>{b.style.display='none'},2000);
-      return false;
-    }
-    this._map[k].push(now);return true;
+const RL={_map:{},check(k,max=4){
+  const now=Date.now();
+  if(!this._map[k])this._map[k]=[];
+  this._map[k]=this._map[k].filter(t=>now-t<1000);
+  if(this._map[k].length>=max){
+    const b=document.getElementById('rlBanner');
+    b.style.display='block';
+    clearTimeout(this._t);
+    this._t=setTimeout(()=>{b.style.display='none'},2000);
+    return false;
   }
-};
+  this._map[k].push(now);return true;
+}};
 
 // ═══════════════════════════════════════════════════════
 // SOUND ENGINE
 // ═══════════════════════════════════════════════════════
-const SFX={
-  _ctx:null,
+const SFX={_ctx:null,
   _get(){if(!this._ctx)this._ctx=new(window.AudioContext||window.webkitAudioContext)();return this._ctx},
   _tone(freq,dur,vol=0.15,type='sine'){
     try{
@@ -813,35 +708,22 @@ const CF=(()=>{
     for(let i=0;i<n;i++){
       const a=(Math.PI*2/n)*i+Math.random()*.5;
       const s=Math.random()*7+3;
-      ps.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-5,
-        life:1,decay:Math.random()*.012+.008,
-        sz:Math.random()*5+2,
-        color:(cols||defCols)[Math.floor(Math.random()*(cols||defCols).length)],
-        rot:Math.random()*Math.PI*2,rs:(Math.random()-.5)*.2});
+      ps.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-5,life:1,decay:Math.random()*.012+.008,sz:Math.random()*5+2,color:(cols||defCols)[Math.floor(Math.random()*(cols||defCols).length)],rot:Math.random()*Math.PI*2,rs:(Math.random()-.5)*.2});
     }
     if(!af)loop();
   }
   function loop(){
     cx.clearRect(0,0,cv.width,cv.height);
     ps=ps.filter(p=>p.life>0);
-    ps.forEach(p=>{
-      p.x+=p.vx;p.y+=p.vy;p.vy+=.25;p.vx*=.99;
-      p.life-=p.decay;p.rot+=p.rs;
-      cx.save();cx.globalAlpha=p.life;cx.translate(p.x,p.y);cx.rotate(p.rot);
-      cx.fillStyle=p.color;cx.fillRect(-p.sz/2,-p.sz/2,p.sz,p.sz);cx.restore();
-    });
+    ps.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.25;p.vx*=.99;p.life-=p.decay;p.rot+=p.rs;cx.save();cx.globalAlpha=p.life;cx.translate(p.x,p.y);cx.rotate(p.rot);cx.fillStyle=p.color;cx.fillRect(-p.sz/2,-p.sz/2,p.sz,p.sz);cx.restore();});
     af=ps.length>0?requestAnimationFrame(loop):null;
   }
   return{burst};
 })();
 
-// ═══════════════════════════════════════════════════════
-// TOAST
-// ═══════════════════════════════════════════════════════
 function toast(msg){
   document.querySelectorAll('.toast').forEach(t=>t.remove());
-  const t=document.createElement('div');
-  t.className='toast';t.innerHTML=msg;
+  const t=document.createElement('div');t.className='toast';t.innerHTML=msg;
   document.body.appendChild(t);
   setTimeout(()=>t.remove(),2600);
 }
@@ -851,19 +733,13 @@ function toast(msg){
 // ═══════════════════════════════════════════════════════
 async function sbFetch(path,method='GET',body=null,headers={}){
   try{
-    const res=await fetch(SUPABASE_URL+path,{
-      method,
-      headers:{'apikey':SUPABASE_ANON,'Authorization':'Bearer '+SUPABASE_ANON,
-        'Content-Type':'application/json','Prefer':'return=representation',...headers},
-      body:body?JSON.stringify(body):null
-    });
+    const res=await fetch(SUPABASE_URL+path,{method,headers:{'apikey':SUPABASE_ANON,'Authorization':'Bearer '+SUPABASE_ANON,'Content-Type':'application/json','Prefer':'return=representation',...headers},body:body?JSON.stringify(body):null});
     if(!res.ok){const e=await res.text();console.warn('SB err:',e);return null}
     const txt=await res.text();
     return txt?JSON.parse(txt):null;
   }catch(e){console.warn('SB fetch:',e);return null}
 }
 
-// ── LOAD/SAVE USER ──
 async function loadUserFromDB(){
   if(!userId)return;
   const rows=await sbFetch(`/rest/v1/gc_users?id=eq.${userId}&select=*`);
@@ -893,24 +769,8 @@ async function saveUserToDB(){
   if(!userId)return;
   clearTimeout(debounceSave);
   debounceSave=setTimeout(async()=>{
-    const payload={
-      id:userId,
-      username:tgUser?.username||tgUser?.first_name||'Игрок_'+userId.slice(0,5),
-      display_name:state.displayName||tgUser?.first_name||'ИГРОК',
-      avatar_url:state.avatarUrl||null,
-      balance:state.balance,
-      inventory:JSON.stringify(state.inventory),
-      cases_opened:state.casesOpened,
-      pvp_wins:state.pvpWins,
-      luck:state.luck,
-      history:JSON.stringify(state.history.slice(0,50)),
-      ref_code:state.refCode||userId.slice(0,8),
-      ref_count:state.refCount,
-      ref_earned:state.refEarned,
-      updated_at:new Date().toISOString()
-    };
-    const res=await sbFetch('/rest/v1/gc_users','POST',payload,
-      {'Prefer':'resolution=merge-duplicates,return=representation'});
+    const payload={id:userId,username:tgUser?.username||tgUser?.first_name||'Игрок_'+userId.slice(0,5),display_name:state.displayName||tgUser?.first_name||'ИГРОК',avatar_url:state.avatarUrl||null,balance:state.balance,inventory:JSON.stringify(state.inventory),cases_opened:state.casesOpened,pvp_wins:state.pvpWins,luck:state.luck,history:JSON.stringify(state.history.slice(0,50)),ref_code:state.refCode||userId.slice(0,8),ref_count:state.refCount,ref_earned:state.refEarned,updated_at:new Date().toISOString()};
+    const res=await sbFetch('/rest/v1/gc_users','POST',payload,{'Prefer':'resolution=merge-duplicates,return=representation'});
     const dot=document.getElementById('syncDot');
     if(res){dot.className='sync-indicator ok';setTimeout(()=>dot.className='sync-indicator',1000)}
   },800);
@@ -919,31 +779,26 @@ async function saveUserToDB(){
 
 function safeJSON(v,def){try{return typeof v==='string'?JSON.parse(v):v??def}catch(e){return def}}
 
-// ── LOAD BATTLES ──
 async function loadBattles(){
-  const rows=await sbFetch(`/rest/v1/gc_battles?status=eq.waiting&order=created_at.desc&limit=20`);
+  const rows=await sbFetch(`/rest/v1/gc_battles?status=eq.waiting&order=created_at.desc&limit=50`);
   if(rows)battles=rows;
   renderPvpLobby();
 }
-async function saveBattle(b){
-  return await sbFetch('/rest/v1/gc_battles','POST',b,
-    {'Prefer':'resolution=merge-duplicates,return=representation'});
-}
-async function updateBattle(id,data){
-  return await sbFetch(`/rest/v1/gc_battles?id=eq.${id}`,'PATCH',data);
-}
-async function deleteBattle(id){
-  return await sbFetch(`/rest/v1/gc_battles?id=eq.${id}`,'DELETE');
-}
+async function saveBattle(b){return await sbFetch('/rest/v1/gc_battles','POST',b,{'Prefer':'resolution=merge-duplicates,return=representation'});}
+async function updateBattle(id,data){return await sbFetch(`/rest/v1/gc_battles?id=eq.${id}`,'PATCH',data);}
+async function deleteBattle(id){return await sbFetch(`/rest/v1/gc_battles?id=eq.${id}`,'DELETE');}
 
 // ═══════════════════════════════════════════════════════
-// REALTIME WebSocket via Supabase Realtime
+// REALTIME WebSocket
 // ═══════════════════════════════════════════════════════
+let ws=null;
 function initRealtime(){
+  if(ws && ws.readyState===WebSocket.OPEN)return;
   try{
-    const ws=new WebSocket(`wss://riwzrplciliebgexltll.supabase.co/realtime/v1/websocket?apikey=${SUPABASE_ANON}&vsn=1.0.0`);
+    ws=new WebSocket(`wss://riwzrplciliebgexltll.supabase.co/realtime/v1/websocket?apikey=${SUPABASE_ANON}&vsn=1.0.0`);
     ws.onopen=()=>{
       ws.send(JSON.stringify({topic:'realtime:public:gc_battles',event:'phx_join',payload:{},ref:1}));
+      ws.send(JSON.stringify({topic:'realtime:public:gc_users',event:'phx_join',payload:{},ref:2}));
     };
     ws.onmessage=(e)=>{
       try{
@@ -951,29 +806,29 @@ function initRealtime(){
         if(msg.event==='INSERT'||msg.event==='UPDATE'){
           const row=msg.payload?.record||msg.payload?.new;
           if(!row)return;
-          if(msg.event==='INSERT'&&row.status==='waiting'){
-            if(!battles.find(b=>b.id===row.id))battles.unshift(row);
-            renderPvpLobby();
-          }
-          if(msg.event==='UPDATE'){
-            const idx=battles.findIndex(b=>b.id===row.id);
-            if(idx>=0)battles[idx]=row;
-            if(row.status!=='waiting')battles=battles.filter(b=>b.id!==row.id);
-            if(row.opponent_id===userId&&row.status==='fighting'){
-              handleBattleResult(row);
+          if(msg.topic==='realtime:public:gc_battles'){
+            if(row.status==='waiting'){
+              if(!battles.find(b=>b.id===row.id))battles.unshift(row);
+              renderPvpLobby();
+            }else{
+              battles=battles.filter(b=>b.id!==row.id);
+              renderPvpLobby();
             }
-            renderPvpLobby();
+            if(row.opponent_id===userId&&row.status==='fighting'){handleBattleResult(row);}
+          }
+          if(msg.topic==='realtime:public:gc_users'){
+            if(row.id===userId){loadUserFromDB();}
           }
         }
       }catch(err){}
     };
-    ws.onerror=()=>{};
-    ws.onclose=()=>{setTimeout(initRealtime,3000)};
-  }catch(e){}
+    ws.onerror=()=>{setTimeout(initRealtime,5000);};
+    ws.onclose=()=>{setTimeout(initRealtime,5000);};
+  }catch(e){setTimeout(initRealtime,5000);}
 }
 
 // ═══════════════════════════════════════════════════════
-// BALANCE
+// BALANCE & LUCK & HISTORY
 // ═══════════════════════════════════════════════════════
 function setBalance(v){
   const prev=state.balance;
@@ -988,113 +843,40 @@ function setBalance(v){
   saveUserToDB();
 }
 
-// ═══════════════════════════════════════════════════════
-// LUCK SYSTEM
-// ═══════════════════════════════════════════════════════
-function applyLuck(baseChance){
-  const bonus=state.luck*0.005;
-  return Math.min(95,baseChance+bonus);
-}
-function incrementLuck(amount){
-  state.luck=Math.min(200,state.luck+(amount||1));
-  updateLuckBar();
-}
-function updateLuckBar(){
-  const pct=Math.min(100,state.luck/2);
-  const el=document.getElementById('luckFill');
-  const pt=document.getElementById('luckPct');
-  if(el)el.style.width=pct+'%';
-  if(pt)pt.innerText=Math.round(pct)+'%';
+function applyLuck(baseChance){return Math.min(95,baseChance+state.luck*0.005);}
+function incrementLuck(amount){state.luck=Math.min(200,state.luck+(amount||1));updateLuckBar();}
+function updateLuckBar(){const pct=Math.min(100,state.luck/2);const el=document.getElementById('luckFill');const pt=document.getElementById('luckPct');if(el)el.style.width=pct+'%';if(pt)pt.innerText=Math.round(pct)+'%';}
+
+function addHist(icon,action,result,pos){state.history.unshift({icon,action,result,pos,ts:Date.now()});if(state.history.length>60)state.history=state.history.slice(0,60);}
+
+function makeGift(name){const g=GIFTS[name];if(!g)return null;return{name,icon:g.icon,val:g.val,rarity:g.rarity};}
+
+// ── DOM RENDER ──
+function renderInv(containerId,withSell=false,mode=null){
+  const el=document.getElementById(containerId);if(!el)return;
+  if(!state.inventory.length){el.innerHTML='<div class="inv-empty">📭 Нет подарков</div>';return;}
+  el.innerHTML=state.inventory.map((g,i)=>`<div class="inv-card" data-gift-idx="${i}" data-mode="${mode||''}"><div class="inv-rarity r-${g.rarity}"></div><div class="inv-icon">${g.icon}</div><div class="inv-name">${g.name}</div><div class="inv-val">★ ${g.val}</div>${withSell?`<button class="sell-chip" data-idx="${i}">Продать</button>`:''}</div>`).join('');
+  if(withSell){el.querySelectorAll('.sell-chip').forEach(btn=>{btn.onclick=e=>{e.stopPropagation();sellGift(+btn.dataset.idx)};});}
+  el.querySelectorAll('.inv-card').forEach(card=>{card.onclick=e=>{if(e.target.classList.contains('sell-chip'))return;const idx=+card.dataset.giftIdx;const modeAttr=card.dataset.mode;if(modeAttr==='upgrade')selectForUpgrade(idx);else if(modeAttr==='craft')selectForCraft(idx);else if(modeAttr==='pvp')selectForPvp(idx);};});
 }
 
-// ═══════════════════════════════════════════════════════
-// HISTORY
-// ═══════════════════════════════════════════════════════
-function addHist(icon,action,result,pos){
-  state.history.unshift({icon,action,result,pos,ts:Date.now()});
-  if(state.history.length>60)state.history=state.history.slice(0,60);
-}
+function renderAllInv(){renderInv('invCases',false);renderInv('invUpgrade',false,'upgrade');renderInv('invCraft',false,'craft');renderInv('invPvp',false,'pvp');renderInv('invProfile',true);}
 
-// ═══════════════════════════════════════════════════════
-// INVENTORY HELPERS
-// ═══════════════════════════════════════════════════════
-function makeGift(name){
-  const g=GIFTS[name];if(!g)return null;
-  return{name,icon:g.icon,val:g.val,rarity:g.rarity};
-}
-
-// ── DOM CACHE ──
-const DOM={};
-function $id(id){return DOM[id]||(DOM[id]=document.getElementById(id))}
-
-function renderInv(containerId, withSell=false, mode=null){
-  const el=$id(containerId);if(!el)return;
-  if(!state.inventory.length){el.innerHTML='<div class="inv-empty">📭 Нет подарков</div>';return}
-  el.innerHTML=state.inventory.map((g,i)=>`
-    <div class="inv-card" data-gift-idx="${i}" data-mode="${mode||''}">
-      <div class="inv-rarity r-${g.rarity}"></div>
-      <div class="inv-icon">${g.icon}</div>
-      <div class="inv-name">${g.name}</div>
-      <div class="inv-val">★ ${g.val}</div>
-      ${withSell?`<button class="sell-chip" data-idx="${i}">Продать</button>`:''}
-    </div>`).join('');
-  
-  if(withSell){
-    el.querySelectorAll('.sell-chip').forEach(btn=>{
-      btn.onclick=e=>{e.stopPropagation();sellGift(+btn.dataset.idx)};
-    });
-  }
-  
-  // Назначение подарка по нажатию (для всех режимов)
-  el.querySelectorAll('.inv-card').forEach(card=>{
-    card.onclick=e=>{
-      if(e.target.classList.contains('sell-chip')) return;
-      const idx=+card.dataset.giftIdx;
-      const modeAttr=card.dataset.mode;
-      if(modeAttr==='upgrade') selectForUpgrade(idx);
-      else if(modeAttr==='craft') selectForCraft(idx);
-      else if(modeAttr==='pvp') selectForPvp(idx);
-    };
-  });
-}
-
-function renderAllInv(){
-  renderInv('invCases', false);
-  renderInv('invUpgrade', false, 'upgrade');
-  renderInv('invCraft', false, 'craft');
-  renderInv('invPvp', false, 'pvp');
-  renderInv('invProfile', true);
-}
-
-function sellGift(i){
-  if(!RL.check('sell',5))return;
-  const g=state.inventory[i];if(!g)return;
-  const p=Math.floor(g.val*.7);
-  state.inventory.splice(i,1);
-  setBalance(state.balance+p);
-  addHist(g.icon,'Продан: '+g.name,'+'+p+' ★',true);
-  vibrate([8]);
-  updateAllUI();
-  toast('💰 Продано за '+p+' ★');
-}
+function sellGift(i){if(!RL.check('sell',5))return;const g=state.inventory[i];if(!g)return;const p=Math.floor(g.val*.7);state.inventory.splice(i,1);setBalance(state.balance+p);addHist(g.icon,'Продан: '+g.name,'+'+p+' ★',true);vibrate([8]);updateAllUI();toast('💰 Продано за '+p+' ★');}
 
 function updateProfileStats(){
   let total=0;state.inventory.forEach(g=>total+=g.val);
-  const s=id=>document.getElementById(id);
-  s('sTotalGifts')&&(s('sTotalGifts').innerText=state.inventory.length);
-  s('sTotalStars')&&(s('sTotalStars').innerText=total);
-  s('sCasesOpened')&&(s('sCasesOpened').innerText=state.casesOpened||0);
-  s('sPvpWins')&&(s('sPvpWins').innerText=state.pvpWins||0);
-  
+  document.getElementById('sTotalGifts')&&(document.getElementById('sTotalGifts').innerText=state.inventory.length);
+  document.getElementById('sTotalStars')&&(document.getElementById('sTotalStars').innerText=total);
+  document.getElementById('sCasesOpened')&&(document.getElementById('sCasesOpened').innerText=state.casesOpened||0);
+  document.getElementById('sPvpWins')&&(document.getElementById('sPvpWins').innerText=state.pvpWins||0);
   const displayName=state.displayName||tgUser?.first_name||'ИГРОК';
-  s('pName')&&(s('pName').innerText=displayName);
-  
+  document.getElementById('pName')&&(document.getElementById('pName').innerText=displayName);
   const baseUrl=window.location.origin+window.location.pathname;
-  const refEl=$id('refLinkInput');
+  const refEl=document.getElementById('refLinkInput');
   if(refEl)refEl.value=baseUrl+'?ref='+state.refCode;
-  s('refCount')&&(s('refCount').innerText=state.refCount||0);
-  s('refEarned')&&(s('refEarned').innerText=state.refEarned||0);
-  
+  document.getElementById('refCount')&&(document.getElementById('refCount').innerText=state.refCount||0);
+  document.getElementById('refEarned')&&(document.getElementById('refEarned').innerText=state.refEarned||0);
   updateLuckBar();
   renderHistory();
   renderAvatar();
@@ -1103,20 +885,15 @@ function updateProfileStats(){
 function renderAvatar(){
   const el=document.getElementById('avatarDisplay');
   if(!el)return;
-  if(state.avatarUrl){
-    el.innerHTML=`<img src="${state.avatarUrl}" alt="avatar">`;
-  } else if(tgUser?.photo_url){
-    el.innerHTML=`<img src="${tgUser.photo_url}" alt="tg">`;
-  } else {
-    el.innerText='👤';
-  }
+  if(state.avatarUrl){el.innerHTML=`<img src="${state.avatarUrl}" alt="avatar">`;}
+  else if(tgUser?.photo_url){el.innerHTML=`<img src="${tgUser.photo_url}" alt="tg">`;}
+  else{el.innerText='👤';}
 }
 
 function renderHistory(){
-  const el=$id('histBody');if(!el)return;
-  if(!state.history.length){el.innerHTML='<tr><td colspan="3" style="color:var(--tm);text-align:center;padding:16px;font-size:12px">Нет истории</td></tr>';return}
-  el.innerHTML=state.history.slice(0,25).map(h=>`
-    <tr><td style="font-size:16px">${h.icon}</td><td>${h.action}</td><td class="${h.pos?'hist-pos':'hist-neg'}">${h.result}</td></tr>`).join('');
+  const el=document.getElementById('histBody');if(!el)return;
+  if(!state.history.length){el.innerHTML='<tr><td colspan="3" style="color:var(--tm);text-align:center;padding:16px;font-size:12px">Нет истории</td></tr>';return;}
+  el.innerHTML=state.history.slice(0,25).map(h=>`<tr><td style="font-size:16px">${h.icon}</td><td>${h.action}</td><td class="${h.pos?'hist-pos':'hist-neg'}">${h.result}</td></tr>`).join('');
 }
 
 function updateAllUI(){
@@ -1132,248 +909,123 @@ function updateAllUI(){
 // CASES
 // ═══════════════════════════════════════════════════════
 function renderCases(){
-  const g=$id('casesGrid');if(!g)return;
-  g.innerHTML=CASES.map(c=>`
-    <div class="case-card ${c.cls}">
-      <div class="case-visual"><div class="case-emoji">${c.emoji}</div></div>
-      <div class="case-body">
-        <div class="case-top"><div class="case-name">${c.name}</div><div class="case-price">★ ${c.price}</div></div>
-        <div class="case-drops">${c.gifts.slice(0,3).map(g=>`<span class="drop-tag">${GIFTS[g.n]?.icon} ${g.n} <span style="color:var(--tm)">${g.c}%</span></span>`).join('')}</div>
-        <button class="open-btn" data-id="${c.id}">ОТКРЫТЬ КЕЙС</button>
-      </div>
-    </div>`).join('');
-  g.querySelectorAll('.open-btn').forEach(btn=>{
-    btn.onclick=()=>openCase(CASES.find(c=>c.id===btn.dataset.id));
-  });
+  const g=document.getElementById('casesGrid');if(!g)return;
+  g.innerHTML=CASES.map(c=>`<div class="case-card ${c.cls}"><div class="case-visual"><div class="case-emoji">${c.emoji}</div></div><div class="case-body"><div class="case-top"><div class="case-name">${c.name}</div><div class="case-price">★ ${c.price}</div></div><div class="case-drops">${c.gifts.slice(0,3).map(g=>`<span class="drop-tag">${GIFTS[g.n]?.icon} ${g.n} <span style="color:var(--tm)">${g.c}%</span></span>`).join('')}</div><button class="open-btn" data-id="${c.id}">ОТКРЫТЬ КЕЙС</button></div></div>`).join('');
+  g.querySelectorAll('.open-btn').forEach(btn=>{btn.onclick=()=>openCase(CASES.find(c=>c.id===btn.dataset.id));});
 }
 
-function rollCase(gifts){
-  const total=gifts.reduce((s,g)=>s+g.c,0);
-  let r=Math.random()*total,acc=0;
-  for(const g of gifts){acc+=g.c;if(r<=acc)return g.n}
-  return gifts[0].n;
-}
+function rollCase(gifts){const total=gifts.reduce((s,g)=>s+g.c,0);let r=Math.random()*total,acc=0;for(const g of gifts){acc+=g.c;if(r<=acc)return g.n}return gifts[0].n;}
 
 function openCase(caseData){
   if(!RL.check('openCase',2))return;
-  if(state.balance<caseData.price){toast('❌ Нужно '+caseData.price+' ★');return}
+  if(state.balance<caseData.price){toast('❌ Нужно '+caseData.price+' ★');return;}
   setBalance(state.balance-caseData.price);
   state.casesOpened=(state.casesOpened||0)+1;
-
   const wonName=rollCase(caseData.gifts);
   const names=caseData.gifts.map(g=>g.n);
   const strip=Array.from({length:64},()=>names[Math.floor(Math.random()*names.length)]);
   const wonPos=50;strip[wonPos]=wonName;
-
   showRoulette(strip,wonPos,()=>{
     const info=GIFTS[wonName];
     const isRare=info.rarity!=='common';
-    if(isRare){CF.burst(window.innerWidth/2,window.innerHeight*.35,isRare?100:50);SFX.win();vibrate([20,50,20])}
+    if(isRare){CF.burst(window.innerWidth/2,window.innerHeight*.35,isRare?100:50);SFX.win();vibrate([20,50,20]);}
     showResultModal(wonName,null,action=>{
-      if(action==='keep'){
-        state.inventory.push(makeGift(wonName));
-        addHist(info.icon,'Кейс: '+caseData.name,'+'+wonName,true);
-        toast('📦 '+wonName+' добавлен');
-      }else{
-        const p=Math.floor(info.val*.7);
-        setBalance(state.balance+p);
-        addHist(info.icon,'Продан: '+wonName,'+'+p+' ★',true);
-        toast('💰 Продано за '+p+' ★');
-      }
+      if(action==='keep'){state.inventory.push(makeGift(wonName));addHist(info.icon,'Кейс: '+caseData.name,'+'+wonName,true);toast('📦 '+wonName+' добавлен');}
+      else{const p=Math.floor(info.val*.7);setBalance(state.balance+p);addHist(info.icon,'Продан: '+wonName,'+'+p+' ★',true);toast('💰 Продано за '+p+' ★');}
       updateAllUI();
     });
   });
 }
 
 function showRoulette(strip,wonPos,cb){
-  const wrap=document.createElement('div');
-  wrap.className='roulette-wrap';
-  wrap.innerHTML=`<div class="roulette-title">ОТКРЫВАЕМ...</div>
-    <div class="roulette-box" id="rlBox">
-      <div class="rl-center"></div><div class="rl-fade-l"></div><div class="rl-fade-r"></div>
-      <div class="roulette-track" id="rlTrack"></div>
-    </div>`;
+  const wrap=document.createElement('div');wrap.className='roulette-wrap';
+  wrap.innerHTML=`<div class="roulette-title">ОТКРЫВАЕМ...</div><div class="roulette-box" id="rlBox"><div class="rl-center"></div><div class="rl-fade-l"></div><div class="rl-fade-r"></div><div class="roulette-track" id="rlTrack"></div></div>`;
   document.body.appendChild(wrap);
-  const track=wrap.querySelector('#rlTrack');
-  const ITEM=108;
-  strip.forEach(name=>{
-    const g=GIFTS[name]||{icon:'🎁'};
-    const el=document.createElement('div');
-    el.className='roulette-item';
-    el.innerHTML=`<div style="font-size:32px">${g.icon}</div><div class="roulette-item-lbl">${name}</div>`;
-    track.appendChild(el);
-  });
-  const boxW=wrap.querySelector('#rlBox').offsetWidth||400;
-  const center=boxW/2-ITEM/2;
+  const track=wrap.querySelector('#rlTrack');const ITEM=108;
+  strip.forEach(name=>{const g=GIFTS[name]||{icon:'🎁'};const el=document.createElement('div');el.className='roulette-item';el.innerHTML=`<div style="font-size:32px">${g.icon}</div><div class="roulette-item-lbl">${name}</div>`;track.appendChild(el);});
+  const boxW=wrap.querySelector('#rlBox').offsetWidth||400;const center=boxW/2-ITEM/2;
   const finalX=-(wonPos*ITEM-center+Math.round((Math.random()-.5)*30));
   track.style.transform='translateX(0)';
-  requestAnimationFrame(()=>{
-    track.style.transition='transform 4s cubic-bezier(0.08,0.82,0.17,1)';
-    track.style.transform=`translateX(${finalX}px)`;
-  });
+  requestAnimationFrame(()=>{track.style.transition='transform 4s cubic-bezier(0.08,0.82,0.17,1)';track.style.transform=`translateX(${finalX}px)`;});
   let ticks=0;const tickI=setInterval(()=>{SFX.roulette();ticks++;if(ticks>30)clearInterval(tickI)},120);
-  setTimeout(()=>{wrap.remove();vibrate([30]);if(cb)cb()},4800);
+  setTimeout(()=>{wrap.remove();vibrate([30]);if(cb)cb();},4800);
 }
 
 function showResultModal(name,isUpgrade,cb){
   const info=GIFTS[name];if(!info)return;
-  const overlay=document.createElement('div');
-  overlay.className='result-overlay';
-  overlay.innerHTML=`
-    <div class="result-box">
-      <div class="result-icon">${info.icon}</div>
-      <div class="result-title">${name}</div>
-      <div class="result-rarity" style="color:${RARITY_COLORS[info.rarity]}">${RARITY_LABELS[info.rarity]}</div>
-      <div class="result-val">★ ${info.val} Stars</div>
-      <div class="result-btns">
-        ${isUpgrade===null?`
-          <button class="btn btn-primary" id="rKeep">📦 Забрать</button>
-          <button class="btn btn-outline" id="rSell">💰 Продать за ${Math.floor(info.val*.7)} ★</button>
-        `:`<button class="btn btn-primary" id="rKeep">✅ Получено!</button>`}
-      </div>
-    </div>`;
+  const overlay=document.createElement('div');overlay.className='result-overlay';
+  overlay.innerHTML=`<div class="result-box"><div class="result-icon">${info.icon}</div><div class="result-title">${name}</div><div class="result-rarity" style="color:${RARITY_COLORS[info.rarity]}">${RARITY_LABELS[info.rarity]}</div><div class="result-val">★ ${info.val} Stars</div><div class="result-btns">${isUpgrade===null?`<button class="btn btn-primary" id="rKeep">📦 Забрать</button><button class="btn btn-outline" id="rSell">💰 Продать за ${Math.floor(info.val*.7)} ★</button>`:`<button class="btn btn-primary" id="rKeep">✅ Получено!</button>`}</div></div>`;
   document.body.appendChild(overlay);
-  document.getElementById('rKeep').onclick=()=>{overlay.remove();if(cb)cb('keep')};
+  document.getElementById('rKeep').onclick=()=>{overlay.remove();if(cb)cb('keep');};
   const rsBtn=document.getElementById('rSell');
-  if(rsBtn)rsBtn.onclick=()=>{overlay.remove();if(cb)cb('sell')};
+  if(rsBtn)rsBtn.onclick=()=>{overlay.remove();if(cb)cb('sell');};
 }
 
 // ═══════════════════════════════════════════════════════
-// UPGRADE (выбор нажатием)
+// UPGRADE
 // ═══════════════════════════════════════════════════════
 function renderUpgradeSlots(){
-  const container=$id('upgradeSlots');if(!container)return;
-  if(upgradeSlots.length===0){
-    container.innerHTML='<div style="color:var(--tm);font-size:12px;text-align:center;padding:12px">Нажми на подарок в инвентаре</div>';
-    updateUpgradeChance();return;
-  }
-  container.innerHTML=upgradeSlots.map((g,i)=>`
-    <div class="upgrade-slot-row">
-      <div class="slot-icon">${g.icon}</div>
-      <div class="slot-info">
-        <div class="slot-name">${g.name}</div>
-        <div class="slot-val">★ ${g.val} · <span style="color:${RARITY_COLORS[g.rarity]}">${RARITY_LABELS[g.rarity]}</span></div>
-      </div>
-      <button class="slot-remove" data-si="${i}">✕</button>
-    </div>`).join('');
-  container.querySelectorAll('.slot-remove').forEach(b=>{
-    b.onclick=()=>{
-      state.inventory.push(upgradeSlots[+b.dataset.si]);
-      upgradeSlots.splice(+b.dataset.si,1);
-      updateAllUI();SFX.click();
-    };
-  });
+  const container=document.getElementById('upgradeSlots');if(!container)return;
+  if(upgradeSlots.length===0){container.innerHTML='<div style="color:var(--tm);font-size:12px;text-align:center;padding:12px">Нажми на подарок в инвентаре</div>';updateUpgradeChance();return;}
+  container.innerHTML=upgradeSlots.map((g,i)=>`<div class="upgrade-slot-row"><div class="slot-icon">${g.icon}</div><div class="slot-info"><div class="slot-name">${g.name}</div><div class="slot-val">★ ${g.val} · <span style="color:${RARITY_COLORS[g.rarity]}">${RARITY_LABELS[g.rarity]}</span></div></div><button class="slot-remove" data-si="${i}">✕</button></div>`).join('');
+  container.querySelectorAll('.slot-remove').forEach(b=>{b.onclick=()=>{state.inventory.push(upgradeSlots[+b.dataset.si]);upgradeSlots.splice(+b.dataset.si,1);updateAllUI();SFX.click();};});
   updateUpgradeChance();
 }
 
 function updateUpgradeChance(){
-  const cn=$id('upgradeChanceNum');
-  const cf=$id('upgradeChanceFill');
-  const cd=$id('upgradeChanceDesc');
-  const btn=$id('upgradeDoBtn');
-  const rp=$id('upgradeResultPreview');
+  const cn=document.getElementById('upgradeChanceNum');const cf=document.getElementById('upgradeChanceFill');const cd=document.getElementById('upgradeChanceDesc');const btn=document.getElementById('upgradeDoBtn');const rp=document.getElementById('upgradeResultPreview');
   if(!cn)return;
-
-  if(upgradeSlots.length===0){
-    cn.innerText='—';cn.className='chance-num';
-    if(cf)cf.style.width='0%';
-    if(cd)cd.innerText='Нажми на подарок в инвентаре';
-    if(btn)btn.disabled=true;if(rp)rp.style.display='none';return;
-  }
+  if(upgradeSlots.length===0){cn.innerText='—';cn.className='chance-num';if(cf)cf.style.width='0%';if(cd)cd.innerText='Нажми на подарок в инвентаре';if(btn)btn.disabled=true;if(rp)rp.style.display='none';return;}
   const rarities=[...new Set(upgradeSlots.map(g=>g.rarity))];
-  if(rarities.length>1){
-    cn.innerText='!';cn.className='chance-num low';
-    if(cf)cf.style.width='5%';
-    if(cd)cd.innerText='⚠️ Разная редкость!';
-    if(btn)btn.disabled=true;if(rp)rp.style.display='none';return;
-  }
+  if(rarities.length>1){cn.innerText='!';cn.className='chance-num low';if(cf)cf.style.width='5%';if(cd)cd.innerText='⚠️ Разная редкость!';if(btn)btn.disabled=true;if(rp)rp.style.display='none';return;}
   const rarity=rarities[0];
   const baseChance=UPGRADE_CH[rarity];
   const bonus=Math.min(20,(upgradeSlots.length-1)*5);
   const finalChance=Math.round(applyLuck(baseChance+bonus));
   const cls=finalChance>=60?'high':finalChance>=35?'med':'low';
-  cn.innerText=finalChance>0?finalChance+'%':'0%';
-  cn.className='chance-num '+cls;
+  cn.innerText=finalChance>0?finalChance+'%':'0%';cn.className='chance-num '+cls;
   if(cf)cf.style.width=finalChance+'%';
   const firstGift=upgradeSlots[0];
   const targetName=GIFTS[firstGift.name]?.upTo;
-  if(targetName&&GIFTS[targetName]){
-    const t=GIFTS[targetName];
-    if(cd)cd.innerText=`При успехе: ${targetName} (★ ${t.val})`;
-    if(rp){
-      rp.style.display='block';
-      document.getElementById('urpIcon').innerText=t.icon;
-      document.getElementById('urpName').innerText=targetName;
-    }
-  }else{
-    if(cd)cd.innerText='Максимальный уровень';
-    if(rp)rp.style.display='none';
-  }
+  if(targetName&&GIFTS[targetName]){const t=GIFTS[targetName];if(cd)cd.innerText=`При успехе: ${targetName} (★ ${t.val})`;if(rp){rp.style.display='block';document.getElementById('urpIcon').innerText=t.icon;document.getElementById('urpName').innerText=targetName;}}
+  else{if(cd)cd.innerText='Максимальный уровень';if(rp)rp.style.display='none';}
   if(btn)btn.disabled=(finalChance===0||!targetName);
 }
 
 function selectForUpgrade(idx){
   const g=state.inventory[idx];if(!g)return;
-  if(upgradeSlots.length>0 && g.rarity!==upgradeSlots[0].rarity){
-    toast('⚠️ Можно добавлять только подарки одной редкости!');return;
-  }
-  upgradeSlots.push({...g});
-  state.inventory.splice(idx,1);
-  updateAllUI();SFX.click();
+  if(upgradeSlots.length>0 && g.rarity!==upgradeSlots[0].rarity){toast('⚠️ Можно добавлять только подарки одной редкости!');return;}
+  upgradeSlots.push({...g});state.inventory.splice(idx,1);updateAllUI();SFX.click();
 }
 
 function doUpgrade(){
   if(!RL.check('upgrade',2))return;
   if(upgradeSlots.length===0)return;
   const rarities=[...new Set(upgradeSlots.map(g=>g.rarity))];
-  if(rarities.length>1){toast('⚠️ Разная редкость!');return}
+  if(rarities.length>1){toast('⚠️ Разная редкость!');return;}
   const rarity=rarities[0];
   const base=UPGRADE_CH[rarity];
   const bonus=Math.min(20,(upgradeSlots.length-1)*5);
   const chance=Math.round(applyLuck(base+bonus));
   const targetName=GIFTS[upgradeSlots[0].name]?.upTo;
-  if(!targetName||chance===0){toast('Нельзя улучшить');return}
-
+  if(!targetName||chance===0){toast('Нельзя улучшить');return;}
   const slotsSnapshot=[...upgradeSlots];
   upgradeSlots=[];
-
   const success=Math.random()*100<chance;
-  if(success){
-    const g=makeGift(targetName);
-    state.inventory.push(g);
-    addHist(g.icon,'Апгрейд → '+targetName,'✅ Успех!',true);
-    state.luck=Math.max(0,state.luck-10);
-    showResultModal(targetName,true,()=>{});
-    CF.burst(window.innerWidth/2,window.innerHeight/2,80);SFX.win();vibrate([30,60,30]);
-  }else{
-    incrementLuck(slotsSnapshot.length*3);
-    addHist('💀','Апгрейд провален','−'+slotsSnapshot.reduce((s,g)=>s+g.val,0)+' ★',false);
-    SFX.lose();vibrate([50]);
-    toast('💀 Неудача! '+slotsSnapshot.length+' подарок(ов) потеряно');
-  }
+  if(success){const g=makeGift(targetName);state.inventory.push(g);addHist(g.icon,'Апгрейд → '+targetName,'✅ Успех!',true);state.luck=Math.max(0,state.luck-10);showResultModal(targetName,true,()=>{});CF.burst(window.innerWidth/2,window.innerHeight/2,80);SFX.win();vibrate([30,60,30]);}
+  else{incrementLuck(slotsSnapshot.length*3);addHist('💀','Апгрейд провален','−'+slotsSnapshot.reduce((s,g)=>s+g.val,0)+' ★',false);SFX.lose();vibrate([50]);toast('💀 Неудача! '+slotsSnapshot.length+' подарок(ов) потеряно');}
   updateAllUI();
 }
 
 // ═══════════════════════════════════════════════════════
-// CRAFT (выбор нажатием)
+// CRAFT
 // ═══════════════════════════════════════════════════════
 function renderCraftSlots(){
   for(let i=0;i<3;i++){
     const el=document.querySelector(`.craft-slot[data-slot="${i}"]`);if(!el)continue;
     const g=craftSlots[i];
-    if(g){
-      el.classList.add('filled');
-      el.innerHTML=`<div class="craft-slot-icon">${g.icon}</div><div class="craft-slot-name">${g.name}</div><div class="craft-slot-val">★ ${g.val}</div>`;
-      el.onclick=()=>{
-        state.inventory.push(g);craftSlots[i]=null;
-        updateCraftResult();renderAllInv();saveUserToDB();
-        renderCraftSlots();
-      };
-    }else{
-      el.classList.remove('filled');
-      el.innerHTML=`<div class="craft-slot-icon">❓</div><div class="craft-slot-name">Выбрать</div>`;
-      el.onclick=()=>{}; // handled by global click
-    }
+    if(g){el.classList.add('filled');el.innerHTML=`<div class="craft-slot-icon">${g.icon}</div><div class="craft-slot-name">${g.name}</div><div class="craft-slot-val">★ ${g.val}</div>`;el.onclick=()=>{state.inventory.push(g);craftSlots[i]=null;updateCraftResult();renderAllInv();saveUserToDB();renderCraftSlots();};}
+    else{el.classList.remove('filled');el.innerHTML=`<div class="craft-slot-icon">❓</div><div class="craft-slot-name">Выбрать</div>`;el.onclick=()=>{};}
   }
   updateCraftResult();
 }
@@ -1383,13 +1035,8 @@ function selectForCraft(idx){
   for(let i=0;i<3;i++){
     if(craftSlots[i]===null){
       const placed=craftSlots.filter(Boolean);
-      if(placed.length>0 && g.rarity!==placed[0].rarity){
-        toast('⚠️ Только подарки одной редкости!');return;
-      }
-      craftSlots[i]=g;
-      state.inventory.splice(idx,1);
-      renderCraftSlots();renderAllInv();saveUserToDB();
-      return;
+      if(placed.length>0 && g.rarity!==placed[0].rarity){toast('⚠️ Только подарки одной редкости!');return;}
+      craftSlots[i]=g;state.inventory.splice(idx,1);renderCraftSlots();renderAllInv();saveUserToDB();return;
     }
   }
   toast('Все слоты заняты!');
@@ -1397,34 +1044,27 @@ function selectForCraft(idx){
 
 function updateCraftResult(){
   const placed=craftSlots.filter(Boolean);
-  const crIcon=$id('crIcon');const crName=$id('crName');const craftBtn=$id('craftBtn');
+  const crIcon=document.getElementById('crIcon');const crName=document.getElementById('crName');const craftBtn=document.getElementById('craftBtn');
   if(!crIcon)return;
-  if(placed.length<3){
-    crIcon.innerText='❓';crName.innerText='Добавьте 3 подарка';
-    if(craftBtn)craftBtn.disabled=true;return;
-  }
+  if(placed.length<3){crIcon.innerText='❓';crName.innerText='Добавьте 3 подарка';if(craftBtn)craftBtn.disabled=true;return;}
   const rarities=[...new Set(placed.map(g=>g.rarity))];
-  if(rarities.length>1){
-    crIcon.innerText='⚠️';crName.innerText='Разная редкость!';
-    if(craftBtn)craftBtn.disabled=true;return;
-  }
+  if(rarities.length>1){crIcon.innerText='⚠️';crName.innerText='Разная редкость!';if(craftBtn)craftBtn.disabled=true;return;}
   const rarity=rarities[0];
   const resultName=CRAFT_RESULT[rarity];
-  if(!resultName){crIcon.innerText='👑';crName.innerText='Максимальный уровень';if(craftBtn)craftBtn.disabled=true;return}
+  if(!resultName){crIcon.innerText='👑';crName.innerText='Максимальный уровень';if(craftBtn)craftBtn.disabled=true;return;}
   const resultInfo=GIFTS[resultName];
-  crIcon.innerText=resultInfo.icon;crName.innerText=resultName+' (★ '+resultInfo.val+')';
-  if(craftBtn)craftBtn.disabled=false;
+  crIcon.innerText=resultInfo.icon;crName.innerText=resultName+' (★ '+resultInfo.val+')';if(craftBtn)craftBtn.disabled=false;
 }
 
 function doCraft(){
   if(!RL.check('craft',2))return;
   const placed=craftSlots.filter(Boolean);
-  if(placed.length<3){toast('Добавь 3 подарка');return}
+  if(placed.length<3){toast('Добавь 3 подарка');return;}
   const rarities=[...new Set(placed.map(g=>g.rarity))];
-  if(rarities.length>1){toast('Только одна редкость!');return}
+  if(rarities.length>1){toast('Только одна редкость!');return;}
   const rarity=rarities[0];
   const resultName=CRAFT_RESULT[rarity];
-  if(!resultName){toast('Нельзя крафтить');return}
+  if(!resultName){toast('Нельзя крафтить');return;}
   craftSlots=[null,null,null];
   const g=makeGift(resultName);
   state.inventory.push(g);
@@ -1435,81 +1075,38 @@ function doCraft(){
 }
 
 // ═══════════════════════════════════════════════════════
-// PVP (выбор нажатием, публичные/приватные)
+// PVP
 // ═══════════════════════════════════════════════════════
-function selectForPvp(idx){
-  pvpStakeIdx=idx;
-  const g=state.inventory[idx];if(!g)return;
-  document.getElementById('pvpStakeText').innerHTML=g.icon+' '+g.name;
-  document.getElementById('pvpStakeVal').innerHTML='★ '+g.val;
-  document.getElementById('createBattleBtn').disabled=false;
-}
+function selectForPvp(idx){pvpStakeIdx=idx;const g=state.inventory[idx];if(!g)return;document.getElementById('pvpStakeText').innerHTML=g.icon+' '+g.name;document.getElementById('pvpStakeVal').innerHTML='★ '+g.val;document.getElementById('createBattleBtn').disabled=false;}
 
 function renderPvpLobby(){
-  const el=$id('pvpLobby');if(!el)return;
+  const el=document.getElementById('pvpLobby');if(!el)return;
   const active=battles.filter(b=>b.status==='waiting' && Date.now()-new Date(b.created_at).getTime()<120000);
-  if(!active.length){
-    el.innerHTML='<div class="no-battles">Нет активных батлов.<br>Создай первый!</div>';return;
-  }
-  el.innerHTML=active.map(b=>{
-    const cg=safeJSON(b.creator_gift,{});
-    const isOwn=b.creator_id===userId;
-    return `<div class="lobby-card">
-      <div class="lc-gift">
-        <div class="lc-icon">${cg.icon||'❓'}</div>
-        <div class="lc-name">${cg.name||'?'}</div>
-        <div class="lc-val">★ ${cg.val||0}</div>
-      </div>
-      <div class="lc-mid">
-        <div class="lc-vs">VS</div>
-        <div class="lc-status">Ожидание</div>
-        ${b.type==='private'?'<div class="lc-private">🔒 Приватный</div>':''}
-      </div>
-      <div>
-        ${isOwn
-          ?`<button class="btn btn-danger btn-sm" onclick="cancelBattle('${b.id}')">Отменить</button>`
-          :`<button class="lc-join-btn" onclick="joinBattle('${b.id}')">Войти</button>`
-        }
-      </div>
-    </div>`;
-  }).join('');
+  if(!active.length){el.innerHTML='<div class="no-battles">Нет активных батлов.<br>Создай первый!</div>';return;}
+  el.innerHTML=active.map(b=>{const cg=safeJSON(b.creator_gift,{});const isOwn=b.creator_id===userId;return `<div class="lobby-card"><div class="lc-gift"><div class="lc-icon">${cg.icon||'❓'}</div><div class="lc-name">${cg.name||'?'}</div><div class="lc-val">★ ${cg.val||0}</div></div><div class="lc-mid"><div class="lc-vs">VS</div><div class="lc-status">Ожидание</div>${b.type==='private'?'<div class="lc-private">🔒 Приватный</div>':''}</div><div>${isOwn?`<button class="btn btn-danger btn-sm" onclick="cancelBattle('${b.id}')">Отменить</button>`:`<button class="lc-join-btn" onclick="joinBattle('${b.id}')">Войти</button>`}</div></div>`;}).join('');
 }
 
 async function createBattle(){
   if(!RL.check('createBattle',1))return;
-  if(pvpStakeIdx===null||!state.inventory[pvpStakeIdx]){toast('Выбери подарок!');return}
+  if(pvpStakeIdx===null||!state.inventory[pvpStakeIdx]){toast('Выбери подарок!');return;}
   const g={...state.inventory[pvpStakeIdx]};
   state.inventory.splice(pvpStakeIdx,1);
   pvpStakeIdx=null;
-
   const battleId='b_'+Date.now()+'_'+Math.random().toString(36).slice(2,6);
   const isPrivate=pvpMode==='private';
-  const battle={
-    id:battleId,
-    creator_id:userId,
-    creator_gift:JSON.stringify(g),
-    opponent_id:null,opponent_gift:null,
-    type:isPrivate?'private':'public',
-    status:'waiting',
-    winner_id:null,
-    created_at:new Date().toISOString()
-  };
-
+  const battle={id:battleId,creator_id:userId,creator_gift:JSON.stringify(g),opponent_id:null,opponent_gift:null,type:isPrivate?'private':'public',status:'waiting',winner_id:null,created_at:new Date().toISOString(),is_private:isPrivate};
   battles.unshift(battle);
   renderPvpLobby();
   saveUserToDB();
   document.getElementById('pvpStakeText').innerHTML='Нажми на подарок в инвентаре';
   document.getElementById('pvpStakeVal').innerHTML='';
   document.getElementById('createBattleBtn').disabled=true;
-
-  const saved=await saveBattle(battle);
-
+  await saveBattle(battle);
   if(isPrivate){
     const link=window.location.origin+window.location.pathname+'?join='+battleId;
     document.getElementById('privateLinkRow').style.display='block';
     document.getElementById('privateBattleLink').value=link;
   }
-
   toast('⚔️ Батл создан!');
   addHist(g.icon,'PvP ставка','★ '+g.val,false);
 }
@@ -1517,19 +1114,16 @@ async function createBattle(){
 async function joinBattle(battleId){
   if(!RL.check('joinBattle',2))return;
   const battle=battles.find(b=>b.id===battleId);
-  if(!battle||battle.status!=='waiting'){toast('Батл недоступен');return}
-  if(battle.creator_id===userId){toast('Нельзя войти в свой батл');return}
-  if(state.inventory.length===0){toast('Нет подарков для ставки');return}
-  
+  if(!battle||battle.status!=='waiting'){toast('Батл недоступен');return;}
+  if(battle.creator_id===userId){toast('Нельзя войти в свой батл');return;}
+  if(state.inventory.length===0){toast('Нет подарков для ставки');return;}
   const myGift={...state.inventory[0]};
   state.inventory.splice(0,1);
-  
   battle.status='fighting';
   battle.opponent_id=userId;
   battle.opponent_gift=JSON.stringify(myGift);
   await updateBattle(battleId,{status:'fighting',opponent_id:userId,opponent_gift:JSON.stringify(myGift)});
   battles=battles.filter(b=>b.id!==battleId);
-  
   saveUserToDB();
   renderPvpLobby();
   const creatorGift=safeJSON(battle.creator_gift,{});
@@ -1559,90 +1153,55 @@ async function cancelBattle(battleId){
 
 // НОВАЯ ФОРМУЛА: 30% цена + 70% рандом
 function showCoinFlip(gift1,gift2,battle,creatorId){
-  const overlay=document.createElement('div');
-  overlay.className='coin-overlay';
-  overlay.innerHTML=`
-    <div class="coin-fighters">
-      <div class="fighter-box"><div class="fighter-label">Игрок 1 · Орёл</div><div class="fighter-icon-big">${gift1.icon||'❓'}</div></div>
-      <div class="coin-vs">VS</div>
-      <div class="fighter-box"><div class="fighter-label">Игрок 2 · Решка</div><div class="fighter-icon-big">${gift2.icon||'❓'}</div></div>
-    </div>
-    <div class="coin-wrap"><div class="coin" id="coinEl"><div class="coin-face coin-head">🦅</div><div class="coin-face coin-tail">👾</div></div></div>
-    <div id="coinResultArea"></div>`;
+  const overlay=document.createElement('div');overlay.className='coin-overlay';
+  overlay.innerHTML=`<div class="coin-fighters"><div class="fighter-box"><div class="fighter-label">Игрок 1 · Орёл</div><div class="fighter-icon-big">${gift1.icon||'❓'}</div></div><div class="coin-vs">VS</div><div class="fighter-box"><div class="fighter-label">Игрок 2 · Решка</div><div class="fighter-icon-big">${gift2.icon||'❓'}</div></div></div><div class="coin-wrap"><div class="coin" id="coinEl"><div class="coin-face coin-head">🦅</div><div class="coin-face coin-tail">👾</div></div></div><div id="coinResultArea"></div>`;
   document.body.appendChild(overlay);
-
-  const pValue = gift1.val;
-  const oValue = gift2.val;
-  const pWeight = pValue * 0.3;
-  const oWeight = oValue * 0.3;
-  const pRandom = Math.random() * (pValue * 0.7);
-  const oRandom = Math.random() * (oValue * 0.7);
-  const pRoll = pWeight + pRandom;
-  const oRoll = oWeight + oRandom;
-  const creatorWins = pRoll >= oRoll;
-  
-  const iAmCreator = userId === creatorId;
-  const iWon = iAmCreator ? creatorWins : !creatorWins;
-  const finalFace = creatorWins ? 0 : 1;
-  const coinEl = document.getElementById('coinEl');
-  const baseSpins = 1800;
-  const finalRot = baseSpins + (finalFace === 1 ? 180 : 0);
-  coinEl.style.setProperty('--final-rot', finalRot + 'deg');
-
+  const pValue=gift1.val,oValue=gift2.val;
+  const pRoll=(pValue*0.3)+(Math.random()*pValue*0.7);
+  const oRoll=(oValue*0.3)+(Math.random()*oValue*0.7);
+  const creatorWins=pRoll>=oRoll;
+  const iAmCreator=userId===creatorId;
+  const iWon=iAmCreator?creatorWins:!creatorWins;
+  const finalFace=creatorWins?0:1;
+  const coinEl=document.getElementById('coinEl');
+  coinEl.style.setProperty('--final-rot',1800+(finalFace===1?180:0)+'deg');
   SFX.coin();
-
-  let ticks = 0;
-  const ti = setInterval(() => { SFX.roulette(); ticks++; if (ticks > 15) clearInterval(ti); }, 130);
-
-  setTimeout(() => {
-    const area = document.getElementById('coinResultArea');
-    if (!area) return;
-    if (iWon) {
-      area.innerHTML = `<div class="coin-result-banner" style="color:var(--gold)">🏆 ПОБЕДА!</div><div class="coin-result-sub">Ты забираешь оба подарка!</div>`;
-      CF.burst(window.innerWidth / 2, window.innerHeight * .6, 100);
-      SFX.win();
-      vibrate([50, 100, 50]);
-      state.inventory.push(gift1, gift2);
-      state.pvpWins = (state.pvpWins || 0) + 1;
-      addHist(gift1.icon, 'PvP Победа!', '+' + ((gift1.val || 0) + (gift2.val || 0)) + ' ★ worth', true);
-    } else {
-      area.innerHTML = `<div class="coin-result-banner" style="color:var(--red)">💀 ПОРАЖЕНИЕ</div><div class="coin-result-sub">Подарок ушёл победителю</div>`;
-      SFX.lose();
-      vibrate([80]);
-      incrementLuck(5);
-      addHist(gift2.icon, 'PvP Поражение', '−' + ((gift2.val) || 0) + ' ★', false);
+  let ticks=0;const ti=setInterval(()=>{SFX.roulette();ticks++;if(ticks>15)clearInterval(ti);},130);
+  setTimeout(()=>{
+    const area=document.getElementById('coinResultArea');
+    if(!area)return;
+    if(iWon){
+      area.innerHTML=`<div class="coin-result-banner" style="color:var(--gold)">🏆 ПОБЕДА!</div><div class="coin-result-sub">Ты забираешь оба подарка!</div>`;
+      CF.burst(window.innerWidth/2,window.innerHeight*.6,100);SFX.win();vibrate([50,100,50]);
+      state.inventory.push(gift1,gift2);
+      state.pvpWins=(state.pvpWins||0)+1;
+      addHist(gift1.icon,'PvP Победа!','+'+((gift1.val||0)+(gift2.val||0))+' ★ worth',true);
+    }else{
+      area.innerHTML=`<div class="coin-result-banner" style="color:var(--red)">💀 ПОРАЖЕНИЕ</div><div class="coin-result-sub">Подарок ушёл победителю</div>`;
+      SFX.lose();vibrate([80]);incrementLuck(5);
+      addHist(gift2.icon,'PvP Поражение','−'+((gift2.val)||0)+' ★',false);
     }
-    updateBattle(battle.id, { status: 'done', winner_id: creatorWins ? creatorId : battle.opponent_id });
+    updateBattle(battle.id,{status:'done',winner_id:creatorWins?creatorId:battle.opponent_id});
     saveUserToDB();
-
-    const closeBtn = document.createElement('button');
-    closeBtn.className = 'btn btn-outline btn-sm';
-    closeBtn.style.marginTop = '16px';
-    closeBtn.innerText = 'Закрыть';
-    closeBtn.onclick = () => { overlay.remove(); updateAllUI(); };
+    const closeBtn=document.createElement('button');
+    closeBtn.className='btn btn-outline btn-sm';closeBtn.style.marginTop='16px';closeBtn.innerText='Закрыть';
+    closeBtn.onclick=()=>{overlay.remove();updateAllUI();};
     area.appendChild(closeBtn);
-  }, 2500);
+  },2500);
 }
 
 // ═══════════════════════════════════════════════════════
-// REFERRAL
+// REFERRAL & CHECK
 // ═══════════════════════════════════════════════════════
 function checkReferral(){
   const params=new URLSearchParams(window.location.search);
   const ref=params.get('ref');
   if(ref&&ref!==state.refCode){
-    if(!localStorage.getItem('gc_ref_used')){
-      localStorage.setItem('gc_ref_used','1');
-      state.balance+=50;
-      toast('🎁 Реферальный бонус: +50 ★');
-    }
+    if(!localStorage.getItem('gc_ref_used')){localStorage.setItem('gc_ref_used','1');state.balance+=50;toast('🎁 Реферальный бонус: +50 ★');}
   }
   const joinId=params.get('join');
   if(joinId){
-    setTimeout(()=>{
-      const b=battles.find(bt=>bt.id===joinId);
-      if(b&&b.status==='waiting')joinBattle(joinId);
-    },1000);
+    setTimeout(()=>{const b=battles.find(bt=>bt.id===joinId);if(b&&b.status==='waiting')joinBattle(joinId);},1000);
   }
 }
 
@@ -1651,23 +1210,15 @@ function checkReferral(){
 // ═══════════════════════════════════════════════════════
 document.getElementById('avatarInput').onchange=function(e){
   const file=e.target.files[0];if(!file)return;
-  if(file.size>2*1024*1024){toast('Файл слишком большой (макс 2MB)');return}
+  if(file.size>2*1024*1024){toast('Файл слишком большой (макс 2MB)');return;}
   const reader=new FileReader();
-  reader.onload=ev=>{
-    state.avatarUrl=ev.target.result;
-    renderAvatar();saveUserToDB();toast('✅ Аватар обновлён');
-  };
+  reader.onload=ev=>{state.avatarUrl=ev.target.result;renderAvatar();saveUserToDB();toast('✅ Аватар обновлён');};
   reader.readAsDataURL(file);
 };
 
 document.getElementById('editNameBtn').onclick=()=>{
   const newName=prompt('Введите новое имя:', state.displayName||'ИГРОК');
-  if(newName && newName.trim()){
-    state.displayName=newName.trim().toUpperCase();
-    document.getElementById('pName').innerText=state.displayName;
-    saveUserToDB();
-    toast('✅ Имя обновлено');
-  }
+  if(newName && newName.trim()){state.displayName=newName.trim().toUpperCase();document.getElementById('pName').innerText=state.displayName;saveUserToDB();toast('✅ Имя обновлено');}
 };
 
 // ═══════════════════════════════════════════════════════
@@ -1678,11 +1229,9 @@ document.querySelectorAll('.pvp-tab').forEach(btn=>{
     document.querySelectorAll('.pvp-tab').forEach(b=>b.classList.remove('active'));
     btn.classList.add('active');
     pvpMode=btn.dataset.pvptab;
-    const pvpLabel=$id('pvpCreateLabel');
-    if(pvpLabel)pvpLabel.innerText=pvpMode==='private'
-      ?"Создай приватный батл — только по ссылке"
-      :"Поставь подарок и создай публичный батл";
-    const privRow=$id('privateLinkRow');
+    const pvpLabel=document.getElementById('pvpCreateLabel');
+    if(pvpLabel)pvpLabel.innerText=pvpMode==='private'?"Создай приватный батл — только по ссылке":"Поставь подарок и создай публичный батл";
+    const privRow=document.getElementById('privateLinkRow');
     if(privRow&&pvpMode==='public')privRow.style.display='none';
     SFX.click();
   };
@@ -1698,10 +1247,10 @@ document.querySelectorAll('.tab').forEach(btn=>{
     btn.classList.add('active');
     document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
     const tab=btn.dataset.tab;
-    $id(tab+'Panel').classList.add('active');
-    $id('mainContent').scrollTop=0;
-    if(tab==='pvp'){loadBattles()}
-    if(tab==='profile'){updateProfileStats()}
+    document.getElementById(tab+'Panel').classList.add('active');
+    document.getElementById('mainContent').scrollTop=0;
+    if(tab==='pvp'){loadBattles();}
+    if(tab==='profile'){updateProfileStats();}
     SFX.click();vibrate([5]);
   };
 });
@@ -1709,76 +1258,38 @@ document.querySelectorAll('.tab').forEach(btn=>{
 // ═══════════════════════════════════════════════════════
 // BUTTONS
 // ═══════════════════════════════════════════════════════
-$id('addBtn').onclick=()=>{
-  if(!RL.check('add',3))return;
-  setBalance(state.balance+100);
-  addHist('⭐️','Пополнение','+100 ★',true);
-  toast('★ +100 Stars');saveUserToDB();
-};
-$id('balancePill').onclick=()=>{
-  if(!RL.check('add',3))return;
-  setBalance(state.balance+100);
-  addHist('⭐️','Пополнение','+100 ★',true);
-  toast('★ +100 Stars');saveUserToDB();
-};
-$id('upgradeDoBtn').onclick=doUpgrade;
-$id('craftBtn').onclick=doCraft;
-$id('createBattleBtn').onclick=createBattle;
-$id('depositBtn').onclick=()=>{setBalance(state.balance+500);addHist('💎','Пополнение','+500 ★',true);toast('💎 +500 Stars (демо)');saveUserToDB()};
-$id('withdrawBtn').onclick=()=>toast('💰 Вывод — скоро');
-$id('shareProfileBtn').onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(window.location.href);toast('🔗 Ссылка скопирована!')};
-$id('copyRefBtn').onclick=()=>{const el=$id('refLinkInput');if(el)navigator.clipboard&&navigator.clipboard.writeText(el.value);toast('🔗 Реферальная ссылка скопирована!')};
-$id('copyPrivateLinkBtn').onclick=()=>{const el=$id('privateBattleLink');if(el)navigator.clipboard&&navigator.clipboard.writeText(el.value);toast('🔗 Ссылка скопирована!')};
+document.getElementById('addBtn').onclick=()=>{if(!RL.check('add',3))return;setBalance(state.balance+100);addHist('⭐️','Пополнение','+100 ★',true);toast('★ +100 Stars');saveUserToDB();};
+document.getElementById('balancePill').onclick=()=>{if(!RL.check('add',3))return;setBalance(state.balance+100);addHist('⭐️','Пополнение','+100 ★',true);toast('★ +100 Stars');saveUserToDB();};
+document.getElementById('upgradeDoBtn').onclick=doUpgrade;
+document.getElementById('craftBtn').onclick=doCraft;
+document.getElementById('createBattleBtn').onclick=createBattle;
+document.getElementById('depositBtn').onclick=()=>{setBalance(state.balance+500);addHist('💎','Пополнение','+500 ★',true);toast('💎 +500 Stars (демо)');saveUserToDB();};
+document.getElementById('withdrawBtn').onclick=()=>toast('💰 Вывод — скоро');
+document.getElementById('shareProfileBtn').onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(window.location.href);toast('🔗 Ссылка скопирована!');};
+document.getElementById('copyRefBtn').onclick=()=>{const el=document.getElementById('refLinkInput');if(el)navigator.clipboard&&navigator.clipboard.writeText(el.value);toast('🔗 Реферальная ссылка скопирована!');};
+document.getElementById('copyPrivateLinkBtn').onclick=()=>{const el=document.getElementById('privateBattleLink');if(el)navigator.clipboard&&navigator.clipboard.writeText(el.value);toast('🔗 Ссылка скопирована!');};
 
 // ═══════════════════════════════════════════════════════
 // ONLINE COUNT
 // ═══════════════════════════════════════════════════════
-function updateOnline(){document.getElementById('onlineCount').innerText=(140+Math.round((Math.random()-.5)*30))}
+function updateOnline(){document.getElementById('onlineCount').innerText=(140+Math.round((Math.random()-.5)*30));}
 setInterval(updateOnline,6000);updateOnline();
 
 // ═══════════════════════════════════════════════════════
 // PWA MANIFEST + INSTALL
 // ═══════════════════════════════════════════════════════
 function setupPWA(){
-  const manifest={
-    name:"GiftCase",short_name:"GiftCase",
-    start_url:window.location.pathname,
-    display:"standalone",background_color:"#060606",theme_color:"#060606",
-    icons:[{src:"https://fav.farm/🎁",sizes:"192x192",type:"image/png"}]
-  };
+  const manifest={name:"GiftCase",short_name:"GiftCase",start_url:window.location.pathname,display:"standalone",background_color:"#060606",theme_color:"#060606",icons:[{src:"https://fav.farm/🎁",sizes:"192x192",type:"image/png"}]};
   const blob=new Blob([JSON.stringify(manifest)],{type:'application/manifest+json'});
   const url=URL.createObjectURL(blob);
   const link=document.createElement('link');link.rel='manifest';link.href=url;
   document.head.appendChild(link);
-
   let deferredPrompt=null;
-  window.addEventListener('beforeinstallprompt',e=>{
-    e.preventDefault();deferredPrompt=e;
-    setTimeout(()=>{
-      const banner=document.createElement('div');
-      banner.className='install-banner';banner.id='installBanner';
-      banner.innerHTML=`
-        <div class="ib-icon">🎁</div>
-        <div class="ib-text"><div class="ib-title">Добавить на экран</div><div class="ib-sub">Быстрый доступ к GiftCase</div></div>
-        <button class="ib-btn" id="installBtn">Добавить</button>
-        <button class="ib-close" id="installClose">✕</button>`;
-      document.body.appendChild(banner);
-      document.getElementById('installBtn').onclick=async()=>{
-        deferredPrompt.prompt();const r=await deferredPrompt.userChoice;
-        banner.remove();deferredPrompt=null;
-      };
-      document.getElementById('installClose').onclick=()=>banner.remove();
-    },4000);
-  });
+  window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;setTimeout(()=>{const banner=document.createElement('div');banner.className='install-banner';banner.id='installBanner';banner.innerHTML=`<div class="ib-icon">🎁</div><div class="ib-text"><div class="ib-title">Добавить на экран</div><div class="ib-sub">Быстрый доступ к GiftCase</div></div><button class="ib-btn" id="installBtn">Добавить</button><button class="ib-close" id="installClose">✕</button>`;document.body.appendChild(banner);document.getElementById('installBtn').onclick=async()=>{deferredPrompt.prompt();const r=await deferredPrompt.userChoice;banner.remove();deferredPrompt=null;};document.getElementById('installClose').onclick=()=>banner.remove();},4000);});
 }
 setupPWA();
 
-// ═══════════════════════════════════════════════════════
-// DATA VALIDATION
-// ═══════════════════════════════════════════════════════
-function validateInventory(){
-  state.inventory=state.inventory.filter(g=>g&&g.name&&GIFTS[g.name]&&g.val>0&&g.rarity);
-}
+function validateInventory(){state.inventory=state.inventory.filter(g=>g&&g.name&&GIFTS[g.name]&&g.val>0&&g.rarity);}
 
 // ═══════════════════════════════════════════════════════
 // TELEGRAM INIT
@@ -1793,13 +1304,10 @@ function initTelegram(){
       tgUser={...u};
       userId='tg_'+u.id;
       renderAvatar();
-      if(!state.displayName) state.displayName=u.first_name||'ИГРОК';
+      if(!state.displayName)state.displayName=u.first_name||'ИГРОК';
       document.getElementById('pName').innerText=state.displayName;
-      if(u.username){
-        document.getElementById('pId').innerHTML=`@${u.username}`;
-      } else {
-        document.getElementById('pId').innerHTML=`ID: ${u.id}`;
-      }
+      if(u.username){document.getElementById('pId').innerHTML=`@${u.username}`;}
+      else{document.getElementById('pId').innerHTML=`ID: ${u.id}`;}
     }
   }
 }
@@ -1809,31 +1317,16 @@ function initTelegram(){
 // ═══════════════════════════════════════════════════════
 async function init(){
   initTelegram();
-
-  if(!userId){
-    let stored=localStorage.getItem('gc_uid2');
-    if(!stored){stored='u_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);localStorage.setItem('gc_uid2',stored)}
-    userId=stored;
-  }
-
-  try{
-    const local=localStorage.getItem('gc_state');
-    if(local){
-      const d=JSON.parse(local);
-      if(d.userId===userId&&d.state){state={...state,...d.state}}
-    }
-  }catch(e){}
-
+  if(!userId){let stored=localStorage.getItem('gc_uid2');if(!stored){stored='u_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);localStorage.setItem('gc_uid2',stored)}userId=stored;}
+  try{const local=localStorage.getItem('gc_state');if(local){const d=JSON.parse(local);if(d.userId===userId&&d.state){state={...state,...d.state}}}}catch(e){}
   validateInventory();
   renderCases();
   updateAllUI();
-
   loadUserFromDB().then(()=>{validateInventory();updateAllUI()});
   loadBattles();
   initRealtime();
   checkReferral();
 }
-
 init();
 </script>
 </body>
