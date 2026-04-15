@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>GiftCase Battle — Открывай кейсы с Telegram Gift</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0f1e 0%, #0c1222 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            padding: 16px;
+            min-height: 100vh;
+            color: white;
+        }
+
+        /* Контейнер Mini App */
+        .app {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* Шапка с балансом */
+        .header {
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 12px 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .balance {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0,0,0,0.4);
+            padding: 6px 14px;
+            border-radius: 40px;
+        }
+
+        .balance span:first-child {
+            font-size: 14px;
+            opacity: 0.7;
+        }
+
+        .balance span:last-child {
+            font-size: 20px;
+            font-weight: bold;
+            color: #FFD700;
+        }
+
+        .add-stars {
+            background: #2a6df4;
+            border: none;
+            color: white;
+            padding: 6px 14px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .add-stars:active {
+            transform: scale(0.96);
+            background: #1a5ad4;
+        }
+
+        /* Сетка кейсов */
+        .cases-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .case-card {
+            background: rgba(20, 25, 40, 0.8);
+            backdrop-filter: blur(4px);
+            border-radius: 28px;
+            padding: 16px;
+            border: 1px solid rgba(255,255,255,0.15);
+            transition: 0.2s;
+            cursor: pointer;
+        }
+
+        .case-card:active {
+            transform: scale(0.98);
+            background: rgba(30, 38, 58, 0.9);
+        }
+
+        .case-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .case-name {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .case-price {
+            background: #FFD70020;
+            padding: 4px 12px;
+            border-radius: 20px;
+            color: #FFD700;
+            font-weight: bold;
+        }
+
+        .case-chance {
+            font-size: 13px;
+            opacity: 0.6;
+            margin-bottom: 8px;
+        }
+
+        .gift-preview {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+
+        .gift-tag {
+            background: rgba(255,255,255,0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+
+        /* Кнопка открытия */
+        .open-btn {
+            background: linear-gradient(90deg, #f09819 0%, #ff6a00 100%);
+            border: none;
+            padding: 12px;
+            border-radius: 40px;
+            font-weight: bold;
+            font-size: 16px;
+            color: white;
+            width: 100%;
+            margin-top: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .open-btn:active {
+            transform: scale(0.97);
+        }
+
+        /* Результат открытия */
+        .result-panel {
+            background: rgba(0,0,0,0.5);
+            border-radius: 28px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            border: 1px solid rgba(255,215,0,0.3);
+        }
+
+        .gift-icon {
+            font-size: 64px;
+            margin: 10px 0;
+        }
+
+        .claim-btn {
+            background: #2ea043;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 40px;
+            font-weight: bold;
+            margin-top: 12px;
+            cursor: pointer;
+        }
+
+        /* Инвентарь */
+        .inventory {
+            background: rgba(255,255,255,0.05);
+            border-radius: 24px;
+            padding: 16px;
+            margin-top: 20px;
+        }
+
+        .inventory h3 {
+            margin-bottom: 12px;
+            font-size: 18px;
+        }
+
+        .inventory-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .inv-item {
+            background: rgba(255,255,255,0.1);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+        }
+
+        button {
+            font-family: inherit;
+        }
+
+        hr {
+            opacity: 0.2;
+            margin: 16px 0;
+        }
+    </style>
+</head>
+<body>
+<div class="app">
+    <div class="header">
+        <div class="balance">
+            <span>⭐️ Баланс</span>
+            <span id="balanceValue">250</span>
+        </div>
+        <button class="add-stars" id="addStarsBtn">+ 100 Stars</button>
+    </div>
+
+    <div class="cases-grid" id="casesContainer"></div>
+
+    <div id="resultArea" class="result-panel" style="display: none;">
+        <div>🎁 Ты выиграл!</div>
+        <div class="gift-icon" id="winGiftIcon">🎀</div>
+        <div id="winGiftName" style="font-weight: bold; margin: 8px 0;">Розовый мишка</div>
+        <div id="winGiftValue" style="font-size: 13px; opacity: 0.8;"></div>
+        <button class="claim-btn" id="claimGiftBtn">📦 Забрать подарок в Telegram</button>
+    </div>
+
+    <div class="inventory">
+        <h3>📦 Мои выигранные подарки</h3>
+        <div class="inventory-list" id="inventoryList">
+            <div style="opacity: 0.5;">Здесь будут твои Telegram Gift</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ------------------- ДАННЫЕ ПОДАРКОВ (Telegram Gift) -------------------
+    const GIFTS_DB = {
+        // Обычные подарки
+        "Розовый мишка": { icon: "🧸", starsValue: 15, rarity: "common" },
+        "Букет цветов": { icon: "💐", starsValue: 15, rarity: "common" },
+        "Шоколадка": { icon: "🍫", starsValue: 15, rarity: "common" },
+        // Редкие
+        "Золотая звезда": { icon: "⭐️", starsValue: 50, rarity: "rare" },
+        "Алмазное сердце": { icon: "💎", starsValue: 50, rarity: "rare" },
+        // Эпические
+        "Легендарный дракон": { icon: "🐉", starsValue: 200, rarity: "epic" },
+        "Космический корабль": { icon: "🚀", starsValue: 200, rarity: "epic" },
+        // Легендарка
+        "Трон короля": { icon: "👑", starsValue: 1000, rarity: "legendary" }
+    };
+
+    // Конфигурация кейсов (цена + пул подарков с шансами)
+    const CASES = [
+        {
+            id: "common",
+            name: "🎁 Обычный кейс",
+            price: 30,
+            description: "Гарантированный обычный подарок",
+            gifts: [
+                { name: "Розовый мишка", chance: 40 },
+                { name: "Букет цветов", chance: 35 },
+                { name: "Шоколадка", chance: 25 }
+            ]
+        },
+        {
+            id: "rare",
+            name: "✨ Редкий кейс",
+            price: 80,
+            description: "Шанс на алмазное сердце!",
+            gifts: [
+                { name: "Розовый мишка", chance: 30 },
+                { name: "Букет цветов", chance: 20 },
+                { name: "Шоколадка", chance: 20 },
+                { name: "Золотая звезда", chance: 20 },
+                { name: "Алмазное сердце", chance: 10 }
+            ]
+        },
+        {
+            id: "epic",
+            name: "🔥 Эпический кейс",
+            price: 200,
+            description: "Можно выбить дракона!",
+            gifts: [
+                { name: "Золотая звезда", chance: 35 },
+                { name: "Алмазное сердце", chance: 35 },
+                { name: "Легендарный дракон", chance: 20 },
+                { name: "Космический корабль", chance: 10 }
+            ]
+        },
+        {
+            id: "legendary",
+            name: "👑 Легендарный кейс",
+            price: 500,
+            description: "Главный приз — Трон короля!",
+            gifts: [
+                { name: "Легендарный дракон", chance: 40 },
+                { name: "Космический корабль", chance: 35 },
+                { name: "Трон короля", chance: 25 }
+            ]
+        }
+    ];
+
+    // ----- Состояние игрока -----
+    let userBalance = 250;          // Stars
+    let inventory = [];             // Массив выигранных подарков (объекты { name, icon, starsValue, rarity })
+
+    // ----- DOM элементы -----
+    const balanceSpan = document.getElementById("balanceValue");
+    const casesContainer = document.getElementById("casesContainer");
+    const resultArea = document.getElementById("resultArea");
+    const winGiftIconSpan = document.getElementById("winGiftIcon");
+    const winGiftNameSpan = document.getElementById("winGiftName");
+    const winGiftValueSpan = document.getElementById("winGiftValue");
+    const claimBtn = document.getElementById("claimGiftBtn");
+    const inventoryListDiv = document.getElementById("inventoryList");
+
+    let lastWonGift = null;   // храним последний выигрыш
+
+    // ----- Вспомогательные функции -----
+    function saveToLocalStorage() {
+        localStorage.setItem("giftcase_balance", userBalance);
+        localStorage.setItem("giftcase_inventory", JSON.stringify(inventory));
+    }
+
+    function loadFromLocalStorage() {
+        const savedBalance = localStorage.getItem("giftcase_balance");
+        if (savedBalance !== null) userBalance = parseInt(savedBalance);
+        const savedInv = localStorage.getItem("giftcase_inventory");
+        if (savedInv !== null) {
+            try {
+                inventory = JSON.parse(savedInv);
+            } catch(e) { inventory = []; }
+        }
+        updateBalanceUI();
+        renderInventory();
+    }
+
+    function updateBalanceUI() {
+        balanceSpan.innerText = userBalance;
+        saveToLocalStorage();
+    }
+
+    // Выбор случайного подарка по шансам
+    function openCase(caseData) {
+        const totalChance = caseData.gifts.reduce((sum, g) => sum + g.chance, 0);
+        let random = Math.random() * totalChance;
+        let accumulated = 0;
+        for (let gift of caseData.gifts) {
+            accumulated += gift.chance;
+            if (random <= accumulated) {
+                return gift.name;
+            }
+        }
+        return caseData.gifts[0].name;
+    }
+
+    // Добавить подарок в инвентарь
+    function addGiftToInventory(giftName) {
+        const giftInfo = GIFTS_DB[giftName];
+        if (!giftInfo) return;
+        inventory.push({
+            name: giftName,
+            icon: giftInfo.icon,
+            starsValue: giftInfo.starsValue,
+            rarity: giftInfo.rarity
+        });
+        renderInventory();
+        saveToLocalStorage();
+    }
+
+    function renderInventory() {
+        if (inventory.length === 0) {
+            inventoryListDiv.innerHTML = '<div style="opacity: 0.5;">Здесь будут твои Telegram Gift</div>';
+            return;
+        }
+        let html = "";
+        inventory.forEach((gift, idx) => {
+            html += `<div class="inv-item">${gift.icon} ${gift.name} (⭐️ ${gift.starsValue})</div>`;
+        });
+        inventoryListDiv.innerHTML = html;
+    }
+
+    // Показать результат открытия
+    function showWinResult(giftName) {
+        const gift = GIFTS_DB[giftName];
+        if (!gift) return;
+        lastWonGift = { name: giftName, icon: gift.icon, starsValue: gift.starsValue };
+        winGiftIconSpan.innerText = gift.icon;
+        winGiftNameSpan.innerText = giftName;
+        winGiftValueSpan.innerText = `⭐️ Примерная стоимость: ${gift.starsValue} Stars`;
+        resultArea.style.display = "block";
+
+        // Добавляем в инвентарь автоматически (дубль для истории)
+        addGiftToInventory(giftName);
+    }
+
+    // Отправка подарка в Telegram (имитация / реальный вызов)
+    function sendGiftToTelegram(giftName) {
+        // Реальная интеграция: WebApp.sendData или вызов метода бота
+        if (window.Telegram && window.Telegram.WebApp) {
+            const tg = window.Telegram.WebApp;
+            tg.sendData(JSON.stringify({
+                action: "claim_gift",
+                gift: giftName,
+                timestamp: Date.now()
+            }));
+            tg.showAlert(`🎁 Ты получил подарок: ${giftName}! Он уже в твоём профиле Telegram.`);
+        } else {
+            // Режим разработки (браузер)
+            alert(`[DEMO] Ты выиграл Telegram Gift: ${giftName}\nВ реальном Mini App бот отправит его тебе.`);
+        }
+    }
+
+    // Основная логика открытия кейса
+    function attemptOpenCase(caseData) {
+        if (userBalance < caseData.price) {
+            if (window.Telegram && window.Telegram.WebApp) {
+                window.Telegram.WebApp.showAlert("❌ Недостаточно Stars! Пополни баланс.");
+            } else {
+                alert("Недостаточно Stars!");
+            }
+            return false;
+        }
+
+        // Списываем цену
+        userBalance -= caseData.price;
+        updateBalanceUI();
+
+        // Открываем кейс
+        const wonGiftName = openCase(caseData);
+        showWinResult(wonGiftName);
+
+        // Анимация/скролл
+        resultArea.scrollIntoView({ behavior: "smooth", block: "center" });
+        return true;
+    }
+
+    // Отрисовка всех кейсов в UI
+    function renderCases() {
+        casesContainer.innerHTML = "";
+        for (let caseItem of CASES) {
+            const card = document.createElement("div");
+            card.className = "case-card";
+
+            // Шансы в текстовом виде
+            let chancesText = "";
+            for (let g of caseItem.gifts) {
+                chancesText += `${g.name} (${g.chance}%) `;
+            }
+
+            card.innerHTML = `
+                <div class="case-header">
+                    <div class="case-name">${caseItem.name}</div>
+                    <div class="case-price">⭐️ ${caseItem.price}</div>
+                </div>
+                <div class="case-chance">🎲 ${caseItem.description}<br>📊 ${chancesText}</div>
+                <div class="gift-preview">
+                    ${caseItem.gifts.slice(0,3).map(g => `<span class="gift-tag">${GIFTS_DB[g.name]?.icon || "🎁"} ${g.name}</span>`).join('')}
+                    ${caseItem.gifts.length > 3 ? '<span class="gift-tag">+ещё</span>' : ''}
+                </div>
+                <button class="open-btn" data-case-id="${caseItem.id}">🔓 Открыть кейс</button>
+            `;
+
+            const openBtn = card.querySelector(".open-btn");
+            openBtn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                attemptOpenCase(caseItem);
+            });
+
+            casesContainer.appendChild(card);
+        }
+    }
+
+    // Обработчик кнопки "Забрать подарок"
+    claimBtn.addEventListener("click", () => {
+        if (lastWonGift) {
+            sendGiftToTelegram(lastWonGift.name);
+            // Опционально: скрыть панель или оставить
+            resultArea.style.display = "none";
+            lastWonGift = null;
+        } else {
+            if (window.Telegram && window.Telegram.WebApp) {
+                window.Telegram.WebApp.showAlert("Сначала открой кейс!");
+            }
+        }
+    });
+
+    // Добавление Stars (демо-пополнение)
+    document.getElementById("addStarsBtn").addEventListener("click", () => {
+        userBalance += 100;
+        updateBalanceUI();
+        if (window.Telegram && window.Telegram.WebApp) {
+            window.Telegram.WebApp.showAlert("+100 Stars добавлено!");
+        }
+    });
+
+    // Инициализация Telegram WebApp
+    if (window.Telegram && window.Telegram.WebApp) {
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.ready();
+        tg.enableClosingConfirmation();
+    }
+
+    // Загружаем сохранённые данные и рендерим
+    loadFromLocalStorage();
+    renderCases();
+</script>
+</body>
+</html>
