@@ -9,6 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
+/* ========== ВЕСЬ CSS (как в предыдущей версии, без изменений) ========== */
 :root {
   --black: #000000;
   --bg: #080808;
@@ -133,7 +134,6 @@ body::before {
 .section-title { font-family:var(--font-display); font-size:28px; letter-spacing:2px; color:var(--white); }
 .section-sub { font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; }
 
-/* КЕЙСЫ - СТРОГО 2 РЯДА */
 .cases-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -310,6 +310,7 @@ body::before {
 .battle-vs { flex:1; text-align:center; font-family:var(--font-display); font-size:22px; color:var(--text-muted); letter-spacing:2px; }
 .battle-join-btn { padding:8px 16px; background:var(--surface-3); border:1px solid var(--border-light); color:var(--white); border-radius:var(--radius-full); font-family:var(--font-body); font-size:11px; font-weight:700; cursor:pointer; transition:var(--transition); }
 .battle-join-btn:hover { background:var(--white); color:var(--black); }
+.battle-private-badge { font-size:9px; background:var(--gold); color:var(--black); padding:2px 6px; border-radius:var(--radius-full); margin-left:6px; }
 
 .profile-hero {
   background:var(--surface-1); border:1px solid var(--border);
@@ -388,26 +389,58 @@ body::before {
   display:none;
 }
 
-.battle-fight-overlay {
+/* АНИМАЦИЯ МОНЕТКИ */
+.coin-animation-overlay {
   position:fixed; inset:0;
   background:rgba(0,0,0,0.97);
   z-index:600;
-  display:flex; align-items:center; justify-content:center;
-  flex-direction:column; gap:20px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  gap:30px;
 }
-.battle-fighters { display:flex; align-items:center; gap:30px; }
-.fighter { display:flex; flex-direction:column; align-items:center; gap:6px; animation:fighterIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both; }
-.fighter:first-child { animation-delay:0.1s; animation-name:fighterInLeft; }
-.fighter:last-child { animation-delay:0.2s; animation-name:fighterInRight; }
-@keyframes fighterInLeft { from{opacity:0; transform:translateX(-60px)} to{opacity:1;transform:translateX(0)} }
-@keyframes fighterInRight { from{opacity:0;transform:translateX(60px)} to{opacity:1;transform:translateX(0)} }
-.fighter-icon { font-size:60px; filter:drop-shadow(0 0 20px rgba(255,255,255,0.15)); }
-.fighter-name { font-size:10px; color:var(--text-secondary); text-align:center; max-width:80px; }
-.battle-vs-big { font-family:var(--font-display); font-size:48px; color:var(--text-muted); letter-spacing:4px; animation:vsPulse 0.8s 0.5s cubic-bezier(0.34,1.56,0.64,1) both; }
-@keyframes vsPulse { 0%{opacity:0;transform:scale(0.5)} 100%{opacity:1;transform:scale(1)} }
-.battle-countdown { font-family:var(--font-display); font-size:64px; color:var(--white); animation:countPulse 1s ease; }
-@keyframes countPulse { 0%{transform:scale(1.5);opacity:0} 30%{opacity:1} 100%{transform:scale(1)} }
-.winner-banner { font-family:var(--font-display); font-size:44px; color:var(--gold); animation:popIn 0.5s cubic-bezier(0.34,1.56,0.64,1); }
+.coin-container {
+  perspective: 800px;
+}
+.coin {
+  width:150px;
+  height:150px;
+  border-radius:50%;
+  background: linear-gradient(145deg, #ffd700, #b8860b);
+  box-shadow: 0 0 30px rgba(255,215,0,0.5);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:70px;
+  font-weight:bold;
+  animation: spinCoin 1.5s cubic-bezier(0.4,0,0.2,1);
+  transform-style: preserve-3d;
+}
+@keyframes spinCoin {
+  0% { transform: rotateY(0deg) scale(0.5); opacity:0; }
+  20% { transform: rotateY(360deg) scale(1); opacity:1; }
+  40% { transform: rotateY(720deg) scale(1.1); }
+  60% { transform: rotateY(1080deg) scale(1); }
+  80% { transform: rotateY(1440deg) scale(0.95); }
+  100% { transform: rotateY(1800deg) scale(1); }
+}
+.coin-result {
+  font-family:var(--font-display);
+  font-size:48px;
+  color:var(--gold);
+  text-shadow:0 0 20px var(--gold);
+  animation: fadeInUp 0.5s ease;
+}
+.coin-sub {
+  font-size:16px;
+  color:var(--text-secondary);
+  margin-top:10px;
+}
+@keyframes fadeInUp {
+  from { opacity:0; transform:translateY(20px); }
+  to { opacity:1; transform:translateY(0); }
+}
 
 @media (min-width:768px) {
   .topbar { padding:0 24px; height:60px; }
@@ -507,10 +540,15 @@ body::before {
         <div class="pvp-stake" id="pvpStakeDisplay">
           <div id="pvpStakeText" style="color:var(--text-muted);">⚔ Нажми на подарок в инвентаре</div>
         </div>
-        <button class="big-btn" id="createBattleBtn" disabled>Создать батл</button>
+        <div style="display:flex; gap:10px; margin-top:10px;">
+          <button class="big-btn" id="createPrivateBattleBtn" style="flex:1; background:#2a6df4;">🔒 Приватный батл</button>
+        </div>
+        <div id="privateBattleLinkContainer" style="display:none; margin-top:12px;">
+          <button class="big-btn" id="copyPrivateLinkBtn" style="background:#2a6df4;">🔗 Скопировать ссылку для приглашения</button>
+        </div>
       </div>
-      <div class="section-header" style="margin-top:16px;"><div class="section-title" style="font-size:20px;">АКТИВНЫЕ БАТЛЫ</div></div>
-      <div class="pvp-lobby" id="pvpLobby"><div style="color:var(--text-muted);text-align:center;padding:30px;font-size:12px;">Загрузка батлов...</div></div>
+      <div class="section-header" style="margin-top:16px;"><div class="section-title" style="font-size:20px;">ПУБЛИЧНЫЕ БАТЛЫ</div></div>
+      <div class="pvp-lobby" id="pvpLobby"><div style="color:var(--text-muted);text-align:center;padding:30px;font-size:12px;">Загрузка...</div></div>
       <div class="inventory-section"><h3>МОИ ПОДАРКИ</h3><div class="inventory-grid" id="pvpInventoryList"></div></div>
     </div>
 
@@ -569,12 +607,14 @@ let state = {
   referredBy: null
 };
 let upgradeSelectedIdx = null;
-let pvpSelectedIdx = null;
+let pvpSelectedIdxSup = null;
 let craftSlots = [null, null, null];
 let currentCraftResult = null;
 let saveTimeout = null;
 let cachedStats = null;
 let lastInventoryHash = '';
+let currentPvpChannel = null;
+let lastCreatedPrivateBattleId = null;
 
 // ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
 function getUserId() {
@@ -672,8 +712,6 @@ function updateLuck(won, starsValue) {
   saveState();
 }
 
-function applyLuckToChance(baseChance) { return Math.min(95, Math.floor(baseChance * (1 + state.luck / 100))); }
-
 function burstConfetti() {
   const canvas = document.getElementById('confettiCanvas');
   const ctx = canvas.getContext('2d');
@@ -754,7 +792,6 @@ const GIFTS_DB = {
 };
 const UPGRADE_CHANCES = { common:70, rare:50, epic:30, legendary:0 };
 const RARITY_LABELS = { common:"Обычный", rare:"Редкий", epic:"Эпический", legendary:"Легендарный" };
-const RARITY_COLORS = { common:"#555", rare:"#6688cc", epic:"#aa66cc", legendary:"#c8a96e" };
 const CASES = [
   { id:"common", name:"ОБЫЧНЫЙ", emoji:"📦", price:30, rarity:"rarity-common",
     gifts:[{name:"Розовый мишка",chance:40},{name:"Букет цветов",chance:35},{name:"Шоколадка",chance:25}]},
@@ -921,7 +958,7 @@ function showResultModal(giftName, isUpgradeSuccess, callback) {
       <div class="result-glow"></div>
       <div class="result-icon">${info.icon}</div>
       <div class="result-title">${giftName}</div>
-      <div class="result-sub" style="color:${RARITY_COLORS[info.rarity]}">${RARITY_LABELS[info.rarity].toUpperCase()} · ★ ${info.starsValue}</div>
+      <div class="result-sub" style="color:${info.rarity === 'legendary' ? '#c8a96e' : '#888'}">${RARITY_LABELS[info.rarity].toUpperCase()} · ★ ${info.starsValue}</div>
       ${isUpgradeSuccess !== null ? `<div class="result-actions"><button class="big-btn" id="resultKeepBtn">📦 Забрать</button></div>` : `<div class="result-actions"><button class="big-btn" id="resultKeepBtn">📦 Забрать</button><button class="big-btn secondary" id="resultSellBtn">💰 Продать за ${Math.floor(info.starsValue*0.7)} ★</button></div>`}
     </div>
   `;
@@ -966,11 +1003,10 @@ function doUpgrade() {
   const chance = UPGRADE_CHANCES[g.rarity];
   const targetName = GIFTS_DB[g.name]?.upgradeTo;
   if (!targetName || chance === 0) return;
-  const finalChance = applyLuckToChance(chance);
   state.inventory.splice(upgradeSelectedIdx, 1);
   upgradeSelectedIdx = null;
   document.getElementById('upgradeBtn').disabled = true;
-  const success = Math.random() * 100 < finalChance;
+  const success = Math.random() * 100 < chance;
   if (success) {
     const targetInfo = GIFTS_DB[targetName];
     state.inventory.push({ name:targetName, icon:targetInfo.icon, starsValue:targetInfo.starsValue, rarity:targetInfo.rarity });
@@ -1083,26 +1119,20 @@ function doCraft() {
 }
 
 // ============================================================
-// PVP С SUPABASE (обновлённая версия)
+// PVP С SUPABASE (приватные батлы + анимация монетки)
 // ============================================================
-let currentPvpChannel = null;
-let pvpSelectedIdxSup = null;
-let lastCreatedBattleId = null;
-
 function selectForPvp(idx) {
   pvpSelectedIdxSup = idx;
   const g = state.inventory[idx];
   if (!g) return;
   document.getElementById('pvpStakeText').innerHTML = `${g.icon} ${g.name} ★${g.starsValue}`;
-  document.getElementById('createBattleBtn').disabled = false;
 }
 
-async function createBattle() {
+async function createPrivateBattle() {
   if (pvpSelectedIdxSup === null || !state.inventory[pvpSelectedIdxSup]) { showToast('Выбери подарок!'); return; }
   const gift = state.inventory[pvpSelectedIdxSup];
   state.inventory.splice(pvpSelectedIdxSup, 1);
   pvpSelectedIdxSup = null;
-  document.getElementById('createBattleBtn').disabled = true;
   document.getElementById('pvpStakeText').innerHTML = '⚔ Нажми на подарок в инвентаре';
   
   const battleId = Date.now().toString(36) + Math.random().toString(36).substr(2, 6);
@@ -1114,16 +1144,23 @@ async function createBattle() {
       creator_id: userId,
       creator_name: creatorName,
       creator_gift: gift,
-      status: 'waiting'
+      status: 'waiting',
+      is_private: true
     });
     
     if (error) throw error;
     
-    lastCreatedBattleId = battleId;
-    const battleLink = `${window.location.origin}${window.location.pathname}?battle=${battleId}`;
+    lastCreatedPrivateBattleId = battleId;
+    const battleLink = `${window.location.origin}${window.location.pathname}?private_battle=${battleId}`;
     
-    // Показываем кнопку копирования ссылки
-    showCopyLinkButton(battleLink);
+    document.getElementById('privateBattleLinkContainer').style.display = 'block';
+    const copyBtn = document.getElementById('copyPrivateLinkBtn');
+    copyBtn.onclick = () => {
+      navigator.clipboard.writeText(battleLink);
+      showToast('🔗 Ссылка на приватный батл скопирована! Отправь её другу');
+      copyBtn.innerHTML = '✅ Ссылка скопирована!';
+      setTimeout(() => { copyBtn.innerHTML = '🔗 Скопировать ссылку для приглашения'; }, 3000);
+    };
     
     renderAllInventories();
     renderPvpLobby();
@@ -1135,37 +1172,150 @@ async function createBattle() {
   }
 }
 
-function showCopyLinkButton(link) {
-  // Удаляем старую кнопку, если есть
-  const existingBtn = document.getElementById('copyBattleLinkBtn');
-  if (existingBtn) existingBtn.remove();
+async function joinPrivateBattle(battleId) {
+  const { data: battle, error: fetchError } = await supabaseClient
+    .from('battles')
+    .select('*')
+    .eq('id', battleId)
+    .single();
   
-  const pvpCreateDiv = document.querySelector('.pvp-create');
-  if (!pvpCreateDiv) return;
+  if (fetchError || !battle || battle.status !== 'waiting') { showToast('Батл недоступен или уже завершён'); return; }
+  if (battle.creator_id === userId) { showToast('Нельзя присоединиться к своему батлу'); return; }
+  if (state.inventory.length === 0) { showToast('Нет подарков для ставки!'); return; }
   
-  const btn = document.createElement('button');
-  btn.id = 'copyBattleLinkBtn';
-  btn.className = 'big-btn';
-  btn.style.marginTop = '10px';
-  btn.style.background = '#2a6df4';
-  btn.style.color = 'white';
-  btn.innerHTML = '🔗 СКОПИРОВАТЬ ССЫЛКУ ДЛЯ ПРИГЛАШЕНИЯ';
-  btn.onclick = () => {
-    navigator.clipboard.writeText(link);
-    showToast('🔗 Ссылка скопирована! Отправь её другу');
-    btn.innerHTML = '✅ ССЫЛКА СКОПИРОВАНА';
-    setTimeout(() => {
-      btn.innerHTML = '🔗 СКОПИРОВАТЬ ССЫЛКУ ДЛЯ ПРИГЛАШЕНИЯ';
-    }, 3000);
-  };
-  pvpCreateDiv.appendChild(btn);
+  const myGift = state.inventory[0];
+  if (!myGift) return;
+  
+  state.inventory.splice(0, 1);
+  renderAllInventories();
+  
+  const opponentName = telegramUser?.username || userId.slice(-6);
+  
+  const { error: updateError } = await supabaseClient
+    .from('battles')
+    .update({
+      opponent_id: userId,
+      opponent_name: opponentName,
+      opponent_gift: myGift,
+      status: 'fighting'
+    })
+    .eq('id', battleId);
+  
+  if (updateError) {
+    state.inventory.push(myGift);
+    renderAllInventories();
+    showToast('❌ Ошибка присоединения');
+    return;
+  }
+  
+  // АНИМАЦИЯ МОНЕТКИ
+  showCoinAnimation(battle, myGift, (winnerId) => {
+    if (winnerId === userId) {
+      state.inventory.push(battle.creator_gift, myGift);
+      state.pvpWins = (state.pvpWins || 0) + 1;
+      addHistory(myGift.icon, `PvP победа!`, `+${battle.creator_gift.starsValue + myGift.starsValue} ★`, true);
+      showToast(`🏆 ПОБЕДА! Ты забрал оба подарка!`);
+      burstConfetti();
+      updateLuck(true, battle.creator_gift.starsValue);
+      SoundFX.play('win');
+    } else {
+      addHistory(myGift.icon, `PvP проигрыш`, `−${myGift.starsValue} ★`, false);
+      showToast(`💀 Проигрыш! ${battle.creator_gift.icon} уходит победителю`);
+      updateLuck(false, myGift.starsValue);
+      SoundFX.play('error');
+    }
+    
+    supabaseClient.from('battles').update({ status: 'finished', winner_id: winnerId }).eq('id', battleId);
+    renderAllInventories();
+    updateProfileStats();
+    renderPvpLobby();
+  });
 }
 
-async function joinBattle(battleId) {
-  // Убираем кнопку копирования, если она есть
-  const existingBtn = document.getElementById('copyBattleLinkBtn');
-  if (existingBtn) existingBtn.remove();
+function showCoinAnimation(battle, myGift, callback) {
+  // 40% цена + 60% рандом
+  const pValue = battle.creator_gift.starsValue;
+  const oValue = myGift.starsValue;
+  const pWeight = pValue * 0.4;
+  const oWeight = oValue * 0.4;
+  const pRandom = Math.random() * (pValue * 0.6);
+  const oRandom = Math.random() * (oValue * 0.6);
+  const pRoll = pWeight + pRandom;
+  const oRoll = oWeight + oRandom;
+  const winnerId = pRoll >= oRoll ? battle.creator_id : userId;
+  const isCreatorWin = winnerId === battle.creator_id;
   
+  const overlay = document.createElement('div');
+  overlay.className = 'coin-animation-overlay';
+  overlay.innerHTML = `
+    <div class="coin-container">
+      <div class="coin">🎲</div>
+    </div>
+    <div style="text-align:center;">
+      <div class="coin-result" id="coinResult" style="display:none;"></div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  
+  setTimeout(() => {
+    const coin = overlay.querySelector('.coin');
+    const resultDiv = overlay.querySelector('#coinResult');
+    const resultText = isCreatorWin ? 'ОРЁЛ' : 'РЕШКА';
+    const winnerName = isCreatorWin ? battle.creator_name : (telegramUser?.username || userId.slice(-6));
+    
+    coin.innerHTML = isCreatorWin ? '🦅' : '🪙';
+    resultDiv.style.display = 'block';
+    resultDiv.innerHTML = `${resultText}<div class="coin-sub">Победитель: ${winnerName}</div>`;
+    
+    setTimeout(() => {
+      overlay.remove();
+      callback(winnerId);
+    }, 2000);
+  }, 1500);
+}
+
+async function renderPvpLobby() {
+  const lobby = document.getElementById('pvpLobby');
+  if (!lobby) return;
+  
+  const { data: battles, error } = await supabaseClient
+    .from('battles')
+    .select('*')
+    .eq('status', 'waiting')
+    .eq('is_private', false)
+    .order('created_at', { ascending: false });
+  
+  if (error) { lobby.innerHTML = `<div style="color:var(--text-muted);text-align:center;padding:30px;">Ошибка загрузки</div>`; return; }
+  
+  if (!battles || battles.length === 0) {
+    lobby.innerHTML = `<div style="color:var(--text-muted);text-align:center;padding:30px;">Нет активных публичных батлов.<br>Создай приватный по кнопке выше!</div>`;
+    return;
+  }
+  
+  lobby.innerHTML = battles.map(b => `
+    <div class="battle-card">
+      <div class="battle-gift-slot">
+        <div class="battle-gift-icon">${b.creator_gift.icon}</div>
+        <div class="battle-gift-name">${b.creator_gift.name}</div>
+        <div class="battle-gift-val">★ ${b.creator_gift.starsValue}</div>
+      </div>
+      <div class="battle-vs">VS</div>
+      <div>
+        ${b.creator_id !== userId 
+          ? `<button class="battle-join-btn" data-bid="${b.id}">Войти</button>`
+          : `<button class="battle-join-btn" data-cancel="${b.id}" style="background:#3a2a2a;">Отменить</button>`
+        }
+      </div>
+    </div>
+  `).join('');
+  
+  lobby.querySelectorAll('.battle-join-btn').forEach(btn => {
+    if (btn.dataset.bid) btn.onclick = () => joinPublicBattle(btn.dataset.bid);
+    if (btn.dataset.cancel) btn.onclick = () => cancelBattle(btn.dataset.cancel);
+  });
+}
+
+async function joinPublicBattle(battleId) {
   const { data: battle, error: fetchError } = await supabaseClient
     .from('battles')
     .select('*')
@@ -1201,72 +1351,26 @@ async function joinBattle(battleId) {
     return;
   }
   
-  // НОВАЯ ФОРМУЛА: 60% цена + 40% рандом
-  const pValue = battle.creator_gift.starsValue;
-  const oValue = myGift.starsValue;
-  const pRoll = (pValue * 0.6) + (Math.random() * pValue * 0.4);
-  const oRoll = (oValue * 0.6) + (Math.random() * oValue * 0.4);
-  const winnerId = pRoll >= oRoll ? battle.creator_id : userId;
-  
-  if (winnerId === userId) {
-    state.inventory.push(battle.creator_gift, myGift);
-    state.pvpWins = (state.pvpWins || 0) + 1;
-    addHistory(myGift.icon, `PvP победа!`, `+${battle.creator_gift.starsValue + myGift.starsValue} ★`, true);
-    showToast(`🏆 ПОБЕДА! Ты забрал оба подарка!`);
-    burstConfetti();
-    updateLuck(true, battle.creator_gift.starsValue);
-    SoundFX.play('win');
-  } else {
-    addHistory(myGift.icon, `PvP проигрыш`, `−${myGift.starsValue} ★`, false);
-    showToast(`💀 Проигрыш! ${battle.creator_gift.icon} уходит победителю`);
-    updateLuck(false, myGift.starsValue);
-    SoundFX.play('error');
-  }
-  
-  await supabaseClient.from('battles').update({ status: 'finished', winner_id: winnerId }).eq('id', battleId);
-  
-  renderAllInventories();
-  updateProfileStats();
-  renderPvpLobby();
-}
-
-async function renderPvpLobby() {
-  const lobby = document.getElementById('pvpLobby');
-  if (!lobby) return;
-  
-  const { data: battles, error } = await supabaseClient
-    .from('battles')
-    .select('*')
-    .eq('status', 'waiting')
-    .order('created_at', { ascending: false });
-  
-  if (error) { lobby.innerHTML = `<div style="color:var(--text-muted);text-align:center;padding:30px;">Ошибка загрузки</div>`; return; }
-  
-  if (!battles || battles.length === 0) {
-    lobby.innerHTML = `<div style="color:var(--text-muted);text-align:center;padding:30px;">Нет активных батлов.<br>Создай первый!</div>`;
-    return;
-  }
-  
-  lobby.innerHTML = battles.map(b => `
-    <div class="battle-card">
-      <div class="battle-gift-slot">
-        <div class="battle-gift-icon">${b.creator_gift.icon}</div>
-        <div class="battle-gift-name">${b.creator_gift.name}</div>
-        <div class="battle-gift-val">★ ${b.creator_gift.starsValue}</div>
-      </div>
-      <div class="battle-vs">VS</div>
-      <div>
-        ${b.creator_id !== userId 
-          ? `<button class="battle-join-btn" data-bid="${b.id}">Войти</button>`
-          : `<button class="battle-join-btn" data-cancel="${b.id}" style="background:#3a2a2a;">Отменить</button>`
-        }
-      </div>
-    </div>
-  `).join('');
-  
-  lobby.querySelectorAll('.battle-join-btn').forEach(btn => {
-    if (btn.dataset.bid) btn.onclick = () => joinBattle(btn.dataset.bid);
-    if (btn.dataset.cancel) btn.onclick = () => cancelBattle(btn.dataset.cancel);
+  showCoinAnimation(battle, myGift, (winnerId) => {
+    if (winnerId === userId) {
+      state.inventory.push(battle.creator_gift, myGift);
+      state.pvpWins = (state.pvpWins || 0) + 1;
+      addHistory(myGift.icon, `PvP победа!`, `+${battle.creator_gift.starsValue + myGift.starsValue} ★`, true);
+      showToast(`🏆 ПОБЕДА! Ты забрал оба подарка!`);
+      burstConfetti();
+      updateLuck(true, battle.creator_gift.starsValue);
+      SoundFX.play('win');
+    } else {
+      addHistory(myGift.icon, `PvP проигрыш`, `−${myGift.starsValue} ★`, false);
+      showToast(`💀 Проигрыш! ${battle.creator_gift.icon} уходит победителю`);
+      updateLuck(false, myGift.starsValue);
+      SoundFX.play('error');
+    }
+    
+    supabaseClient.from('battles').update({ status: 'finished', winner_id: winnerId }).eq('id', battleId);
+    renderAllInventories();
+    updateProfileStats();
+    renderPvpLobby();
   });
 }
 
@@ -1284,11 +1388,6 @@ async function cancelBattle(battleId) {
   renderAllInventories();
   
   await supabaseClient.from('battles').delete().eq('id', battleId);
-  
-  // Убираем кнопку копирования
-  const existingBtn = document.getElementById('copyBattleLinkBtn');
-  if (existingBtn) existingBtn.remove();
-  
   renderPvpLobby();
   showToast('Батл отменён, подарок возвращён');
 }
@@ -1379,7 +1478,7 @@ document.querySelectorAll('.tab-item').forEach(btn => {
 document.getElementById('addStarsBtn').onclick = () => { setBalance(state.balance + 100); addHistory('⭐', 'Пополнение', '+100 ★', true); showToast('+100 Stars'); renderAllInventories(); SoundFX.play('open'); };
 document.getElementById('balancePill').onclick = () => { setBalance(state.balance + 100); addHistory('⭐', 'Пополнение', '+100 ★', true); showToast('+100 Stars'); renderAllInventories(); };
 document.getElementById('upgradeBtn').onclick = doUpgrade;
-document.getElementById('createBattleBtn').onclick = createBattle;
+document.getElementById('createPrivateBattleBtn').onclick = createPrivateBattle;
 document.getElementById('depositBtn').onclick = () => { setBalance(state.balance + 500); addHistory('💎', 'Пополнение', '+500 ★', true); showToast('+500 Stars'); renderAllInventories(); };
 document.getElementById('withdrawBtn').onclick = () => showToast('💰 Вывод: скоро будет доступно');
 document.getElementById('shareBtn').onclick = () => { navigator.clipboard.writeText(window.location.href); showToast('🔗 Ссылка скопирована!'); };
@@ -1404,12 +1503,13 @@ if (window.Telegram?.WebApp) {
   window.Telegram.WebApp.ready();
 }
 
+// Проверка приватного батла по ссылке
 const urlParams = new URLSearchParams(window.location.search);
-const battleIdFromUrl = urlParams.get('battle');
-if (battleIdFromUrl) {
+const privateBattleId = urlParams.get('private_battle');
+if (privateBattleId) {
   setTimeout(() => {
-    if (confirm('Вас пригласили на PvP батл! Присоединиться?')) {
-      joinBattle(battleIdFromUrl);
+    if (confirm('🎮 Вас пригласили на ПРИВАТНЫЙ PvP батл! Присоединиться?')) {
+      joinPrivateBattle(privateBattleId);
     }
   }, 1000);
 }
