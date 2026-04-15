@@ -1082,9 +1082,12 @@ function doCraft() {
   SoundFX.play('win');
 }
 
-// PVP С SUPABASE
+// ============================================================
+// PVP С SUPABASE (обновлённая версия)
+// ============================================================
 let currentPvpChannel = null;
 let pvpSelectedIdxSup = null;
+let lastCreatedBattleId = null;
 
 function selectForPvp(idx) {
   pvpSelectedIdxSup = idx;
@@ -1116,9 +1119,12 @@ async function createBattle() {
     
     if (error) throw error;
     
+    lastCreatedBattleId = battleId;
     const battleLink = `${window.location.origin}${window.location.pathname}?battle=${battleId}`;
-    showToast(`⚔️ Батл создан! Ссылка скопирована`);
-    if (navigator.clipboard) navigator.clipboard.writeText(battleLink);
+    
+    // Показываем кнопку копирования ссылки
+    showCopyLinkButton(battleLink);
+    
     renderAllInventories();
     renderPvpLobby();
   } catch (err) {
@@ -1129,7 +1135,37 @@ async function createBattle() {
   }
 }
 
+function showCopyLinkButton(link) {
+  // Удаляем старую кнопку, если есть
+  const existingBtn = document.getElementById('copyBattleLinkBtn');
+  if (existingBtn) existingBtn.remove();
+  
+  const pvpCreateDiv = document.querySelector('.pvp-create');
+  if (!pvpCreateDiv) return;
+  
+  const btn = document.createElement('button');
+  btn.id = 'copyBattleLinkBtn';
+  btn.className = 'big-btn';
+  btn.style.marginTop = '10px';
+  btn.style.background = '#2a6df4';
+  btn.style.color = 'white';
+  btn.innerHTML = '🔗 СКОПИРОВАТЬ ССЫЛКУ ДЛЯ ПРИГЛАШЕНИЯ';
+  btn.onclick = () => {
+    navigator.clipboard.writeText(link);
+    showToast('🔗 Ссылка скопирована! Отправь её другу');
+    btn.innerHTML = '✅ ССЫЛКА СКОПИРОВАНА';
+    setTimeout(() => {
+      btn.innerHTML = '🔗 СКОПИРОВАТЬ ССЫЛКУ ДЛЯ ПРИГЛАШЕНИЯ';
+    }, 3000);
+  };
+  pvpCreateDiv.appendChild(btn);
+}
+
 async function joinBattle(battleId) {
+  // Убираем кнопку копирования, если она есть
+  const existingBtn = document.getElementById('copyBattleLinkBtn');
+  if (existingBtn) existingBtn.remove();
+  
   const { data: battle, error: fetchError } = await supabaseClient
     .from('battles')
     .select('*')
@@ -1165,8 +1201,11 @@ async function joinBattle(battleId) {
     return;
   }
   
-  const pRoll = Math.random() * battle.creator_gift.starsValue;
-  const oRoll = Math.random() * myGift.starsValue;
+  // НОВАЯ ФОРМУЛА: 60% цена + 40% рандом
+  const pValue = battle.creator_gift.starsValue;
+  const oValue = myGift.starsValue;
+  const pRoll = (pValue * 0.6) + (Math.random() * pValue * 0.4);
+  const oRoll = (oValue * 0.6) + (Math.random() * oValue * 0.4);
   const winnerId = pRoll >= oRoll ? battle.creator_id : userId;
   
   if (winnerId === userId) {
@@ -1245,6 +1284,11 @@ async function cancelBattle(battleId) {
   renderAllInventories();
   
   await supabaseClient.from('battles').delete().eq('id', battleId);
+  
+  // Убираем кнопку копирования
+  const existingBtn = document.getElementById('copyBattleLinkBtn');
+  if (existingBtn) existingBtn.remove();
+  
   renderPvpLobby();
   showToast('Батл отменён, подарок возвращён');
 }
