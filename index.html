@@ -4,9 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
 <meta name="theme-color" content="#000000">
-<title>GIFTCASE — Premium Cases</title>
+<title>GIFTCASE — PvP Online</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root {
   --black: #000000;
@@ -94,7 +95,6 @@ body::before {
 @keyframes pulse-online { 0%,100%{ opacity:1; } 50%{ opacity:0.4; } }
 .content-area { flex:1; overflow-y:auto; overflow-x:hidden; padding:12px; padding-bottom:75px; }
 
-/* TABS */
 .tabs-bar {
   flex-shrink:0;
   position:fixed; bottom:0; left:0; right:0;
@@ -133,7 +133,7 @@ body::before {
 .section-title { font-family:var(--font-display); font-size:28px; letter-spacing:2px; color:var(--white); }
 .section-sub { font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; }
 
-/* КЕЙСЫ - СТРОГО 2 РЯДА НА ТЕЛЕФОНЕ */
+/* КЕЙСЫ - СТРОГО 2 РЯДА + ИСПРАВЛЕНА ЦЕНА */
 .cases-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -154,9 +154,9 @@ body::before {
 .case-emoji { font-size:52px; position:relative; z-index:1; filter:drop-shadow(0 8px 24px rgba(0,0,0,0.8)); transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1); }
 .case-card:hover .case-emoji { transform:scale(1.1) translateY(-3px); }
 .case-body { padding:10px; }
-.case-meta { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
+.case-meta { display:flex; flex-direction:column; align-items:flex-start; gap:5px; margin-bottom:6px; }
 .case-name { font-family:var(--font-display); font-size:18px; letter-spacing:1px; color:var(--white); }
-.case-price-tag { display:flex; align-items:center; gap:3px; background:var(--surface-2); border:1px solid var(--border); padding:3px 8px; border-radius:var(--radius-full); font-size:12px; font-weight:700; color:var(--gold); }
+.case-price-tag { display:flex; align-items:center; gap:3px; background:var(--surface-2); border:1px solid var(--border); padding:3px 8px; border-radius:var(--radius-full); font-size:11px; font-weight:700; color:var(--gold); }
 .case-items { display:flex; flex-wrap:wrap; gap:3px; margin-bottom:8px; }
 .case-item-tag { background:var(--surface-2); border:1px solid var(--border); padding:2px 5px; border-radius:var(--radius-sm); font-size:9px; color:var(--text-secondary); display:flex; align-items:center; gap:2px; }
 .open-case-btn {
@@ -175,7 +175,6 @@ body::before {
 .rarity-legendary { border-color:#3a3020; }
 .rarity-legendary:hover { border-color:var(--gold); box-shadow:0 8px 32px rgba(200,169,110,0.1); }
 
-/* ROULETTE */
 .roulette-container { position:relative; overflow:hidden; height:100px; border-radius:var(--radius-md); border:1px solid var(--border); background:var(--surface-1); margin:16px 0; }
 .roulette-track { display:flex; align-items:center; height:100%; position:absolute; left:0; top:0; will-change:transform; }
 .roulette-item { flex-shrink:0; width:80px; height:80px; display:flex; flex-direction:column; align-items:center; justify-content:center; margin:0 4px; border-radius:var(--radius-md); background:var(--surface-2); border:1px solid var(--border); font-size:28px; gap:3px; }
@@ -185,7 +184,6 @@ body::before {
 .roulette-overlay-l { left:0; background:linear-gradient(90deg,var(--surface-1),transparent); }
 .roulette-overlay-r { right:0; background:linear-gradient(-90deg,var(--surface-1),transparent); }
 
-/* INVENTORY */
 .inventory-section {
   background:var(--surface-1);
   border:1px solid var(--border);
@@ -303,6 +301,8 @@ body::before {
 .craft-result-name { font-size:16px; font-weight:700; color:var(--gold); }
 
 /* PVP */
+.pvp-create { background:var(--surface-1); border:1px solid var(--border); border-radius:var(--radius-lg); padding:16px; margin-bottom:14px; }
+.pvp-stake { background:var(--surface-2); border:1px solid var(--border); border-radius:var(--radius-md); padding:10px; text-align:center; cursor:pointer; margin-bottom:10px; }
 .pvp-lobby { display:flex; flex-direction:column; gap:10px; }
 .battle-card { background:var(--surface-1); border:1px solid var(--border); border-radius:var(--radius-lg); padding:14px; display:flex; align-items:center; gap:12px; transition:var(--transition); position:relative; overflow:hidden; }
 .battle-card::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:linear-gradient(180deg, transparent, var(--border-light), transparent); }
@@ -358,7 +358,6 @@ body::before {
 }
 .profile-btn:hover { border-color:var(--border-light); background:var(--surface-3); }
 
-/* HISTORY */
 .history-table { width:100%; border-collapse:collapse; margin-top:6px; }
 .history-table th { font-size:9px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px; padding:6px; border-bottom:1px solid var(--border); text-align:left; }
 .history-table td { padding:8px 6px; border-bottom:1px solid var(--border); font-size:11px; color:var(--text-secondary); }
@@ -366,7 +365,6 @@ body::before {
 .hist-gain { color:var(--success); font-weight:700; }
 .hist-loss { color:var(--danger); font-weight:700; }
 
-/* RESULT MODAL */
 .result-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.96); z-index:600; display:flex; align-items:center; justify-content:center; animation:fadeIn 0.2s; }
 .result-modal { text-align:center; padding:28px 24px; max-width:300px; width:90%; animation:popIn 0.45s cubic-bezier(0.34,1.56,0.64,1); position:relative; }
 @keyframes popIn { 0% { opacity:0; transform:scale(0.3) rotate(-10deg); } 100% { opacity:1; transform:scale(1) rotate(0deg); } }
@@ -398,7 +396,6 @@ body::before {
   display:none;
 }
 
-/* BATTLE ANIMATION */
 .battle-fight-overlay {
   position:fixed; inset:0;
   background:rgba(0,0,0,0.97);
@@ -420,7 +417,6 @@ body::before {
 @keyframes countPulse { 0%{transform:scale(1.5);opacity:0} 30%{opacity:1} 100%{transform:scale(1)} }
 .winner-banner { font-family:var(--font-display); font-size:44px; color:var(--gold); animation:popIn 0.5s cubic-bezier(0.34,1.56,0.64,1); }
 
-/* АДАПТИВ (ПЛАНШЕТ/ПК) */
 @media (min-width:768px) {
   .topbar { padding:0 24px; height:60px; }
   .content-area { padding:20px 24px; padding-bottom:80px; }
@@ -515,17 +511,14 @@ body::before {
 
     <div id="pvpPanel" class="panel">
       <div class="section-header"><div class="section-title">PvP БАТЛЫ</div><div class="section-sub">сразись с игроком</div></div>
-      <div style="background:var(--surface-1);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;margin-bottom:14px;">
-        <div style="font-size:12px;color:var(--text-muted);margin-bottom:10px;">Поставь подарок и создай батл. Победитель забирает оба.</div>
-        <div style="display:flex;gap:10px;align-items:center;">
-          <div style="flex:1;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-md);padding:10px;cursor:pointer;transition:var(--transition);" id="pvpStakeDisplay">
-            <div id="pvpStakeText" style="color:var(--text-muted);font-size:12px;">⚔ Нажми на подарок в инвентаре</div>
-          </div>
-          <button class="big-btn" id="createBattleBtn" style="width:auto;padding:10px 20px;flex-shrink:0;" disabled>Создать</button>
+      <div class="pvp-create">
+        <div class="pvp-stake" id="pvpStakeDisplay">
+          <div id="pvpStakeText" style="color:var(--text-muted);">⚔ Нажми на подарок в инвентаре</div>
         </div>
+        <button class="big-btn" id="createBattleBtn" disabled>Создать батл</button>
       </div>
-      <div class="section-header" style="margin-top:16px;"><div class="section-title" style="font-size:20px;">ОТКРЫТЫЕ БАТЛЫ</div></div>
-      <div class="pvp-lobby" id="pvpLobby"><div style="color:var(--text-muted);text-align:center;padding:30px;font-size:12px;">Нет активных батлов.<br>Создай первый!</div></div>
+      <div class="section-header" style="margin-top:16px;"><div class="section-title" style="font-size:20px;">АКТИВНЫЕ БАТЛЫ</div></div>
+      <div class="pvp-lobby" id="pvpLobby"><div style="color:var(--text-muted);text-align:center;padding:30px;font-size:12px;">Загрузка батлов...</div></div>
       <div class="inventory-section"><h3>МОИ ПОДАРКИ</h3><div class="inventory-grid" id="pvpInventoryList"></div></div>
     </div>
 
@@ -565,56 +558,168 @@ body::before {
 
 <script>
 // ============================================================
-// КЭШИРОВАНИЕ DOM
+// SUPABASE КОНФИГУРАЦИЯ
 // ============================================================
-const DOM = {
-  balance: document.getElementById('balanceValue'),
-  casesContainer: document.getElementById('casesContainer'),
-  inventoryList: document.getElementById('inventoryList'),
-  upgradeInventoryList: document.getElementById('upgradeInventoryList'),
-  craftInventoryList: document.getElementById('craftInventoryList'),
-  pvpInventoryList: document.getElementById('pvpInventoryList'),
-  profileInventoryList: document.getElementById('profileInventoryList'),
-  pvpLobby: document.getElementById('pvpLobby'),
-  upgradeChanceVal: document.getElementById('upgradeChanceVal'),
-  upgradeProgressFill: document.getElementById('upgradeProgressFill'),
-  upgradeChanceSub: document.getElementById('upgradeChanceSub'),
-  upgradeFromIcon: document.getElementById('upgradeFromIcon'),
-  upgradeFromName: document.getElementById('upgradeFromName'),
-  upgradeFromVal: document.getElementById('upgradeFromVal'),
-  upgradeToIcon: document.getElementById('upgradeToIcon'),
-  upgradeToName: document.getElementById('upgradeToName'),
-  upgradeToVal: document.getElementById('upgradeToVal'),
-  upgradeBtn: document.getElementById('upgradeBtn'),
-  createBattleBtn: document.getElementById('createBattleBtn'),
-  pvpStakeText: document.getElementById('pvpStakeText'),
-  craftSlotsContainer: document.getElementById('craftSlotsContainer'),
-  craftResult: document.getElementById('craftResult'),
-  craftBtn: document.getElementById('craftBtn')
-};
+const SUPABASE_URL = 'https://riwzrplciliebgexltll.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJpd3pycGxjaWxpZWJnZXhsdGxsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyNjM5MjEsImV4cCI6MjA5MTgzOTkyMX0.jrrI78rQ-3VARU0I1eazM6iKHbSJLpcK5HCjJ4VRxnQ';
+
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // ============================================================
-// RATE LIMITER
+// ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
 // ============================================================
-const RateLimiter = (() => {
-  const limits = {};
-  const msgEl = document.getElementById('rateLimitMsg');
-  let msgTimer = null;
-  function check(action, maxPerSec = 3) {
-    const now = Date.now();
-    if (!limits[action]) limits[action] = [];
-    limits[action] = limits[action].filter(t => now - t < 1000);
-    if (limits[action].length >= maxPerSec) {
-      clearTimeout(msgTimer);
-      msgEl.style.display = 'block';
-      msgTimer = setTimeout(() => { msgEl.style.display = 'none'; }, 2000);
-      return false;
-    }
-    limits[action].push(now);
-    return true;
+let userId = null;
+let telegramUser = null;
+let state = {
+  balance: 250,
+  inventory: [],
+  casesOpened: 0,
+  pvpWins: 0,
+  history: [],
+  luck: 0,
+  referralCode: null,
+  referredBy: null
+};
+let upgradeSelectedIdx = null;
+let pvpSelectedIdx = null;
+let craftSlots = [null, null, null];
+let currentCraftResult = null;
+let saveTimeout = null;
+let cachedStats = null;
+let lastInventoryHash = '';
+let currentBattleSubscription = null;
+
+// ============================================================
+// ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
+// ============================================================
+function getUserId() {
+  let id = localStorage.getItem('gc_uid');
+  if (!id) { id = 'u_' + Math.random().toString(36).slice(2,10); localStorage.setItem('gc_uid', id); }
+  return id;
+}
+
+function getInventoryHash() {
+  return state.inventory.map(g => g.name + g.starsValue).join(',');
+}
+
+function showToast(msg) {
+  const existing = document.querySelector('.toast');
+  if (existing) existing.remove();
+  const t = document.createElement('div'); t.className = 'toast'; t.innerHTML = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2500);
+}
+
+function addHistory(icon, action, result, isPositive) {
+  state.history.unshift({ icon, action, result, isPositive, ts: Date.now() });
+  if (state.history.length > 50) state.history = state.history.slice(0, 50);
+  renderHistory();
+  saveState();
+}
+
+function renderHistory() {
+  const tbody = document.getElementById('historyBody');
+  if (!tbody) return;
+  if (state.history.length === 0) { tbody.innerHTML = `<tr><td colspan="3" style="color:var(--text-muted);text-align:center;padding:16px;">Нет истории</td></tr>`; return; }
+  tbody.innerHTML = state.history.slice(0,20).map(h => `<tr><td class="hist-icon">${h.icon}</td><td>${h.action}</td><td class="${h.isPositive ? 'hist-gain' : 'hist-loss'}">${h.result}</td></tr>`).join('');
+}
+
+function setBalance(val, animate = true) {
+  const prev = state.balance;
+  state.balance = Math.max(0, Math.floor(val));
+  const el = document.getElementById('balanceValue');
+  el.innerText = state.balance;
+  if (animate && prev !== state.balance) {
+    el.classList.remove('flash-up','flash-down');
+    void el.offsetWidth;
+    el.classList.add(state.balance > prev ? 'flash-up' : 'flash-down');
+    setTimeout(() => el.classList.remove('flash-up','flash-down'), 600);
   }
-  return { check };
-})();
+  saveState();
+}
+
+function saveState() {
+  if (saveTimeout) clearTimeout(saveTimeout);
+  saveTimeout = setTimeout(() => {
+    try { localStorage.setItem('gc_state_' + userId, JSON.stringify({ v: 3, state })); } catch(e) {}
+    saveTimeout = null;
+  }, 100);
+}
+
+function loadState() {
+  userId = getUserId();
+  if (!state.referralCode) state.referralCode = userId;
+  const raw = localStorage.getItem('gc_state_' + userId);
+  if (raw) {
+    try { const data = JSON.parse(raw); if (data.state) state = { ...state, ...data.state }; } catch(e) {}
+  }
+  document.getElementById('balanceValue').innerText = state.balance;
+  updateLuckUI();
+}
+
+function updateProfileStats() {
+  const currentHash = getInventoryHash();
+  if (currentHash === lastInventoryHash && cachedStats) {
+    document.getElementById('pTotalGifts').innerText = cachedStats.totalGifts;
+    document.getElementById('pTotalStars').innerText = cachedStats.totalStars;
+    document.getElementById('pCasesOpened').innerText = state.casesOpened || 0;
+    document.getElementById('pWins').innerText = state.pvpWins || 0;
+    document.getElementById('pLuck').innerText = state.luck + '%';
+    return;
+  }
+  lastInventoryHash = currentHash;
+  let totalStars = 0;
+  state.inventory.forEach(g => totalStars += g.starsValue);
+  cachedStats = { totalGifts: state.inventory.length, totalStars };
+  document.getElementById('pTotalGifts').innerText = cachedStats.totalGifts;
+  document.getElementById('pTotalStars').innerText = cachedStats.totalStars;
+  document.getElementById('pCasesOpened').innerText = state.casesOpened || 0;
+  document.getElementById('pWins').innerText = state.pvpWins || 0;
+  document.getElementById('pLuck').innerText = state.luck + '%';
+}
+
+function updateLuckUI() { document.getElementById('pLuck').innerText = state.luck + '%'; }
+
+function updateLuck(won, starsValue) {
+  if (!won) { state.luck = Math.min(30, state.luck + 5); showToast(`🍀 Удача повышена до ${state.luck}%`); }
+  else { state.luck = Math.max(0, state.luck - 3); }
+  updateLuckUI();
+  saveState();
+}
+
+function applyLuckToChance(baseChance) { return Math.min(95, Math.floor(baseChance * (1 + state.luck / 100))); }
+
+function burstConfetti() {
+  const canvas = document.getElementById('confettiCanvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  let particles = [];
+  for (let i = 0; i < 100; i++) {
+    particles.push({
+      x: canvas.width/2, y: canvas.height/2,
+      vx: (Math.random() - 0.5) * 15, vy: (Math.random() - 0.5) * 15 - 8,
+      size: Math.random() * 7 + 2, life: 1,
+      color: `hsl(${Math.random() * 360}, 70%, 60%)`
+    });
+  }
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    let alive = false;
+    particles.forEach(p => {
+      p.x += p.vx; p.y += p.vy; p.vy += 0.2; p.life -= 0.012;
+      if (p.life > 0) {
+        alive = true;
+        ctx.globalAlpha = p.life;
+        ctx.fillStyle = p.color;
+        ctx.fillRect(p.x - p.size/2, p.y - p.size/2, p.size, p.size);
+      }
+    });
+    particles = particles.filter(p => p.life > 0);
+    if (alive) requestAnimationFrame(animate);
+  }
+  animate();
+}
 
 // ============================================================
 // ЗВУКИ И ВИБРАЦИЯ
@@ -654,7 +759,7 @@ const SoundFX = {
 };
 
 // ============================================================
-// DATABASE
+// БАЗА ДАННЫХ ПОДАРКОВ И КЕЙСОВ
 // ============================================================
 const GIFTS_DB = {
   "Розовый мишка": { icon:"🧸", starsValue:15, rarity:"common", upgradeTo:"Золотая звезда" },
@@ -681,188 +786,7 @@ const CASES = [
 ];
 
 // ============================================================
-// STATE + STORAGE
-// ============================================================
-const STATE_VERSION = 3;
-let userId = null;
-let telegramUser = null;
-let state = {
-  balance: 250,
-  inventory: [],
-  casesOpened: 0,
-  pvpWins: 0,
-  history: [],
-  luck: 0,
-  referralCode: null,
-  referredBy: null
-};
-let globalBattles = [];
-let upgradeSelectedIdx = null;
-let pvpSelectedIdx = null;
-let craftSlots = [null, null, null];
-let currentCraftResult = null;
-let renderedPanels = new Set();
-let saveTimeout = null;
-let cachedStats = null;
-let lastInventoryHash = '';
-
-function getUserId() {
-  let id = localStorage.getItem('gc_uid');
-  if (!id) { id = 'u_' + Math.random().toString(36).slice(2,10); localStorage.setItem('gc_uid', id); }
-  return id;
-}
-
-function getInventoryHash() {
-  return state.inventory.map(g => g.name + g.starsValue).join(',');
-}
-
-function validateState(data) {
-  if (!data || typeof data !== 'object') return false;
-  if (typeof data.balance !== 'number' || data.balance < 0 || data.balance > 1000000) return false;
-  if (!Array.isArray(data.inventory)) return false;
-  if (typeof data.luck !== 'number' || data.luck < 0 || data.luck > 30) data.luck = 0;
-  return true;
-}
-
-function saveState() {
-  if (saveTimeout) clearTimeout(saveTimeout);
-  saveTimeout = setTimeout(() => {
-    try { localStorage.setItem('gc_state_' + userId, JSON.stringify({ v: STATE_VERSION, state })); } catch(e) {}
-    saveTimeout = null;
-  }, 100);
-}
-
-function loadState() {
-  userId = getUserId();
-  if (!state.referralCode) state.referralCode = userId;
-  const raw = localStorage.getItem('gc_state_' + userId);
-  if (raw) {
-    try {
-      const data = JSON.parse(raw);
-      if (data.v === STATE_VERSION && validateState(data.state)) {
-        state = { ...state, ...data.state };
-      }
-    } catch(e) {}
-  }
-  const braw = localStorage.getItem('gc_battles');
-  if (braw) { try { globalBattles = JSON.parse(braw); } catch(e) { globalBattles = []; } }
-  DOM.balance.innerText = state.balance;
-  updateLuckUI();
-}
-
-function saveBattles() { try { localStorage.setItem('gc_battles', JSON.stringify(globalBattles)); } catch(e) {} }
-
-function showToast(msg) {
-  const existing = document.querySelector('.toast');
-  if (existing) existing.remove();
-  const t = document.createElement('div'); t.className = 'toast'; t.innerHTML = msg;
-  document.body.appendChild(t);
-  setTimeout(() => t.remove(), 2500);
-}
-
-function addHistory(icon, action, result, isPositive) {
-  state.history.unshift({ icon, action, result, isPositive, ts: Date.now() });
-  if (state.history.length > 50) state.history = state.history.slice(0, 50);
-  renderHistory();
-  saveState();
-}
-
-function renderHistory() {
-  const tbody = document.getElementById('historyBody');
-  if (!tbody) return;
-  if (state.history.length === 0) { tbody.innerHTML = `<tr><td colspan="3" style="color:var(--text-muted);text-align:center;padding:16px;">Нет истории</td></table>`; return; }
-  tbody.innerHTML = state.history.slice(0,20).map(h => `<tr><td class="hist-icon">${h.icon}</td><td>${h.action}</td><td class="${h.isPositive ? 'hist-gain' : 'hist-loss'}">${h.result}</td></tr>`).join('');
-}
-
-function setBalance(val, animate = true) {
-  const prev = state.balance;
-  state.balance = Math.max(0, Math.floor(val));
-  DOM.balance.innerText = state.balance;
-  if (animate && prev !== state.balance) {
-    DOM.balance.classList.remove('flash-up','flash-down');
-    void DOM.balance.offsetWidth;
-    DOM.balance.classList.add(state.balance > prev ? 'flash-up' : 'flash-down');
-    setTimeout(() => DOM.balance.classList.remove('flash-up','flash-down'), 600);
-  }
-  saveState();
-}
-
-function updateProfileStats() {
-  const currentHash = getInventoryHash();
-  if (currentHash === lastInventoryHash && cachedStats) {
-    document.getElementById('pTotalGifts').innerText = cachedStats.totalGifts;
-    document.getElementById('pTotalStars').innerText = cachedStats.totalStars;
-    document.getElementById('pCasesOpened').innerText = state.casesOpened || 0;
-    document.getElementById('pWins').innerText = state.pvpWins || 0;
-    document.getElementById('pLuck').innerText = state.luck + '%';
-    return;
-  }
-  lastInventoryHash = currentHash;
-  let totalStars = 0;
-  state.inventory.forEach(g => totalStars += g.starsValue);
-  cachedStats = { totalGifts: state.inventory.length, totalStars };
-  document.getElementById('pTotalGifts').innerText = cachedStats.totalGifts;
-  document.getElementById('pTotalStars').innerText = cachedStats.totalStars;
-  document.getElementById('pCasesOpened').innerText = state.casesOpened || 0;
-  document.getElementById('pWins').innerText = state.pvpWins || 0;
-  document.getElementById('pLuck').innerText = state.luck + '%';
-}
-
-function updateLuckUI() { document.getElementById('pLuck').innerText = state.luck + '%'; }
-
-function updateLuck(won, starsValue) {
-  if (!won) { state.luck = Math.min(30, state.luck + 5); showToast(`🍀 Удача повышена до ${state.luck}%`); }
-  else { state.luck = Math.max(0, state.luck - 3); }
-  updateLuckUI();
-  saveState();
-}
-
-function applyLuckToChance(baseChance) { return Math.min(95, Math.floor(baseChance * (1 + state.luck / 100))); }
-
-function showRarityEffect(rarity) {
-  const colors = { common:'#555', rare:'#6688cc', epic:'#aa66cc', legendary:'#c8a96e' };
-  const flash = document.createElement('div');
-  flash.style.cssText = `position:fixed;inset:0;background:${colors[rarity]};opacity:0;pointer-events:none;z-index:650;transition:opacity 0.3s;`;
-  document.body.appendChild(flash);
-  flash.style.opacity = '0.3';
-  setTimeout(() => { flash.style.opacity = '0'; setTimeout(() => flash.remove(), 300); }, 100);
-  if (rarity === 'legendary') burstConfetti();
-}
-
-function burstConfetti() {
-  const canvas = document.getElementById('confettiCanvas');
-  const ctx = canvas.getContext('2d');
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-  let particles = [];
-  for (let i = 0; i < 100; i++) {
-    particles.push({
-      x: canvas.width/2, y: canvas.height/2,
-      vx: (Math.random() - 0.5) * 15, vy: (Math.random() - 0.5) * 15 - 8,
-      size: Math.random() * 7 + 2, life: 1,
-      color: `hsl(${Math.random() * 360}, 70%, 60%)`
-    });
-  }
-  function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    let alive = false;
-    particles.forEach(p => {
-      p.x += p.vx; p.y += p.vy; p.vy += 0.2; p.life -= 0.012;
-      if (p.life > 0) {
-        alive = true;
-        ctx.globalAlpha = p.life;
-        ctx.fillStyle = p.color;
-        ctx.fillRect(p.x - p.size/2, p.y - p.size/2, p.size, p.size);
-      }
-    });
-    particles = particles.filter(p => p.life > 0);
-    if (alive) requestAnimationFrame(animate);
-  }
-  animate();
-}
-
-// ============================================================
-// ЕДИНЫЙ РЕНДЕР ИНВЕНТАРЯ
+// РЕНДЕР ИНВЕНТАРЯ
 // ============================================================
 function renderInventory(containerId, withSell = false, mode = null) {
   const container = document.getElementById(containerId);
@@ -903,7 +827,6 @@ function renderAllInventories() {
 }
 
 function sellGift(idx) {
-  if (!RateLimiter.check('sell', 5)) return;
   if (!state.inventory[idx]) return;
   const g = state.inventory[idx];
   const price = Math.floor(g.starsValue * 0.7);
@@ -919,318 +842,11 @@ function sellGift(idx) {
 }
 
 // ============================================================
-// TELEGRAM USER
-// ============================================================
-function initTelegramUser() {
-  if (window.Telegram?.WebApp) {
-    const tg = window.Telegram.WebApp;
-    tg.expand();
-    tg.ready();
-    tg.enableClosingConfirmation();
-    if (tg.initDataUnsafe?.user) {
-      telegramUser = tg.initDataUnsafe.user;
-      document.getElementById('profileName').innerText = telegramUser.first_name || 'ИГРОК';
-      if (telegramUser.username) {
-        document.getElementById('profileUsername').innerHTML = `@${telegramUser.username}`;
-        document.getElementById('profileIdText').innerHTML = '';
-      } else {
-        document.getElementById('profileUsername').innerHTML = '';
-        document.getElementById('profileIdText').innerHTML = `ID: ${telegramUser.id}`;
-      }
-      if (telegramUser.photo_url) {
-        document.getElementById('profileAvatar').innerHTML = `<img src="${telegramUser.photo_url}" style="width:56px;height:56px;border-radius:50%;">`;
-      }
-    }
-  }
-}
-
-// ============================================================
-// АПГРЕЙД
-// ============================================================
-function selectForUpgrade(idx) {
-  upgradeSelectedIdx = idx;
-  const g = state.inventory[idx];
-  if (!g) return;
-  const chance = UPGRADE_CHANCES[g.rarity];
-  const targetName = GIFTS_DB[g.name]?.upgradeTo;
-  const target = targetName ? GIFTS_DB[targetName] : null;
-  DOM.upgradeFromIcon.innerText = g.icon;
-  DOM.upgradeFromName.innerText = g.name;
-  DOM.upgradeFromName.style.color = 'var(--text-primary)';
-  DOM.upgradeFromVal.innerText = `★ ${g.starsValue}`;
-  document.getElementById('upgradeFromCard').classList.add('has-item');
-  if (target) {
-    DOM.upgradeToIcon.innerText = target.icon;
-    DOM.upgradeToName.innerText = targetName;
-    DOM.upgradeToName.style.color = 'var(--text-primary)';
-    DOM.upgradeToVal.innerText = `★ ${target.starsValue}`;
-  }
-  const cv = DOM.upgradeChanceVal;
-  cv.innerText = chance > 0 ? chance + '%' : '—';
-  cv.className = 'chance-value ' + (chance >= 60 ? 'high' : chance >= 40 ? 'med' : 'low');
-  DOM.upgradeProgressFill.style.width = chance + '%';
-  DOM.upgradeChanceSub.innerText = target ? `При успехе: ${targetName} (★ ${target.starsValue})` : 'Максимальный уровень';
-  DOM.upgradeBtn.disabled = (chance === 0 || !target);
-}
-
-function doUpgrade() {
-  if (!RateLimiter.check('upgrade', 2)) return;
-  if (upgradeSelectedIdx === null) return;
-  const g = state.inventory[upgradeSelectedIdx];
-  if (!g) return;
-  const chance = UPGRADE_CHANCES[g.rarity];
-  const targetName = GIFTS_DB[g.name]?.upgradeTo;
-  if (!targetName || chance === 0) return;
-  const finalChance = applyLuckToChance(chance);
-  state.inventory.splice(upgradeSelectedIdx, 1);
-  upgradeSelectedIdx = null;
-  DOM.upgradeBtn.disabled = true;
-  const success = Math.random() * 100 < finalChance;
-  if (success) {
-    const targetInfo = GIFTS_DB[targetName];
-    state.inventory.push({ name:targetName, icon:targetInfo.icon, starsValue:targetInfo.starsValue, rarity:targetInfo.rarity });
-    addHistory(targetInfo.icon, `Апгрейд → ${targetName}`, `✅ Успех (шанс ${finalChance}%)`, true);
-    showResultModal(targetName, true, () => {});
-    burstConfetti();
-    updateLuck(true, targetInfo.starsValue);
-    SoundFX.play('win');
-    showRarityEffect(targetInfo.rarity);
-  } else {
-    addHistory(g.icon, `Апгрейд ${g.name}`, `💀 Провал (шанс ${finalChance}%)`, false);
-    showToast(`💀 Неудача! ${g.name} потерян`);
-    updateLuck(false, g.starsValue);
-    SoundFX.play('error');
-  }
-  renderAllInventories();
-  updateProfileStats();
-  renderUpgradeUI();
-  renderCraftUI();
-}
-
-function renderUpgradeUI() {
-  upgradeSelectedIdx = null;
-  DOM.upgradeFromIcon.innerText = '📦';
-  DOM.upgradeFromName.innerText = 'Нажми на подарок в инвентаре';
-  DOM.upgradeFromName.style.color = 'var(--text-muted)';
-  DOM.upgradeFromVal.innerText = '';
-  DOM.upgradeToIcon.innerText = '❓';
-  DOM.upgradeToName.innerText = 'Результат';
-  DOM.upgradeToName.style.color = 'var(--text-muted)';
-  DOM.upgradeToVal.innerText = '';
-  DOM.upgradeChanceVal.innerText = '—';
-  DOM.upgradeChanceVal.className = 'chance-value';
-  DOM.upgradeProgressFill.style.width = '0%';
-  DOM.upgradeChanceSub.innerText = 'Нажми на подарок в инвентаре';
-  DOM.upgradeBtn.disabled = true;
-  document.getElementById('upgradeFromCard').classList.remove('has-item');
-}
-
-// ============================================================
-// КРАФТ
-// ============================================================
-function selectForCraft(idx) {
-  for (let i = 0; i < 3; i++) {
-    if (craftSlots[i] === null) {
-      craftSlots[i] = { ...state.inventory[idx] };
-      state.inventory.splice(idx, 1);
-      break;
-    }
-  }
-  renderAllInventories();
-  renderCraftUI();
-}
-
-function renderCraftUI() {
-  if (!DOM.craftSlotsContainer) return;
-  DOM.craftSlotsContainer.innerHTML = '';
-  for (let i = 0; i < 3; i++) {
-    const gift = craftSlots[i];
-    const slotDiv = document.createElement('div');
-    slotDiv.className = gift ? 'craft-slot filled' : 'craft-slot empty';
-    if (gift) {
-      slotDiv.innerHTML = `<div class="craft-slot-icon">${gift.icon}</div><div class="craft-slot-name">${gift.name}</div><div class="craft-slot-remove" data-slot="${i}">✕</div>`;
-    } else {
-      slotDiv.innerHTML = `<div class="craft-slot-icon">❓</div><div class="craft-slot-name">Выбрать</div>`;
-    }
-    DOM.craftSlotsContainer.appendChild(slotDiv);
-  }
-  document.querySelectorAll('.craft-slot-remove').forEach(btn => {
-    btn.onclick = (e) => { e.stopPropagation(); removeCraftSlot(parseInt(btn.dataset.slot)); };
-  });
-  const allFilled = craftSlots.every(s => s !== null);
-  if (allFilled) {
-    const totalValue = craftSlots.reduce((sum, g) => sum + g.starsValue, 0);
-    let resultRarity = 'common';
-    if (totalValue >= 3000) resultRarity = 'legendary';
-    else if (totalValue >= 600) resultRarity = 'epic';
-    else if (totalValue >= 150) resultRarity = 'rare';
-    const possibleGifts = Object.entries(GIFTS_DB).filter(([_, info]) => info.rarity === resultRarity);
-    const randomGift = possibleGifts[Math.floor(Math.random() * possibleGifts.length)];
-    currentCraftResult = { name: randomGift[0], ...randomGift[1] };
-    DOM.craftResult.innerHTML = `<div class="craft-result-icon">${currentCraftResult.icon}</div><div class="craft-result-name">${currentCraftResult.name}</div><div class="craft-result-sub" style="font-size:10px; color:var(--text-muted);">★ ${currentCraftResult.starsValue} · ${RARITY_LABELS[currentCraftResult.rarity]}</div>`;
-    DOM.craftBtn.disabled = false;
-  } else {
-    DOM.craftResult.innerHTML = `<div class="craft-result-icon">❓</div><div class="craft-result-name">Выберите 3 подарка</div>`;
-    DOM.craftBtn.disabled = true;
-  }
-}
-
-function removeCraftSlot(slotIndex) {
-  if (craftSlots[slotIndex]) {
-    state.inventory.push(craftSlots[slotIndex]);
-    craftSlots[slotIndex] = null;
-    renderAllInventories();
-    renderCraftUI();
-  }
-}
-
-function doCraft() {
-  const allFilled = craftSlots.every(s => s !== null);
-  if (!allFilled) { showToast('Заполните все 3 слота'); return; }
-  if (!currentCraftResult) return;
-  craftSlots = [null, null, null];
-  state.inventory.push({ name:currentCraftResult.name, icon:currentCraftResult.icon, starsValue:currentCraftResult.starsValue, rarity:currentCraftResult.rarity });
-  addHistory(currentCraftResult.icon, `Крафт`, `+${currentCraftResult.name}`, true);
-  showToast(`✨ Получен ${currentCraftResult.name}`);
-  renderAllInventories();
-  renderCraftUI();
-  updateProfileStats();
-  if (currentCraftResult.rarity === 'legendary') { burstConfetti(); showRarityEffect('legendary'); }
-  SoundFX.play('win');
-}
-
-// ============================================================
-// PVP
-// ============================================================
-function selectForPvp(idx) {
-  pvpSelectedIdx = idx;
-  const g = state.inventory[idx];
-  if (!g) return;
-  DOM.pvpStakeText.innerHTML = `${g.icon} ${g.name} ★${g.starsValue}`;
-  DOM.createBattleBtn.disabled = false;
-}
-
-function createBattle() {
-  if (!RateLimiter.check('createBattle', 1)) return;
-  if (pvpSelectedIdx === null || !state.inventory[pvpSelectedIdx]) { showToast('Выбери подарок!'); return; }
-  const g = state.inventory[pvpSelectedIdx];
-  state.inventory.splice(pvpSelectedIdx, 1);
-  pvpSelectedIdx = null;
-  const battle = { id: Date.now() + '_' + Math.random().toString(36).slice(2,6), creatorId: userId, creatorGift: g, opponentId: null, opponentGift: null, status: 'waiting', ts: Date.now() };
-  globalBattles.push(battle);
-  saveBattles();
-  renderAllInventories();
-  renderPvpLobby();
-  const battleLink = `${window.location.origin}${window.location.pathname}?battle=${battle.id}`;
-  showToast(`⚔️ Батл создан! Ссылка скопирована`);
-  if (navigator.clipboard) navigator.clipboard.writeText(battleLink);
-  DOM.pvpStakeText.innerHTML = '⚔ Нажми на подарок в инвентаре';
-  DOM.createBattleBtn.disabled = true;
-}
-
-function joinBattle(battleId) {
-  const battle = globalBattles.find(b => b.id === battleId);
-  if (!battle || battle.status !== 'waiting') { showToast('Батл недоступен'); return; }
-  if (battle.creatorId === userId) { showToast('Нельзя присоединиться к своему батлу'); return; }
-  if (state.inventory.length === 0) { showToast('Нет подарков для ставки!'); return; }
-  const myGift = state.inventory[0];
-  if (!myGift) return;
-  const myGiftCopy = { ...myGift };
-  state.inventory.splice(0, 1);
-  battle.opponentId = userId;
-  battle.opponentGift = myGiftCopy;
-  battle.status = 'fighting';
-  saveBattles();
-  renderAllInventories();
-  renderPvpLobby();
-  showBattleFight(battle, () => {
-    const pRoll = Math.random() * battle.creatorGift.starsValue;
-    const oRoll = Math.random() * myGiftCopy.starsValue;
-    if (pRoll >= oRoll) {
-      battle.status = 'done';
-      addHistory(myGiftCopy.icon, `PvP проигрыш`, `−${myGiftCopy.starsValue} ★`, false);
-      showToast(`💀 Проигрыш! ${battle.creatorGift.icon} уходит победителю`);
-      updateLuck(false, myGiftCopy.starsValue);
-      SoundFX.play('error');
-    } else {
-      state.inventory.push(battle.creatorGift, myGiftCopy);
-      state.pvpWins = (state.pvpWins || 0) + 1;
-      battle.status = 'done';
-      addHistory(myGiftCopy.icon, `PvP победа!`, `+${battle.creatorGift.starsValue + myGiftCopy.starsValue} ★`, true);
-      showToast(`🏆 ПОБЕДА! Ты забрал оба подарка!`);
-      burstConfetti();
-      updateLuck(true, battle.creatorGift.starsValue);
-      SoundFX.play('win');
-    }
-    globalBattles = globalBattles.filter(b => b.status !== 'done');
-    saveBattles();
-    renderAllInventories();
-    renderPvpLobby();
-    updateProfileStats();
-  });
-}
-
-function showBattleFight(battle, callback) {
-  const overlay = document.createElement('div');
-  overlay.className = 'battle-fight-overlay';
-  overlay.innerHTML = `<div class="battle-fighters"><div class="fighter"><div class="fighter-icon">${battle.creatorGift.icon}</div><div class="fighter-name">${battle.creatorGift.name}</div></div><div class="battle-vs-big">VS</div><div class="fighter"><div class="fighter-icon">${battle.opponentGift.icon}</div><div class="fighter-name">${battle.opponentGift.name}</div></div></div>`;
-  document.body.appendChild(overlay);
-  let count = 3;
-  const countEl = document.createElement('div');
-  countEl.className = 'battle-countdown';
-  countEl.innerText = count;
-  overlay.appendChild(countEl);
-  const timer = setInterval(() => {
-    count--;
-    if (count > 0) {
-      countEl.innerText = count;
-      countEl.style.animation = 'none';
-      void countEl.offsetWidth;
-      countEl.style.animation = 'countPulse 1s ease';
-    } else {
-      clearInterval(timer);
-      const winner = document.createElement('div');
-      winner.className = 'winner-banner';
-      winner.innerText = Math.random() > 0.5 ? '🏆 ПОБЕДА!' : '💀 ПОРАЖЕНИЕ!';
-      countEl.replaceWith(winner);
-      setTimeout(() => { overlay.remove(); callback(); }, 1500);
-    }
-  }, 1000);
-}
-
-function renderPvpLobby() {
-  if (!DOM.pvpLobby) return;
-  const active = globalBattles.filter(b => b.status === 'waiting');
-  if (active.length === 0) { DOM.pvpLobby.innerHTML = `<div style="color:var(--text-muted);text-align:center;padding:30px;font-size:12px;">Нет активных батлов.<br>Создай первый!</div>`; return; }
-  DOM.pvpLobby.innerHTML = active.map(b => `
-    <div class="battle-card">
-      <div class="battle-gift-slot"><div class="battle-gift-icon">${b.creatorGift.icon}</div><div class="battle-gift-name">${b.creatorGift.name}</div><div class="battle-gift-val">★ ${b.creatorGift.starsValue}</div></div>
-      <div class="battle-vs">VS</div>
-      <div>${b.creatorId !== userId ? `<button class="battle-join-btn" data-bid="${b.id}">Войти</button>` : `<button class="big-btn danger" style="width:auto;padding:6px 12px;font-size:11px;" data-cancel="${b.id}">Отменить</button>`}</div>
-    </div>
-  `).join('');
-  DOM.pvpLobby.querySelectorAll('.battle-join-btn').forEach(btn => { btn.onclick = () => joinBattle(btn.dataset.bid); });
-  DOM.pvpLobby.querySelectorAll('[data-cancel]').forEach(btn => { btn.onclick = () => cancelBattle(btn.dataset.cancel); });
-}
-
-function cancelBattle(battleId) {
-  const idx = globalBattles.findIndex(b => b.id === battleId);
-  if (idx < 0) return;
-  const b = globalBattles[idx];
-  if (b.creatorId !== userId) return;
-  state.inventory.push(b.creatorGift);
-  globalBattles.splice(idx, 1);
-  saveBattles();
-  renderAllInventories();
-  renderPvpLobby();
-  showToast('Батл отменён, подарок возвращён');
-}
-
-// ============================================================
 // КЕЙСЫ
 // ============================================================
 function renderCases() {
-  DOM.casesContainer.innerHTML = '';
+  const container = document.getElementById('casesContainer');
+  container.innerHTML = '';
   CASES.forEach(c => {
     const card = document.createElement('div');
     card.className = `case-card ${c.rarity}`;
@@ -1239,16 +855,15 @@ function renderCases() {
       <div class="case-body">
         <div class="case-meta"><div class="case-name">${c.name}</div><div class="case-price-tag">★ ${c.price}</div></div>
         <div class="case-items">${c.gifts.slice(0,3).map(g => `<span class="case-item-tag">${GIFTS_DB[g.name]?.icon} ${g.name} ${g.chance}%</span>`).join('')}</div>
-        <button class="open-case-btn">ОТКРЫТЬ КЕЙС</button>
+        <button class="open-case-btn">ОТКРЫТЬ</button>
       </div>
     `;
-    card.querySelector('.open-case-btn').onclick = (e) => { e.stopPropagation(); openCase(c); };
-    DOM.casesContainer.appendChild(card);
+    card.querySelector('.open-case-btn').onclick = () => openCase(c);
+    container.appendChild(card);
   });
 }
 
 function openCase(caseData) {
-  if (!RateLimiter.check('openCase', 2)) return;
   if (state.balance < caseData.price) { showToast(`❌ Недостаточно Stars (нужно ${caseData.price})`); return; }
   setBalance(state.balance - caseData.price);
   state.casesOpened = (state.casesOpened || 0) + 1;
@@ -1267,7 +882,6 @@ function openCase(caseData) {
         state.inventory.push({ name:wonName, icon:info.icon, starsValue:info.starsValue, rarity:info.rarity });
         addHistory(info.icon, `Кейс: ${caseData.name}`, `+${wonName}`, true);
         showToast(`📦 ${wonName} добавлен в инвентарь`);
-        if (info.rarity !== 'common') showRarityEffect(info.rarity);
         SoundFX.play('open');
         SoundFX.vibrate();
       } else {
@@ -1342,6 +956,338 @@ function showResultModal(giftName, isUpgradeSuccess, callback) {
 }
 
 // ============================================================
+// АПГРЕЙД
+// ============================================================
+function selectForUpgrade(idx) {
+  upgradeSelectedIdx = idx;
+  const g = state.inventory[idx];
+  if (!g) return;
+  const chance = UPGRADE_CHANCES[g.rarity];
+  const targetName = GIFTS_DB[g.name]?.upgradeTo;
+  const target = targetName ? GIFTS_DB[targetName] : null;
+  document.getElementById('upgradeFromIcon').innerText = g.icon;
+  document.getElementById('upgradeFromName').innerText = g.name;
+  document.getElementById('upgradeFromName').style.color = 'var(--text-primary)';
+  document.getElementById('upgradeFromVal').innerText = `★ ${g.starsValue}`;
+  document.getElementById('upgradeFromCard').classList.add('has-item');
+  if (target) {
+    document.getElementById('upgradeToIcon').innerText = target.icon;
+    document.getElementById('upgradeToName').innerText = targetName;
+    document.getElementById('upgradeToName').style.color = 'var(--text-primary)';
+    document.getElementById('upgradeToVal').innerText = `★ ${target.starsValue}`;
+  }
+  const cv = document.getElementById('upgradeChanceVal');
+  cv.innerText = chance > 0 ? chance + '%' : '—';
+  cv.className = 'chance-value ' + (chance >= 60 ? 'high' : chance >= 40 ? 'med' : 'low');
+  document.getElementById('upgradeProgressFill').style.width = chance + '%';
+  document.getElementById('upgradeChanceSub').innerText = target ? `При успехе: ${targetName} (★ ${target.starsValue})` : 'Максимальный уровень';
+  document.getElementById('upgradeBtn').disabled = (chance === 0 || !target);
+}
+
+function doUpgrade() {
+  if (upgradeSelectedIdx === null) return;
+  const g = state.inventory[upgradeSelectedIdx];
+  if (!g) return;
+  const chance = UPGRADE_CHANCES[g.rarity];
+  const targetName = GIFTS_DB[g.name]?.upgradeTo;
+  if (!targetName || chance === 0) return;
+  const finalChance = applyLuckToChance(chance);
+  state.inventory.splice(upgradeSelectedIdx, 1);
+  upgradeSelectedIdx = null;
+  document.getElementById('upgradeBtn').disabled = true;
+  const success = Math.random() * 100 < finalChance;
+  if (success) {
+    const targetInfo = GIFTS_DB[targetName];
+    state.inventory.push({ name:targetName, icon:targetInfo.icon, starsValue:targetInfo.starsValue, rarity:targetInfo.rarity });
+    addHistory(targetInfo.icon, `Апгрейд → ${targetName}`, `✅ Успех`, true);
+    showResultModal(targetName, true, () => {});
+    burstConfetti();
+    updateLuck(true, targetInfo.starsValue);
+    SoundFX.play('win');
+  } else {
+    addHistory(g.icon, `Апгрейд ${g.name}`, `💀 Провал`, false);
+    showToast(`💀 Неудача! ${g.name} потерян`);
+    updateLuck(false, g.starsValue);
+    SoundFX.play('error');
+  }
+  renderAllInventories();
+  updateProfileStats();
+  renderUpgradeUI();
+  renderCraftUI();
+}
+
+function renderUpgradeUI() {
+  upgradeSelectedIdx = null;
+  document.getElementById('upgradeFromIcon').innerText = '📦';
+  document.getElementById('upgradeFromName').innerText = 'Нажми на подарок в инвентаре';
+  document.getElementById('upgradeFromName').style.color = 'var(--text-muted)';
+  document.getElementById('upgradeFromVal').innerText = '';
+  document.getElementById('upgradeToIcon').innerText = '❓';
+  document.getElementById('upgradeToName').innerText = 'Результат';
+  document.getElementById('upgradeToName').style.color = 'var(--text-muted)';
+  document.getElementById('upgradeToVal').innerText = '';
+  document.getElementById('upgradeChanceVal').innerText = '—';
+  document.getElementById('upgradeChanceVal').className = 'chance-value';
+  document.getElementById('upgradeProgressFill').style.width = '0%';
+  document.getElementById('upgradeChanceSub').innerText = 'Нажми на подарок в инвентаре';
+  document.getElementById('upgradeBtn').disabled = true;
+  document.getElementById('upgradeFromCard').classList.remove('has-item');
+}
+
+// ============================================================
+// КРАФТ
+// ============================================================
+function selectForCraft(idx) {
+  for (let i = 0; i < 3; i++) {
+    if (craftSlots[i] === null) {
+      craftSlots[i] = { ...state.inventory[idx] };
+      state.inventory.splice(idx, 1);
+      break;
+    }
+  }
+  renderAllInventories();
+  renderCraftUI();
+}
+
+function renderCraftUI() {
+  const container = document.getElementById('craftSlotsContainer');
+  if (!container) return;
+  container.innerHTML = '';
+  for (let i = 0; i < 3; i++) {
+    const gift = craftSlots[i];
+    const slotDiv = document.createElement('div');
+    slotDiv.className = gift ? 'craft-slot filled' : 'craft-slot empty';
+    if (gift) {
+      slotDiv.innerHTML = `<div class="craft-slot-icon">${gift.icon}</div><div class="craft-slot-name">${gift.name}</div><div class="craft-slot-remove" data-slot="${i}">✕</div>`;
+    } else {
+      slotDiv.innerHTML = `<div class="craft-slot-icon">❓</div><div class="craft-slot-name">Выбрать</div>`;
+    }
+    container.appendChild(slotDiv);
+  }
+  document.querySelectorAll('.craft-slot-remove').forEach(btn => {
+    btn.onclick = (e) => { e.stopPropagation(); removeCraftSlot(parseInt(btn.dataset.slot)); };
+  });
+  const allFilled = craftSlots.every(s => s !== null);
+  if (allFilled) {
+    const totalValue = craftSlots.reduce((sum, g) => sum + g.starsValue, 0);
+    let resultRarity = 'common';
+    if (totalValue >= 3000) resultRarity = 'legendary';
+    else if (totalValue >= 600) resultRarity = 'epic';
+    else if (totalValue >= 150) resultRarity = 'rare';
+    const possibleGifts = Object.entries(GIFTS_DB).filter(([_, info]) => info.rarity === resultRarity);
+    const randomGift = possibleGifts[Math.floor(Math.random() * possibleGifts.length)];
+    currentCraftResult = { name: randomGift[0], ...randomGift[1] };
+    document.getElementById('craftResult').innerHTML = `<div class="craft-result-icon">${currentCraftResult.icon}</div><div class="craft-result-name">${currentCraftResult.name}</div><div class="craft-result-sub" style="font-size:10px; color:var(--text-muted);">★ ${currentCraftResult.starsValue} · ${RARITY_LABELS[currentCraftResult.rarity]}</div>`;
+    document.getElementById('craftBtn').disabled = false;
+  } else {
+    document.getElementById('craftResult').innerHTML = `<div class="craft-result-icon">❓</div><div class="craft-result-name">Выберите 3 подарка</div>`;
+    document.getElementById('craftBtn').disabled = true;
+  }
+}
+
+function removeCraftSlot(slotIndex) {
+  if (craftSlots[slotIndex]) {
+    state.inventory.push(craftSlots[slotIndex]);
+    craftSlots[slotIndex] = null;
+    renderAllInventories();
+    renderCraftUI();
+  }
+}
+
+function doCraft() {
+  const allFilled = craftSlots.every(s => s !== null);
+  if (!allFilled) { showToast('Заполните все 3 слота'); return; }
+  if (!currentCraftResult) return;
+  craftSlots = [null, null, null];
+  state.inventory.push({ name:currentCraftResult.name, icon:currentCraftResult.icon, starsValue:currentCraftResult.starsValue, rarity:currentCraftResult.rarity });
+  addHistory(currentCraftResult.icon, `Крафт`, `+${currentCraftResult.name}`, true);
+  showToast(`✨ Получен ${currentCraftResult.name}`);
+  renderAllInventories();
+  renderCraftUI();
+  updateProfileStats();
+  if (currentCraftResult.rarity === 'legendary') burstConfetti();
+  SoundFX.play('win');
+}
+
+// ============================================================
+// PVP С SUPABASE REALTIME
+// ============================================================
+let currentPvpChannel = null;
+
+function selectForPvp(idx) {
+  pvpSelectedIdx = idx;
+  const g = state.inventory[idx];
+  if (!g) return;
+  document.getElementById('pvpStakeText').innerHTML = `${g.icon} ${g.name} ★${g.starsValue}`;
+  document.getElementById('createBattleBtn').disabled = false;
+}
+
+async function createBattle() {
+  if (pvpSelectedIdx === null || !state.inventory[pvpSelectedIdx]) { showToast('Выбери подарок!'); return; }
+  const gift = state.inventory[pvpSelectedIdx];
+  state.inventory.splice(pvpSelectedIdx, 1);
+  pvpSelectedIdx = null;
+  document.getElementById('createBattleBtn').disabled = true;
+  document.getElementById('pvpStakeText').innerHTML = '⚔ Нажми на подарок в инвентаре';
+  
+  const battleId = Date.now().toString(36) + Math.random().toString(36).substr(2, 6);
+  const creatorName = telegramUser?.username || userId.slice(-6);
+  
+  try {
+    const { error } = await supabase.from('battles').insert({
+      id: battleId,
+      creator_id: userId,
+      creator_name: creatorName,
+      creator_gift: gift,
+      status: 'waiting'
+    });
+    
+    if (error) throw error;
+    
+    const battleLink = `${window.location.origin}${window.location.pathname}?battle=${battleId}`;
+    showToast(`⚔️ Батл создан! Ссылка скопирована`);
+    if (navigator.clipboard) navigator.clipboard.writeText(battleLink);
+    renderAllInventories();
+    renderPvpLobby();
+  } catch (err) {
+    console.error('Create battle error:', err);
+    state.inventory.push(gift);
+    renderAllInventories();
+    showToast('❌ Ошибка создания батла');
+  }
+}
+
+async function joinBattle(battleId) {
+  const { data: battle, error: fetchError } = await supabase
+    .from('battles')
+    .select('*')
+    .eq('id', battleId)
+    .single();
+  
+  if (fetchError || !battle || battle.status !== 'waiting') { showToast('Батл недоступен'); return; }
+  if (battle.creator_id === userId) { showToast('Нельзя присоединиться к своему батлу'); return; }
+  if (state.inventory.length === 0) { showToast('Нет подарков для ставки!'); return; }
+  
+  const myGift = state.inventory[0];
+  if (!myGift) return;
+  
+  state.inventory.splice(0, 1);
+  renderAllInventories();
+  
+  const opponentName = telegramUser?.username || userId.slice(-6);
+  
+  const { error: updateError } = await supabase
+    .from('battles')
+    .update({
+      opponent_id: userId,
+      opponent_name: opponentName,
+      opponent_gift: myGift,
+      status: 'fighting'
+    })
+    .eq('id', battleId);
+  
+  if (updateError) {
+    state.inventory.push(myGift);
+    renderAllInventories();
+    showToast('❌ Ошибка присоединения');
+    return;
+  }
+  
+  const pRoll = Math.random() * battle.creator_gift.starsValue;
+  const oRoll = Math.random() * myGift.starsValue;
+  const winnerId = pRoll >= oRoll ? battle.creator_id : userId;
+  
+  if (winnerId === userId) {
+    state.inventory.push(battle.creator_gift, myGift);
+    state.pvpWins = (state.pvpWins || 0) + 1;
+    addHistory(myGift.icon, `PvP победа!`, `+${battle.creator_gift.starsValue + myGift.starsValue} ★`, true);
+    showToast(`🏆 ПОБЕДА! Ты забрал оба подарка!`);
+    burstConfetti();
+    updateLuck(true, battle.creator_gift.starsValue);
+    SoundFX.play('win');
+  } else {
+    addHistory(myGift.icon, `PvP проигрыш`, `−${myGift.starsValue} ★`, false);
+    showToast(`💀 Проигрыш! ${battle.creator_gift.icon} уходит победителю`);
+    updateLuck(false, myGift.starsValue);
+    SoundFX.play('error');
+  }
+  
+  await supabase.from('battles').update({ status: 'finished', winner_id: winnerId }).eq('id', battleId);
+  
+  renderAllInventories();
+  updateProfileStats();
+  renderPvpLobby();
+}
+
+async function renderPvpLobby() {
+  const lobby = document.getElementById('pvpLobby');
+  if (!lobby) return;
+  
+  const { data: battles, error } = await supabase
+    .from('battles')
+    .select('*')
+    .eq('status', 'waiting')
+    .order('created_at', { ascending: false });
+  
+  if (error) { lobby.innerHTML = `<div style="color:var(--text-muted);text-align:center;padding:30px;">Ошибка загрузки</div>`; return; }
+  
+  if (!battles || battles.length === 0) {
+    lobby.innerHTML = `<div style="color:var(--text-muted);text-align:center;padding:30px;">Нет активных батлов.<br>Создай первый!</div>`;
+    return;
+  }
+  
+  lobby.innerHTML = battles.map(b => `
+    <div class="battle-card">
+      <div class="battle-gift-slot">
+        <div class="battle-gift-icon">${b.creator_gift.icon}</div>
+        <div class="battle-gift-name">${b.creator_gift.name}</div>
+        <div class="battle-gift-val">★ ${b.creator_gift.starsValue}</div>
+      </div>
+      <div class="battle-vs">VS</div>
+      <div>
+        ${b.creator_id !== userId 
+          ? `<button class="battle-join-btn" data-bid="${b.id}">Войти</button>`
+          : `<button class="battle-join-btn" data-cancel="${b.id}" style="background:#3a2a2a;">Отменить</button>`
+        }
+      </div>
+    </div>
+  `).join('');
+  
+  lobby.querySelectorAll('.battle-join-btn').forEach(btn => {
+    if (btn.dataset.bid) btn.onclick = () => joinBattle(btn.dataset.bid);
+    if (btn.dataset.cancel) btn.onclick = () => cancelBattle(btn.dataset.cancel);
+  });
+}
+
+async function cancelBattle(battleId) {
+  const { data: battle, error: fetchError } = await supabase
+    .from('battles')
+    .select('*')
+    .eq('id', battleId)
+    .single();
+  
+  if (fetchError || !battle) { showToast('Батл не найден'); return; }
+  if (battle.creator_id !== userId) { showToast('Нельзя отменить чужой батл'); return; }
+  
+  state.inventory.push(battle.creator_gift);
+  renderAllInventories();
+  
+  await supabase.from('battles').delete().eq('id', battleId);
+  renderPvpLobby();
+  showToast('Батл отменён, подарок возвращён');
+}
+
+function subscribeToBattles() {
+  if (currentBattleSubscription) return;
+  currentBattleSubscription = supabase
+    .channel('battles-channel')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'battles' }, () => {
+      renderPvpLobby();
+    })
+    .subscribe();
+}
+
+// ============================================================
 // РЕФЕРАЛЬНАЯ СИСТЕМА
 // ============================================================
 function initReferral() {
@@ -1356,6 +1302,7 @@ function initReferral() {
     saveState();
   }
 }
+
 function showReferralModal() {
   const link = `${window.location.origin}${window.location.pathname}?ref=${userId}`;
   const overlay = document.createElement('div');
@@ -1375,23 +1322,34 @@ function showReferralModal() {
 }
 
 // ============================================================
+// TELEGRAM ИНИЦИАЛИЗАЦИЯ
+// ============================================================
+function initTelegramUser() {
+  if (window.Telegram?.WebApp) {
+    const tg = window.Telegram.WebApp;
+    tg.expand();
+    tg.ready();
+    tg.enableClosingConfirmation();
+    if (tg.initDataUnsafe?.user) {
+      telegramUser = tg.initDataUnsafe.user;
+      document.getElementById('profileName').innerText = telegramUser.first_name || 'ИГРОК';
+      if (telegramUser.username) {
+        document.getElementById('profileUsername').innerHTML = `@${telegramUser.username}`;
+        document.getElementById('profileIdText').innerHTML = '';
+      } else {
+        document.getElementById('profileUsername').innerHTML = '';
+        document.getElementById('profileIdText').innerHTML = `ID: ${telegramUser.id}`;
+      }
+    }
+  }
+}
+
+// ============================================================
 // ОНЛАЙН КАУНТЕР
 // ============================================================
 function updateOnlineCount() { document.getElementById('onlineCount').innerText = 128 + Math.floor(Math.random() * 40); }
 setInterval(updateOnlineCount, 5000);
 updateOnlineCount();
-
-// ============================================================
-// ЛЕНИВАЯ ЗАГРУЗКА ПАНЕЛЕЙ
-// ============================================================
-function renderPanel(panelId) {
-  if (renderedPanels.has(panelId)) return;
-  renderedPanels.add(panelId);
-  if (panelId === 'cases') renderCases();
-  if (panelId === 'pvp') renderPvpLobby();
-  if (panelId === 'upgrade') renderUpgradeUI();
-  if (panelId === 'craft') renderCraftUI();
-}
 
 // ============================================================
 // ТАБЫ
@@ -1402,39 +1360,28 @@ document.querySelectorAll('.tab-item').forEach(btn => {
     btn.classList.add('active');
     document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
     document.getElementById(btn.dataset.tab + 'Panel').classList.add('active');
-    renderPanel(btn.dataset.tab);
+    if (btn.dataset.tab === 'pvp') renderPvpLobby();
     if (btn.dataset.tab === 'profile') updateProfileStats();
+    if (btn.dataset.tab === 'upgrade') renderUpgradeUI();
+    if (btn.dataset.tab === 'craft') renderCraftUI();
   });
 });
 
 // ============================================================
 // КНОПКИ
 // ============================================================
-document.getElementById('addStarsBtn').addEventListener('click', () => {
-  if (!RateLimiter.check('addStars', 3)) return;
-  setBalance(state.balance + 100);
-  addHistory('⭐', 'Пополнение', '+100 ★', true);
-  showToast('+100 Stars');
-  renderAllInventories();
-  SoundFX.play('open');
-});
-document.getElementById('balancePill').addEventListener('click', () => {
-  if (!RateLimiter.check('addStars', 3)) return;
-  setBalance(state.balance + 100);
-  addHistory('⭐', 'Пополнение', '+100 ★', true);
-  showToast('+100 Stars');
-  renderAllInventories();
-});
-DOM.upgradeBtn.addEventListener('click', doUpgrade);
-DOM.createBattleBtn.addEventListener('click', createBattle);
-document.getElementById('depositBtn').addEventListener('click', () => { setBalance(state.balance + 500); addHistory('💎', 'Пополнение', '+500 ★', true); showToast('+500 Stars'); renderAllInventories(); });
-document.getElementById('withdrawBtn').addEventListener('click', () => showToast('💰 Вывод: скоро будет доступно'));
-document.getElementById('shareBtn').addEventListener('click', () => { navigator.clipboard.writeText(window.location.href); showToast('🔗 Ссылка скопирована!'); });
-document.getElementById('referralBtn').addEventListener('click', showReferralModal);
-DOM.craftBtn.addEventListener('click', doCraft);
+document.getElementById('addStarsBtn').onclick = () => { setBalance(state.balance + 100); addHistory('⭐', 'Пополнение', '+100 ★', true); showToast('+100 Stars'); renderAllInventories(); SoundFX.play('open'); };
+document.getElementById('balancePill').onclick = () => { setBalance(state.balance + 100); addHistory('⭐', 'Пополнение', '+100 ★', true); showToast('+100 Stars'); renderAllInventories(); };
+document.getElementById('upgradeBtn').onclick = doUpgrade;
+document.getElementById('createBattleBtn').onclick = createBattle;
+document.getElementById('depositBtn').onclick = () => { setBalance(state.balance + 500); addHistory('💎', 'Пополнение', '+500 ★', true); showToast('+500 Stars'); renderAllInventories(); };
+document.getElementById('withdrawBtn').onclick = () => showToast('💰 Вывод: скоро будет доступно');
+document.getElementById('shareBtn').onclick = () => { navigator.clipboard.writeText(window.location.href); showToast('🔗 Ссылка скопирована!'); };
+document.getElementById('referralBtn').onclick = showReferralModal;
+document.getElementById('craftBtn').onclick = doCraft;
 
 // ============================================================
-// INIT
+// ИНИЦИАЛИЗАЦИЯ
 // ============================================================
 loadState();
 initReferral();
@@ -1446,17 +1393,23 @@ renderHistory();
 renderPvpLobby();
 renderUpgradeUI();
 renderCraftUI();
+subscribeToBattles();
 
-setInterval(() => {
-  const braw = localStorage.getItem('gc_battles');
-  if (braw) {
-    try {
-      const fresh = JSON.parse(braw);
-      globalBattles = fresh.filter(b => b.status !== 'done' || Date.now() - b.ts < 30000);
-      renderPvpLobby();
-    } catch(e) {}
-  }
-}, 5000);
+if (window.Telegram?.WebApp) {
+  window.Telegram.WebApp.expand();
+  window.Telegram.WebApp.ready();
+}
+
+// Проверка приглашения по ссылке
+const urlParams = new URLSearchParams(window.location.search);
+const battleId = urlParams.get('battle');
+if (battleId) {
+  setTimeout(() => {
+    if (confirm('Вас пригласили на PvP батл! Присоединиться?')) {
+      joinBattle(battleId);
+    }
+  }, 1000);
+}
 </script>
 </body>
 </html>
