@@ -22,10 +22,8 @@
   --font-d:'Bebas Neue',sans-serif;--font-b:'DM Sans',sans-serif;
   --ease:cubic-bezier(0.4,0,0.2,1);--spring:cubic-bezier(0.34,1.56,0.64,1);
   --sh:0 4px 24px rgba(0,0,0,.7);
-  /* Высота таббара с учётом safe-area */
   --tab-h:58px;
 }
-/* ── СБРОС ── */
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{height:100%;overflow:hidden}
 body{
@@ -33,7 +31,6 @@ body{
   height:100vh;height:100dvh;overflow:hidden;
   -webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent
 }
-/* Зернистый оверлей — атмосфера */
 body::after{
   content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:.35;
   background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E")
@@ -44,12 +41,8 @@ button{font-family:var(--font-b);cursor:pointer;border:none;background:none;colo
 input,select,textarea{font-family:var(--font-b)}
 img{display:block}
 
-/* ══════════════════════════════════════════════
-   КАРКАС ПРИЛОЖЕНИЯ
-══════════════════════════════════════════════ */
 .app{display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden;position:relative}
 
-/* ── ТОПБАР ── */
 .topbar{
   flex-shrink:0;height:52px;background:var(--s1);border-bottom:1px solid var(--border);
   display:flex;align-items:center;justify-content:space-between;
@@ -78,10 +71,8 @@ img{display:block}
 .sync-dot{width:5px;height:5px;border-radius:50%;background:var(--borderL);margin-left:3px;transition:background .3s}
 .sync-dot.ok{background:var(--green)}.sync-dot.err{background:var(--red)}
 
-/* ── КОНТЕНТ ── */
 .content{
   flex:1;overflow-y:auto;overflow-x:hidden;
-  /* Отступ снизу = высота таббара + safe-area */
   padding:14px 14px calc(var(--tab-h) + env(safe-area-inset-bottom) + 8px);
   -webkit-overflow-scrolling:touch
 }
@@ -89,10 +80,6 @@ img{display:block}
 .panel.active{display:block;animation:panelIn .18s var(--ease)}
 @keyframes panelIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
-/* ══════════════════════════════════════════════
-   НАВИГАЦИОННЫЙ ТАБ-БАР — ВСЕГДА ВИДИМ
-   Используем position:fixed + padding-bottom для safe-area
-══════════════════════════════════════════════ */
 .tabs{
   position:fixed;
   bottom:0;left:0;right:0;
@@ -110,7 +97,6 @@ img{display:block}
   padding:6px 2px;color:var(--tm);transition:.15s;position:relative;
   background:none;border:none
 }
-/* Золотая полоска сверху у активного таба */
 .tab::before{
   content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);
   width:0;height:2px;background:var(--gold);border-radius:0 0 2px 2px;transition:width .25s var(--ease)
@@ -121,14 +107,10 @@ img{display:block}
 .tab-icon{font-size:20px;line-height:1}
 .tab-lbl{font-size:9px;font-weight:600;letter-spacing:.4px;text-transform:uppercase}
 
-/* ── ЗАГОЛОВКИ СЕКЦИЙ ── */
 .sec-hdr{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px}
 .sec-title{font-family:var(--font-d);font-size:28px;letter-spacing:2px;color:var(--white)}
 .sec-sub{font-size:10px;color:var(--tm);text-transform:uppercase;letter-spacing:.5px}
 
-/* ══════════════════════════════════════════════
-   КЕЙСЫ — 3 КОЛОНКИ НА ВСЕХ УСТРОЙСТВАХ
-══════════════════════════════════════════════ */
 .cases-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .case-card{
   background:var(--s1);border:1px solid var(--border);border-radius:var(--r-lg);
@@ -152,7 +134,6 @@ img{display:block}
 .open-btn::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.06),transparent);transform:translateX(-100%);transition:transform .4s}
 .open-btn:hover::after{transform:translateX(100%)}
 .open-btn:hover{background:var(--borderL)}.open-btn:active{transform:scale(.97)}
-/* Цвета карточек */
 .c-legendary{border-color:#3a3020}.c-legendary:hover{border-color:var(--gold);box-shadow:0 4px 20px rgba(200,169,110,.1)}
 .c-legendary .case-name{color:var(--gold)}.c-legendary .case-visual{background:linear-gradient(140deg,#0d0900,#1a1500)}
 .c-epic .case-visual{background:linear-gradient(140deg,#080508,#140e10)}
@@ -161,7 +142,6 @@ img{display:block}
 .c-special{border-color:#1a2a1a}.c-special .case-name{color:var(--green)}.c-special .case-visual{background:linear-gradient(140deg,#050a05,#0a150a)}
 .c-premium{border-color:#1a1a2a}.c-premium .case-name{color:var(--blue)}.c-premium .case-visual{background:linear-gradient(140deg,#05050f,#0a0a1a)}
 
-/* ── ИНВЕНТАРЬ ── */
 .inv-section{background:var(--s1);border:1px solid var(--border);border-radius:var(--r-lg);padding:14px;margin-top:14px}
 .inv-section h3{font-family:var(--font-d);font-size:18px;letter-spacing:1px;margin-bottom:10px}
 .inv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:6px;max-height:200px;overflow-y:auto}
@@ -180,7 +160,6 @@ img{display:block}
 .sell-chip:hover{color:var(--red);border-color:var(--red)}
 .inv-empty{grid-column:1/-1;text-align:center;color:var(--tm);padding:20px;font-size:12px}
 
-/* ── КНОПКИ ── */
 .btn{width:100%;padding:13px;border-radius:var(--r-full);font-size:13px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;transition:.15s;display:flex;align-items:center;justify-content:center;gap:7px;cursor:pointer}
 .btn-primary{background:var(--white);color:var(--bg)}.btn-primary:hover{background:#e8e8e8}.btn-primary:active{transform:scale(.97)}
 .btn-primary:disabled{background:var(--s3);color:var(--tm);cursor:not-allowed;transform:none}
@@ -189,11 +168,7 @@ img{display:block}
 .btn-gold{background:linear-gradient(135deg,#c8a96e,#e8c98e);color:#000}.btn-gold:hover{filter:brightness(1.1)}
 .btn-sm{padding:8px 16px;font-size:11px;width:auto}
 
-/* ══════════════════════════════════════════════
-   АПГРЕЙД — КРУГОВАЯ РУЛЕТКА (CASEBATTLE СТИЛЬ)
-══════════════════════════════════════════════ */
 .upg-layout{display:flex;flex-direction:column;gap:12px}
-/* Выбор ставки */
 .upg-stake-box{background:var(--s1);border:1px solid var(--border);border-radius:var(--r-lg);padding:14px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:.15s}
 .upg-stake-box:hover{border-color:var(--borderL)}.upg-stake-box.filled{border-color:var(--borderL)}
 .upg-stake-icon{font-size:38px;min-width:44px;text-align:center}
@@ -203,7 +178,6 @@ img{display:block}
 .upg-stake-hint{font-size:11px;color:var(--tm)}
 .upg-stake-remove{width:24px;height:24px;border-radius:50%;background:var(--s3);border:1px solid var(--borderL);color:var(--tm);font-size:11px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:.15s}
 .upg-stake-remove:hover{color:var(--red);border-color:var(--red)}
-/* Список целей */
 .upg-targets{background:var(--s2);border:1px solid var(--border);border-radius:var(--r-lg);padding:12px}
 .upg-targets-lbl{font-size:10px;color:var(--tm);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
 .upg-targets-list{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
@@ -212,11 +186,9 @@ img{display:block}
 .upg-target-item:hover{border-color:var(--borderL)}.upg-target-item:active{transform:scale(.93)}
 .upg-target-item.selected{border-color:var(--gold)}
 .uti-icon{font-size:20px}.uti-name{font-size:7px;color:var(--ts);text-align:center;line-height:1.2}.uti-val{font-size:9px;font-weight:700;color:var(--gold)}
-/* Круговая рулетка */
 .upg-wheel-wrap{display:flex;flex-direction:column;align-items:center;gap:12px;padding:16px 0}
 .upg-wheel-svg{position:relative;width:220px;height:220px}
 .upg-wheel-svg svg{width:100%;height:100%}
-/* Стрелка в центре */
 .upg-arrow-wrap{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
 .upg-arrow{
   width:4px;height:80px;background:var(--white);border-radius:2px;
@@ -231,7 +203,6 @@ img{display:block}
 .upg-chance-num.low{color:var(--red);text-shadow:0 0 16px rgba(248,113,113,.3)}
 .upg-chance-lbl{font-size:10px;color:var(--tm);text-transform:uppercase;letter-spacing:1.5px;margin-top:4px}
 .upg-chance-desc{font-size:11px;color:var(--ts);margin-top:4px}
-/* История апгрейдов */
 .upg-history-box{background:var(--s1);border:1px solid var(--border);border-radius:var(--r-lg);padding:14px;margin-top:12px}
 .upg-history-title{font-family:var(--font-d);font-size:18px;letter-spacing:1px;margin-bottom:10px;color:var(--ts)}
 .upg-hist-item{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border)}
@@ -243,9 +214,6 @@ img{display:block}
 .uhi-win{color:var(--green)}.uhi-lose{color:var(--red)}
 .uhi-almost{font-size:9px;color:var(--gold);margin-left:4px}
 
-/* ══════════════════════════════════════════════
-   КРАФТ
-══════════════════════════════════════════════ */
 .craft-slots{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
 .craft-slot{background:var(--s1);border:2px dashed var(--borderL);border-radius:var(--r-lg);padding:12px;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;transition:.15s;min-height:92px;justify-content:center}
 .craft-slot.filled{border-style:solid;border-color:var(--borderL)}.craft-slot:hover{border-color:#555}
@@ -262,14 +230,10 @@ img{display:block}
 .co-range{font-size:10px;color:var(--ts);margin-top:3px}
 .craft-arrow{text-align:center;font-size:18px;color:var(--tm);margin:4px 0}
 
-/* ══════════════════════════════════════════════
-   РУЛЕТКА КЕЙСОВ — ЭНЕРГЕТИЧЕСКИЙ ЗАРЯД
-══════════════════════════════════════════════ */
 .roulette-overlay{
   position:fixed;inset:0;background:rgba(0,0,0,.97);z-index:300;
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px
 }
-/* Энергетический заряд */
 .energy-wrap{width:min(580px,95vw);position:relative;height:32px;display:flex;align-items:center;justify-content:center;overflow:visible}
 .energy-bar{width:100%;height:4px;background:var(--s3);border-radius:var(--r-full);overflow:hidden;position:relative}
 .energy-fill{
@@ -279,20 +243,17 @@ img{display:block}
   animation:ePulse .5s ease-in-out infinite alternate
 }
 @keyframes ePulse{from{box-shadow:0 0 6px var(--gold)}to{box-shadow:0 0 18px var(--goldL),0 0 30px var(--gold)}}
-/* Частицы искр */
 .spark{
   position:absolute;width:3px;height:3px;border-radius:50%;background:var(--goldL);
   pointer-events:none;animation:sparkUp .8s ease forwards
 }
 @keyframes sparkUp{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--sx),var(--sy)) scale(0)}}
-/* Парящие частицы вокруг */
 .particle{
   position:absolute;border-radius:50%;background:var(--gold);opacity:.6;
   animation:particleFloat var(--pd,2s) linear infinite
 }
 @keyframes particleFloat{0%{transform:translateY(0) scale(1);opacity:.6}50%{opacity:.3}100%{transform:translateY(-40px) scale(0);opacity:0}}
 
-/* Полоска рулетки */
 .roulette-box{
   position:relative;overflow:hidden;width:min(580px,95vw);height:108px;
   border-radius:var(--r-md);border:1px solid var(--borderL);background:var(--s1)
@@ -305,7 +266,6 @@ img{display:block}
 .rl-fade-l,.rl-fade-r{position:absolute;top:0;bottom:0;width:80px;z-index:1}
 .rl-fade-l{left:0;background:linear-gradient(90deg,var(--s1),transparent)}.rl-fade-r{right:0;background:linear-gradient(-90deg,var(--s1),transparent)}
 
-/* ── МОДАЛ РЕЗУЛЬТАТА ── */
 .result-overlay{position:fixed;inset:0;background:rgba(0,0,0,.97);z-index:400;display:flex;align-items:center;justify-content:center;animation:fadeIn .2s}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 .result-box{text-align:center;padding:36px 28px;max-width:320px;width:90%;animation:popIn .45s var(--spring)}
@@ -317,9 +277,6 @@ img{display:block}
 .result-btns{display:flex;flex-direction:column;gap:8px;margin-top:20px}
 .almost-badge{background:rgba(200,169,110,.12);border:1px solid rgba(200,169,110,.3);border-radius:var(--r-full);padding:4px 12px;font-size:11px;color:var(--gold);margin-top:6px;display:inline-block}
 
-/* ══════════════════════════════════════════════
-   PVP — МОНЕТКА С ВЕРТИКАЛЬНЫМ БРОСКОМ
-══════════════════════════════════════════════ */
 .coin-overlay{position:fixed;inset:0;background:rgba(0,0,0,.98);z-index:400;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
 .coin-fighters{display:flex;align-items:center;gap:24px}
 .fighter-box{display:flex;flex-direction:column;align-items:center;gap:5px}
@@ -328,13 +285,11 @@ img{display:block}
 @keyframes fAppear{from{opacity:0;transform:scale(.5)}to{opacity:1;transform:scale(1)}}
 .coin-vs{font-family:var(--font-d);font-size:40px;color:var(--tm);letter-spacing:3px;animation:vsPop .6s .3s var(--spring) both}
 @keyframes vsPop{0%{opacity:0;transform:scale(.5)}100%{opacity:1;transform:scale(1)}}
-/* Вертикальный бросок монетки */
 .coin-scene{perspective:500px;width:100px;height:100px}
 .coin-3d{
   width:100px;height:100px;transform-style:preserve-3d;position:relative;
   animation:coinToss 3s cubic-bezier(0.25,0.46,0.45,0.94) forwards
 }
-/* translateY = вверх-вниз (бросок), rotateX = вертикальное вращение */
 @keyframes coinToss{
   0%  {transform:translateY(0px)    rotateX(0deg)}
   15% {transform:translateY(-90px)  rotateX(180deg)}
@@ -353,7 +308,6 @@ img{display:block}
 .coin-result-banner{font-family:var(--font-d);font-size:44px;letter-spacing:2px;animation:popIn .5s var(--spring)}
 .coin-result-sub{font-size:13px;color:var(--ts);margin-top:4px;text-align:center}
 
-/* ── PVP ЛОББИ ── */
 .pvp-tabs{display:flex;gap:6px;margin-bottom:12px}
 .pvp-tab{padding:7px 14px;border-radius:var(--r-full);background:var(--s2);border:1px solid var(--border);color:var(--ts);font-size:11px;font-weight:600;transition:.15s;cursor:pointer}
 .pvp-tab.active{background:var(--s3);border-color:var(--borderL);color:var(--white)}.pvp-tab:active{transform:scale(.95)}
@@ -379,7 +333,6 @@ img{display:block}
 .pvp-sec-title{font-family:var(--font-d);font-size:16px;letter-spacing:1px;margin-bottom:7px}
 .pvp-sec-title.pub{color:var(--ts)}.pvp-sec-title.priv{color:var(--gold)}
 
-/* ── ПРОФИЛЬ ── */
 .profile-hero{background:var(--s1);border:1px solid var(--border);border-radius:var(--r-lg);padding:18px;margin-bottom:12px;position:relative;overflow:hidden}
 .profile-hero::after{content:'';position:absolute;top:-60px;right:-60px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(200,169,110,.04),transparent 70%);pointer-events:none}
 .avatar-wrap{position:relative;width:60px;margin-bottom:10px}
@@ -409,20 +362,17 @@ img{display:block}
 .ref-stats{display:flex;gap:7px;margin-top:7px}
 .ref-stat{flex:1;background:var(--s2);border:1px solid var(--border);border-radius:var(--r-md);padding:9px;text-align:center}
 .ref-stat-n{font-family:var(--font-d);font-size:20px;color:var(--gold)}.ref-stat-l{font-size:9px;color:var(--tm)}
-/* Пополнение */
 .deposit-amounts{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}
 .dep-amt{flex:1;min-width:60px;padding:8px;background:var(--s2);border:2px solid var(--border);border-radius:var(--r-md);text-align:center;cursor:pointer;transition:.15s}
 .dep-amt:hover,.dep-amt.selected{border-color:var(--gold);background:rgba(200,169,110,.08)}
 .dep-amt-stars{font-family:var(--font-d);font-size:18px;color:var(--gold)}
 .dep-amt-price{font-size:9px;color:var(--tm);margin-top:2px}
-/* История */
 .hist-table{width:100%;border-collapse:collapse}
 .hist-table th{font-size:9px;color:var(--tm);text-transform:uppercase;padding:5px 7px;border-bottom:1px solid var(--border);text-align:left}
 .hist-table td{padding:8px 7px;border-bottom:1px solid var(--border);font-size:11px;color:var(--ts)}
 .hist-table tr:last-child td{border:none}
 .hist-pos{color:var(--green);font-weight:700}.hist-neg{color:var(--red);font-weight:700}
 
-/* ── ТОСТ ── */
 .toast{
   position:fixed;bottom:calc(var(--tab-h) + env(safe-area-inset-bottom) + 10px);
   left:50%;transform:translateX(-50%);
@@ -436,7 +386,6 @@ img{display:block}
 #cfv{position:fixed;inset:0;pointer-events:none;z-index:800}
 .rl-banner{position:fixed;top:62px;left:50%;transform:translateX(-50%);background:#2a0a0a;border:1px solid #4a1a1a;border-radius:var(--r-full);padding:6px 16px;font-size:12px;color:var(--red);z-index:100;display:none;white-space:nowrap}
 
-/* ── Заглушка для браузера ── */
 .browser-stub{position:fixed;inset:0;background:var(--bg);z-index:5000;display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:32px;text-align:center}
 .browser-stub.show{display:flex}
 .bs-icon{font-size:64px}
@@ -445,7 +394,6 @@ img{display:block}
 .bs-btn{padding:14px 28px;background:linear-gradient(135deg,#2481cc,#1a6db3);color:#fff;border-radius:var(--r-full);font-size:14px;font-weight:700;text-decoration:none;display:inline-block;margin-top:8px}
 .bs-skip{margin-top:12px;font-size:12px;color:var(--tm);cursor:pointer;text-decoration:underline}
 
-/* ── МОДАЛ ПОПОЛНЕНИЯ ── */
 .modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:600;display:none;align-items:flex-end;justify-content:center}
 .modal-ov.show{display:flex;animation:fadeIn .2s}
 .modal-sheet{background:var(--s1);border:1px solid var(--border);border-top-left-radius:var(--r-xl);border-top-right-radius:var(--r-xl);padding:24px 16px calc(20px + env(safe-area-inset-bottom));width:100%;max-width:540px;animation:slideUp .3s var(--spring)}
@@ -453,20 +401,11 @@ img{display:block}
 .modal-handle{width:32px;height:3px;background:var(--borderL);border-radius:2px;margin:0 auto 16px}
 .modal-title{font-family:var(--font-d);font-size:24px;letter-spacing:1px;margin-bottom:14px}
 
-/* ── УСТАНОВОЧНЫЙ БАННЕР ── */
 .install-banner{position:fixed;bottom:calc(var(--tab-h) + env(safe-area-inset-bottom) + 8px);left:50%;transform:translateX(-50%);background:var(--s2);border:1px solid var(--borderL);border-radius:var(--r-xl);padding:10px 14px;max-width:320px;width:90%;display:flex;align-items:center;gap:8px;z-index:60;animation:toastIn .4s var(--spring);box-shadow:var(--sh)}
 .ib-icon{font-size:24px}.ib-text{flex:1}.ib-title{font-size:12px;font-weight:700;color:var(--white)}.ib-sub{font-size:9px;color:var(--tm)}
 .ib-btn{padding:6px 12px;background:var(--white);border-radius:var(--r-full);color:var(--bg);font-size:11px;font-weight:700;flex-shrink:0;cursor:pointer}
 .ib-close{width:18px;height:18px;border-radius:50%;background:var(--s3);color:var(--tm);font-size:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer}
 
-/* ══════════════════════════════════════════════
-   АДАПТИВ
-   Телефон < 480px: 2 колонки на очень маленьких экранах
-   Телефон 480+: 3 колонки
-   Планшет 768+: 3 колонки, увеличенные карточки
-   ПК 1024+: боковой таббар, 4 колонки
-   ПК 1400+: 5 колонок
-══════════════════════════════════════════════ */
 @media(max-width:359px){.cases-grid{grid-template-columns:repeat(2,1fr);gap:7px}.case-visual{height:80px}.case-emoji{font-size:34px}}
 @media(min-width:600px){
   .cases-grid{grid-template-columns:repeat(3,1fr);gap:10px}
@@ -482,7 +421,6 @@ img{display:block}
   .stats-grid{grid-template-columns:repeat(4,1fr)}
 }
 @media(min-width:1024px){
-  /* На ПК — боковой таббар */
   .app{flex-direction:row}
   .tabs{
     position:relative;flex-direction:column;
@@ -492,7 +430,6 @@ img{display:block}
     flex-shrink:0;align-items:stretch;
     backdrop-filter:none;-webkit-backdrop-filter:none
   }
-  /* Переопределяем индикатор для боковой панели */
   .tab::before{
     top:50%;bottom:auto;left:0;right:auto;transform:translateY(-50%);
     width:3px;height:0
@@ -513,7 +450,6 @@ img{display:block}
 <canvas id="cfv"></canvas>
 <div class="rl-banner" id="rlBanner">⚠️ Слишком быстро, подождите</div>
 
-<!-- Заглушка для браузера (не Telegram) -->
 <div class="browser-stub" id="browserStub">
   <div class="bs-icon">🎁</div>
   <div class="bs-title">GIFTCASE</div>
@@ -522,7 +458,6 @@ img{display:block}
   <span class="bs-skip" id="bsSkip">Продолжить как гость</span>
 </div>
 
-<!-- Модал пополнения через Telegram Stars -->
 <div class="modal-ov" id="depositModal">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
@@ -534,7 +469,6 @@ img{display:block}
   </div>
 </div>
 
-<!-- Модал вывода подарка -->
 <div class="modal-ov" id="withdrawModal">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
@@ -549,7 +483,6 @@ img{display:block}
 </div>
 
 <div class="app" id="app">
-  <!-- ТОПБАР -->
   <div class="topbar">
     <div class="logo">GIFTCASE<div class="logo-dot"></div></div>
     <div class="topbar-right">
@@ -563,21 +496,17 @@ img{display:block}
     </div>
   </div>
 
-  <!-- ОСНОВНОЙ КОНТЕНТ -->
   <div class="content" id="mainContent">
 
-    <!-- ▸ КЕЙСЫ -->
     <div class="panel active" id="casesPanel">
       <div class="sec-hdr"><div class="sec-title">КЕЙСЫ</div><div class="sec-sub">открой и выиграй</div></div>
       <div class="cases-grid" id="casesGrid"></div>
       <div class="inv-section"><h3>МОИ ПОДАРКИ</h3><div class="inv-grid" id="invCases"></div></div>
     </div>
 
-    <!-- ▸ АПГРЕЙД — новая механика -->
     <div class="panel" id="upgradePanel">
       <div class="sec-hdr"><div class="sec-title">АПГРЕЙД</div><div class="sec-sub">ставка → цель → шанс</div></div>
       <div class="upg-layout">
-        <!-- Блок ставки -->
         <div class="upg-stake-box" id="upgStakeBox" onclick="upgStakeClick()">
           <div class="upg-stake-icon" id="upgStakeIcon">📦</div>
           <div class="upg-stake-info">
@@ -585,12 +514,10 @@ img{display:block}
             <div class="upg-stake-val" id="upgStakeVal"></div>
           </div>
         </div>
-        <!-- Список целей (появляется после выбора ставки) -->
         <div class="upg-targets" id="upgTargetsWrap" style="display:none">
           <div class="upg-targets-lbl">Выбери цель апгрейда</div>
           <div class="upg-targets-list" id="upgTargetsList"></div>
         </div>
-        <!-- Круговая рулетка -->
         <div class="upg-wheel-wrap" id="upgWheelWrap" style="display:none">
           <div class="upg-wheel-svg" id="upgWheelSvg">
             <svg viewBox="0 0 220 220" id="upgSvg"></svg>
@@ -609,7 +536,6 @@ img{display:block}
         </div>
       </div>
       <button class="btn btn-primary" id="upgradeDoBtn" disabled style="margin-top:12px">⚡ АПГРЕЙД</button>
-      <!-- История апгрейдов -->
       <div class="upg-history-box" id="upgHistBox" style="display:none">
         <div class="upg-history-title">ИСТОРИЯ АПГРЕЙДОВ</div>
         <div id="upgHistList"></div>
@@ -617,7 +543,6 @@ img{display:block}
       <div class="inv-section" style="margin-top:14px"><h3>МОИ ПОДАРКИ</h3><div class="inv-grid" id="invUpgrade"></div></div>
     </div>
 
-    <!-- ▸ КРАФТ -->
     <div class="panel" id="craftPanel">
       <div class="sec-hdr"><div class="sec-title">КРАФТ</div><div class="sec-sub">3 подарка → 1 случайный</div></div>
       <p style="font-size:11px;color:var(--tm);margin-bottom:10px">Нажми на 3 подарка в инвентаре. <strong style="color:var(--ts)">35% победа</strong> — получишь дороже. <strong style="color:var(--red)">65% проигрыш</strong> — получишь дешевле.</p>
@@ -647,7 +572,6 @@ img{display:block}
       <div class="inv-section" style="margin-top:14px"><h3>МОИ ПОДАРКИ</h3><div class="inv-grid" id="invCraft"></div></div>
     </div>
 
-    <!-- ▸ PVP -->
     <div class="panel" id="pvpPanel">
       <div class="sec-hdr"><div class="sec-title">PvP БАТЛЫ</div><div class="sec-sub">победитель забирает всё</div></div>
       <div class="pvp-tabs">
@@ -673,7 +597,6 @@ img{display:block}
       <div class="inv-section"><h3>МОИ ПОДАРКИ</h3><div class="inv-grid" id="invPvp"></div></div>
     </div>
 
-    <!-- ▸ ПРОФИЛЬ -->
     <div class="panel" id="profilePanel">
       <div class="profile-hero">
         <div class="avatar-wrap">
@@ -712,9 +635,8 @@ img{display:block}
       </div>
     </div>
 
-  </div><!-- /content -->
+  </div>
 
-  <!-- НАВИГАЦИЯ — видима на всех устройствах -->
   <div class="tabs" id="tabsBar">
     <button class="tab active" data-tab="cases"><span class="tab-icon">🎁</span><span class="tab-lbl">Кейсы</span></button>
     <button class="tab" data-tab="upgrade"><span class="tab-icon">⬆️</span><span class="tab-lbl">Апгрейд</span></button>
@@ -725,15 +647,9 @@ img{display:block}
 </div>
 
 <script>
-// ══════════════════════════════════════════════
-// КОНФИГУРАЦИЯ SUPABASE
-// ══════════════════════════════════════════════
 const SB_URL='https://riwzrplciliebgexltll.supabase.co';
 const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJpd3pycGxjaWxpZWJnZXhsdGxsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyNjM5MjEsImV4cCI6MjA5MTgzOTkyMX0.jrrI78rQ-3VARU0I1eazM6iKHbSJLpcK5HCjJ4VRxnQ';
 
-// ══════════════════════════════════════════════
-// БАЗА ДАННЫХ ПОДАРКОВ
-// ══════════════════════════════════════════════
 const GIFTS={
   "Конфеты":            {icon:"🍬",val:8,  rarity:"common"},
   "Открытка":           {icon:"💌",val:10, rarity:"common"},
@@ -760,12 +676,10 @@ const GIFTS={
   "Бесконечный камень": {icon:"💫",val:1500,rarity:"legendary"},
   "Врата богов":        {icon:"⛩️",val:2000,rarity:"legendary"}
 };
-// Все подарки отсортированные по цене (нужно для апгрейда и крафта)
 const ALL_GIFTS=Object.entries(GIFTS).map(([n,g])=>({name:n,...g})).sort((a,b)=>a.val-b.val);
 const RARITY_LABELS={common:"Обычный",rare:"Редкий",epic:"Эпический",legendary:"Легендарный"};
 const RARITY_COLORS={common:"#666",rare:"#5577cc",epic:"#9955cc",legendary:"#c8a96e"};
 
-// Список кейсов
 const CASES=[
   {id:"starter",name:"СТАРТОВЫЙ",emoji:"🎀",price:12,cls:"c-common",gifts:[{n:"Конфеты",c:30},{n:"Открытка",c:25},{n:"Кексик",c:22},{n:"Воздушный шар",c:14},{n:"Шоколадка",c:9}]},
   {id:"common",name:"ОБЫЧНЫЙ",emoji:"📦",price:25,cls:"c-common",gifts:[{n:"Розовый мишка",c:20},{n:"Букет цветов",c:18},{n:"Шоколадка",c:16},{n:"Плюшевый кот",c:14},{n:"Воздушный шар",c:12},{n:"Кексик",c:10},{n:"Конфеты",c:10}]},
@@ -781,38 +695,25 @@ const CASES=[
   {id:"event",name:"СОБЫТИЕ",emoji:"🎄",price:140,cls:"c-special",gifts:[{n:"Бесконечный камень",c:10},{n:"Трон короля",c:8},{n:"Феникс",c:14},{n:"Легендарный дракон",c:13},{n:"Космический корабль",c:12},{n:"Единорог",c:11},{n:"Золотой кубок",c:10},{n:"Кристалл",c:10},{n:"Музыкальная шкатулка",c:8},{n:"Золотая звезда",c:4}]}
 ];
 
-// ══════════════════════════════════════════════
-// СОСТОЯНИЕ ПРИЛОЖЕНИЯ
-// ══════════════════════════════════════════════
 let userId=null, tgUser=null;
 let state={
   balance:250, inventory:[], casesOpened:0, pvpWins:0,
   history:[], luck:0, refCode:null, refCount:0, refEarned:0,
   avatarUrl:null, displayName:null
 };
-// Апгрейд
-let upgStakeGift=null; // выбранная ставка
-let upgTargetGift=null; // выбранная цель
-let upgHistory=[];      // история попыток апгрейда
-// Крафт
+let upgStakeGift=null;
+let upgTargetGift=null;
+let upgHistory=[];
 let craftSlots=[null,null,null];
-// PvP
 let pvpStakeIdx=null, pvpPrivStakeIdx=null, pvpMode='public';
 let battles=[], privateBattles=[];
 let coinRunning=false, activeCoinBid=null;
-// Sync
 let debounceSave=null, ws=null, wsHB=null, wsRT=null;
 let dataLoaded=false;
-// Пополнение
 let selectedDepAmt=null;
-// Вывод
 let withdrawGiftIdx=null;
-// WebSocket активность
 let lastWsActivity = Date.now();
 
-// ══════════════════════════════════════════════
-// RATE LIMITER
-// ══════════════════════════════════════════════
 const RL={_m:{},check(k,max=4){
   const n=Date.now();if(!this._m[k])this._m[k]=[];
   this._m[k]=this._m[k].filter(t=>n-t<1000);
@@ -823,9 +724,6 @@ const RL={_m:{},check(k,max=4){
   this._m[k].push(n);return true;
 }};
 
-// ══════════════════════════════════════════════
-// ЗВУК
-// ══════════════════════════════════════════════
 const SFX={_c:null,
   _g(){if(!this._c)this._c=new(window.AudioContext||window.webkitAudioContext)();return this._c},
   _t(f,d,v=.15,t='sine'){try{const c=this._g(),o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.type=t;o.frequency.value=f;g.gain.setValueAtTime(v,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+d);o.start();o.stop(c.currentTime+d);}catch(e){}},
@@ -836,14 +734,10 @@ const SFX={_c:null,
   coin(){this._t(600,.1,.1,'triangle')},
   craft(){[523,659,784,1047].forEach((f,i)=>setTimeout(()=>this._t(f,.15,.1),i*80))},
   almost(){this._t(900,.05,.06);setTimeout(()=>this._t(800,.05,.06),80)},
-  // Звук тиканья рулетки апгрейда
   tick(){this._t(1200,.03,.08,'square')}
 };
 function vibrate(p=[10]){try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}}
 
-// ══════════════════════════════════════════════
-// КОНФЕТТИ - ИСПРАВЛЕНА ОШИБКА #8 (отложенная инициализация)
-// ══════════════════════════════════════════════
 const CF=(()=>{
   let _cv=null, _cx=null, _ps=[], _af=null;
   function _init(){
@@ -858,7 +752,7 @@ const CF=(()=>{
     _cv.height=window.innerHeight;
   }
   let resizeTimer;
-  window.addEventListener('resize', () => { // ИСПРАВЛЕНА ОШИБКА #10 (debounce)
+  window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(resize, 100);
   });
@@ -880,19 +774,10 @@ const CF=(()=>{
   return{burst};
 })();
 
-// ══════════════════════════════════════════════
-// ТОСТ
-// ══════════════════════════════════════════════
 function toast(m){document.querySelectorAll('.toast').forEach(t=>t.remove());const t=document.createElement('div');t.className='toast';t.innerHTML=m;document.body.appendChild(t);setTimeout(()=>t.remove(),2600);}
 
-// ══════════════════════════════════════════════
-// КОПИРОВАНИЕ - ИСПРАВЛЕНА ОШИБКА #12 (переименована функция)
-// ══════════════════════════════════════════════
 function copyToClipboard(text){try{navigator.clipboard.writeText(text);}catch(e){const t=document.createElement('textarea');t.value=text;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();}}
 
-// ══════════════════════════════════════════════
-// SUPABASE REST
-// ══════════════════════════════════════════════
 async function sb(path,method='GET',body=null,h={}){
   try{
     const r=await fetch(SB_URL+path,{method,headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=representation',...h},body:body?JSON.stringify(body):null});
@@ -901,7 +786,6 @@ async function sb(path,method='GET',body=null,h={}){
   }catch(e){console.warn('SB',e);return null;}
 }
 
-// ── Загрузка пользователя ──
 async function loadUser(){
   if(!userId)return;
   const rows=await sb(`/rest/v1/gc_users?id=eq.${encodeURIComponent(userId)}&select=*`);
@@ -920,7 +804,6 @@ async function loadUser(){
   dataLoaded=true;await saveUser(true);return false;
 }
 
-// ── Сохранение с дебоунсом 600мс ──
 async function saveUser(now=false){
   if(!userId)return;
   clearTimeout(debounceSave);
@@ -932,7 +815,7 @@ async function saveUser(now=false){
     else{dot.className='sync-dot err';setTimeout(()=>dot.className='sync-dot',2000);}
   };
   if(now)await go();else debounceSave=setTimeout(go,600);
-  try{ // ИСПРАВЛЕНА ОШИБКА #19 (проверка квоты localStorage)
+  try{
     localStorage.setItem('gc_state',JSON.stringify({state,userId,ts:Date.now()}));
   } catch(e) {
     if(e.name === 'QuotaExceededError') {
@@ -941,12 +824,11 @@ async function saveUser(now=false){
     }
   }
 }
-function safeJ(v,d){ // ИСПРАВЛЕНА ОШИБКА #6 (логирование)
+function safeJ(v,d){
   try{ return typeof v==='string'?JSON.parse(v):(v??d);}
   catch(e){ console.error('JSON parse error:', v, e); return Array.isArray(d)?[...d]:d; }
 }
 
-// ── Батлы ──
 async function loadBattles(){
   const pub=await sb(`/rest/v1/battles?status=eq.waiting&or=(is_private.eq.false,is_private.is.null)&order=created_at.desc&limit=50`);
   if(pub)battles=pub;
@@ -956,45 +838,33 @@ async function loadBattles(){
 async function saveBattle(b){return await sb('/rest/v1/battles','POST',b,{'Prefer':'resolution=merge-duplicates,return=representation'});}
 async function updateBattle(id,data){return await sb(`/rest/v1/battles?id=eq.${id}`,'PATCH',data);}
 
-// ══════════════════════════════════════════════
-// WEBSOCKET REALTIME (Supabase Realtime v2)
-// Подписка на gc_users и battles
-// ══════════════════════════════════════════════
 function initRT(){
   if(wsRT)try{wsRT.close();}catch(e){}
   if(wsHB)clearInterval(wsHB);
   try{
     wsRT=new WebSocket(`wss://riwzrplciliebgexltll.supabase.co/realtime/v1/websocket?apikey=${SB_KEY}&vsn=1.0.0`);
     wsRT.onopen=()=>{
-      // Подписываемся на изменения батлов
       wsRT.send(JSON.stringify({topic:'realtime:public:battles',event:'phx_join',payload:{},ref:'j1'}));
-      // Подписываемся на изменения пользователей (для синхронизации баланса)
       wsRT.send(JSON.stringify({topic:'realtime:public:gc_users',event:'phx_join',payload:{},ref:'j2'}));
-      // Heartbeat каждые 20 сек чтобы не дропало соединение
       wsHB=setInterval(()=>{if(wsRT.readyState===1)wsRT.send(JSON.stringify({topic:'phoenix',event:'heartbeat',payload:{},ref:'hb'+Date.now()}));},20000);
     };
-    wsRT.onmessage=e=>{lastWsActivity=Date.now();try{handleRT(JSON.parse(e.data));}catch(ex){}}; // ИСПРАВЛЕНА ОШИБКА #7 (отслеживание активности)
+    wsRT.onmessage=e=>{lastWsActivity=Date.now();try{handleRT(JSON.parse(e.data));}catch(ex){}};
     wsRT.onclose=()=>{clearInterval(wsHB);setTimeout(initRT,4000);};
-    wsRT.onerror=()=>{wsRT.close();setTimeout(initRT,3000);}; // ИСПРАВЛЕНА ОШИБКА #11 (переподключение при ошибке)
+    wsRT.onerror=()=>{wsRT.close();setTimeout(initRT,3000);};
   }catch(e){setTimeout(initRT,5000);}
 }
 
 function handleRT(msg){
   if(['phx_reply','phx_error','phx_close'].includes(msg.event))return;
   const row=msg.payload?.record||msg.payload?.new||msg.payload?.data;if(!row)return;
-
-  // ── Обновления таблицы gc_users (мгновенная синхронизация баланса) ──
   if(msg.topic==='realtime:public:gc_users'){
     if(msg.event==='UPDATE'&&row.id===userId){
-      // Обновляем баланс и инвентарь если изменились на другом устройстве
       if(row.balance!==undefined&&row.balance!==state.balance){
         state.balance=row.balance;
         document.getElementById('balVal').innerText=state.balance;
       }
     }
   }
-
-  // ── Обновления таблицы battles ──
   if(msg.topic==='realtime:public:battles'){
     const isPub=row.is_private===false||row.is_private===null;
     if(msg.event==='INSERT'){
@@ -1004,7 +874,6 @@ function handleRT(msg){
     if(msg.event==='UPDATE'){
       if(row.status!=='waiting'){battles=battles.filter(b=>b.id!==row.id);privateBattles=privateBattles.filter(b=>b.id!==row.id);renderPvpLobby();}
       else{const bi=battles.findIndex(b=>b.id===row.id);if(bi>=0)battles[bi]=row;const pi=privateBattles.findIndex(b=>b.id===row.id);if(pi>=0)privateBattles[pi]=row;renderPvpLobby();}
-      // Создатель видит анимацию монетки когда противник присоединился
       if(row.status==='fighting'&&row.creator_id===userId&&row.opponent_gift&&!coinRunning&&activeCoinBid!==row.id){
         activeCoinBid=row.id;
         setTimeout(()=>{if(!coinRunning)showCoinFlip(safeJ(row.creator_gift,{}),safeJ(row.opponent_gift,{}),row,row.creator_id);},400);
@@ -1013,12 +882,8 @@ function handleRT(msg){
     if(msg.event==='DELETE'){const id=msg.payload?.old?.id;battles=battles.filter(b=>b.id!==id);privateBattles=privateBattles.filter(b=>b.id!==id);renderPvpLobby();}
   }
 }
-// Fallback поллинг с проверкой активности WS - ИСПРАВЛЕНА ОШИБКА #7
 setInterval(()=>{if(!wsRT||wsRT.readyState!==1||Date.now()-lastWsActivity>15000)loadBattles();},10000);
 
-// ══════════════════════════════════════════════
-// БАЛАНС, УДАЧА, ИСТОРИЯ
-// ══════════════════════════════════════════════
 function setBal(v){
   const p=state.balance;state.balance=Math.max(0,Math.floor(v));
   const el=document.getElementById('balVal');
@@ -1031,20 +896,17 @@ function addHist(icon,action,result,pos){state.history.unshift({icon,action,resu
 function makeGift(name){const g=GIFTS[name];if(!g)return null;return{name,icon:g.icon,val:g.val,rarity:g.rarity};}
 function validateInv(){state.inventory=state.inventory.filter(g=>g&&g.name&&GIFTS[g.name]&&g.val>0&&g.rarity);}
 
-// ── Найти подарок ближайший по цене ──
 function findGiftByPrice(targetPrice){
   let best=ALL_GIFTS[0],bestD=Infinity;
   ALL_GIFTS.forEach(g=>{const d=Math.abs(g.val-targetPrice);if(d<bestD){bestD=d;best=g;}});
   return best;
 }
 
-// ══════════════════════════════════════════════
-// РЕНДЕР ИНВЕНТАРЯ
-// ══════════════════════════════════════════════
+function escapeHtml(str){if(!str)return '';return str.replace(/[&<>]/g,function(m){if(m==='&')return'&amp;';if(m==='<')return'&lt;';if(m==='>')return'&gt;';return m;});}
+
 function renderInv(cid,withSell=false,mode=null){
   const el=document.getElementById(cid);if(!el)return;
   if(!state.inventory.length){el.innerHTML='<div class="inv-empty">📭 Нет подарков</div>';return;}
-  // ИСПРАВЛЕНА ОШИБКА #18 (санитайзинг через textContent в innerHTML)
   el.innerHTML=state.inventory.map((g,i)=>`<div class="inv-card" data-gi="${i}" data-mode="${mode||''}"><div class="inv-dot r-${g.rarity}"></div><div class="inv-icon">${g.icon}</div><div class="inv-name">${escapeHtml(g.name)}</div><div class="inv-val">★ ${g.val}</div>${withSell?`<button class="sell-chip" data-idx="${i}">Продать</button>`:''}</div>`).join('');
   if(withSell)el.querySelectorAll('.sell-chip').forEach(b=>{b.onclick=e=>{e.stopPropagation();sellGift(+b.dataset.idx);};});
   el.querySelectorAll('.inv-card').forEach(card=>{
@@ -1056,8 +918,6 @@ function renderInv(cid,withSell=false,mode=null){
     };
   });
 }
-// Функция для санитайзинга HTML
-function escapeHtml(str){if(!str)return '';return str.replace(/[&<>]/g,function(m){if(m==='&')return'&amp;';if(m==='<')return'&lt;';if(m==='>')return'&gt;';return m;});}
 function renderAllInv(){
   renderInv('invCases');renderInv('invUpgrade',false,'upgrade');renderInv('invCraft',false,'craft');
   renderInv('invPvp',false,pvpMode==='private'?'pvp_priv':'pvp_pub');renderInv('invProfile',true);
@@ -1080,14 +940,13 @@ function updateStats(){
   else s('pId')&&(s('pId').innerText='ID: '+(userId||'').slice(0,12));
   updateLuckBar();renderHist();renderAvatar();
 }
+function isValidUrl(url){try{const u=new URL(url);return ['http:','https:'].includes(u.protocol);}catch(e){return false;}}
 function renderAvatar(){
   const el=document.getElementById('avatarDisplay');if(!el)return;
-  // ИСПРАВЛЕНА ОШИБКА #5 (валидация URL аватара)
   if(state.avatarUrl && isValidUrl(state.avatarUrl))el.innerHTML=`<img src="${state.avatarUrl}">`;
   else if(tgUser?.photo_url && isValidUrl(tgUser.photo_url))el.innerHTML=`<img src="${tgUser.photo_url}">`;
   else el.innerText='👤';
 }
-function isValidUrl(url){try{const u=new URL(url);return ['http:','https:'].includes(u.protocol);}catch(e){return false;}}
 function renderHist(){
   const el=document.getElementById('histBody');if(!el)return;
   if(!state.history.length){el.innerHTML='<tr><td colspan="3" style="color:var(--tm);text-align:center;padding:14px;font-size:11px">Нет истории</td></tr>';return;}
@@ -1098,9 +957,6 @@ function updateAllUI(){
   renderAllInv();updateStats();renderUpgradeUI();renderCraftSlots();renderPvpLobby();
 }
 
-// ══════════════════════════════════════════════
-// КЕЙСЫ
-// ══════════════════════════════════════════════
 function renderCases(){
   const g=document.getElementById('casesGrid');if(!g)return;
   g.innerHTML=CASES.map(c=>`<div class="case-card ${c.cls}"><div class="case-visual"><div class="case-emoji">${c.emoji}</div></div><div class="case-body"><div class="case-name">${c.name}</div><div class="case-price">★ ${c.price}</div><div class="case-drops">${c.gifts.slice(0,3).map(gf=>`<span class="drop-tag">${GIFTS[gf.n]?.icon||''}</span>`).join('')}</div><button class="open-btn" data-id="${c.id}">ОТКРЫТЬ</button></div></div>`).join('');
@@ -1108,7 +964,6 @@ function renderCases(){
 }
 function rollCase(gifts){const tot=gifts.reduce((s,g)=>s+g.c,0);let r=Math.random()*tot,acc=0;for(const g of gifts){acc+=g.c;if(r<=acc)return g.n}return gifts[0].n;}
 
-// ── Открытие кейса с энергозарядом ──
 function openCase(c){
   if(!RL.check('openCase',2))return;
   if(state.balance<c.price){toast('❌ Нужно '+c.price+' ★');return;}
@@ -1128,7 +983,6 @@ function openCase(c){
   });
 }
 
-// ── Рулетка с энергетическим зарядом вместо надписи ──
 function showRouletteWithCharge(strip,wonPos,cb){
   const ov=document.createElement('div');ov.className='roulette-overlay';
   ov.innerHTML=`
@@ -1140,7 +994,6 @@ function showRouletteWithCharge(strip,wonPos,cb){
       <div class="roulette-track" id="rlTrack"></div>
     </div>`;
   document.body.appendChild(ov);
-  // Строим дорожку
   const track=ov.querySelector('#rlTrack');const ITEM=108;
   strip.forEach((name,si)=>{
     const g=GIFTS[name]||{icon:'🎁'};
@@ -1151,17 +1004,14 @@ function showRouletteWithCharge(strip,wonPos,cb){
   });
   const fill=document.getElementById('eFill');const wrap=document.getElementById('eWrap');
   let pct=0;
-  // Анимация заряда
   const chargeI=setInterval(()=>{
     pct=Math.min(100,pct+2.5);fill.style.width=pct+'%';
-    // Искры на вершине заряда
     if(Math.random()>.6){
       const sp=document.createElement('div');sp.className='spark';
       sp.style.left=(pct-1)+'%';sp.style.bottom='0';
       sp.style.setProperty('--sx',(Math.random()*30-15)+'px');sp.style.setProperty('--sy',(-(Math.random()*20+10))+'px');
       wrap.appendChild(sp);setTimeout(()=>sp.remove(),800);
     }
-    // Парящие частицы
     if(Math.random()>.8){
       const pt=document.createElement('div');pt.className='particle';
       const sz=Math.random()*3+1;pt.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;bottom:${Math.random()*20}px;--pd:${Math.random()*1.5+1}s`;
@@ -1169,7 +1019,6 @@ function showRouletteWithCharge(strip,wonPos,cb){
     }
     if(pct>=100){
       clearInterval(chargeI);
-      // Запускаем рулетку
       const boxW=ov.querySelector('#rlBox').offsetWidth||400;const center=boxW/2-ITEM/2;
       const finalX=-(wonPos*ITEM-center+Math.round((Math.random()-.5)*25));
       track.style.transform='translateX(0)';
@@ -1177,10 +1026,9 @@ function showRouletteWithCharge(strip,wonPos,cb){
       let ticks=0;const ti=setInterval(()=>{SFX.roulette();ticks++;if(ticks>28)clearInterval(ti);},130);
       setTimeout(()=>{ov.remove();vibrate([30]);if(cb)cb();},4800);
     }
-  },16); // ~60fps заряд за ~0.66сек
+  },16);
 }
 
-// ── Результат ──
 function showResultModal(name,type,cb){
   const info=GIFTS[name];if(!info)return;
   const isAlmost=type==='almost';
@@ -1201,15 +1049,11 @@ function showResultModal(name,type,cb){
   document.getElementById('rSell')?.onclick=()=>{ov.remove();if(cb)cb('sell');};
 }
 
-// ══════════════════════════════════════════════
-// АПГРЕЙД — КРУГОВАЯ РУЛЕТКА
-// chance = val_input / val_target * 100
-// ══════════════════════════════════════════════
 function upgStakeClick(){renderInv('invUpgrade',false,'upgrade');toast('👇 Нажми на подарок чтобы поставить');}
 
 function pickUpgStake(idx){
   const g=state.inventory[idx];if(!g)return;
-  if(upgStakeGift){state.inventory.push(upgStakeGift);} // вернуть предыдущую ставку
+  if(upgStakeGift){state.inventory.push(upgStakeGift);}
   upgStakeGift={...g};upgTargetGift=null;
   state.inventory.splice(idx,1);
   renderUpgradeUI();renderInv('invUpgrade',false,'upgrade');SFX.click();
@@ -1224,12 +1068,10 @@ function renderUpgradeUI(){
 
   if(upgStakeGift){
     si.innerText=upgStakeGift.icon;sn.innerText=upgStakeGift.name;sn.style.color='var(--tp)';sv.innerText='★ '+upgStakeGift.val;sb.classList.add('filled');
-    // Показываем цели — всё что дороже ставки
     const targets=ALL_GIFTS.filter(g=>g.val>upgStakeGift.val);
     tw.style.display=targets.length?'':'none';
     tl.innerHTML=targets.map(g=>`<div class="upg-target-item${upgTargetGift?.name===g.name?' selected':''}" data-name="${g.name}"><div class="uti-icon">${g.icon}</div><div class="uti-name">${escapeHtml(g.name)}</div><div class="uti-val">★ ${g.val}</div></div>`).join('');
     tl.querySelectorAll('.upg-target-item').forEach(el=>{el.onclick=()=>{const tg=GIFTS[el.dataset.name];upgTargetGift={name:el.dataset.name,...tg};renderUpgradeUI();SFX.click();};});
-    // Кнопка удаления ставки
     if(!sb.querySelector('.upg-stake-remove')){
       const rm=document.createElement('button');rm.className='upg-stake-remove';rm.innerText='✕';
       rm.onclick=(e)=>{e.stopPropagation();state.inventory.push(upgStakeGift);upgStakeGift=null;upgTargetGift=null;renderUpgradeUI();renderInv('invUpgrade',false,'upgrade');};
@@ -1238,7 +1080,6 @@ function renderUpgradeUI(){
   }else{si.innerText='📦';sn.innerText='Нажми — выбери подарок-ставку';sn.style.color='var(--tm)';sv.innerText='';sb.classList.remove('filled');tw.style.display='none';ww.style.display='none';btn.disabled=true;sb.querySelectorAll('.upg-stake-remove').forEach(b=>b.remove());return;}
 
   if(upgTargetGift&&upgStakeGift){
-    // Шанс = input / target * 100
     const chance=Math.round((upgStakeGift.val/upgTargetGift.val)*100);
     ww.style.display='flex';renderWheelSvg(chance);updateChanceDisplay(chance,upgStakeGift,upgTargetGift);
     btn.disabled=false;
@@ -1246,15 +1087,12 @@ function renderUpgradeUI(){
   renderUpgHistory();
 }
 
-// ── SVG круговая рулетка ──
 function renderWheelSvg(chance){
   const svg=document.getElementById('upgSvg');if(!svg)return;
   const r=90;const cx=110;const cy=110;
   const winPct=Math.max(2,Math.min(98,chance))/100;
   const losePct=1-winPct;
-  // Сектор победы (зелёный)
   const winAng=winPct*Math.PI*2;const loseAng=losePct*Math.PI*2;
-  // Начинаем сверху (-π/2)
   const startAngle=-Math.PI/2;
   const midAngle=startAngle+winAng;
   const winX1=cx+r*Math.cos(startAngle);const winY1=cy+r*Math.sin(startAngle);
@@ -1262,19 +1100,13 @@ function renderWheelSvg(chance){
   const loseX2=cx+r*Math.cos(startAngle);const loseY2=cy+r*Math.sin(startAngle);
   const winLargeArc=winPct>.5?1:0;const loseLargeArc=losePct>.5?1:0;
   svg.innerHTML=`
-    <!-- Фон круга -->
     <circle cx="${cx}" cy="${cy}" r="${r}" fill="#0f0f0f" stroke="#252525" stroke-width="1"/>
-    <!-- Проигрышный сектор (красный) — весь фон -->
     <path d="M${cx},${cy} L${winX1},${winY1} A${r},${r},0,${loseLargeArc},1,${loseX2},${loseY2} Z" fill="rgba(248,113,113,.15)" stroke="rgba(248,113,113,.3)" stroke-width="1"/>
-    <!-- Победный сектор (зелёный) -->
     <path d="M${cx},${cy} L${winX1},${winY1} A${r},${r},0,${winLargeArc},1,${winX2},${winY2} Z" fill="rgba(74,222,128,.15)" stroke="rgba(74,222,128,.4)" stroke-width="1"/>
-    <!-- Текст секторов -->
     <text x="${cx}" y="${cy-20}" text-anchor="middle" fill="rgba(74,222,128,.8)" font-size="12" font-family="Bebas Neue,sans-serif" letter-spacing="1">${chance}%</text>
     <text x="${cx}" y="${cy-6}" text-anchor="middle" fill="rgba(74,222,128,.5)" font-size="9">WIN</text>
     <text x="${cx}" y="${cy+16}" text-anchor="middle" fill="rgba(248,113,113,.6)" font-size="9">LOSE</text>
-    <!-- Центральный круг -->
     <circle cx="${cx}" cy="${cy}" r="28" fill="#0f0f0f" stroke="#323232" stroke-width="1"/>
-    <!-- Деления -->
     ${Array.from({length:24},(_,i)=>{const a=i/24*Math.PI*2-Math.PI/2;const x1=cx+(r-6)*Math.cos(a);const y1=cy+(r-6)*Math.sin(a);const x2=cx+r*Math.cos(a);const y2=cy+r*Math.sin(a);return`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#252525" stroke-width="1"/>`;}).join('')}
   `;
 }
@@ -1287,21 +1119,17 @@ function updateChanceDisplay(chance,stake,target){
   if(cd)cd.innerText=`${stake.val} ★ → ${target.val} ★  |  ${stake.val}/${target.val} × 100`;
 }
 
-// ── Анимация стрелки (вращается при апгрейде) ──
 function spinArrowAndResult(chance,win){
   return new Promise(resolve=>{
     const arrow=document.getElementById('upgArrow');if(!arrow)return resolve();
-    // Базовые обороты + финальная позиция
     const totalSpins=3+Math.random()*2;
-    const winZone=chance/100; // зелёный сектор = [0, winZone*360)
-    // Если победа — останавливаемся в зелёной зоне, если проигрыш — в красной
-    const winLandDeg=Math.random()*winZone*360; // внутри зелёного
-    const loseLandDeg=winZone*360+Math.random()*(360-winZone*360); // красный
+    const winZone=chance/100;
+    const winLandDeg=Math.random()*winZone*360;
+    const loseLandDeg=winZone*360+Math.random()*(360-winZone*360);
     const landDeg=win?winLandDeg:loseLandDeg;
     const totalDeg=totalSpins*360+landDeg;
     arrow.style.transition=`transform ${2.5+Math.random()*0.5}s cubic-bezier(0.08,0.82,0.17,1)`;
     arrow.style.transform=`rotate(${totalDeg}deg)`;
-    // Звук тиканья
     let t=0;const ti=setInterval(()=>{SFX.tick();t++;if(t>30)clearInterval(ti);},80);
     setTimeout(()=>{clearInterval(ti);resolve();},3200);
   });
@@ -1312,11 +1140,10 @@ async function doUpgrade(){
   if(!upgStakeGift||!upgTargetGift){toast('Выбери подарок и цель');return;}
   const chance=Math.round((upgStakeGift.val/upgTargetGift.val)*100);
   const roll=Math.random()*100;const win=roll<=chance;
-  const almost=!win&&roll<=chance+8; // промах в пределах 8% = "почти попал"
+  const almost=!win&&roll<=chance+8;
   const stakeSnap={...upgStakeGift};const targetSnap={...upgTargetGift};
   upgStakeGift=null;upgTargetGift=null;
   document.getElementById('upgradeDoBtn').disabled=true;
-  // Вращаем стрелку
   await spinArrowAndResult(chance,win);
   if(win){
     state.inventory.push(makeGift(targetSnap.name));
@@ -1329,13 +1156,11 @@ async function doUpgrade(){
     if(almost)SFX.almost();else SFX.lose();vibrate([50]);incLuck(4);
     upgHistory.unshift({from:stakeSnap,to:targetSnap,win:false,almost,ts:Date.now()});
     addHist('💀','Апгрейд: '+stakeSnap.name,'💀 Провал',false);
-    // Показываем проигрышный результат
     const loseOv=document.createElement('div');loseOv.className='result-overlay';
     loseOv.innerHTML=`<div class="result-box"><div class="result-icon" style="filter:grayscale(1);opacity:.5">${stakeSnap.icon}</div><div class="result-title" style="color:var(--red)">ПРОВАЛ</div>${almost?'<div class="almost-badge">🔥 Почти попал! Ещё раз?</div>':''}<div style="font-size:12px;color:var(--tm);margin-top:8px">Подарок потерян</div><div class="result-btns"><button class="btn btn-outline" id="lClose">Закрыть</button></div></div>`;
     document.body.appendChild(loseOv);document.getElementById('lClose').onclick=()=>loseOv.remove();
   }
   updateAllUI();saveUser();
-  // Сбрасываем стрелку
   const arrow=document.getElementById('upgArrow');if(arrow){arrow.style.transition='none';arrow.style.transform='rotate(0deg)';}
 }
 
@@ -1346,9 +1171,6 @@ function renderUpgHistory(){
   list.innerHTML=upgHistory.slice(0,8).map(h=>`<div class="upg-hist-item"><div class="uhi-icons"><span>${h.from.icon}</span><span class="uhi-arrow">→</span><span style="${!h.win?'opacity:.4':''}">${h.to.icon}</span></div><div class="uhi-info">${escapeHtml(h.from.name)} → ${escapeHtml(h.to.name)}</div><div class="uhi-result ${h.win?'uhi-win':'uhi-lose'}">${h.win?'✅ WIN':'💀 LOSE'}${h.almost&&!h.win?'<span class="uhi-almost">🔥</span>':''}</div></div>`).join('');
 }
 
-// ══════════════════════════════════════════════
-// КРАФТ — 35% / 65%
-// ══════════════════════════════════════════════
 function renderCraftSlots(){
   for(let i=0;i<3;i++){
     const el=document.querySelector(`.craft-slot[data-slot="${i}"]`);if(!el)continue;
@@ -1365,7 +1187,6 @@ function renderCraftSlots(){
 }
 function pickCraft(idx){
   const g=state.inventory[idx];if(!g)return;
-  // ИСПРАВЛЕНА ОШИБКА #14 (проверка дубликатов в крафте)
   const alreadyInSlot=craftSlots.some(slot=>slot && slot.name===g.name && slot.val===g.val);
   if(alreadyInSlot){toast('⚠️ Этот подарок уже в слоте!');return;}
   const slot=craftSlots.findIndex(s=>s===null);if(slot===-1){toast('Все слоты заняты!');return;}
@@ -1382,7 +1203,6 @@ function doCraft(){
   if(!RL.check('craft',2))return;
   const placed=craftSlots.filter(Boolean);if(placed.length<3){toast('Добавь 3 подарка');return;}
   const tot=placed.reduce((s,g)=>s+g.val,0);
-  // Шанс 1-3% на легендарный бонус
   const ultraRare=Math.random()<0.02;
   const win=ultraRare||Math.random()<0.35;
   const mult=ultraRare?(3+Math.random()*2):win?(1.3+Math.random()*.7):(0.5+Math.random()*.4);
@@ -1390,7 +1210,6 @@ function doCraft(){
   const result=findGiftByPrice(targetPrice);
   const almost=!win&&!ultraRare&&Math.random()>.75;
   craftSlots=[null,null,null];
-  // Рулетка крафта
   showCraftRoulette(result.name,win,almost,()=>{
     state.inventory.push({name:result.name,icon:result.icon,val:result.val,rarity:result.rarity});
     addHist(result.icon,'Крафт → '+result.name,'★ '+result.val,win);
@@ -1423,9 +1242,6 @@ function showCraftRoulette(wonName,win,almost,cb){
   }},18);
 }
 
-// ══════════════════════════════════════════════
-// PVP
-// ══════════════════════════════════════════════
 function pickPvp(idx,mode){
   const g=state.inventory[idx];if(!g)return;
   if(mode==='private'){pvpPrivStakeIdx=idx;document.getElementById('pvpPrivateStakeText').innerHTML=g.icon+' '+escapeHtml(g.name);document.getElementById('pvpPrivateStakeVal').innerText='★ '+g.val;document.getElementById('createPrivateBattleBtn').disabled=false;}
@@ -1464,17 +1280,16 @@ async function joinBattle(bid){
 }
 async function cancelBattle(bid){const b=battles.find(x=>x.id===bid)||privateBattles.find(x=>x.id===bid);if(!b||b.creator_id!==userId)return;const g=safeJ(b.creator_gift,{});state.inventory.push(g);battles=battles.filter(x=>x.id!==bid);privateBattles=privateBattles.filter(x=>x.id!==bid);await updateBattle(bid,{status:'cancelled'});saveUser();renderPvpLobby();toast('Батл отменён');}
 
-// Детерминированный победитель - ИСПРАВЛЕНА ОШИБКА #15 (целочисленная арифметика)
+// ИСПРАВЛЕННАЯ ФУНКЦИЯ detWinner
 function detWinner(bid,g1,g2){
   let s=0;
   for(let i=0;i<bid.length;i++)s=(s*31+bid.charCodeAt(i))%1000000;
-  function sr(){s=(s*9301+49297)%233280;return s/233280;}
+  let sr=function(){s=(s*9301+49297)%233280;return s/233280;};
   const v1=Math.floor(g1.val*0.1 + sr()*(g1.val*0.9));
   const v2=Math.floor(g2.val*0.1 + sr()*(g2.val*0.9));
   return v1>=v2?'creator':'opponent';
 }
 
-// ── Монетка с вертикальным броском ──
 function showCoinFlip(gift1,gift2,battle,creatorId){
   if(document.querySelector('.coin-overlay'))return;if(coinRunning)return;coinRunning=true;
   const ov=document.createElement('div');ov.className='coin-overlay';
@@ -1490,7 +1305,6 @@ function showCoinFlip(gift1,gift2,battle,creatorId){
   document.body.appendChild(ov);
   const winner=detWinner(battle.id,gift1,gift2);const cWins=winner==='creator';
   const iAmCreator=userId===creatorId;const iWon=iAmCreator?cWins:!cWins;
-  // heads=орёл=победа создателя (0 доп. оборот), tails=решка=победа противника (+180 по X)
   const finalRx=1800+(cWins?0:180);
   document.getElementById('coin3d').style.setProperty('--rx',finalRx+'deg');
   SFX.coin();vibrate([15]);
@@ -1514,9 +1328,6 @@ function showCoinFlip(gift1,gift2,battle,creatorId){
   },3500);
 }
 
-// ══════════════════════════════════════════════
-// ПОПОЛНЕНИЕ ЧЕРЕЗ TELEGRAM STARS
-// ══════════════════════════════════════════════
 const DEP_AMTS=[
   {stars:50,price:1},{stars:150,price:2},{stars:500,price:5},
   {stars:1000,price:10},{stars:2500,price:25},{stars:5000,price:50}
@@ -1534,7 +1345,6 @@ document.getElementById('depConfirmBtn').onclick=()=>{
   if(!selectedDepAmt)return;
   const tg=window.Telegram?.WebApp;
   if(tg?.openInvoice){
-    // Вызываем Telegram Stars инвойс
     tg.openInvoice({
       title:'GiftCase Stars',
       description:`Пополнение на ${selectedDepAmt.stars} ★`,
@@ -1553,7 +1363,6 @@ document.getElementById('depConfirmBtn').onclick=()=>{
       else{toast('❌ Ошибка оплаты: '+status);}
     });
   }else{
-    // Демо режим (браузер)
     setBal(state.balance+selectedDepAmt.stars);
     addHist('💎','Пополнение (демо)','+'+selectedDepAmt.stars+' ★',true);
     toast('✅ +'+selectedDepAmt.stars+' ★ (демо)');
@@ -1562,9 +1371,6 @@ document.getElementById('depConfirmBtn').onclick=()=>{
   }
 };
 
-// ══════════════════════════════════════════════
-// ВЫВОД TELEGRAM GIFTS
-// ══════════════════════════════════════════════
 function openWithdrawModal(){
   withdrawGiftIdx=null;document.getElementById('withdrawConfirmBtn').disabled=true;
   const grid=document.getElementById('withdrawInvGrid');
@@ -1590,17 +1396,10 @@ document.getElementById('withdrawConfirmBtn').onclick=async()=>{
   }
 };
 
-// ══════════════════════════════════════════════
-// ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
-// ══════════════════════════════════════════════
-
-// ── PVP табы ──
 document.querySelectorAll('.pvp-tab').forEach(btn=>{btn.onclick=()=>{document.querySelectorAll('.pvp-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');pvpMode=btn.dataset.pvptab;const ip=pvpMode==='public';document.getElementById('publicCreateBox').style.display=ip?'':'none';document.getElementById('privateCreateBox').style.display=ip?'none':'';document.getElementById('publicLobbyWrap').style.display=ip?'':'none';document.getElementById('privateLobbyWrap').style.display=ip?'none':'';renderInv('invPvp',false,ip?'pvp_pub':'pvp_priv');renderPvpLobby();SFX.click();};});
 
-// ── Навигационные табы ──
 document.querySelectorAll('.tab').forEach(btn=>{btn.onclick=()=>{if(!RL.check('tab',10))return;document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));const tab=btn.dataset.tab;document.getElementById(tab+'Panel').classList.add('active');document.getElementById('mainContent').scrollTop=0;if(tab==='pvp')loadBattles();if(tab==='profile')updateStats();SFX.click();vibrate([5]);};});
 
-// ── Кнопки ──
 document.getElementById('addBtn').onclick=()=>{if(!RL.check('add',3))return;setBal(state.balance+100);addHist('⭐️','Пополнение','+100 ★',true);toast('★ +100');saveUser();};
 document.getElementById('balancePill').onclick=()=>{if(!RL.check('add',3))return;setBal(state.balance+100);addHist('⭐️','Пополнение','+100 ★',true);toast('★ +100');saveUser();};
 document.getElementById('upgradeDoBtn').onclick=doUpgrade;
@@ -1616,11 +1415,9 @@ document.getElementById('avatarInput').onchange=function(e){const f=e.target.fil
 document.getElementById('editNameBtn').onclick=()=>{const n=prompt('Введите имя:',state.displayName||'ИГРОК');if(n&&n.trim()){state.displayName=n.trim().slice(0,20).toUpperCase();document.getElementById('pName').innerText=state.displayName;saveUser();toast('✅ Имя обновлено');}};
 document.getElementById('bsSkip').onclick=()=>document.getElementById('browserStub').classList.remove('show');
 
-// ── Онлайн-счётчик ──
 function upOnline(){document.getElementById('onlineCount').innerText=140+Math.round((Math.random()-.5)*30);}
 setInterval(upOnline,6000);upOnline();
 
-// ── PWA инсталл ──
 function setupPWA(){
   const m={name:"GiftCase",short_name:"GiftCase",start_url:window.location.pathname,display:"standalone",background_color:"#060606",theme_color:"#060606",icons:[{src:"https://fav.farm/🎁",sizes:"192x192",type:"image/png"}]};
   const b=new Blob([JSON.stringify(m)],{type:'application/manifest+json'});
@@ -1629,9 +1426,6 @@ function setupPWA(){
   window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e;setTimeout(()=>{const ban=document.createElement('div');ban.className='install-banner';ban.innerHTML=`<div class="ib-icon">🎁</div><div class="ib-text"><div class="ib-title">Добавить на экран</div><div class="ib-sub">Быстрый доступ к GiftCase</div></div><button class="ib-btn" id="ib">Добавить</button><button class="ib-close" id="ibc">✕</button>`;document.body.appendChild(ban);document.getElementById('ib').onclick=async()=>{dp.prompt();await dp.userChoice;ban.remove();dp=null;};document.getElementById('ibc').onclick=()=>ban.remove();},5000);});
 }setupPWA();
 
-// ══════════════════════════════════════════════
-// TELEGRAM ИНИЦИАЛИЗАЦИЯ
-// ══════════════════════════════════════════════
 function initTG(){
   const tg=window.Telegram?.WebApp;
   if(tg){
@@ -1671,16 +1465,12 @@ function initTG(){
 }
 document.getElementById('bsSkip').onclick=()=>{document.getElementById('browserStub').classList.remove('show');localStorage.setItem('gc_stub_skipped','1');};
 
-// ══════════════════════════════════════════════
-// ПРОВЕРКА РЕФЕРАЛА И JOIN-ССЫЛКИ - ИСПРАВЛЕНА ОШИБКА #3
-// ══════════════════════════════════════════════
 function checkReferral(){
   const p=new URLSearchParams(window.location.search);
   const ref=p.get('ref');
   if(ref&&ref!==state.refCode&&!localStorage.getItem('gc_ref_used_'+ref)){
     localStorage.setItem('gc_ref_used_'+ref,'1');
     state.balance+=50;
-    // Сохраняем использованный реферальный код
     if(!state.usedRefCode) state.usedRefCode=ref;
     saveUser();
     toast('🎁 +50 ★ реферальный бонус');
@@ -1701,9 +1491,6 @@ function checkReferral(){
   }
 }
 
-// ══════════════════════════════════════════════
-// ИНИЦИАЛИЗАЦИЯ
-// ══════════════════════════════════════════════
 async function init(){
   initTG();
   try{const loc=localStorage.getItem('gc_state');if(loc){const d=JSON.parse(loc);if(d.userId===userId&&d.state&&Date.now()-d.ts<3600000)state={...state,...d.state};}}catch(e){}
