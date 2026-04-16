@@ -397,9 +397,34 @@ img{display:block}
 
 .modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:600;display:none;align-items:flex-end;justify-content:center}
 .modal-ov.show{display:flex;animation:fadeIn .2s}
-.modal-sheet{background:var(--s1);border:1px solid var(--border);border-top-left-radius:var(--r-xl);border-top-right-radius:var(--r-xl);padding:24px 16px calc(20px + env(safe-area-inset-bottom));width:100%;max-width:540px;animation:slideUp .3s var(--spring)}
+.modal-sheet{
+  background:var(--s1);
+  border:1px solid var(--border);
+  border-top-left-radius:var(--r-xl);
+  border-top-right-radius:var(--r-xl);
+  padding:24px 16px calc(20px + env(safe-area-inset-bottom));
+  width:100%;
+  max-width:540px;
+  animation:slideUp .3s var(--spring);
+  transition: height 0.1s ease;
+  height: auto;
+  min-height: 280px;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+.modal-handle{
+  width:40px;
+  height:4px;
+  background:var(--borderL);
+  border-radius:2px;
+  margin:0 auto 16px;
+  cursor: ns-resize;
+  touch-action: none;
+}
+.modal-handle:active{
+  background:var(--gold);
+}
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.modal-handle{width:32px;height:3px;background:var(--borderL);border-radius:2px;margin:0 auto 16px}
 .modal-title{font-family:var(--font-d);font-size:24px;letter-spacing:1px;margin-bottom:14px}
 
 .install-banner{position:fixed;bottom:calc(var(--tab-h) + env(safe-area-inset-bottom) + 8px);left:50%;transform:translateX(-50%);background:var(--s2);border:1px solid var(--borderL);border-radius:var(--r-xl);padding:10px 14px;max-width:320px;width:90%;display:flex;align-items:center;gap:8px;z-index:60;animation:toastIn .4s var(--spring);box-shadow:var(--sh)}
@@ -955,7 +980,7 @@ function renderAvatar(){
 }
 function renderHist(){
   const el=document.getElementById('histBody');if(!el)return;
-  if(!state.history.length){el.innerHTML='<tr><td colspan="3" style="color:var(--tm);text-align:center;padding:14px;font-size:11px">Нет истории</td></tr>';return;}
+  if(!state.history.length){el.innerHTML='<tr><td colspan="3" style="color:var(--tm);text-align:center;padding:14px;font-size:11px">Нет истории</tr>';return;}
   el.innerHTML=state.history.slice(0,25).map(h=>`<tr><td style="font-size:15px">${escapeHtml(h.icon)}</td><td>${escapeHtml(h.action)}</td><td class="${h.pos?'hist-pos':'hist-neg'}">${escapeHtml(h.result)}</td></tr>`).join('');
 }
 function updateAllUI(){
@@ -1349,34 +1374,83 @@ function openDepositModal(){
   selectedDepAmt=null;document.getElementById('depConfirmBtn').disabled=true;
   el.innerHTML=DEP_AMTS.map((d,i)=>`<div class="dep-amt" data-i="${i}"><div class="dep-amt-stars">★ ${d.stars}</div><div class="dep-amt-price">${d.price} XTR</div></div>`).join('');
   el.querySelectorAll('.dep-amt').forEach(btn=>{btn.onclick=()=>{el.querySelectorAll('.dep-amt').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');selectedDepAmt=DEP_AMTS[+btn.dataset.i];document.getElementById('depConfirmBtn').disabled=false;};});
-  document.getElementById('depositModal').classList.add('show');
+  
+  const modal = document.getElementById('depositModal');
+  modal.classList.add('show');
+  
+  // Делаем ползунок активным - возможность растягивать шторку
+  const sheet = modal.querySelector('.modal-sheet');
+  const handle = modal.querySelector('.modal-handle');
+  
+  if(sheet && handle && !sheet.hasAttribute('data-resizable')) {
+    sheet.setAttribute('data-resizable', 'true');
+    
+    let startY = 0;
+    let startHeight = 0;
+    
+    const onMove = (e) => {
+      const currentY = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
+      if(!currentY) return;
+      const dy = currentY - startY;
+      let newHeight = startHeight - dy;
+      newHeight = Math.min(window.innerHeight * 0.85, Math.max(280, newHeight));
+      sheet.style.height = newHeight + 'px';
+      sheet.style.maxHeight = newHeight + 'px';
+    };
+    
+    const onStop = () => {
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', onStop);
+      document.removeEventListener('touchmove', onMove);
+      document.removeEventListener('touchend', onStop);
+    };
+    
+    const onStart = (e) => {
+      startY = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
+      startHeight = sheet.offsetHeight;
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onStop);
+      document.addEventListener('touchmove', onMove);
+      document.addEventListener('touchend', onStop);
+      e.preventDefault();
+    };
+    
+    handle.addEventListener('mousedown', onStart);
+    handle.addEventListener('touchstart', onStart);
+  }
 }
 document.getElementById('depCancelBtn').onclick=()=>document.getElementById('depositModal').classList.remove('show');
 document.getElementById('depConfirmBtn').onclick=()=>{
   if(!selectedDepAmt)return;
-  const tg=window.Telegram?.WebApp;
-  if(tg?.openInvoice){
+  
+  // Пытаемся оплатить через Telegram Stars
+  const tg = window.Telegram?.WebApp;
+  if(tg && tg.openInvoice) {
     tg.openInvoice({
-      title:'GiftCase Stars',
-      description:`Пополнение на ${selectedDepAmt.stars} ★`,
-      payload:`deposit_${userId}_${selectedDepAmt.stars}_${Date.now()}`,
-      provider_token:'',
-      currency:'XTR',
-      prices:[{label:`${selectedDepAmt.stars} Stars`,amount:selectedDepAmt.price}]
-    },(status)=>{
-      if(status==='paid'){
-        setBal(state.balance+selectedDepAmt.stars);
-        addHist('💎','Пополнение (Stars)','+'+selectedDepAmt.stars+' ★',true);
-        toast('✅ +'+selectedDepAmt.stars+' ★ Stars зачислены!');
+      title: 'GiftCase Stars',
+      description: `Пополнение на ${selectedDepAmt.stars} ★`,
+      payload: `deposit_${userId}_${selectedDepAmt.stars}_${Date.now()}`,
+      provider_token: '',
+      currency: 'XTR',
+      prices: [{ label: `${selectedDepAmt.stars} Stars`, amount: selectedDepAmt.price }]
+    }, (status) => {
+      if(status === 'paid') {
+        setBal(state.balance + selectedDepAmt.stars);
+        addHist('💎', 'Пополнение (Stars)', '+' + selectedDepAmt.stars + ' ★', true);
+        toast('✅ +' + selectedDepAmt.stars + ' ★ Stars зачислены!');
         document.getElementById('depositModal').classList.remove('show');
         saveUser();
-      }else if(status==='cancelled'){toast('Оплата отменена');}
-      else{toast('❌ Ошибка оплаты: '+status);}
+      } else if(status === 'cancelled') {
+        toast('Оплата отменена');
+      } else {
+        toast('❌ Ошибка оплаты: ' + status);
+      }
     });
-  }else{
-    setBal(state.balance+selectedDepAmt.stars);
-    addHist('💎','Пополнение (демо)','+'+selectedDepAmt.stars+' ★',true);
-    toast('✅ +'+selectedDepAmt.stars+' ★ (демо)');
+  } else {
+    // Демо-режим (если не в Telegram)
+    setBal(state.balance + selectedDepAmt.stars);
+    addHist('💎', 'Пополнение (демо)', '+' + selectedDepAmt.stars + ' ★', true);
+    toast('✅ +' + selectedDepAmt.stars + ' ★ (демо)');
     document.getElementById('depositModal').classList.remove('show');
     saveUser();
   }
