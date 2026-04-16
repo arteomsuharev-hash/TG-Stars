@@ -776,7 +776,18 @@ const CF=(()=>{
 
 function toast(m){document.querySelectorAll('.toast').forEach(t=>t.remove());const t=document.createElement('div');t.className='toast';t.innerHTML=m;document.body.appendChild(t);setTimeout(()=>t.remove(),2600);}
 
-function copyToClipboard(text){try{navigator.clipboard.writeText(text);}catch(e){const t=document.createElement('textarea');t.value=text;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();}}
+function copyToClipboard(text){
+  try{
+    navigator.clipboard.writeText(text);
+  }catch(e){
+    const t=document.createElement('textarea');
+    t.value=text;
+    document.body.appendChild(t);
+    t.select();
+    document.execCommand('copy');
+    t.remove();
+  }
+}
 
 async function sb(path,method='GET',body=null,h={}){
   try{
@@ -1280,14 +1291,18 @@ async function joinBattle(bid){
 }
 async function cancelBattle(bid){const b=battles.find(x=>x.id===bid)||privateBattles.find(x=>x.id===bid);if(!b||b.creator_id!==userId)return;const g=safeJ(b.creator_gift,{});state.inventory.push(g);battles=battles.filter(x=>x.id!==bid);privateBattles=privateBattles.filter(x=>x.id!==bid);await updateBattle(bid,{status:'cancelled'});saveUser();renderPvpLobby();toast('Батл отменён');}
 
-// ИСПРАВЛЕННАЯ ФУНКЦИЯ detWinner
 function detWinner(bid,g1,g2){
   let s=0;
-  for(let i=0;i<bid.length;i++)s=(s*31+bid.charCodeAt(i))%1000000;
-  let sr=function(){s=(s*9301+49297)%233280;return s/233280;};
-  const v1=Math.floor(g1.val*0.1 + sr()*(g1.val*0.9));
-  const v2=Math.floor(g2.val*0.1 + sr()*(g2.val*0.9));
-  return v1>=v2?'creator':'opponent';
+  for(let i=0;i<bid.length;i++){
+    s = (s * 31 + bid.charCodeAt(i)) % 1000000;
+  }
+  const random = function(){
+    s = (s * 9301 + 49297) % 233280;
+    return s / 233280;
+  };
+  const v1 = Math.floor(g1.val * 0.1 + random() * (g1.val * 0.9));
+  const v2 = Math.floor(g2.val * 0.1 + random() * (g2.val * 0.9));
+  return v1 >= v2 ? 'creator' : 'opponent';
 }
 
 function showCoinFlip(gift1,gift2,battle,creatorId){
