@@ -307,6 +307,15 @@ img{display:block}
 <div class="rl-banner" id="rlBanner">⚠️ Слишком быстро, подождите</div>
 <div id="loadingIndicator" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:var(--s2); padding:12px 24px; border-radius:var(--r-full); z-index:10000; font-size:14px; color:var(--gold);">⏳ Загрузка...</div>
 
+<!-- Модальное окно для входа через Telegram -->
+<div id="telegramLogin" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:var(--s2); border:1px solid var(--borderL); border-radius:var(--r-lg); padding:24px; z-index:10001; text-align:center; flex-direction:column; align-items:center;">
+  <div style="font-size:24px; margin-bottom:12px">📱</div>
+  <div style="font-size:16px; font-weight:700; margin-bottom:8px">Войдите через Telegram</div>
+  <div style="font-size:12px; color:var(--tm); margin-bottom:16px">Для синхронизации профиля между устройствами</div>
+  <a href="https://t.me/giftcase_bot/giftcase" target="_blank" style="display:inline-block; background:var(--gold); color:#000; padding:12px 24px; border-radius:var(--r-full); text-decoration:none; font-weight:700;">Открыть в Telegram</a>
+  <button id="closeTelegramLogin" style="margin-top:16px; background:none; color:var(--ts); cursor:pointer;">Закрыть</button>
+</div>
+
 <div class="app" id="app">
   <div class="topbar">
     <div class="logo">GIFTCASE<div class="logo-dot"></div></div>
@@ -597,7 +606,7 @@ const RL={_map:{},check(k,max=4){
 }};
 
 // ═══════════════════════════════════════════════════════
-// SOUND & CONFETTI (сокращённо)
+// SOUND & CONFETTI
 // ═══════════════════════════════════════════════════════
 const SFX={_ctx:null,
   _get(){if(!this._ctx)this._ctx=new(window.AudioContext||window.webkitAudioContext)();return this._ctx},
@@ -696,7 +705,6 @@ async function saveUserToDB(immediate=false){
     const dot=document.getElementById('syncDot');
     if(res){dot.className='sync-indicator ok';setTimeout(()=>dot.className='sync-indicator',1200);}
     else{dot.className='sync-indicator err';setTimeout(()=>dot.className='sync-indicator',2000);}
-    // Очищаем кэш после сохранения
     cache = {};
   };
   if(immediate)await doSave();
@@ -719,7 +727,7 @@ async function loadBattles(){
 async function saveBattle(b){return await sbFetch('/rest/v1/battles','POST',b,{'Prefer':'resolution=merge-duplicates,return=representation'},true);}
 async function updateBattle(id,data){return await sbFetch(`/rest/v1/battles?id=eq.${id}`,'PATCH',data,{},true);}
 
-// REALTIME (без изменений, работает)
+// REALTIME
 function initRealtime(){
   if(wsReconnectTimer){clearTimeout(wsReconnectTimer);wsReconnectTimer=null;}
   if(wsHeartbeatTimer){clearInterval(wsHeartbeatTimer);wsHeartbeatTimer=null;}
@@ -933,7 +941,7 @@ function showResultModal(name,isUpgrade,cb){
 }
 
 // ═══════════════════════════════════════════════════════
-// UPGRADE (сокращённо, логика та же)
+// UPGRADE
 // ═══════════════════════════════════════════════════════
 function renderUpgradeSlots(){
   const container=document.getElementById('upgradeSlots');if(!container)return;
@@ -1153,7 +1161,6 @@ async function createPrivateBattle(){
 async function joinBattle(battleId){
   if(!RL.check('joinBattle',2))return;
   
-  // Ждём загрузки данных пользователя
   if(!dataLoaded || !state.inventory || state.inventory.length === undefined){
     toast('⏳ Загрузка данных... Подождите');
     setTimeout(() => joinBattle(battleId), 1000);
@@ -1450,25 +1457,95 @@ function setupPWA(){
 setupPWA();
 
 // ═══════════════════════════════════════════════════════
-// TELEGRAM (ЕДИНЫЙ ID)
+// TELEGRAM (ЕДИНЫЙ ID С СОХРАНЕНИЕМ В LOCALSTORAGE)
 // ═══════════════════════════════════════════════════════
+function isInTelegramWebView(){
+  return !!(window.Telegram?.WebApp);
+}
+
 function initTelegram(){
-  const tg=window.Telegram?.WebApp;
+  const tg = window.Telegram?.WebApp;
+  
   if(tg){
-    tg.expand();tg.ready();
-    try{tg.setHeaderColor('#0f0f0f');}catch(e){}
-    const u=tg.initDataUnsafe?.user;
+    tg.expand();
+    tg.ready();
+    try{ tg.setHeaderColor('#0f0f0f'); }catch(e){}
+    
+    const u = tg.initDataUnsafe?.user;
     if(u){
-      tgUser={...u};
-      // ИСПРАВЛЕНО: единый ID для ПК и телефона
-      userId='tg_'+u.id;
+      tgUser = {...u};
+      // Единый ID на основе Telegram ID
+      userId = 'tg_' + u.id;
+      
+      // Сохраняем в localStorage для синхронизации
+      localStorage.setItem('gc_user_id', userId);
+      localStorage.setItem('gc_user_data', JSON.stringify({
+        id: u.id,
+        username: u.username,
+        first_name: u.first_name,
+        photo_url: u.photo_url
+      }));
+      
       renderAvatar();
-      if(!state.displayName)state.displayName=u.first_name||'ИГРОК';
-      const pn=document.getElementById('pName');if(pn)pn.innerText=state.displayName.toUpperCase();
-      const pid=document.getElementById('pId');if(pid)pid.innerText=u.username?('@'+u.username):('ID: '+u.id);
+      if(!state.displayName) state.displayName = u.first_name || 'ИГРОК';
+      const pn = document.getElementById('pName');
+      if(pn) pn.innerText = state.displayName.toUpperCase();
+      const pid = document.getElementById('pId');
+      if(pid) pid.innerText = u.username ? ('@'+u.username) : ('ID: '+u.id);
+      
+      console.log('[Telegram] Авторизован как:', userId);
+      return true;
     }
   }
+  
+  // Проверяем, нет ли сохранённого Telegram ID из прошлых сессий
+  const savedUserId = localStorage.getItem('gc_user_id');
+  if(savedUserId && savedUserId.startsWith('tg_')){
+    userId = savedUserId;
+    console.log('[Telegram] Восстановлен ID из localStorage:', userId);
+    
+    // Пытаемся восстановить данные пользователя
+    const savedUserData = localStorage.getItem('gc_user_data');
+    if(savedUserData){
+      try{
+        const u = JSON.parse(savedUserData);
+        tgUser = u;
+        renderAvatar();
+        if(!state.displayName) state.displayName = u.first_name || 'ИГРОК';
+        const pn = document.getElementById('pName');
+        if(pn) pn.innerText = state.displayName.toUpperCase();
+        const pid = document.getElementById('pId');
+        if(pid) pid.innerText = u.username ? ('@'+u.username) : ('ID: '+u.id);
+      }catch(e){}
+    }
+    return true;
+  }
+  
+  // Если нет Telegram, создаём временный ID
+  console.warn('[Telegram] Не удалось определить пользователя. Рекомендуется открывать через Telegram!');
+  let stored = localStorage.getItem('gc_uid2');
+  if(!stored){
+    stored = 'temp_' + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+    localStorage.setItem('gc_uid2', stored);
+  }
+  userId = stored;
+  
+  // Показываем модальное окно для входа через Telegram (только если не в Telegram)
+  if(!isInTelegramWebView() && !localStorage.getItem('gc_telegram_reminded')){
+    setTimeout(() => {
+      const modal = document.getElementById('telegramLogin');
+      if(modal) modal.style.display = 'flex';
+      localStorage.setItem('gc_telegram_reminded', 'true');
+    }, 3000);
+  }
+  
+  return false;
 }
+
+// Закрытие модального окна
+document.getElementById('closeTelegramLogin')?.addEventListener('click', () => {
+  document.getElementById('telegramLogin').style.display = 'none';
+});
 
 // ═══════════════════════════════════════════════════════
 // INIT
@@ -1476,23 +1553,20 @@ function initTelegram(){
 async function init(){
   initTelegram();
   
-  // Если Telegram не дал ID, создаём временный (но лучше через Telegram)
-  if(!userId){
-    let stored=localStorage.getItem('gc_uid2');
-    if(!stored){stored='u_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);localStorage.setItem('gc_uid2',stored);}
-    userId=stored;
-  }
-  
   try{
-    const local=localStorage.getItem('gc_state');
-    if(local){const d=JSON.parse(local);if(d.userId===userId&&d.state&&Date.now()-d.ts<3600000){state={...state,...d.state};}}
+    const local = localStorage.getItem('gc_state');
+    if(local){
+      const d = JSON.parse(local);
+      if(d.userId === userId && d.state && Date.now() - d.ts < 3600000){
+        state = {...state, ...d.state};
+      }
+    }
   }catch(e){}
   
   validateInventory();
   renderCases();
   updateAllUI();
   
-  // Загружаем данные из БД
   await loadUserFromDB();
   validateInventory();
   updateAllUI();
