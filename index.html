@@ -585,6 +585,7 @@ let ws=null;
 let wsReconnectTimer=null;
 let wsHeartbeatTimer=null;
 let activeCoinFlipBattleId=null;
+let activeCoinAnimation = false;
 
 // ═══════════════════════════════════════════════════════
 // RATE LIMITER
@@ -697,13 +698,11 @@ async function saveUserToDB(immediate=false){
 function safeJSON(v,def){try{return typeof v==='string'?JSON.parse(v):(v??def);}catch(e){return def;}}
 
 // ═══════════════════════════════════════════════════════
-// BATTLES (ИСПРАВЛЕНО)
+// BATTLES
 // ═══════════════════════════════════════════════════════
 async function loadBattles(){
-  // Публичные — is_private = false или null
   const pub=await sbFetch(`/rest/v1/battles?status=eq.waiting&or=(is_private.eq.false,is_private.is.null)&order=created_at.desc&limit=50`);
   if(pub) battles=pub;
-  // Приватные только свои
   const priv=await sbFetch(`/rest/v1/battles?status=eq.waiting&is_private.eq.true&creator_id=eq.${encodeURIComponent(userId)}&order=created_at.desc&limit=20`);
   if(priv) privateBattles=priv;
   renderPvpLobby();
@@ -748,11 +747,12 @@ function handleRealtimeMessage(msg){
         const pi=privateBattles.findIndex(b=>b.id===row.id); if(pi>=0) privateBattles[pi]=row;
         renderPvpLobby();
       }
-      if(row.status==='fighting' && row.creator_id===userId && row.opponent_id && row.opponent_gift && activeCoinFlipBattleId!==row.id){
+      // ЗАПУСКАЕМ АНИМАЦИЮ ДЛЯ ОБОИХ ИГРОКОВ
+      if(row.status==='fighting' && row.opponent_id && row.opponent_gift && !activeCoinAnimation && activeCoinFlipBattleId!==row.id){
         activeCoinFlipBattleId=row.id;
         const creatorGift=safeJSON(row.creator_gift,{});
         const opponentGift=safeJSON(row.opponent_gift,{});
-        setTimeout(()=>{showCoinFlip(creatorGift,opponentGift,row,row.creator_id);},300);
+        setTimeout(()=>{showCoinFlip(creatorGift,opponentGift,row,row.creator_id);},500);
       }
     }
     if(msg.event==='DELETE'){
@@ -916,7 +916,7 @@ function showResultModal(name,isUpgrade,cb){
 }
 
 // ═══════════════════════════════════════════════════════
-// UPGRADE (исправлен: без лимита)
+// UPGRADE
 // ═══════════════════════════════════════════════════════
 function renderUpgradeSlots(){
   const container=document.getElementById('upgradeSlots');if(!container)return;
@@ -989,7 +989,7 @@ function doUpgrade(){
 }
 
 // ═══════════════════════════════════════════════════════
-// CRAFT (исправлен: без лимита)
+// CRAFT
 // ═══════════════════════════════════════════════════════
 function renderCraftSlots(){
   for(let i=0;i<3;i++){
@@ -1163,57 +1163,135 @@ async function cancelBattle(battleId){
   toast('Батл отменён, подарок возвращён');
 }
 
-// PvP шансы: 10% от стоимости + 90% рандом
-function calculatePvpWinner(gift1, gift2){
+// Детерминированная функция определения победителя (одинаковый результат у обоих игроков)
+function determineWinner(battleId, gift1, gift2){
+  let seed = 0;
+  for(let i = 0; i < battleId.length; i++){
+    seed = (seed * 31 + battleId.charCodeAt(i)) % 1000000;
+  }
+  function seededRandom(){
+    seed = (seed * 9301 + 49297) % 233280;
+    return seed / 233280;
+  }
   const val1 = gift1.val || 50;
   const val2 = gift2.val || 50;
-  const power1 = val1 * 0.1 + Math.random() * (val1 * 0.9);
-  const power2 = val2 * 0.1 + Math.random() * (val2 * 0.9);
-  return power1 >= power2;
+  const power1 = val1 * 0.1 + seededRandom() * (val1 * 0.9);
+  const power2 = val2 * 0.1 + seededRandom() * (val2 * 0.9);
+  return power1 >= power2 ? 'creator' : 'opponent';
 }
 
-function showCoinFlip(gift1,gift2,battle,creatorId){
-  if(document.querySelector('.coin-overlay'))return;
-  const overlay=document.createElement('div');overlay.className='coin-overlay';
-  overlay.innerHTML=`<div class="coin-fighters"><div class="fighter-box"><div class="fighter-label">Игрок 1 · Орёл</div><div class="fighter-icon-big">${gift1.icon||'❓'}</div><div style="font-size:10px;color:var(--tm);margin-top:4px">${gift1.name||''}</div></div><div class="coin-vs">VS</div><div class="fighter-box"><div class="fighter-label">Игрок 2 · Решка</div><div class="fighter-icon-big">${gift2.icon||'❓'}</div><div style="font-size:10px;color:var(--tm);margin-top:4px">${gift2.name||''}</div></div></div><div class="coin-wrap"><div class="coin" id="coinEl"><div class="coin-face coin-head">🦅</div><div class="coin-face coin-tail">👾</div></div></div><div id="coinResultArea"></div>`;
+// ИСПРАВЛЕННАЯ АНИМАЦИЯ ДЛЯ ОБОИХ ИГРОКОВ
+function showCoinFlip(gift1, gift2, battle, creatorId){
+  if(document.querySelector('.coin-overlay')) return;
+  if(activeCoinAnimation) return;
+  activeCoinAnimation = true;
+  
+  const overlay=document.createElement('div'); 
+  overlay.className='coin-overlay';
+  overlay.innerHTML=`
+    <div style="position:absolute; top:20px; left:50%; transform:translateX(-50%); text-align:center; z-index:10;">
+      <div style="font-family:var(--font-d); font-size:24px; color:var(--gold); letter-spacing:2px;">⚔️ БИТВА ⚔️</div>
+      <div style="font-size:11px; color:var(--tm); margin-top:4px">Определение победителя...</div>
+    </div>
+    <div class="coin-fighters">
+      <div class="fighter-box">
+        <div class="fighter-label">${(battle.creator_name || 'Игрок 1').slice(0,12)} · ОРЁЛ</div>
+        <div class="fighter-icon-big">${gift1.icon||'❓'}</div>
+        <div style="font-size:10px;color:var(--gold);margin-top:4px">★ ${gift1.val||0}</div>
+        <div style="font-size:9px;color:var(--tm)">${gift1.name||''}</div>
+      </div>
+      <div class="coin-vs">VS</div>
+      <div class="fighter-box">
+        <div class="fighter-label">${userId===creatorId ? 'Ты' : 'Игрок 2'} · РЕШКА</div>
+        <div class="fighter-icon-big">${gift2.icon||'❓'}</div>
+        <div style="font-size:10px;color:var(--gold);margin-top:4px">★ ${gift2.val||0}</div>
+        <div style="font-size:9px;color:var(--tm)">${gift2.name||''}</div>
+      </div>
+    </div>
+    <div class="coin-wrap">
+      <div class="coin" id="coinEl">
+        <div class="coin-face coin-head">🦅</div>
+        <div class="coin-face coin-tail">👾</div>
+      </div>
+    </div>
+    <div id="coinResultArea" style="text-align:center; min-height:120px;"></div>
+  `;
   document.body.appendChild(overlay);
   
-  const creatorWins = calculatePvpWinner(gift1, gift2);
-  const iAmCreator = userId===creatorId;
+  // Определяем победителя детерминированно
+  const winner = determineWinner(battle.id, gift1, gift2);
+  const creatorWins = winner === 'creator';
+  const iAmCreator = userId === creatorId;
   const iWon = iAmCreator ? creatorWins : !creatorWins;
   
-  const coinEl=document.getElementById('coinEl');
-  const finalRot=1800+(creatorWins?0:180);
-  coinEl.style.setProperty('--final-rot',finalRot+'deg');
+  const coinEl = document.getElementById('coinEl');
+  const finalRot = 1800 + (creatorWins ? 0 : 180);
+  coinEl.style.setProperty('--final-rot', finalRot + 'deg');
   
-  SFX.coin();vibrate([15]);
-  let ticks=0;const ti=setInterval(()=>{SFX.roulette();vibrate([5]);ticks++;if(ticks>18)clearInterval(ti);},140);
+  SFX.coin();
+  vibrate([15]);
   
-  setTimeout(()=>{
-    const area=document.getElementById('coinResultArea');if(!area)return;
+  let ticks = 0;
+  const ti = setInterval(() => {
+    SFX.roulette();
+    vibrate([5]);
+    ticks++;
+    if(ticks > 18) clearInterval(ti);
+  }, 140);
+  
+  setTimeout(() => {
+    const area = document.getElementById('coinResultArea');
+    if(!area) return;
+    
     if(iWon){
-      area.innerHTML=`<div class="coin-result-banner" style="color:var(--gold)">🏆 ПОБЕДА!</div><div class="coin-result-sub">Ты забираешь оба подарка!</div>`;
-      CF.burst(window.innerWidth/2,window.innerHeight*.5,120);SFX.win();vibrate([50,100,50]);
-      const g1=typeof gift1==='object'?gift1:{};
-      const g2=typeof gift2==='object'?gift2:{};
-      if(g1.name&&GIFTS[g1.name])state.inventory.push({...g1});
-      if(g2.name&&GIFTS[g2.name])state.inventory.push({...g2});
-      state.pvpWins=(state.pvpWins||0)+1;
-      addHist(iAmCreator?g1.icon:g2.icon,'PvP Победа!','+'+(((g1.val||0))+(g2.val||0))+' ★',true);
-    }else{
-      area.innerHTML=`<div class="coin-result-banner" style="color:var(--red)">💀 ПОРАЖЕНИЕ</div><div class="coin-result-sub">Подарок ушёл победителю</div>`;
-      SFX.lose();vibrate([80,30,80]);
+      area.innerHTML = `
+        <div class="coin-result-banner" style="color:var(--gold); animation:popIn .5s var(--spring)">🏆 ПОБЕДА!</div>
+        <div class="coin-result-sub" style="margin-top:8px">Ты забираешь оба подарка!</div>
+        <div style="display:flex; justify-content:center; gap:16px; margin-top:16px;">
+          <div style="text-align:center"><div style="font-size:32px">${gift1.icon||'🎁'}</div><div style="font-size:10px;color:var(--ts)">+${gift1.val||0} ★</div></div>
+          <div style="text-align:center"><div style="font-size:32px">${gift2.icon||'🎁'}</div><div style="font-size:10px;color:var(--ts)">+${gift2.val||0} ★</div></div>
+        </div>
+      `;
+      CF.burst(window.innerWidth/2, window.innerHeight*.5, 120);
+      SFX.win();
+      vibrate([50,100,50]);
+      
+      const g1 = typeof gift1 === 'object' ? gift1 : {};
+      const g2 = typeof gift2 === 'object' ? gift2 : {};
+      if(g1.name && GIFTS[g1.name]) state.inventory.push({...g1});
+      if(g2.name && GIFTS[g2.name]) state.inventory.push({...g2});
+      state.pvpWins = (state.pvpWins || 0) + 1;
+      addHist(iAmCreator ? g1.icon : g2.icon, 'PvP Победа!', '+' + ((g1.val||0)+(g2.val||0)) + ' ★', true);
+    } else {
+      area.innerHTML = `
+        <div class="coin-result-banner" style="color:var(--red); animation:popIn .5s var(--spring)">💀 ПОРАЖЕНИЕ</div>
+        <div class="coin-result-sub" style="margin-top:8px">Подарок ушёл победителю</div>
+        <div style="margin-top:16px; opacity:0.5"><div style="font-size:32px">${iAmCreator ? (gift1.icon||'🎁') : (gift2.icon||'🎁')}</div><div style="font-size:10px;color:var(--ts)">−${(iAmCreator ? (gift1.val||0) : (gift2.val||0))} ★</div></div>
+      `;
+      SFX.lose();
+      vibrate([80,30,80]);
       incrementLuck(5);
-      addHist(iAmCreator?gift1.icon:gift2.icon,'PvP Поражение','−'+((iAmCreator?gift1.val:gift2.val)||0)+' ★',false);
+      addHist(iAmCreator ? gift1.icon : gift2.icon, 'PvP Поражение', '−' + ((iAmCreator ? gift1.val : gift2.val)||0) + ' ★', false);
     }
-    updateAllUI();saveUserToDB();
-    updateBattle(battle.id,{status:'done',winner_id:creatorWins?creatorId:(battle.opponent_id||userId)});
-    activeCoinFlipBattleId=null;
-    const closeBtn=document.createElement('button');
-    closeBtn.className='btn btn-outline btn-sm';closeBtn.style.marginTop='16px';
-    closeBtn.innerText='Закрыть';closeBtn.onclick=()=>overlay.remove();
+    
+    updateAllUI();
+    saveUserToDB();
+    
+    updateBattle(battle.id, {
+      status: 'done',
+      winner_id: creatorWins ? creatorId : (battle.opponent_id || userId)
+    }).catch(console.warn);
+    
+    activeCoinFlipBattleId = null;
+    activeCoinAnimation = false;
+    
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'btn btn-outline btn-sm';
+    closeBtn.style.marginTop = '20px';
+    closeBtn.innerText = 'Закрыть';
+    closeBtn.onclick = () => overlay.remove();
     area.appendChild(closeBtn);
-  },3000);
+  }, 3000);
 }
 
 function copyToClipboard(text){try{navigator.clipboard.writeText(text);}catch(e){const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();}}
