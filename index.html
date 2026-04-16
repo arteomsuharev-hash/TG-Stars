@@ -10,6 +10,7 @@
 <meta name="apple-mobile-web-app-title" content="GiftCase">
 <title>GIFTCASE — Premium Cases</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
 /* ── ДИЗАЙН-ТОКЕНЫ ── */
 :root{
@@ -1437,10 +1438,18 @@ function setupPWA(){
 }setupPWA();
 
 function initTG(){
-  const tg=window.Telegram?.WebApp;
-  if(tg){
-    tg.expand();tg.ready();
+  console.log('🔍 Инициализация Telegram...');
+  const tg = window.Telegram?.WebApp;
+  
+  if(tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+    console.log('✅ Telegram WebApp найден!');
+    const user = tg.initDataUnsafe.user;
+    console.log('👤 Пользователь:', user.first_name);
+    
+    tg.expand();
+    tg.ready();
     try{tg.setHeaderColor('#0f0f0f');}catch(e){}
+    
     tg.onEvent('invoice_closed',(data)=>{
       if(data?.status==='paid'&&selectedDepAmt){
         setBal(state.balance+selectedDepAmt.stars);
@@ -1450,30 +1459,59 @@ function initTG(){
         saveUser();
       }
     });
-    const u=tg.initDataUnsafe?.user;
-    if(u){
-      tgUser={...u};userId='tg_'+u.id;
-      localStorage.setItem('gc_user_id',userId);
-      localStorage.setItem('gc_user_data',JSON.stringify({id:u.id,username:u.username,first_name:u.first_name,photo_url:u.photo_url}));
-      if(!state.displayName)state.displayName=u.first_name||'ИГРОК';
-      return true;
-    }
-  }
-  const sid=localStorage.getItem('gc_user_id');
-  if(sid){
-    userId=sid;
-    try{const d=localStorage.getItem('gc_user_data');if(d){tgUser=JSON.parse(d);if(!state.displayName)state.displayName=tgUser.first_name||'ИГРОК';}}catch(e){}
+    
+    tgUser = user;
+    userId = 'tg_' + user.id;
+    localStorage.setItem('gc_user_id', userId);
+    localStorage.setItem('gc_user_data', JSON.stringify({
+      id: user.id,
+      username: user.username,
+      first_name: user.first_name,
+      photo_url: user.photo_url
+    }));
+    if(!state.displayName) state.displayName = user.first_name || 'ИГРОК';
+    
+    const stub = document.getElementById('browserStub');
+    if(stub) stub.classList.remove('show');
+    
     return true;
   }
-  let stored=localStorage.getItem('gc_uid2');
-  if(!stored){stored='g_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);localStorage.setItem('gc_uid2',stored);}
-  userId=stored;
-  if(!localStorage.getItem('gc_stub_skipped')){
-    setTimeout(()=>document.getElementById('browserStub').classList.add('show'),2000);
+  
+  console.log('⚠️ Не в Telegram WebApp, проверяем localStorage...');
+  const savedId = localStorage.getItem('gc_user_id');
+  if(savedId && savedId.startsWith('tg_')) {
+    userId = savedId;
+    const savedData = localStorage.getItem('gc_user_data');
+    if(savedData) {
+      tgUser = JSON.parse(savedData);
+      console.log('🔄 Восстановлен пользователь из localStorage:', tgUser?.first_name);
+      if(!state.displayName) state.displayName = tgUser.first_name || 'ИГРОК';
+    }
+    const stub = document.getElementById('browserStub');
+    if(stub) stub.classList.remove('show');
+    return true;
   }
+  
+  let guestId = localStorage.getItem('gc_uid2');
+  if(!guestId){
+    guestId = 'guest_' + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+    localStorage.setItem('gc_uid2', guestId);
+  }
+  userId = guestId;
+  
+  if(!localStorage.getItem('gc_stub_skipped')){
+    setTimeout(() => {
+      const stub = document.getElementById('browserStub');
+      if(stub) stub.classList.add('show');
+    }, 1000);
+  }
+  
   return false;
 }
-document.getElementById('bsSkip').onclick=()=>{document.getElementById('browserStub').classList.remove('show');localStorage.setItem('gc_stub_skipped','1');};
+document.getElementById('bsSkip').onclick=()=>{
+  document.getElementById('browserStub').classList.remove('show');
+  localStorage.setItem('gc_stub_skipped','1');
+};
 
 function checkReferral(){
   const p=new URLSearchParams(window.location.search);
