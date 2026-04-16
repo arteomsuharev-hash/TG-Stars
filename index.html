@@ -305,6 +305,7 @@ img{display:block}
 <body>
 <canvas id="cfv"></canvas>
 <div class="rl-banner" id="rlBanner">⚠️ Слишком быстро, подождите</div>
+<div id="loadingIndicator" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:var(--s2); padding:12px 24px; border-radius:var(--r-full); z-index:10000; font-size:14px; color:var(--gold);">⏳ Загрузка...</div>
 
 <div class="app" id="app">
   <div class="topbar">
@@ -635,6 +636,9 @@ const CF=(()=>{
 })();
 
 function toast(msg){document.querySelectorAll('.toast').forEach(t=>t.remove());const t=document.createElement('div');t.className='toast';t.innerHTML=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2600);}
+
+function showLoading(){ const el=document.getElementById('loadingIndicator'); if(el) el.style.display='block'; }
+function hideLoading(){ const el=document.getElementById('loadingIndicator'); if(el) el.style.display='none'; }
 
 // ═══════════════════════════════════════════════════════
 // SUPABASE REST
@@ -1145,22 +1149,46 @@ async function createPrivateBattle(){
   addHist(g.icon,'Приватный батл','★ '+g.val,false);
 }
 
+// ИСПРАВЛЕННАЯ joinBattle С ПРОВЕРКОЙ ИНВЕНТАРЯ
 async function joinBattle(battleId){
   if(!RL.check('joinBattle',2))return;
+  
+  // Ждём, пока инвентарь загрузится
+  if(!state.inventory || state.inventory.length === undefined){
+    toast('⏳ Загрузка данных... Подождите секунду');
+    setTimeout(() => joinBattle(battleId), 1000);
+    return;
+  }
+  
   let battle=battles.find(b=>b.id===battleId)||privateBattles.find(b=>b.id===battleId);
   if(!battle){const rows=await sbFetch(`/rest/v1/battles?id=eq.${battleId}&select=*`);if(rows&&rows.length>0)battle=rows[0];}
-  if(!battle||battle.status!=='waiting'){toast('Батл недоступен или уже занят');return;}
-  if(battle.creator_id===userId){toast('Нельзя войти в свой батл');return;}
-  if(!state.inventory.length){toast('Нет подарков для ставки');return;}
+  if(!battle||battle.status!=='waiting'){toast('❌ Батл недоступен или уже занят');return;}
+  if(battle.creator_id===userId){toast('❌ Нельзя войти в свой батл');return;}
+  
+  // Проверяем инвентарь после загрузки
+  if(!state.inventory || state.inventory.length === 0){
+    toast('📭 Нет подарков для ставки! Откройте кейсы или пополните баланс');
+    return;
+  }
+  
   const myGift={...state.inventory[0]};
   state.inventory.splice(0,1);
   activeCoinFlipBattleId=battleId;
-  await updateBattle(battleId,{status:'fighting',opponent_id:userId,opponent_gift:JSON.stringify(myGift)});
+  
+  await updateBattle(battleId,{
+    status:'fighting',
+    opponent_id:userId,
+    opponent_gift:JSON.stringify(myGift)
+  });
+  
   battles=battles.filter(b=>b.id!==battleId);
   privateBattles=privateBattles.filter(b=>b.id!==battleId);
-  saveUserToDB();renderPvpLobby();
+  saveUserToDB();
+  renderPvpLobby();
+  
   const creatorGift=safeJSON(battle.creator_gift,{});
-  // Резервный запуск анимации (если WebSocket не сработает)
+  
+  // Резервный запуск анимации
   setTimeout(() => {
     if(!activeCoinAnimation && activeCoinFlipBattleId === battleId){
       showCoinFlip(creatorGift, myGift, battle, battle.creator_id);
@@ -1333,8 +1361,7 @@ document.querySelectorAll('.pvp-tab').forEach(btn=>{
 });
 
 // ═══════════════════════════════════════════════════════
-// REFERRAL
-// ═══════════════════════════════════════════════════════
+// REFERRAL (ИСПРАВЛЕННАЯ)
 function checkReferral(){
   const params=new URLSearchParams(window.location.search);
   const ref=params.get('ref');
@@ -1344,11 +1371,27 @@ function checkReferral(){
   }
   const joinId=params.get('join');
   if(joinId){
-    setTimeout(async()=>{
-      const rows=await sbFetch(`/rest/v1/battles?id=eq.${joinId}&select=*`);
-      if(rows&&rows.length>0&&rows[0].status==='waiting'){joinBattle(joinId);}
-      else{toast('❌ Батл не найден или уже занят');}
-    },1500);
+    showLoading();
+    // Ждём загрузки пользователя перед вступлением в батл
+    const waitForUser = setInterval(() => {
+      if(userId && state.inventory !== undefined && state.balance !== undefined){
+        clearInterval(waitForUser);
+        hideLoading();
+        setTimeout(async()=>{
+          const rows=await sbFetch(`/rest/v1/battles?id=eq.${joinId}&select=*`);
+          if(rows&&rows.length>0&&rows[0].status==='waiting'){
+            joinBattle(joinId);
+          }else{
+            toast('❌ Батл не найден или уже занят');
+          }
+        }, 500);
+      }
+    }, 200);
+    // Таймаут на случай ошибки
+    setTimeout(() => {
+      clearInterval(waitForUser);
+      hideLoading();
+    }, 5000);
   }
 }
 
