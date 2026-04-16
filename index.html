@@ -459,46 +459,69 @@ const SUPABASE_URL='https://riwzrplciliebgexltll.supabase.co';
 const SUPABASE_ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJpd3pycGxjaWxpZWJnZXhsdGxsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyNjM5MjEsImV4cCI6MjA5MTgzOTkyMX0.jrrI78rQ-3VARU0I1eazM6iKHbSJLpcK5HCjJ4VRxnQ';
 
 // ═══════════════════════════════════════════════════════
-// EXTENDED DATABASE — больше подарков и кейсов
+// ПОДАРКИ (РАСШИРЕННАЯ БАЗА)
 // ═══════════════════════════════════════════════════════
 const GIFTS={
   // Common (8 подарков)
-  "Розовый мишка":      {icon:"🧸",val:15, rarity:"common",   upTo:"Золотая звезда"},
-  "Букет цветов":       {icon:"💐",val:15, rarity:"common",   upTo:"Алмазное сердце"},
-  "Шоколадка":          {icon:"🍫",val:15, rarity:"common",   upTo:"Золотая звезда"},
-  "Воздушный шар":      {icon:"🎈",val:12, rarity:"common",   upTo:"Серебряная луна"},
-  "Кексик":             {icon:"🧁",val:10, rarity:"common",   upTo:"Серебряная луна"},
-  "Конфеты":            {icon:"🍬",val:8,  rarity:"common",   upTo:"Золотая звезда"},
-  "Плюшевый кот":       {icon:"🐱",val:18, rarity:"common",   upTo:"Алмазное сердце"},
-  "Открытка":           {icon:"💌",val:10, rarity:"common",   upTo:"Серебряная луна"},
+  "Розовый мишка":      {icon:"🧸",val:15, rarity:"common",   upTo:null},
+  "Букет цветов":       {icon:"💐",val:15, rarity:"common",   upTo:null},
+  "Шоколадка":          {icon:"🍫",val:15, rarity:"common",   upTo:null},
+  "Воздушный шар":      {icon:"🎈",val:12, rarity:"common",   upTo:null},
+  "Кексик":             {icon:"🧁",val:10, rarity:"common",   upTo:null},
+  "Конфеты":            {icon:"🍬",val:8,  rarity:"common",   upTo:null},
+  "Плюшевый кот":       {icon:"🐱",val:18, rarity:"common",   upTo:null},
+  "Открытка":           {icon:"💌",val:10, rarity:"common",   upTo:null},
   // Rare (7 подарков)
-  "Золотая звезда":     {icon:"⭐️",val:50, rarity:"rare",     upTo:"Легендарный дракон"},
-  "Алмазное сердце":    {icon:"💎",val:50, rarity:"rare",     upTo:"Космический корабль"},
-  "Серебряная луна":    {icon:"🌙",val:40, rarity:"rare",     upTo:"Легендарный дракон"},
-  "Золотое яблоко":     {icon:"🍎",val:45, rarity:"rare",     upTo:"Феникс"},
-  "Кристалл":           {icon:"💠",val:55, rarity:"rare",     upTo:"Космический корабль"},
-  "Золотой кубок":      {icon:"🏆",val:60, rarity:"rare",     upTo:"Феникс"},
-  "Музыкальная шкатулка":{icon:"🎵",val:45, rarity:"rare",    upTo:"Легендарный дракон"},
+  "Золотая звезда":     {icon:"⭐️",val:50, rarity:"rare",     upTo:null},
+  "Алмазное сердце":    {icon:"💎",val:50, rarity:"rare",     upTo:null},
+  "Серебряная луна":    {icon:"🌙",val:40, rarity:"rare",     upTo:null},
+  "Золотое яблоко":     {icon:"🍎",val:45, rarity:"rare",     upTo:null},
+  "Кристалл":           {icon:"💠",val:55, rarity:"rare",     upTo:null},
+  "Золотой кубок":      {icon:"🏆",val:60, rarity:"rare",     upTo:null},
+  "Музыкальная шкатулка":{icon:"🎵",val:45, rarity:"rare",    upTo:null},
   // Epic (6 подарков)
-  "Легендарный дракон": {icon:"🐉",val:200, rarity:"epic",     upTo:"Трон короля"},
-  "Космический корабль":{icon:"🚀",val:200, rarity:"epic",     upTo:"Трон короля"},
-  "Феникс":             {icon:"🦅",val:180, rarity:"epic",     upTo:"Трон короля"},
-  "Единорог":           {icon:"🦄",val:220, rarity:"epic",     upTo:"Трон короля"},
-  "Чёрная дыра":        {icon:"🌑",val:250, rarity:"epic",     upTo:"Трон короля"},
-  "Волшебный меч":      {icon:"⚔️",val:190, rarity:"epic",    upTo:"Трон короля"},
+  "Легендарный дракон": {icon:"🐉",val:200, rarity:"epic",     upTo:null},
+  "Космический корабль":{icon:"🚀",val:200, rarity:"epic",     upTo:null},
+  "Феникс":             {icon:"🦅",val:180, rarity:"epic",     upTo:null},
+  "Единорог":           {icon:"🦄",val:220, rarity:"epic",     upTo:null},
+  "Чёрная дыра":        {icon:"🌑",val:250, rarity:"epic",     upTo:null},
+  "Волшебный меч":      {icon:"⚔️",val:190, rarity:"epic",    upTo:null},
   // Legendary (3 подарка)
   "Трон короля":        {icon:"👑",val:1000, rarity:"legendary", upTo:null},
   "Бесконечный камень": {icon:"💫",val:1500, rarity:"legendary", upTo:null},
   "Врата богов":        {icon:"⛩️",val:2000, rarity:"legendary", upTo:null}
 };
 
+// Группировка подарков по редкости для апгрейда и крафта
+const GIFTS_BY_RARITY = {
+  common: ["Розовый мишка","Букет цветов","Шоколадка","Воздушный шар","Кексик","Конфеты","Плюшевый кот","Открытка"],
+  rare: ["Золотая звезда","Алмазное сердце","Серебряная луна","Золотое яблоко","Кристалл","Золотой кубок","Музыкальная шкатулка"],
+  epic: ["Легендарный дракон","Космический корабль","Феникс","Единорог","Чёрная дыра","Волшебный меч"],
+  legendary: ["Трон короля","Бесконечный камень","Врата богов"]
+};
+
 const RARITY_ORDER=["common","rare","epic","legendary"];
 const RARITY_LABELS={common:"Обычный",rare:"Редкий",epic:"Эпический",legendary:"Легендарный"};
 const RARITY_COLORS={common:"#666",rare:"#5577cc",epic:"#9955cc",legendary:"#c8a96e"};
 const UPGRADE_CH={common:70,rare:50,epic:30,legendary:0};
-const CRAFT_RESULT={common:"Золотая звезда",rare:"Легендарный дракон",epic:"Трон короля"};
 
-// Функция расчета цены кейса на основе подарков (средняя цена * 0.8 + 20%)
+// Функция получения случайного подарка указанной редкости
+function getRandomGiftByRarity(rarity){
+  const list = GIFTS_BY_RARITY[rarity];
+  if(!list || list.length===0) return null;
+  const randomName = list[Math.floor(Math.random() * list.length)];
+  const g = GIFTS[randomName];
+  return {name:randomName, icon:g.icon, val:g.val, rarity:g.rarity};
+}
+
+// Функция получения следующей редкости
+function getNextRarity(currentRarity){
+  const idx = RARITY_ORDER.indexOf(currentRarity);
+  if(idx >= 0 && idx < RARITY_ORDER.length-1) return RARITY_ORDER[idx+1];
+  return null;
+}
+
+// Функция расчета цены кейса на основе подарков (средняя цена * 0.8)
 function calculateCasePrice(gifts){
   let totalValue=0;
   let totalChance=0;
@@ -510,14 +533,12 @@ function calculateCasePrice(gifts){
     }
   }
   if(totalChance>0) totalValue=totalValue / (totalChance/100);
-  // Цена = средняя цена * 0.8, округление до 5
   let price=Math.round(totalValue * 0.8);
   price=Math.max(30, Math.min(1500, price));
-  // Округляем до 5
   return Math.round(price/5)*5;
 }
 
-// РАСШИРЕННЫЕ КЕЙСЫ с 5-8 подарками и нормальными шансами
+// РАСШИРЕННЫЕ КЕЙСЫ с 5-9 подарками
 const CASES=[
   {id:"starter",name:"СТАРТОВЫЙ",emoji:"🎀",cls:"c-common",
    gifts:[{n:"Конфеты",c:25},{n:"Открытка",c:20},{n:"Кексик",c:18},{n:"Воздушный шар",c:15},{n:"Шоколадка",c:12},{n:"Плюшевый кот",c:10}]},
@@ -618,7 +639,7 @@ const CF=(()=>{
 function toast(msg){document.querySelectorAll('.toast').forEach(t=>t.remove());const t=document.createElement('div');t.className='toast';t.innerHTML=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2600);}
 
 // ═══════════════════════════════════════════════════════
-// SUPABASE REST
+// SUPABASE REST (сокращённо для читаемости, логика та же)
 // ═══════════════════════════════════════════════════════
 async function sbFetch(path,method='GET',body=null,extraHeaders={}){
   try{
@@ -628,7 +649,6 @@ async function sbFetch(path,method='GET',body=null,extraHeaders={}){
   }catch(e){console.warn('SB:',e);return null;}
 }
 
-// ── USER ──
 async function loadUserFromDB(){
   if(!userId)return;
   const rows=await sbFetch(`/rest/v1/gc_users?id=eq.${encodeURIComponent(userId)}&select=*`);
@@ -679,7 +699,6 @@ async function saveUserToDB(immediate=false){
 
 function safeJSON(v,def){try{return typeof v==='string'?JSON.parse(v):(v??def);}catch(e){return def;}}
 
-// ── BATTLES REST ──
 async function loadBattles(){
   const pub=await sbFetch(`/rest/v1/battles?status=eq.waiting&is_private=eq.false&order=created_at.desc&limit=50`);
   if(pub)battles=pub;
@@ -691,32 +710,21 @@ async function saveBattle(b){return await sbFetch('/rest/v1/battles','POST',b,{'
 async function updateBattle(id,data){return await sbFetch(`/rest/v1/battles?id=eq.${id}`,'PATCH',data);}
 
 // ═══════════════════════════════════════════════════════
-// REALTIME
+// REALTIME (упрощённо)
 // ═══════════════════════════════════════════════════════
 function initRealtime(){
   if(wsReconnectTimer){clearTimeout(wsReconnectTimer);wsReconnectTimer=null;}
   if(wsHeartbeatTimer){clearInterval(wsHeartbeatTimer);wsHeartbeatTimer=null;}
   if(ws){try{ws.close();}catch(e){}}
-
   try{
     ws=new WebSocket(`wss://riwzrplciliebgexltll.supabase.co/realtime/v1/websocket?apikey=${SUPABASE_ANON}&vsn=1.0.0`);
     ws.onopen=()=>{
       ws.send(JSON.stringify({topic:'realtime:public:battles',event:'phx_join',payload:{},ref:'battles_join'}));
-      wsHeartbeatTimer=setInterval(()=>{
-        if(ws.readyState===WebSocket.OPEN){
-          ws.send(JSON.stringify({topic:'phoenix',event:'heartbeat',payload:{},ref:'hb_'+Date.now()}));
-        }
-      },25000);
+      wsHeartbeatTimer=setInterval(()=>{if(ws.readyState===WebSocket.OPEN)ws.send(JSON.stringify({topic:'phoenix',event:'heartbeat',payload:{},ref:'hb_'+Date.now()}));},25000);
     };
     ws.onmessage=(evt)=>{try{const msg=JSON.parse(evt.data);handleRealtimeMessage(msg);}catch(e){}};
-    ws.onerror=(e)=>{console.warn('[WS] error',e);};
-    ws.onclose=(e)=>{
-      if(wsHeartbeatTimer){clearInterval(wsHeartbeatTimer);wsHeartbeatTimer=null;}
-      wsReconnectTimer=setTimeout(initRealtime,4000);
-    };
-  }catch(e){
-    wsReconnectTimer=setTimeout(initRealtime,5000);
-  }
+    ws.onclose=()=>{if(wsHeartbeatTimer)clearInterval(wsHeartbeatTimer);wsReconnectTimer=setTimeout(initRealtime,4000);};
+  }catch(e){wsReconnectTimer=setTimeout(initRealtime,5000);}
 }
 
 function handleRealtimeMessage(msg){
@@ -724,39 +732,29 @@ function handleRealtimeMessage(msg){
   if(msg.topic==='realtime:public:battles'){
     const row=msg.payload?.record||msg.payload?.new||msg.payload?.data;
     if(!row)return;
-    const evType=msg.event;
-    if(evType==='INSERT'){
-      if(row.is_private===false&&row.status==='waiting'){
-        if(!battles.find(b=>b.id===row.id)){battles.unshift(row);}
-        renderPvpLobby();
-      }
-      if(row.is_private===true&&row.creator_id===userId&&row.status==='waiting'){
-        if(!privateBattles.find(b=>b.id===row.id)){privateBattles.unshift(row);}
-        renderPvpLobby();
-      }
+    if(msg.event==='INSERT'){
+      if(row.is_private===false&&row.status==='waiting'&&!battles.find(b=>b.id===row.id))battles.unshift(row);
+      if(row.is_private===true&&row.creator_id===userId&&row.status==='waiting'&&!privateBattles.find(b=>b.id===row.id))privateBattles.unshift(row);
+      renderPvpLobby();
     }
-    if(evType==='UPDATE'){
+    if(msg.event==='UPDATE'){
       if(row.status!=='waiting'){
         battles=battles.filter(b=>b.id!==row.id);
         privateBattles=privateBattles.filter(b=>b.id!==row.id);
         renderPvpLobby();
       }else{
-        const bi=battles.findIndex(b=>b.id===row.id);
-        if(bi>=0)battles[bi]=row;
-        const pi=privateBattles.findIndex(b=>b.id===row.id);
-        if(pi>=0)privateBattles[pi]=row;
+        const bi=battles.findIndex(b=>b.id===row.id);if(bi>=0)battles[bi]=row;
+        const pi=privateBattles.findIndex(b=>b.id===row.id);if(pi>=0)privateBattles[pi]=row;
         renderPvpLobby();
       }
-      if(row.status==='fighting' && row.creator_id===userId && row.opponent_id && row.opponent_gift){
-        if(activeCoinFlipBattleId!==row.id){
-          activeCoinFlipBattleId=row.id;
-          const creatorGift=safeJSON(row.creator_gift,{});
-          const opponentGift=safeJSON(row.opponent_gift,{});
-          setTimeout(()=>{showCoinFlip(creatorGift,opponentGift,row,row.creator_id);},300);
-        }
+      if(row.status==='fighting' && row.creator_id===userId && row.opponent_id && row.opponent_gift && activeCoinFlipBattleId!==row.id){
+        activeCoinFlipBattleId=row.id;
+        const creatorGift=safeJSON(row.creator_gift,{});
+        const opponentGift=safeJSON(row.opponent_gift,{});
+        setTimeout(()=>{showCoinFlip(creatorGift,opponentGift,row,row.creator_id);},300);
       }
     }
-    if(evType==='DELETE'){
+    if(msg.event==='DELETE'){
       const id=msg.payload?.old?.id||row.id;
       battles=battles.filter(b=>b.id!==id);
       privateBattles=privateBattles.filter(b=>b.id!==id);
@@ -765,10 +763,10 @@ function handleRealtimeMessage(msg){
   }
 }
 
-setInterval(()=>{if(!ws||ws.readyState!==WebSocket.OPEN){loadBattles();}},10000);
+setInterval(()=>{if(!ws||ws.readyState!==WebSocket.OPEN)loadBattles();},10000);
 
 // ═══════════════════════════════════════════════════════
-// BALANCE & LUCK
+// BALANCE & LUCK & INVENTORY
 // ═══════════════════════════════════════════════════════
 function setBalance(v){
   const prev=state.balance;state.balance=Math.max(0,Math.floor(v));
@@ -918,7 +916,7 @@ function showResultModal(name,isUpgrade,cb){
 }
 
 // ═══════════════════════════════════════════════════════
-// UPGRADE
+// UPGRADE (исправлен: апгрейд в случайный подарок следующей редкости)
 // ═══════════════════════════════════════════════════════
 function renderUpgradeSlots(){
   const container=document.getElementById('upgradeSlots');if(!container)return;
@@ -939,10 +937,18 @@ function updateUpgradeChance(){
   const cls=finalCh>=60?'high':finalCh>=35?'med':'low';
   cn.innerText=finalCh>0?finalCh+'%':'0%';cn.className='chance-num '+cls;
   if(cf)cf.style.width=finalCh+'%';
-  const targetName=GIFTS[upgradeSlots[0].name]?.upTo;
-  if(targetName&&GIFTS[targetName]){const t=GIFTS[targetName];if(cd)cd.innerText=`При успехе: ${targetName} (★ ${t.val})`;if(rp){rp.style.display='block';document.getElementById('urpIcon').innerText=t.icon;document.getElementById('urpName').innerText=targetName;}}
-  else{if(cd)cd.innerText='Максимальный уровень';if(rp)rp.style.display='none';}
-  if(btn)btn.disabled=(finalCh===0||!targetName);
+  
+  const nextRarity=getNextRarity(rarity);
+  if(nextRarity){
+    const possibleGifts=GIFTS_BY_RARITY[nextRarity];
+    if(possibleGifts && possibleGifts.length>0){
+      const randomTarget=possibleGifts[Math.floor(Math.random()*possibleGifts.length)];
+      const t=GIFTS[randomTarget];
+      if(cd)cd.innerText=`При успехе: случайный ${RARITY_LABELS[nextRarity]} подарок (★ ~${t.val})`;
+      if(rp){rp.style.display='block';document.getElementById('urpIcon').innerText=t.icon;document.getElementById('urpName').innerText=randomTarget;}
+      if(btn)btn.disabled=false;
+    }else{cd.innerText='Максимальный уровень';if(rp)rp.style.display='none';if(btn)btn.disabled=true;}
+  }else{cd.innerText='Максимальный уровень';if(rp)rp.style.display='none';if(btn)btn.disabled=true;}
 }
 function selectForUpgrade(idx){
   const g=state.inventory[idx];if(!g)return;
@@ -957,17 +963,33 @@ function doUpgrade(){
   const rarity=rarities[0];const base=UPGRADE_CH[rarity];
   const bonus=Math.min(20,(upgradeSlots.length-1)*5);
   const chance=Math.round(applyLuck(base+bonus));
-  const targetName=GIFTS[upgradeSlots[0].name]?.upTo;
-  if(!targetName||chance===0){toast('Нельзя улучшить');return;}
+  const nextRarity=getNextRarity(rarity);
+  if(!nextRarity||chance===0){toast('Нельзя улучшить');return;}
   const snap=[...upgradeSlots];upgradeSlots=[];
   const success=Math.random()*100<chance;
-  if(success){const g=makeGift(targetName);state.inventory.push(g);addHist(g.icon,'Апгрейд → '+targetName,'✅ Успех!',true);state.luck=Math.max(0,state.luck-10);showResultModal(targetName,true,()=>{});CF.burst(window.innerWidth/2,window.innerHeight/2,80);SFX.win();vibrate([30,60,30]);}
-  else{incrementLuck(snap.length*3);addHist('💀','Апгрейд провален','−'+snap.reduce((s,g)=>s+g.val,0)+' ★',false);SFX.lose();vibrate([50]);toast('💀 Неудача! '+snap.length+' подарок(ов) потеряно');}
+  if(success){
+    const targetGift=getRandomGiftByRarity(nextRarity);
+    if(targetGift){
+      state.inventory.push(targetGift);
+      addHist(targetGift.icon,'Апгрейд → '+targetGift.name,'✅ Успех!',true);
+      state.luck=Math.max(0,state.luck-10);
+      showResultModal(targetGift.name,true,()=>{});
+      CF.burst(window.innerWidth/2,window.innerHeight/2,80);
+      SFX.win();
+      vibrate([30,60,30]);
+    }
+  }else{
+    incrementLuck(snap.length*3);
+    addHist('💀','Апгрейд провален','−'+snap.reduce((s,g)=>s+g.val,0)+' ★',false);
+    SFX.lose();
+    vibrate([50]);
+    toast('💀 Неудача! '+snap.length+' подарок(ов) потеряно');
+  }
   updateAllUI();
 }
 
 // ═══════════════════════════════════════════════════════
-// CRAFT
+// CRAFT (исправлен: крафт в случайный подарок следующей редкости)
 // ═══════════════════════════════════════════════════════
 function renderCraftSlots(){
   for(let i=0;i<3;i++){
@@ -995,25 +1017,37 @@ function updateCraftResult(){
   if(placed.length<3){crIcon.innerText='❓';crName.innerText='Добавьте 3 подарка';if(cb)cb.disabled=true;return;}
   const rarities=[...new Set(placed.map(g=>g.rarity))];
   if(rarities.length>1){crIcon.innerText='⚠️';crName.innerText='Разная редкость!';if(cb)cb.disabled=true;return;}
-  const rarity=rarities[0];const resultName=CRAFT_RESULT[rarity];
-  if(!resultName){crIcon.innerText='👑';crName.innerText='Макс уровень';if(cb)cb.disabled=true;return;}
-  const ri=GIFTS[resultName];crIcon.innerText=ri.icon;crName.innerText=resultName+' (★ '+ri.val+')';if(cb)cb.disabled=false;
+  const rarity=rarities[0];
+  const nextRarity=getNextRarity(rarity);
+  if(!nextRarity){crIcon.innerText='👑';crName.innerText='Макс уровень, нельзя крафтить';if(cb)cb.disabled=true;return;}
+  const possibleGifts=GIFTS_BY_RARITY[nextRarity];
+  if(possibleGifts && possibleGifts.length>0){
+    const randomTarget=possibleGifts[Math.floor(Math.random()*possibleGifts.length)];
+    const ri=GIFTS[randomTarget];
+    crIcon.innerText=ri.icon;
+    crName.innerText=randomTarget+' (★ '+ri.val+')';
+    if(cb)cb.disabled=false;
+  }else{crIcon.innerText='❓';crName.innerText='Недоступно';if(cb)cb.disabled=true;}
 }
 function doCraft(){
   if(!RL.check('craft',2))return;
   const placed=craftSlots.filter(Boolean);if(placed.length<3){toast('Добавь 3 подарка');return;}
   const rarities=[...new Set(placed.map(g=>g.rarity))];if(rarities.length>1){toast('Только одна редкость!');return;}
-  const rarity=rarities[0];const resultName=CRAFT_RESULT[rarity];if(!resultName){toast('Нельзя крафтить');return;}
+  const rarity=rarities[0];
+  const nextRarity=getNextRarity(rarity);
+  if(!nextRarity){toast('Нельзя крафтить (макс уровень)');return;}
+  const targetGift=getRandomGiftByRarity(nextRarity);
+  if(!targetGift){toast('Нельзя крафтить');return;}
   craftSlots=[null,null,null];
-  const g=makeGift(resultName);state.inventory.push(g);
-  addHist(g.icon,'Крафт → '+resultName,'✅ Создано!',true);
+  state.inventory.push(targetGift);
+  addHist(targetGift.icon,'Крафт → '+targetGift.name,'✅ Создано!',true);
   CF.burst(window.innerWidth/2,window.innerHeight*.4,90);SFX.craft();vibrate([20,40,20]);
-  showResultModal(resultName,true,()=>{});
+  showResultModal(targetGift.name,true,()=>{});
   renderCraftSlots();renderAllInv();updateProfileStats();saveUserToDB();
 }
 
 // ═══════════════════════════════════════════════════════
-// PVP
+// PVP (шансы: 10% от цены + 90% рандом)
 // ═══════════════════════════════════════════════════════
 function selectForPvp(idx,mode){
   const g=state.inventory[idx];if(!g)return;
@@ -1129,21 +1163,33 @@ async function cancelBattle(battleId){
   toast('Батл отменён, подарок возвращён');
 }
 
+// PvP шансы: 10% от стоимости + 90% рандом
+function calculatePvpWinner(gift1, gift2){
+  const val1 = gift1.val || 50;
+  const val2 = gift2.val || 50;
+  // 10% от стоимости + 90% рандом
+  const power1 = val1 * 0.1 + Math.random() * (val1 * 0.9);
+  const power2 = val2 * 0.1 + Math.random() * (val2 * 0.9);
+  return power1 >= power2;
+}
+
 function showCoinFlip(gift1,gift2,battle,creatorId){
   if(document.querySelector('.coin-overlay'))return;
   const overlay=document.createElement('div');overlay.className='coin-overlay';
   overlay.innerHTML=`<div class="coin-fighters"><div class="fighter-box"><div class="fighter-label">Игрок 1 · Орёл</div><div class="fighter-icon-big">${gift1.icon||'❓'}</div><div style="font-size:10px;color:var(--tm);margin-top:4px">${gift1.name||''}</div></div><div class="coin-vs">VS</div><div class="fighter-box"><div class="fighter-label">Игрок 2 · Решка</div><div class="fighter-icon-big">${gift2.icon||'❓'}</div><div style="font-size:10px;color:var(--tm);margin-top:4px">${gift2.name||''}</div></div></div><div class="coin-wrap"><div class="coin" id="coinEl"><div class="coin-face coin-head">🦅</div><div class="coin-face coin-tail">👾</div></div></div><div id="coinResultArea"></div>`;
   document.body.appendChild(overlay);
-  const pRoll=(gift1.val||50)*0.3+Math.random()*(gift1.val||50)*0.7;
-  const oRoll=(gift2.val||50)*0.3+Math.random()*(gift2.val||50)*0.7;
-  const creatorWins=pRoll>=oRoll;
-  const iAmCreator=userId===creatorId;
-  const iWon=iAmCreator?creatorWins:!creatorWins;
+  
+  const creatorWins = calculatePvpWinner(gift1, gift2);
+  const iAmCreator = userId===creatorId;
+  const iWon = iAmCreator ? creatorWins : !creatorWins;
+  
   const coinEl=document.getElementById('coinEl');
   const finalRot=1800+(creatorWins?0:180);
   coinEl.style.setProperty('--final-rot',finalRot+'deg');
+  
   SFX.coin();vibrate([15]);
   let ticks=0;const ti=setInterval(()=>{SFX.roulette();vibrate([5]);ticks++;if(ticks>18)clearInterval(ti);},140);
+  
   setTimeout(()=>{
     const area=document.getElementById('coinResultArea');if(!area)return;
     if(iWon){
