@@ -72,16 +72,16 @@ img{display:block}
 .case-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;transition:.18s var(--ease);cursor:pointer;position:relative}
 .case-card:hover{border-color:var(--borderL);transform:translateY(-2px);box-shadow:var(--sh)}
 .case-card:active{transform:scale(.98)}
-.case-visual{height:110px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
-.case-emoji{font-size:52px;position:relative;z-index:1;filter:drop-shadow(0 6px 16px rgba(0,0,0,.7));transition:transform .3s var(--spring)}
+.case-visual{height:100px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.case-emoji{font-size:46px;position:relative;z-index:1;filter:drop-shadow(0 6px 16px rgba(0,0,0,.7));transition:transform .3s var(--spring)}
 .case-card:hover .case-emoji{transform:scale(1.12) translateY(-3px)}
-.case-body{padding:12px}
-.case-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.case-name{font-family:var(--font-d);font-size:18px;letter-spacing:1px;color:var(--white)}
-.case-price{background:var(--s2);border:1px solid var(--border);padding:2px 9px;border-radius:var(--r-full);font-size:12px;font-weight:700;color:var(--gold)}
-.case-drops{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:10px}
-.drop-tag{background:var(--s2);border:1px solid var(--border);padding:2px 7px;border-radius:var(--r-sm);font-size:10px;color:var(--ts)}
-.open-btn{width:100%;padding:11px;background:var(--s3);border:1px solid var(--borderL);border-radius:var(--r-full);color:var(--white);font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;transition:.15s;position:relative;overflow:hidden}
+.case-body{padding:10px}
+.case-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;flex-wrap:wrap;gap:4px}
+.case-name{font-family:var(--font-d);font-size:16px;letter-spacing:1px;color:var(--white)}
+.case-price{background:var(--s2);border:1px solid var(--border);padding:2px 8px;border-radius:var(--r-full);font-size:11px;font-weight:700;color:var(--gold);white-space:nowrap}
+.case-drops{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:8px}
+.drop-tag{background:var(--s2);border:1px solid var(--border);padding:1px 5px;border-radius:var(--r-sm);font-size:9px;color:var(--ts)}
+.open-btn{width:100%;padding:9px;background:var(--s3);border:1px solid var(--borderL);border-radius:var(--r-full);color:var(--white);font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;transition:.15s;position:relative;overflow:hidden}
 .open-btn::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.06),transparent);transform:translateX(-100%);transition:transform .4s}
 .open-btn:hover::after{transform:translateX(100%)}
 .open-btn:hover{background:var(--borderL);border-color:#444}.open-btn:active{transform:scale(.97)}
@@ -98,11 +98,11 @@ img{display:block}
 /* INV */
 .inv-section{background:var(--s1);border:1px solid var(--border);border-radius:var(--r-lg);padding:16px;margin-top:16px}
 .inv-section h3{font-family:var(--font-d);font-size:20px;letter-spacing:1px;margin-bottom:12px}
-.inv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:7px;max-height:220px;overflow-y:auto}
-.inv-card{background:var(--s2);border:1px solid var(--border);border-radius:var(--r-md);padding:10px;display:flex;flex-direction:column;align-items:center;gap:4px;position:relative;transition:.15s;user-select:none;cursor:pointer}
+.inv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:7px;max-height:220px;overflow-y:auto}
+.inv-card{background:var(--s2);border:1px solid var(--border);border-radius:var(--r-md);padding:8px;display:flex;flex-direction:column;align-items:center;gap:3px;position:relative;transition:.15s;user-select:none;cursor:pointer}
 .inv-card.selected{border-color:var(--white);background:var(--s3)}.inv-card:active{transform:scale(.95)}
-.inv-icon{font-size:28px}.inv-name{font-size:10px;font-weight:600;color:var(--ts);text-align:center}
-.inv-val{font-size:11px;font-weight:700;color:var(--gold)}
+.inv-icon{font-size:24px}.inv-name{font-size:9px;font-weight:600;color:var(--ts);text-align:center}
+.inv-val{font-size:10px;font-weight:700;color:var(--gold)}
 .inv-rarity{position:absolute;top:5px;right:5px;width:5px;height:5px;border-radius:50%}
 .r-common{background:#555}.r-rare{background:#5577cc}.r-epic{background:#9955cc}.r-legendary{background:var(--gold);box-shadow:0 0 5px var(--gold)}.r-special{background:var(--green);box-shadow:0 0 5px var(--green)}.r-premium{background:var(--blue);box-shadow:0 0 5px var(--blue)}
 .sell-chip{background:var(--s3);border:1px solid var(--borderL);color:var(--tm);font-size:9px;font-weight:600;padding:2px 8px;border-radius:var(--r-full);transition:.15s;margin-top:4px;cursor:pointer}
@@ -152,7 +152,7 @@ img{display:block}
 .battle-create-box{background:var(--s1);border:1px solid var(--border);border-radius:var(--r-lg);padding:16px;margin-bottom:14px}
 .battle-stake-pick{background:var(--s2);border:1px solid var(--border);border-radius:var(--r-md);padding:12px;margin:8px 0;display:flex;align-items:center;gap:10px;font-size:13px;color:var(--ts)}
 
-/* LOBBY CARD — с аватаром создателя */
+/* LOBBY CARD */
 .lobby-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r-lg);padding:14px;display:flex;align-items:center;gap:12px;margin-bottom:8px;transition:.15s;position:relative;overflow:hidden}
 .lobby-card::before{content:'';position:absolute;left:0;top:20%;bottom:20%;width:2px;background:linear-gradient(180deg,transparent,var(--borderL),transparent)}
 .lobby-card:hover{border-color:var(--borderL)}
@@ -277,9 +277,10 @@ img{display:block}
 @media(min-width:768px){
 .topbar{padding:0 28px}.content{padding:20px 28px;padding-bottom:80px}
 .cases-grid{grid-template-columns:repeat(3,1fr);gap:14px}
-.inv-grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr))}
+.case-visual{height:120px}.case-emoji{font-size:52px}
+.case-name{font-size:18px}.case-price{font-size:12px}
+.inv-grid{grid-template-columns:repeat(auto-fill,minmax(110px,1fr))}
 .stats-grid{grid-template-columns:repeat(4,1fr)}
-.case-visual{height:120px}.case-emoji{font-size:58px}
 }
 @media(min-width:1024px){
 .app{flex-direction:row}
@@ -288,11 +289,11 @@ img{display:block}
 .tab.active::after{height:32px;width:3px}
 .content{padding:24px 36px;padding-bottom:24px}
 .cases-grid{grid-template-columns:repeat(3,1fr);gap:20px}
-.case-visual{height:140px}.case-emoji{font-size:68px}
+.case-visual{height:140px}.case-emoji{font-size:62px}
 .tabs{order:-1}.craft-slots{grid-template-columns:repeat(3,1fr)}
 }
 @media(min-width:1280px){.cases-grid{grid-template-columns:repeat(4,1fr)}}
-@media(min-width:1600px){.cases-grid{grid-template-columns:repeat(5,1fr)}.case-visual{height:160px}.case-emoji{font-size:76px}.content{padding:32px 48px}}
+@media(min-width:1600px){.cases-grid{grid-template-columns:repeat(5,1fr)}.case-visual{height:160px}.case-emoji{font-size:72px}.content{padding:32px 48px}}
 
 /* BATTLE LOADING */
 .battle-skeleton{background:var(--s1);border:1px solid var(--border);border-radius:var(--r-lg);padding:14px;margin-bottom:8px;display:flex;align-items:center;gap:12px;opacity:.5}
@@ -390,7 +391,7 @@ img{display:block}
     <div id="pvpLobby"></div>
   </div>
 
-  <!-- PRIVATE LOBBY (только приватные своих) -->
+  <!-- PRIVATE LOBBY -->
   <div id="privateLobbyWrap" style="display:none">
     <div class="pvp-section-title private-title">🔒 МОИ ПРИВАТНЫЕ БАТЛЫ</div>
     <div id="pvpPrivateLobby"></div>
@@ -461,7 +462,7 @@ const SUPABASE_ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 // EXTENDED DATABASE — больше подарков и кейсов
 // ═══════════════════════════════════════════════════════
 const GIFTS={
-  // Common
+  // Common (8 подарков)
   "Розовый мишка":      {icon:"🧸",val:15, rarity:"common",   upTo:"Золотая звезда"},
   "Букет цветов":       {icon:"💐",val:15, rarity:"common",   upTo:"Алмазное сердце"},
   "Шоколадка":          {icon:"🍫",val:15, rarity:"common",   upTo:"Золотая звезда"},
@@ -470,25 +471,25 @@ const GIFTS={
   "Конфеты":            {icon:"🍬",val:8,  rarity:"common",   upTo:"Золотая звезда"},
   "Плюшевый кот":       {icon:"🐱",val:18, rarity:"common",   upTo:"Алмазное сердце"},
   "Открытка":           {icon:"💌",val:10, rarity:"common",   upTo:"Серебряная луна"},
-  // Rare
-  "Золотая звезда":     {icon:"⭐️",val:50,rarity:"rare",     upTo:"Легендарный дракон"},
+  // Rare (7 подарков)
+  "Золотая звезда":     {icon:"⭐️",val:50, rarity:"rare",     upTo:"Легендарный дракон"},
   "Алмазное сердце":    {icon:"💎",val:50, rarity:"rare",     upTo:"Космический корабль"},
   "Серебряная луна":    {icon:"🌙",val:40, rarity:"rare",     upTo:"Легендарный дракон"},
   "Золотое яблоко":     {icon:"🍎",val:45, rarity:"rare",     upTo:"Феникс"},
   "Кристалл":           {icon:"💠",val:55, rarity:"rare",     upTo:"Космический корабль"},
   "Золотой кубок":      {icon:"🏆",val:60, rarity:"rare",     upTo:"Феникс"},
-  "Музыкальная шкатулка":{icon:"🎵",val:45,rarity:"rare",    upTo:"Легендарный дракон"},
-  // Epic
-  "Легендарный дракон": {icon:"🐉",val:200,rarity:"epic",     upTo:"Трон короля"},
-  "Космический корабль":{icon:"🚀",val:200,rarity:"epic",     upTo:"Трон короля"},
-  "Феникс":             {icon:"🦅",val:180,rarity:"epic",     upTo:"Трон короля"},
-  "Единорог":           {icon:"🦄",val:220,rarity:"epic",     upTo:"Трон короля"},
-  "Чёрная дыра":        {icon:"🌑",val:250,rarity:"epic",     upTo:"Трон короля"},
-  "Волшебный меч":      {icon:"⚔️",val:190,rarity:"epic",    upTo:"Трон короля"},
-  // Legendary
-  "Трон короля":        {icon:"👑",val:1000,rarity:"legendary",upTo:null},
-  "Бесконечный камень": {icon:"💫",val:1500,rarity:"legendary",upTo:null},
-  "Врата богов":        {icon:"⛩️",val:2000,rarity:"legendary",upTo:null}
+  "Музыкальная шкатулка":{icon:"🎵",val:45, rarity:"rare",    upTo:"Легендарный дракон"},
+  // Epic (6 подарков)
+  "Легендарный дракон": {icon:"🐉",val:200, rarity:"epic",     upTo:"Трон короля"},
+  "Космический корабль":{icon:"🚀",val:200, rarity:"epic",     upTo:"Трон короля"},
+  "Феникс":             {icon:"🦅",val:180, rarity:"epic",     upTo:"Трон короля"},
+  "Единорог":           {icon:"🦄",val:220, rarity:"epic",     upTo:"Трон короля"},
+  "Чёрная дыра":        {icon:"🌑",val:250, rarity:"epic",     upTo:"Трон короля"},
+  "Волшебный меч":      {icon:"⚔️",val:190, rarity:"epic",    upTo:"Трон короля"},
+  // Legendary (3 подарка)
+  "Трон короля":        {icon:"👑",val:1000, rarity:"legendary", upTo:null},
+  "Бесконечный камень": {icon:"💫",val:1500, rarity:"legendary", upTo:null},
+  "Врата богов":        {icon:"⛩️",val:2000, rarity:"legendary", upTo:null}
 };
 
 const RARITY_ORDER=["common","rare","epic","legendary"];
@@ -497,33 +498,57 @@ const RARITY_COLORS={common:"#666",rare:"#5577cc",epic:"#9955cc",legendary:"#c8a
 const UPGRADE_CH={common:70,rare:50,epic:30,legendary:0};
 const CRAFT_RESULT={common:"Золотая звезда",rare:"Легендарный дракон",epic:"Трон короля"};
 
-// РАСШИРЕННЫЕ КЕЙСЫ
+// Функция расчета цены кейса на основе подарков (средняя цена * 0.8 + 20%)
+function calculateCasePrice(gifts){
+  let totalValue=0;
+  let totalChance=0;
+  for(const g of gifts){
+    const giftInfo=GIFTS[g.n];
+    if(giftInfo){
+      totalValue+=giftInfo.val * (g.c/100);
+      totalChance+=g.c;
+    }
+  }
+  if(totalChance>0) totalValue=totalValue / (totalChance/100);
+  // Цена = средняя цена * 0.8, округление до 5
+  let price=Math.round(totalValue * 0.8);
+  price=Math.max(30, Math.min(1500, price));
+  // Округляем до 5
+  return Math.round(price/5)*5;
+}
+
+// РАСШИРЕННЫЕ КЕЙСЫ с 5-8 подарками и нормальными шансами
 const CASES=[
-  {id:"starter",name:"СТАРТОВЫЙ",emoji:"🎀",price:15,cls:"c-common",
-   gifts:[{n:"Конфеты",c:35},{n:"Открытка",c:30},{n:"Кексик",c:25},{n:"Воздушный шар",c:10}]},
-  {id:"common",name:"ОБЫЧНЫЙ",emoji:"📦",price:30,cls:"c-common",
-   gifts:[{n:"Розовый мишка",c:30},{n:"Букет цветов",c:25},{n:"Шоколадка",c:20},{n:"Плюшевый кот",c:15},{n:"Воздушный шар",c:10}]},
-  {id:"sweet",name:"СЛАДКИЙ",emoji:"🍭",price:25,cls:"c-common",
-   gifts:[{n:"Шоколадка",c:40},{n:"Кексик",c:30},{n:"Конфеты",c:20},{n:"Золотое яблоко",c:10}]},
-  {id:"rare",name:"РЕДКИЙ",emoji:"✨",price:80,cls:"c-rare",
-   gifts:[{n:"Розовый мишка",c:15},{n:"Плюшевый кот",c:10},{n:"Золотая звезда",c:25},{n:"Алмазное сердце",c:20},{n:"Серебряная луна",c:15},{n:"Золотое яблоко",c:15}]},
-  {id:"music",name:"МУЗЫКАЛЬНЫЙ",emoji:"🎵",price:70,cls:"c-rare",
-   gifts:[{n:"Открытка",c:20},{n:"Музыкальная шкатулка",c:35},{n:"Золотой кубок",c:25},{n:"Кристалл",c:20}]},
-  {id:"crystal",name:"КРИСТАЛЛ",emoji:"💠",price:120,cls:"c-rare",
-   gifts:[{n:"Кристалл",c:30},{n:"Алмазное сердце",c:25},{n:"Золотой кубок",c:25},{n:"Серебряная луна",c:20}]},
-  {id:"epic",name:"ЭПИЧЕСКИЙ",emoji:"🔥",price:200,cls:"c-epic",
-   gifts:[{n:"Золотая звезда",c:15},{n:"Алмазное сердце",c:15},{n:"Легендарный дракон",c:20},{n:"Космический корабль",c:18},{n:"Феникс",c:17},{n:"Единорог",c:15}]},
-  {id:"cosmos",name:"КОСМИЧЕСКИЙ",emoji:"🌌",price:250,cls:"c-premium",
-   gifts:[{n:"Космический корабль",c:25},{n:"Чёрная дыра",c:25},{n:"Феникс",c:20},{n:"Единорог",c:20},{n:"Волшебный меч",c:10}]},
-  {id:"dragon",name:"ДРАКОН",emoji:"🐉",price:300,cls:"c-epic",
-   gifts:[{n:"Легендарный дракон",c:35},{n:"Единорог",c:25},{n:"Чёрная дыра",c:20},{n:"Волшебный меч",c:20}]},
-  {id:"legendary",name:"ЛЕГЕНДАРНЫЙ",emoji:"👑",price:500,cls:"c-legendary",
-   gifts:[{n:"Легендарный дракон",c:25},{n:"Космический корабль",c:20},{n:"Единорог",c:20},{n:"Чёрная дыра",c:20},{n:"Трон короля",c:15}]},
-  {id:"mythic",name:"МИФИЧЕСКИЙ",emoji:"💫",price:1000,cls:"c-legendary",
-   gifts:[{n:"Трон короля",c:35},{n:"Бесконечный камень",c:40},{n:"Врата богов",c:25}]},
-  {id:"event",name:"СОБЫТИЕ",emoji:"🎄",price:150,cls:"c-special",
-   gifts:[{n:"Плюшевый кот",c:20},{n:"Музыкальная шкатулка",c:20},{n:"Золотой кубок",c:20},{n:"Феникс",c:20},{n:"Бесконечный камень",c:20}]}
+  {id:"starter",name:"СТАРТОВЫЙ",emoji:"🎀",cls:"c-common",
+   gifts:[{n:"Конфеты",c:25},{n:"Открытка",c:20},{n:"Кексик",c:18},{n:"Воздушный шар",c:15},{n:"Шоколадка",c:12},{n:"Плюшевый кот",c:10}]},
+  {id:"common",name:"ОБЫЧНЫЙ",emoji:"📦",cls:"c-common",
+   gifts:[{n:"Розовый мишка",c:18},{n:"Букет цветов",c:16},{n:"Шоколадка",c:15},{n:"Плюшевый кот",c:14},{n:"Воздушный шар",c:12},{n:"Кексик",c:10},{n:"Конфеты",c:8},{n:"Открытка",c:7}]},
+  {id:"sweet",name:"СЛАДКИЙ",emoji:"🍭",cls:"c-common",
+   gifts:[{n:"Шоколадка",c:22},{n:"Кексик",c:18},{n:"Конфеты",c:16},{n:"Золотое яблоко",c:14},{n:"Розовый мишка",c:12},{n:"Плюшевый кот",c:10},{n:"Букет цветов",c:8}]},
+  {id:"rare",name:"РЕДКИЙ",emoji:"✨",cls:"c-rare",
+   gifts:[{n:"Золотая звезда",c:18},{n:"Алмазное сердце",c:16},{n:"Серебряная луна",c:14},{n:"Золотое яблоко",c:13},{n:"Кристалл",c:12},{n:"Золотой кубок",c:10},{n:"Музыкальная шкатулка",c:9},{n:"Розовый мишка",c:8}]},
+  {id:"music",name:"МУЗЫКАЛЬНЫЙ",emoji:"🎵",cls:"c-rare",
+   gifts:[{n:"Музыкальная шкатулка",c:22},{n:"Золотой кубок",c:18},{n:"Кристалл",c:16},{n:"Золотая звезда",c:14},{n:"Алмазное сердце",c:12},{n:"Серебряная луна",c:10},{n:"Открытка",c:8}]},
+  {id:"crystal",name:"КРИСТАЛЛ",emoji:"💠",cls:"c-rare",
+   gifts:[{n:"Кристалл",c:20},{n:"Алмазное сердце",c:18},{n:"Золотой кубок",c:16},{n:"Серебряная луна",c:14},{n:"Золотая звезда",c:12},{n:"Золотое яблоко",c:10},{n:"Музыкальная шкатулка",c:10}]},
+  {id:"epic",name:"ЭПИЧЕСКИЙ",emoji:"🔥",cls:"c-epic",
+   gifts:[{n:"Легендарный дракон",c:16},{n:"Космический корабль",c:15},{n:"Феникс",c:14},{n:"Единорог",c:13},{n:"Чёрная дыра",c:12},{n:"Волшебный меч",c:11},{n:"Золотая звезда",c:10},{n:"Алмазное сердце",c:9}]},
+  {id:"cosmos",name:"КОСМИЧЕСКИЙ",emoji:"🌌",cls:"c-premium",
+   gifts:[{n:"Космический корабль",c:18},{n:"Чёрная дыра",c:16},{n:"Феникс",c:15},{n:"Единорог",c:14},{n:"Волшебный меч",c:12},{n:"Легендарный дракон",c:11},{n:"Кристалл",c:8},{n:"Золотой кубок",c:6}]},
+  {id:"dragon",name:"ДРАКОН",emoji:"🐉",cls:"c-epic",
+   gifts:[{n:"Легендарный дракон",c:22},{n:"Единорог",c:18},{n:"Чёрная дыра",c:15},{n:"Волшебный меч",c:14},{n:"Феникс",c:12},{n:"Космический корабль",c:10},{n:"Золотая звезда",c:5},{n:"Алмазное сердце",c:4}]},
+  {id:"legendary",name:"ЛЕГЕНДАРНЫЙ",emoji:"👑",cls:"c-legendary",
+   gifts:[{n:"Трон короля",c:12},{n:"Легендарный дракон",c:14},{n:"Космический корабль",c:13},{n:"Единорог",c:12},{n:"Чёрная дыра",c:11},{n:"Феникс",c:10},{n:"Волшебный меч",c:10},{n:"Бесконечный камень",c:9},{n:"Врата богов",c:9}]},
+  {id:"mythic",name:"МИФИЧЕСКИЙ",emoji:"💫",cls:"c-legendary",
+   gifts:[{n:"Трон короля",c:20},{n:"Бесконечный камень",c:18},{n:"Врата богов",c:16},{n:"Легендарный дракон",c:12},{n:"Космический корабль",c:10},{n:"Феникс",c:8},{n:"Единорог",c:8},{n:"Чёрная дыра",c:8}]},
+  {id:"event",name:"СОБЫТИЕ",emoji:"🎄",cls:"c-special",
+   gifts:[{n:"Бесконечный камень",c:12},{n:"Трон короля",c:10},{n:"Феникс",c:14},{n:"Легендарный дракон",c:13},{n:"Космический корабль",c:12},{n:"Единорог",c:11},{n:"Золотой кубок",c:10},{n:"Кристалл",c:10},{n:"Музыкальная шкатулка",c:8}]}
 ];
+
+// Добавляем цены кейсам
+for(const c of CASES){
+  c.price=calculateCasePrice(c.gifts);
+}
 
 // ═══════════════════════════════════════════════════════
 // STATE
@@ -532,16 +557,16 @@ let userId=null,tgUser=null;
 let state={balance:250,inventory:[],casesOpened:0,pvpWins:0,history:[],luck:0,refCode:null,refCount:0,refEarned:0,avatarUrl:null,displayName:null};
 let upgradeSlots=[];
 let craftSlots=[null,null,null];
-let pvpStakeIdx=null;       // индекс для публичного
-let pvpPrivateStakeIdx=null; // индекс для приватного
+let pvpStakeIdx=null;
+let pvpPrivateStakeIdx=null;
 let pvpMode='public';
-let battles=[];             // только публичные
-let privateBattles=[];      // все приватные (фильтруем свои)
+let battles=[];
+let privateBattles=[];
 let debounceSave=null;
 let ws=null;
 let wsReconnectTimer=null;
 let wsHeartbeatTimer=null;
-let activeCoinFlipBattleId=null; // защита от двойного показа
+let activeCoinFlipBattleId=null;
 
 // ═══════════════════════════════════════════════════════
 // RATE LIMITER
@@ -649,7 +674,6 @@ async function saveUserToDB(immediate=false){
   };
   if(immediate)await doSave();
   else debounceSave=setTimeout(doSave,800);
-  // Fallback localStorage
   try{localStorage.setItem('gc_state',JSON.stringify({state,userId,ts:Date.now()}));}catch(e){}
 }
 
@@ -657,10 +681,8 @@ function safeJSON(v,def){try{return typeof v==='string'?JSON.parse(v):(v??def);}
 
 // ── BATTLES REST ──
 async function loadBattles(){
-  // Публичные
   const pub=await sbFetch(`/rest/v1/battles?status=eq.waiting&is_private=eq.false&order=created_at.desc&limit=50`);
   if(pub)battles=pub;
-  // Приватные (только свои)
   const priv=await sbFetch(`/rest/v1/battles?status=eq.waiting&is_private=eq.true&creator_id=eq.${encodeURIComponent(userId)}&order=created_at.desc&limit=20`);
   if(priv)privateBattles=priv;
   renderPvpLobby();
@@ -669,7 +691,7 @@ async function saveBattle(b){return await sbFetch('/rest/v1/battles','POST',b,{'
 async function updateBattle(id,data){return await sbFetch(`/rest/v1/battles?id=eq.${id}`,'PATCH',data);}
 
 // ═══════════════════════════════════════════════════════
-// REALTIME — НАДЁЖНЫЙ WEBSOCKET С HEARTBEAT
+// REALTIME
 // ═══════════════════════════════════════════════════════
 function initRealtime(){
   if(wsReconnectTimer){clearTimeout(wsReconnectTimer);wsReconnectTimer=null;}
@@ -678,49 +700,31 @@ function initRealtime(){
 
   try{
     ws=new WebSocket(`wss://riwzrplciliebgexltll.supabase.co/realtime/v1/websocket?apikey=${SUPABASE_ANON}&vsn=1.0.0`);
-
     ws.onopen=()=>{
-      console.log('[WS] Connected');
-      // Подписываемся на таблицу battles
       ws.send(JSON.stringify({topic:'realtime:public:battles',event:'phx_join',payload:{},ref:'battles_join'}));
-      // Heartbeat каждые 25 сек
       wsHeartbeatTimer=setInterval(()=>{
         if(ws.readyState===WebSocket.OPEN){
           ws.send(JSON.stringify({topic:'phoenix',event:'heartbeat',payload:{},ref:'hb_'+Date.now()}));
         }
       },25000);
     };
-
-    ws.onmessage=(evt)=>{
-      try{
-        const msg=JSON.parse(evt.data);
-        handleRealtimeMessage(msg);
-      }catch(e){}
-    };
-
+    ws.onmessage=(evt)=>{try{const msg=JSON.parse(evt.data);handleRealtimeMessage(msg);}catch(e){}};
     ws.onerror=(e)=>{console.warn('[WS] error',e);};
-
     ws.onclose=(e)=>{
-      console.log('[WS] closed, reconnecting in 4s...');
       if(wsHeartbeatTimer){clearInterval(wsHeartbeatTimer);wsHeartbeatTimer=null;}
       wsReconnectTimer=setTimeout(initRealtime,4000);
     };
-
   }catch(e){
-    console.warn('[WS] init error',e);
     wsReconnectTimer=setTimeout(initRealtime,5000);
   }
 }
 
 function handleRealtimeMessage(msg){
-  // Phoenix heartbeat/ok ответы — игнорируем
   if(msg.event==='phx_reply'||msg.event==='phx_error'||msg.event==='phx_close')return;
-
   if(msg.topic==='realtime:public:battles'){
     const row=msg.payload?.record||msg.payload?.new||msg.payload?.data;
     if(!row)return;
-    const evType=msg.event; // INSERT, UPDATE, DELETE
-
+    const evType=msg.event;
     if(evType==='INSERT'){
       if(row.is_private===false&&row.status==='waiting'){
         if(!battles.find(b=>b.id===row.id)){battles.unshift(row);}
@@ -731,37 +735,27 @@ function handleRealtimeMessage(msg){
         renderPvpLobby();
       }
     }
-
     if(evType==='UPDATE'){
-      // Убираем из публичного/приватного лобби если не waiting
       if(row.status!=='waiting'){
         battles=battles.filter(b=>b.id!==row.id);
         privateBattles=privateBattles.filter(b=>b.id!==row.id);
         renderPvpLobby();
       }else{
-        // Обновляем
         const bi=battles.findIndex(b=>b.id===row.id);
         if(bi>=0)battles[bi]=row;
         const pi=privateBattles.findIndex(b=>b.id===row.id);
         if(pi>=0)privateBattles[pi]=row;
         renderPvpLobby();
       }
-
-      // ── КЛЮЧЕВОЕ ИСПРАВЛЕНИЕ: анимация у СОЗДАТЕЛЯ ──
-      // Когда opponent_id появился и статус стал fighting — создатель тоже видит анимацию
       if(row.status==='fighting' && row.creator_id===userId && row.opponent_id && row.opponent_gift){
         if(activeCoinFlipBattleId!==row.id){
           activeCoinFlipBattleId=row.id;
           const creatorGift=safeJSON(row.creator_gift,{});
           const opponentGift=safeJSON(row.opponent_gift,{});
-          // Небольшая задержка чтобы противник тоже успел увидеть анимацию
-          setTimeout(()=>{
-            showCoinFlip(creatorGift,opponentGift,row,row.creator_id);
-          },300);
+          setTimeout(()=>{showCoinFlip(creatorGift,opponentGift,row,row.creator_id);},300);
         }
       }
     }
-
     if(evType==='DELETE'){
       const id=msg.payload?.old?.id||row.id;
       battles=battles.filter(b=>b.id!==id);
@@ -771,13 +765,7 @@ function handleRealtimeMessage(msg){
   }
 }
 
-// Дополнительно — polling каждые 10 сек для надёжности
-setInterval(()=>{
-  // Тихо обновляем батлы без лишних render (только если нет WS соединения)
-  if(!ws||ws.readyState!==WebSocket.OPEN){
-    loadBattles();
-  }
-},10000);
+setInterval(()=>{if(!ws||ws.readyState!==WebSocket.OPEN){loadBattles();}},10000);
 
 // ═══════════════════════════════════════════════════════
 // BALANCE & LUCK
@@ -819,7 +807,6 @@ function renderAllInv(){
   renderInv('invCases',false);
   renderInv('invUpgrade',false,'upgrade');
   renderInv('invCraft',false,'craft');
-  // PvP — показываем инвентарь с режимом в зависимости от активного таба
   renderInv('invPvp',false, pvpMode==='private'?'pvp_private':'pvp_public');
   renderInv('invProfile',true);
 }
@@ -874,11 +861,16 @@ function updateAllUI(){
 // ═══════════════════════════════════════════════════════
 function renderCases(){
   const g=document.getElementById('casesGrid');if(!g)return;
-  g.innerHTML=CASES.map(c=>`<div class="case-card ${c.cls}"><div class="case-visual"><div class="case-emoji">${c.emoji}</div></div><div class="case-body"><div class="case-top"><div class="case-name">${c.name}</div><div class="case-price">★ ${c.price}</div></div><div class="case-drops">${c.gifts.slice(0,3).map(gf=>`<span class="drop-tag">${GIFTS[gf.n]?.icon||''} ${gf.n} <span style="color:var(--tm)">${gf.c}%</span></span>`).join('')}</div><button class="open-btn" data-id="${c.id}">ОТКРЫТЬ</button></div></div>`).join('');
+  g.innerHTML=CASES.map(c=>`<div class="case-card ${c.cls}"><div class="case-visual"><div class="case-emoji">${c.emoji}</div></div><div class="case-body"><div class="case-top"><div class="case-name">${c.name}</div><div class="case-price">★ ${c.price}</div></div><div class="case-drops">${c.gifts.slice(0,4).map(gf=>`<span class="drop-tag">${GIFTS[gf.n]?.icon||''} ${gf.n}</span>`).join('')}</div><button class="open-btn" data-id="${c.id}">ОТКРЫТЬ</button></div></div>`).join('');
   g.querySelectorAll('.open-btn').forEach(btn=>{btn.onclick=()=>openCase(CASES.find(c=>c.id===btn.dataset.id));});
 }
 
-function rollCase(gifts){const tot=gifts.reduce((s,g)=>s+g.c,0);let r=Math.random()*tot,acc=0;for(const g of gifts){acc+=g.c;if(r<=acc)return g.n}return gifts[0].n;}
+function rollCase(gifts){
+  const tot=gifts.reduce((s,g)=>s+g.c,0);
+  let r=Math.random()*tot,acc=0;
+  for(const g of gifts){acc+=g.c;if(r<=acc)return g.n}
+  return gifts[0].n;
+}
 
 function openCase(caseData){
   if(!RL.check('openCase',2))return;
@@ -1021,7 +1013,7 @@ function doCraft(){
 }
 
 // ═══════════════════════════════════════════════════════
-// PVP — ИСПРАВЛЕНЫ ВСЕ ПРОБЛЕМЫ
+// PVP
 // ═══════════════════════════════════════════════════════
 function selectForPvp(idx,mode){
   const g=state.inventory[idx];if(!g)return;
@@ -1038,25 +1030,16 @@ function selectForPvp(idx,mode){
   }
 }
 
-// Отображение лобби: ПУБЛИЧНЫЕ не включают приватные, ПРИВАТНЫЕ — только свои
 function renderPvpLobby(){
-  if(pvpMode==='public'){
-    renderPublicLobby();
-  }else{
-    renderPrivateLobby();
-  }
+  if(pvpMode==='public'){renderPublicLobby();}
+  else{renderPrivateLobby();}
 }
 
 function getCreatorAvatarHtml(b){
   const avatarUrl=b.creator_avatar||null;
   const name=(b.creator_name||b.creator_username||'?').slice(0,6).toUpperCase();
-  const avatarHtml=avatarUrl
-    ?`<img src="${avatarUrl}" alt="av">`
-    :`<span style="font-size:14px">${name.charAt(0)}</span>`;
-  return `<div class="lc-creator">
-    <div class="lc-creator-avatar">${avatarHtml}</div>
-    <div class="lc-creator-name">${name}</div>
-  </div>`;
+  const avatarHtml=avatarUrl?`<img src="${avatarUrl}" alt="av">`:`<span style="font-size:14px">${name.charAt(0)}</span>`;
+  return `<div class="lc-creator"><div class="lc-creator-avatar">${avatarHtml}</div><div class="lc-creator-name">${name}</div></div>`;
 }
 
 function renderPublicLobby(){
@@ -1066,51 +1049,18 @@ function renderPublicLobby(){
   el.innerHTML=active.map(b=>{
     const cg=safeJSON(b.creator_gift,{});
     const isOwn=b.creator_id===userId;
-    return `<div class="lobby-card">
-      ${getCreatorAvatarHtml(b)}
-      <div class="lc-gift">
-        <div class="lc-icon">${cg.icon||'❓'}</div>
-        <div class="lc-name">${cg.name||'?'}</div>
-        <div class="lc-val">★ ${cg.val||0}</div>
-      </div>
-      <div class="lc-mid">
-        <div class="lc-vs">VS</div>
-        <div class="lc-status">Ожидание</div>
-      </div>
-      <div>
-        ${isOwn
-          ?`<button class="btn btn-danger btn-sm" onclick="cancelBattle('${b.id}')">Отменить</button>`
-          :`<button class="lc-join-btn" onclick="joinBattle('${b.id}')">Войти</button>`
-        }
-      </div>
-    </div>`;
+    return `<div class="lobby-card">${getCreatorAvatarHtml(b)}<div class="lc-gift"><div class="lc-icon">${cg.icon||'❓'}</div><div class="lc-name">${cg.name||'?'}</div><div class="lc-val">★ ${cg.val||0}</div></div><div class="lc-mid"><div class="lc-vs">VS</div><div class="lc-status">Ожидание</div></div><div>${isOwn?`<button class="btn btn-danger btn-sm" onclick="cancelBattle('${b.id}')">Отменить</button>`:`<button class="lc-join-btn" onclick="joinBattle('${b.id}')">Войти</button>`}</div></div>`;
   }).join('');
 }
 
 function renderPrivateLobby(){
   const el=document.getElementById('pvpPrivateLobby');if(!el)return;
-  // Только мои приватные батлы
   const myPrivate=privateBattles.filter(b=>b.creator_id===userId&&b.status==='waiting'&&Date.now()-new Date(b.created_at).getTime()<300000);
   if(!myPrivate.length){el.innerHTML='<div class="no-battles">У тебя нет активных приватных батлов.<br>Создай и отправь ссылку другу!</div>';return;}
   el.innerHTML=myPrivate.map(b=>{
     const cg=safeJSON(b.creator_gift,{});
     const link=window.location.origin+window.location.pathname+'?join='+b.id;
-    return `<div class="lobby-card">
-      <div class="lc-gift">
-        <div class="lc-icon">${cg.icon||'❓'}</div>
-        <div class="lc-name">${cg.name||'?'}</div>
-        <div class="lc-val">★ ${cg.val||0}</div>
-      </div>
-      <div class="lc-mid">
-        <div class="lc-vs">VS</div>
-        <div class="lc-status">Ожидание</div>
-        <div class="lc-private">🔒 Приватный</div>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:6px;">
-        <button class="lc-join-btn" onclick="copyToClipboard('${link}');toast('🔗 Ссылка скопирована!')">🔗 Скопировать</button>
-        <button class="btn btn-danger btn-sm" onclick="cancelBattle('${b.id}')">Отменить</button>
-      </div>
-    </div>`;
+    return `<div class="lobby-card"><div class="lc-gift"><div class="lc-icon">${cg.icon||'❓'}</div><div class="lc-name">${cg.name||'?'}</div><div class="lc-val">★ ${cg.val||0}</div></div><div class="lc-mid"><div class="lc-vs">VS</div><div class="lc-status">Ожидание</div><div class="lc-private">🔒 Приватный</div></div><div style="display:flex;flex-direction:column;gap:6px;"><button class="lc-join-btn" onclick="copyToClipboard('${link}');toast('🔗 Ссылка скопирована!')">🔗 Скопировать</button><button class="btn btn-danger btn-sm" onclick="cancelBattle('${b.id}')">Отменить</button></div></div>`;
   }).join('');
 }
 
@@ -1119,19 +1069,8 @@ async function createBattle(){
   if(pvpStakeIdx===null||!state.inventory[pvpStakeIdx]){toast('Выбери подарок!');return;}
   const g={...state.inventory[pvpStakeIdx]};
   state.inventory.splice(pvpStakeIdx,1);pvpStakeIdx=null;
-
   const battleId='b_'+Date.now()+'_'+Math.random().toString(36).slice(2,6);
-  const battle={
-    id:battleId,creator_id:userId,
-    creator_name:state.displayName||tgUser?.first_name||'Игрок',
-    creator_username:tgUser?.username||'',
-    creator_avatar:state.avatarUrl||tgUser?.photo_url||null,
-    creator_gift:JSON.stringify(g),
-    opponent_id:null,opponent_gift:null,
-    status:'waiting',winner_id:null,
-    is_private:false,
-    created_at:new Date().toISOString()
-  };
+  const battle={id:battleId,creator_id:userId,creator_name:state.displayName||tgUser?.first_name||'Игрок',creator_username:tgUser?.username||'',creator_avatar:state.avatarUrl||tgUser?.photo_url||null,creator_gift:JSON.stringify(g),opponent_id:null,opponent_gift:null,status:'waiting',winner_id:null,is_private:false,created_at:new Date().toISOString()};
   battles.unshift(battle);renderPvpLobby();saveUserToDB();
   document.getElementById('pvpStakeText').innerHTML='Нажми на подарок в инвентаре';
   document.getElementById('pvpStakeVal').innerText='';
@@ -1146,66 +1085,35 @@ async function createPrivateBattle(){
   if(pvpPrivateStakeIdx===null||!state.inventory[pvpPrivateStakeIdx]){toast('Выбери подарок!');return;}
   const g={...state.inventory[pvpPrivateStakeIdx]};
   state.inventory.splice(pvpPrivateStakeIdx,1);pvpPrivateStakeIdx=null;
-
   const battleId='pb_'+Date.now()+'_'+Math.random().toString(36).slice(2,6);
-  const battle={
-    id:battleId,creator_id:userId,
-    creator_name:state.displayName||tgUser?.first_name||'Игрок',
-    creator_username:tgUser?.username||'',
-    creator_avatar:state.avatarUrl||tgUser?.photo_url||null,
-    creator_gift:JSON.stringify(g),
-    opponent_id:null,opponent_gift:null,
-    status:'waiting',winner_id:null,
-    is_private:true,
-    created_at:new Date().toISOString()
-  };
+  const battle={id:battleId,creator_id:userId,creator_name:state.displayName||tgUser?.first_name||'Игрок',creator_username:tgUser?.username||'',creator_avatar:state.avatarUrl||tgUser?.photo_url||null,creator_gift:JSON.stringify(g),opponent_id:null,opponent_gift:null,status:'waiting',winner_id:null,is_private:true,created_at:new Date().toISOString()};
   privateBattles.unshift(battle);renderPvpLobby();saveUserToDB();
   document.getElementById('pvpPrivateStakeText').innerHTML='Нажми на подарок в инвентаре';
   document.getElementById('pvpPrivateStakeVal').innerText='';
   document.getElementById('createPrivateBattleBtn').disabled=true;
-
   await saveBattle(battle);
-
   const link=window.location.origin+window.location.pathname+'?join='+battleId;
   document.getElementById('privateLinkRow').style.display='block';
   document.getElementById('privateBattleLink').value=link;
-
   toast('🔒 Приватный батл создан!');
   addHist(g.icon,'Приватный батл','★ '+g.val,false);
 }
 
 async function joinBattle(battleId){
   if(!RL.check('joinBattle',2))return;
-  // Ищем в публичных и приватных
   let battle=battles.find(b=>b.id===battleId)||privateBattles.find(b=>b.id===battleId);
-  // Если не нашли локально — грузим из базы
-  if(!battle){
-    const rows=await sbFetch(`/rest/v1/battles?id=eq.${battleId}&select=*`);
-    if(rows&&rows.length>0)battle=rows[0];
-  }
+  if(!battle){const rows=await sbFetch(`/rest/v1/battles?id=eq.${battleId}&select=*`);if(rows&&rows.length>0)battle=rows[0];}
   if(!battle||battle.status!=='waiting'){toast('Батл недоступен или уже занят');return;}
   if(battle.creator_id===userId){toast('Нельзя войти в свой батл');return;}
   if(!state.inventory.length){toast('Нет подарков для ставки');return;}
-
-  // Берём первый подарок из инвентаря (TODO: выбор подарка)
   const myGift={...state.inventory[0]};
   state.inventory.splice(0,1);
-
   activeCoinFlipBattleId=battleId;
-
-  // Обновляем в базе — это тригернет WebSocket у создателя
-  await updateBattle(battleId,{
-    status:'fighting',
-    opponent_id:userId,
-    opponent_gift:JSON.stringify(myGift)
-  });
-
+  await updateBattle(battleId,{status:'fighting',opponent_id:userId,opponent_gift:JSON.stringify(myGift)});
   battles=battles.filter(b=>b.id!==battleId);
   privateBattles=privateBattles.filter(b=>b.id!==battleId);
   saveUserToDB();renderPvpLobby();
-
   const creatorGift=safeJSON(battle.creator_gift,{});
-  // Присоединившийся видит анимацию сразу
   showCoinFlip(creatorGift,myGift,battle,battle.creator_id);
 }
 
@@ -1221,59 +1129,26 @@ async function cancelBattle(battleId){
   toast('Батл отменён, подарок возвращён');
 }
 
-// ── COIN FLIP — РАБОТАЕТ У ОБОИХ ИГРОКОВ ──
 function showCoinFlip(gift1,gift2,battle,creatorId){
-  // Не показывать если уже показывается
   if(document.querySelector('.coin-overlay'))return;
-
   const overlay=document.createElement('div');overlay.className='coin-overlay';
-  overlay.innerHTML=`
-    <div class="coin-fighters">
-      <div class="fighter-box">
-        <div class="fighter-label">Игрок 1 · Орёл</div>
-        <div class="fighter-icon-big">${gift1.icon||'❓'}</div>
-        <div style="font-size:10px;color:var(--tm);margin-top:4px">${gift1.name||''}</div>
-      </div>
-      <div class="coin-vs">VS</div>
-      <div class="fighter-box">
-        <div class="fighter-label">Игрок 2 · Решка</div>
-        <div class="fighter-icon-big">${gift2.icon||'❓'}</div>
-        <div style="font-size:10px;color:var(--tm);margin-top:4px">${gift2.name||''}</div>
-      </div>
-    </div>
-    <div class="coin-wrap">
-      <div class="coin" id="coinEl">
-        <div class="coin-face coin-head">🦅</div>
-        <div class="coin-face coin-tail">👾</div>
-      </div>
-    </div>
-    <div id="coinResultArea"></div>`;
+  overlay.innerHTML=`<div class="coin-fighters"><div class="fighter-box"><div class="fighter-label">Игрок 1 · Орёл</div><div class="fighter-icon-big">${gift1.icon||'❓'}</div><div style="font-size:10px;color:var(--tm);margin-top:4px">${gift1.name||''}</div></div><div class="coin-vs">VS</div><div class="fighter-box"><div class="fighter-label">Игрок 2 · Решка</div><div class="fighter-icon-big">${gift2.icon||'❓'}</div><div style="font-size:10px;color:var(--tm);margin-top:4px">${gift2.name||''}</div></div></div><div class="coin-wrap"><div class="coin" id="coinEl"><div class="coin-face coin-head">🦅</div><div class="coin-face coin-tail">👾</div></div></div><div id="coinResultArea"></div>`;
   document.body.appendChild(overlay);
-
-  // ФОРМУЛА: 30% стоимость + 70% рандом
   const pRoll=(gift1.val||50)*0.3+Math.random()*(gift1.val||50)*0.7;
   const oRoll=(gift2.val||50)*0.3+Math.random()*(gift2.val||50)*0.7;
   const creatorWins=pRoll>=oRoll;
-
-  // Определяем победил ли текущий пользователь
   const iAmCreator=userId===creatorId;
   const iWon=iAmCreator?creatorWins:!creatorWins;
-
-  // heads = creator wins (0 deg), tails = opponent wins (180 deg)
   const coinEl=document.getElementById('coinEl');
   const finalRot=1800+(creatorWins?0:180);
   coinEl.style.setProperty('--final-rot',finalRot+'deg');
-
   SFX.coin();vibrate([15]);
   let ticks=0;const ti=setInterval(()=>{SFX.roulette();vibrate([5]);ticks++;if(ticks>18)clearInterval(ti);},140);
-
   setTimeout(()=>{
     const area=document.getElementById('coinResultArea');if(!area)return;
-
     if(iWon){
       area.innerHTML=`<div class="coin-result-banner" style="color:var(--gold)">🏆 ПОБЕДА!</div><div class="coin-result-sub">Ты забираешь оба подарка!</div>`;
       CF.burst(window.innerWidth/2,window.innerHeight*.5,120);SFX.win();vibrate([50,100,50]);
-      // Добавляем ОБА подарка
       const g1=typeof gift1==='object'?gift1:{};
       const g2=typeof gift2==='object'?gift2:{};
       if(g1.name&&GIFTS[g1.name])state.inventory.push({...g1});
@@ -1286,16 +1161,9 @@ function showCoinFlip(gift1,gift2,battle,creatorId){
       incrementLuck(5);
       addHist(iAmCreator?gift1.icon:gift2.icon,'PvP Поражение','−'+((iAmCreator?gift1.val:gift2.val)||0)+' ★',false);
     }
-
     updateAllUI();saveUserToDB();
-
-    // Обновляем статус в БД
-    updateBattle(battle.id,{
-      status:'done',
-      winner_id:creatorWins?creatorId:(battle.opponent_id||userId)
-    });
+    updateBattle(battle.id,{status:'done',winner_id:creatorWins?creatorId:(battle.opponent_id||userId)});
     activeCoinFlipBattleId=null;
-
     const closeBtn=document.createElement('button');
     closeBtn.className='btn btn-outline btn-sm';closeBtn.style.marginTop='16px';
     closeBtn.innerText='Закрыть';closeBtn.onclick=()=>overlay.remove();
@@ -1313,13 +1181,11 @@ document.querySelectorAll('.pvp-tab').forEach(btn=>{
     document.querySelectorAll('.pvp-tab').forEach(b=>b.classList.remove('active'));
     btn.classList.add('active');
     pvpMode=btn.dataset.pvptab;
-    // Показываем нужные блоки
     const isPublic=pvpMode==='public';
     document.getElementById('publicCreateBox').style.display=isPublic?'':'none';
     document.getElementById('privateCreateBox').style.display=isPublic?'none':'';
     document.getElementById('publicLobbyWrap').style.display=isPublic?'':'none';
     document.getElementById('privateLobbyWrap').style.display=isPublic?'none':'';
-    // Перерендерить инвентарь с нужным режимом
     renderInv('invPvp',false,isPublic?'pvp_public':'pvp_private');
     renderPvpLobby();
     SFX.click();
@@ -1339,13 +1205,9 @@ function checkReferral(){
   const joinId=params.get('join');
   if(joinId){
     setTimeout(async()=>{
-      // Загружаем батл по ID
       const rows=await sbFetch(`/rest/v1/battles?id=eq.${joinId}&select=*`);
-      if(rows&&rows.length>0&&rows[0].status==='waiting'){
-        joinBattle(joinId);
-      }else{
-        toast('❌ Батл не найден или уже занят');
-      }
+      if(rows&&rows.length>0&&rows[0].status==='waiting'){joinBattle(joinId);}
+      else{toast('❌ Батл не найден или уже занят');}
     },1500);
   }
 }
@@ -1446,7 +1308,6 @@ async function init(){
     if(!stored){stored='u_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);localStorage.setItem('gc_uid2',stored);}
     userId=stored;
   }
-  // Быстрая загрузка из localStorage
   try{
     const local=localStorage.getItem('gc_state');
     if(local){const d=JSON.parse(local);if(d.userId===userId&&d.state&&Date.now()-d.ts<3600000){state={...state,...d.state};}}
@@ -1454,7 +1315,6 @@ async function init(){
   validateInventory();
   renderCases();
   updateAllUI();
-  // Async — синхронизация с Supabase
   loadUserFromDB().then(()=>{validateInventory();updateAllUI();});
   loadBattles();
   initRealtime();
