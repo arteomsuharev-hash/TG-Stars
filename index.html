@@ -1292,17 +1292,21 @@ async function joinBattle(bid){
 async function cancelBattle(bid){const b=battles.find(x=>x.id===bid)||privateBattles.find(x=>x.id===bid);if(!b||b.creator_id!==userId)return;const g=safeJ(b.creator_gift,{});state.inventory.push(g);battles=battles.filter(x=>x.id!==bid);privateBattles=privateBattles.filter(x=>x.id!==bid);await updateBattle(bid,{status:'cancelled'});saveUser();renderPvpLobby();toast('Батл отменён');}
 
 function detWinner(bid,g1,g2){
-  // Простая детерминированная функция
-  let sum = 0;
+  let hash = 0;
   for(let i = 0; i < bid.length; i++){
-    sum = sum + bid.charCodeAt(i);
+    hash = (hash * 31 + bid.charCodeAt(i)) % 1000000;
   }
-  // Псевдослучайное число на основе суммы кодов символов
-  const rand = (sum % 100) / 100;
-  const val1 = g1.val * (0.5 + rand * 0.5);
-  const val2 = g2.val * (0.5 + rand * 0.5);
-  return val1 >= val2 ? 'creator' : 'opponent';
-}
+  const rand = function(){
+    hash = (hash * 9301 + 49297) % 233280;
+    return hash / 233280;
+  };
+  const val1 = Math.floor(g1.val * 0.1 + rand() * (g1.val * 0.9));
+  const val2 = Math.floor(g2.val * 0.1 + rand() * (g2.val * 0.9));
+  if(val1 >= val2){
+    return 'creator';
+  } else {
+    return 'opponent';
+  }
 }
 
 function showCoinFlip(gift1,gift2,battle,creatorId){
