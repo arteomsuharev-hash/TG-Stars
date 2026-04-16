@@ -797,6 +797,12 @@ function initRealtime(){
             if(row.id===userId){loadUserFromDB();}
           }
         }
+        // Обработка широковещательных сообщений для анимации создателя
+        if(msg.type === 'broadcast' && msg.payload?.type === 'battle_start'){
+          const {creatorGift, opponentGift, battleId, creatorId} = msg.payload;
+          const battle = {id:battleId, creator_gift:creatorGift, opponent_gift:opponentGift};
+          showCoinFlip(creatorGift, opponentGift, battle, creatorId);
+        }
       }catch(err){}
     };
     ws.onerror=()=>{setTimeout(initRealtime,5000);};
@@ -1052,7 +1058,7 @@ function doCraft(){
 }
 
 // ═══════════════════════════════════════════════════════
-// PVP
+// PVP (с анимацией для обоих игроков)
 // ═══════════════════════════════════════════════════════
 function selectForPvp(idx){pvpStakeIdx=idx;const g=state.inventory[idx];if(!g)return;document.getElementById('pvpStakeText').innerHTML=g.icon+' '+g.name;document.getElementById('pvpStakeVal').innerHTML='★ '+g.val;document.getElementById('createBattleBtn').disabled=false;}
 
@@ -1108,8 +1114,18 @@ async function joinBattle(battleId){
   
   const creatorGift=safeJSON(battle.creator_gift,{});
   
-  // Анимация для присоединившегося игрока
+  // Запускаем анимацию у присоединившегося
   showCoinFlip(creatorGift,myGift,battle,userId);
+  
+  // Отправляем уведомление создателю через WebSocket
+  if(ws && ws.readyState===WebSocket.OPEN){
+    ws.send(JSON.stringify({
+      topic:'realtime:public:battles',
+      event:'broadcast',
+      payload:{type:'battle_start',battleId:battle.id,creatorGift:creatorGift,opponentGift:myGift,creatorId:battle.creator_id},
+      ref:Date.now()
+    }));
+  }
 }
 
 function handleBattleResult(row){
@@ -1138,36 +1154,57 @@ function showCoinFlip(gift1,gift2,battle,creatorId){
   const overlay=document.createElement('div');overlay.className='coin-overlay';
   overlay.innerHTML=`<div class="coin-fighters"><div class="fighter-box"><div class="fighter-label">Игрок 1 · Орёл</div><div class="fighter-icon-big">${gift1.icon||'❓'}</div></div><div class="coin-vs">VS</div><div class="fighter-box"><div class="fighter-label">Игрок 2 · Решка</div><div class="fighter-icon-big">${gift2.icon||'❓'}</div></div></div><div class="coin-wrap"><div class="coin" id="coinEl"><div class="coin-face coin-head">🦅</div><div class="coin-face coin-tail">👾</div></div></div><div id="coinResultArea"></div>`;
   document.body.appendChild(overlay);
+  
   const pValue=gift1.val,oValue=gift2.val;
   const pRoll=(pValue*0.3)+(Math.random()*pValue*0.7);
   const oRoll=(oValue*0.3)+(Math.random()*oValue*0.7);
   const creatorWins=pRoll>=oRoll;
   const iAmCreator=userId===creatorId;
   const iWon=iAmCreator?creatorWins:!creatorWins;
+  
   const finalFace=creatorWins?0:1;
   const coinEl=document.getElementById('coinEl');
   coinEl.style.setProperty('--final-rot',1800+(finalFace===1?180:0)+'deg');
+  
   SFX.coin();
   let ticks=0;const ti=setInterval(()=>{SFX.roulette();ticks++;if(ticks>15)clearInterval(ti);},130);
+  
   setTimeout(()=>{
     const area=document.getElementById('coinResultArea');
     if(!area)return;
+    
     if(iWon){
       area.innerHTML=`<div class="coin-result-banner" style="color:var(--gold)">🏆 ПОБЕДА!</div><div class="coin-result-sub">Ты забираешь оба подарка!</div>`;
-      CF.burst(window.innerWidth/2,window.innerHeight*.6,100);SFX.win();vibrate([50,100,50]);
+      CF.burst(window.innerWidth/2,window.innerHeight*.6,100);
+      SFX.win();
+      vibrate([50,100,50]);
+      
+      // Добавляем оба подарка победителю
       state.inventory.push(gift1,gift2);
       state.pvpWins=(state.pvpWins||0)+1;
       addHist(gift1.icon,'PvP Победа!','+'+((gift1.val||0)+(gift2.val||0))+' ★ worth',true);
+      toast('🏆 ПОБЕДА! Ты забрал оба подарка!');
     }else{
       area.innerHTML=`<div class="coin-result-banner" style="color:var(--red)">💀 ПОРАЖЕНИЕ</div><div class="coin-result-sub">Подарок ушёл победителю</div>`;
-      SFX.lose();vibrate([80]);incrementLuck(5);
+      SFX.lose();
+      vibrate([80]);
+      incrementLuck(5);
       addHist(gift2.icon,'PvP Поражение','−'+((gift2.val)||0)+' ★',false);
+      toast('💀 Поражение! Твой подарок ушёл победителю');
     }
-    updateBattle(battle.id,{status:'done',winner_id:creatorWins?creatorId:battle.opponent_id});
+    
+    // Обновляем UI и сохраняем
+    updateAllUI();
     saveUserToDB();
+    
+    // Обновляем статус батла в Supabase
+    updateBattle(battle.id,{status:'done',winner_id:creatorWins?creatorId:battle.opponent_id});
+    
     const closeBtn=document.createElement('button');
-    closeBtn.className='btn btn-outline btn-sm';closeBtn.style.marginTop='16px';closeBtn.innerText='Закрыть';
-    closeBtn.onclick=()=>{overlay.remove();updateAllUI();};
+    closeBtn.className='btn btn-outline btn-sm';
+    closeBtn.style.marginTop='16px';
+    closeBtn.innerText='Закрыть';
+    closeBtn.onclick=()=>{overlay.remove();};
     area.appendChild(closeBtn);
   },2500);
 }
