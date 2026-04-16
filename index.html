@@ -49,174 +49,105 @@ img{display:block}
 .online-badge{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--tm)}
 .online-dot{width:5px;height:5px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:glow2 1.5s infinite}
 @keyframes glow2{50%{opacity:.3}}
+.login-btn{background:var(--s3);border:1px solid var(--borderL);color:var(--ts);padding:5px 12px;border-radius:var(--r-full);font-size:12px;font-weight:600;transition:.15s;margin-left:8px}
+.login-btn:hover{color:var(--white)}
 
 .content{flex:1;overflow-y:auto;overflow-x:hidden;padding:16px;padding-bottom:80px}
 .panel{display:none}
 .panel.active{display:block;animation:panelIn .2s var(--ease)}
 @keyframes panelIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
-.tabs{position:fixed;bottom:0;left:0;right:0;background:var(--s1);border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:8px 4px;padding-bottom:calc(8px + env(safe-area-inset-bottom));z-index:1000}
-.tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:8px 4px;background:none;border:none;color:var(--tm);cursor:pointer;transition:.15s;position:relative}
-.tab::after{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:0;height:2px;background:var(--white);border-radius:0 0 2px 2px;transition:width .25s var(--ease)}
+/* КНОПКИ НАВИГАЦИИ - ВСЕГДА ВИДНЫ */
+.tabs{position:fixed;bottom:0;left:0;right:0;background:var(--s1);border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:10px 8px;padding-bottom:calc(10px + env(safe-area-inset-bottom));z-index:1000}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:8px 4px;background:none;border:none;color:var(--tm);cursor:pointer;transition:.15s;position:relative}
+.tab::after{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:0;height:3px;background:var(--gold);border-radius:0 0 2px 2px;transition:width .25s var(--ease)}
 .tab.active::after{width:28px}
-.tab.active{color:var(--white)}.tab:active{transform:scale(.92)}
-.tab-icon{font-size:20px;line-height:1}
-.tab-lbl{font-size:9px;font-weight:600;letter-spacing:.5px;text-transform:uppercase}
+.tab.active{color:var(--gold)}
+.tab:active{transform:scale(.92)}
+.tab-icon{font-size:22px;line-height:1}
+.tab-lbl{font-size:10px;font-weight:600;letter-spacing:.5px;text-transform:uppercase}
 
-.sec-hdr{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px}
-.sec-title{font-family:var(--font-d);font-size:30px;letter-spacing:2px;color:var(--white)}
-.sec-sub{font-size:11px;color:var(--tm);text-transform:uppercase;letter-spacing:.5px}
-
-/* CASES */
-.cases-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+/* Адаптивные кейсы - 3 ряда на всех устройствах */
+.cases-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 .case-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;transition:.18s var(--ease);cursor:pointer;position:relative}
 .case-card:hover{border-color:var(--borderL);transform:translateY(-2px);box-shadow:var(--sh)}
 .case-card:active{transform:scale(.98)}
-.case-visual{height:100px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
-.case-emoji{font-size:46px;position:relative;z-index:1;filter:drop-shadow(0 6px 16px rgba(0,0,0,.7));transition:transform .3s var(--spring)}
+.case-visual{height:110px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.case-emoji{font-size:52px;position:relative;z-index:1;filter:drop-shadow(0 6px 16px rgba(0,0,0,.7));transition:transform .3s var(--spring)}
 .case-card:hover .case-emoji{transform:scale(1.12) translateY(-3px)}
 .case-body{padding:10px}
 .case-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;flex-wrap:wrap;gap:4px}
-.case-name{font-family:var(--font-d);font-size:16px;letter-spacing:1px;color:var(--white)}
-.case-price{background:var(--s2);border:1px solid var(--border);padding:2px 8px;border-radius:var(--r-full);font-size:11px;font-weight:700;color:var(--gold);white-space:nowrap}
+.case-name{font-family:var(--font-d);font-size:14px;letter-spacing:1px;color:var(--white)}
+.case-price{background:var(--s2);border:1px solid var(--border);padding:2px 8px;border-radius:var(--r-full);font-size:10px;font-weight:700;color:var(--gold);white-space:nowrap}
 .case-drops{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:8px}
-.drop-tag{background:var(--s2);border:1px solid var(--border);padding:1px 5px;border-radius:var(--r-sm);font-size:9px;color:var(--ts)}
-.open-btn{width:100%;padding:9px;background:var(--s3);border:1px solid var(--borderL);border-radius:var(--r-full);color:var(--white);font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;transition:.15s;position:relative;overflow:hidden}
-.open-btn::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.06),transparent);transform:translateX(-100%);transition:transform .4s}
-.open-btn:hover::after{transform:translateX(100%)}
-.open-btn:hover{background:var(--borderL);border-color:#444}.open-btn:active{transform:scale(.97)}
-.c-legendary{border-color:#3a3020}.c-legendary:hover{border-color:var(--gold);box-shadow:0 6px 24px rgba(200,169,110,.12)}
-.c-legendary .case-name{color:var(--gold)}.c-legendary .case-visual{background:linear-gradient(140deg,#0d0900,#1a1500)}
-.c-epic .case-visual{background:linear-gradient(140deg,#080508,#140e10)}
-.c-rare .case-visual{background:linear-gradient(140deg,#060810,#0a0f1a)}
-.c-common .case-visual{background:#0e0e0e}
-.c-special{border-color:#1a2a1a}.c-special:hover{border-color:#4ade80;box-shadow:0 6px 24px rgba(74,222,128,.08)}
-.c-special .case-name{color:var(--green)}.c-special .case-visual{background:linear-gradient(140deg,#050a05,#0a150a)}
-.c-premium{border-color:#1a1a2a}.c-premium:hover{border-color:#60a5fa;box-shadow:0 6px 24px rgba(96,165,250,.08)}
-.c-premium .case-name{color:var(--blue)}.c-premium .case-visual{background:linear-gradient(140deg,#05050f,#0a0a1a)}
+.drop-tag{background:var(--s2);border:1px solid var(--border);padding:1px 4px;border-radius:var(--r-sm);font-size:8px;color:var(--ts)}
+.open-btn{width:100%;padding:8px;background:var(--s3);border:1px solid var(--borderL);border-radius:var(--r-full);color:var(--white);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;transition:.15s}
+.open-btn:active{transform:scale(.97)}
 
-/* INV */
-.inv-section{background:var(--s1);border:1px solid var(--border);border-radius:var(--r-lg);padding:16px;margin-top:16px}
-.inv-section h3{font-family:var(--font-d);font-size:20px;letter-spacing:1px;margin-bottom:12px}
-.inv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:7px;max-height:220px;overflow-y:auto}
-.inv-card{background:var(--s2);border:1px solid var(--border);border-radius:var(--r-md);padding:8px;display:flex;flex-direction:column;align-items:center;gap:3px;position:relative;transition:.15s;user-select:none;cursor:pointer}
-.inv-card.selected{border-color:var(--white);background:var(--s3)}.inv-card:active{transform:scale(.95)}
-.inv-icon{font-size:24px}.inv-name{font-size:9px;font-weight:600;color:var(--ts);text-align:center}
-.inv-val{font-size:10px;font-weight:700;color:var(--gold)}
-.inv-rarity{position:absolute;top:5px;right:5px;width:5px;height:5px;border-radius:50%}
-.r-common{background:#555}.r-rare{background:#5577cc}.r-epic{background:#9955cc}.r-legendary{background:var(--gold);box-shadow:0 0 5px var(--gold)}.r-special{background:var(--green);box-shadow:0 0 5px var(--green)}.r-premium{background:var(--blue);box-shadow:0 0 5px var(--blue)}
-.sell-chip{background:var(--s3);border:1px solid var(--borderL);color:var(--tm);font-size:9px;font-weight:600;padding:2px 8px;border-radius:var(--r-full);transition:.15s;margin-top:4px;cursor:pointer}
-.sell-chip:hover{color:var(--red);border-color:var(--red)}
-.inv-empty{grid-column:1/-1;text-align:center;color:var(--tm);padding:24px;font-size:12px}
+@media(max-width:480px){
+  .cases-grid{gap:8px}
+  .case-visual{height:90px}
+  .case-emoji{font-size:44px}
+  .case-name{font-size:12px}
+  .case-price{font-size:9px}
+  .drop-tag{font-size:7px}
+  .open-btn{font-size:9px;padding:6px}
+}
+@media(min-width:768px){
+  .case-visual{height:120px}
+  .case-emoji{font-size:58px}
+  .case-name{font-size:16px}
+  .case-price{font-size:11px}
+}
+@media(min-width:1024px){
+  .cases-grid{gap:16px}
+  .case-visual{height:140px}
+  .case-emoji{font-size:68px}
+}
 
-/* BTN */
-.btn{width:100%;padding:14px;border-radius:var(--r-full);font-size:14px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;transition:.15s;display:flex;align-items:center;justify-content:center;gap:8px}
-.btn-primary{background:var(--white);color:var(--bg)}.btn-primary:hover{background:#e8e8e8}.btn-primary:active{transform:scale(.97)}
-.btn-primary:disabled{background:var(--s3);color:var(--tm);cursor:not-allowed;transform:none}
-.btn-outline{background:transparent;border:1px solid var(--borderL);color:var(--tp)}.btn-outline:hover{background:var(--s2)}
-.btn-danger{background:transparent;border:1px solid #3a1515;color:var(--red)}.btn-danger:hover{background:#2a0a0a}
-.btn-gold{background:linear-gradient(135deg,#c8a96e,#e8c98e);color:#000}.btn-gold:hover{filter:brightness(1.1)}
-.btn-sm{padding:9px 18px;font-size:12px;width:auto}
+/* Анимация для апгрейда */
+.upgrade-animation-overlay{position:fixed;inset:0;background:rgba(0,0,0,.98);z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px}
+.upgrade-numbers{display:flex;align-items:center;gap:32px;font-family:var(--font-d);font-size:48px}
+.upgrade-arrow{font-size:48px;animation:upgradePulse 0.5s ease infinite}
+@keyframes upgradePulse{0%,100%{opacity:0.5;transform:scale(1)}50%{opacity:1;transform:scale(1.2)}}
+.upgrade-chance-meter{width:200px;height:8px;background:var(--s3);border-radius:4px;overflow:hidden}
+.upgrade-chance-fill{height:100%;background:linear-gradient(90deg,var(--red),var(--gold),var(--green));width:0%;transition:width 2s ease}
+.upgrade-spinner{width:60px;height:60px;border:4px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.almost-win{position:absolute;font-size:14px;color:var(--gold);animation:almostFlash 0.3s ease 3}
+@keyframes almostFlash{0%,100%{opacity:0;transform:scale(0.5)}50%{opacity:1;transform:scale(1.5)}}
 
-/* UPGRADE */
-.upgrade-slots{display:flex;flex-direction:column;gap:10px;margin-bottom:12px}
-.upgrade-slot-row{background:var(--s1);border:1px solid var(--border);border-radius:var(--r-lg);padding:14px;display:flex;align-items:center;gap:12px;transition:.15s}
-.upgrade-slot-row:hover{border-color:var(--borderL)}
-.slot-icon{font-size:32px;min-width:40px;text-align:center}.slot-info{flex:1}
-.slot-name{font-size:13px;font-weight:600;color:var(--tp)}.slot-val{font-size:11px;color:var(--gold)}
-.slot-remove{width:26px;height:26px;border-radius:50%;background:var(--s3);border:1px solid var(--borderL);color:var(--tm);font-size:12px;flex-shrink:0;transition:.15s;cursor:pointer}
-.slot-remove:hover{color:var(--red);border-color:var(--red)}
-.chance-box{background:var(--s2);border:1px solid var(--border);border-radius:var(--r-lg);padding:20px;text-align:center;margin:12px 0}
-.chance-lbl{font-size:10px;color:var(--tm);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px}
-.chance-num{font-family:var(--font-d);font-size:58px;line-height:1;color:var(--white);transition:color .3s}
-.chance-num.high{color:var(--green)}.chance-num.med{color:#e8c96e}.chance-num.low{color:var(--red)}
-.chance-bar{height:3px;background:var(--s3);border-radius:var(--r-full);margin:8px 0;overflow:hidden}
-.chance-fill{height:100%;background:var(--white);border-radius:var(--r-full);transition:width .5s var(--ease)}
-.chance-desc{font-size:11px;color:var(--tm)}
-.upgrade-result-preview{background:var(--s1);border:1px solid var(--borderL);border-radius:var(--r-md);padding:12px;text-align:center;margin:8px 0}
-.urp-label{font-size:10px;color:var(--tm);margin-bottom:4px}.urp-icon{font-size:40px}.urp-name{font-size:13px;font-weight:600;color:var(--tp)}
+/* Анимация крафта */
+.craft-animation-overlay{position:fixed;inset:0;background:rgba(0,0,0,.98);z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
+.craft-items-rotate{display:flex;gap:16px;animation:craftItemsSpin 1s ease}
+@keyframes craftItemsSpin{0%{transform:scale(1) rotate(0deg)}50%{transform:scale(1.3) rotate(180deg)}100%{transform:scale(1) rotate(360deg)}}
+.craft-result-glow{animation:resultGlow 0.5s ease infinite}
+@keyframes resultGlow{0%,100%{text-shadow:0 0 5px var(--gold)}50%{text-shadow:0 0 20px var(--gold)}}
 
-/* CRAFT */
-.craft-slots{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
-.craft-slot{background:var(--s1);border:2px dashed var(--borderL);border-radius:var(--r-lg);padding:14px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;transition:.15s;min-height:100px;justify-content:center}
-.craft-slot.filled{border-style:solid;border-color:var(--borderL)}.craft-slot:hover{border-color:#555}
-.craft-slot-icon{font-size:28px}.craft-slot-name{font-size:9px;color:var(--ts);text-align:center;line-height:1.2}.craft-slot-val{font-size:10px;color:var(--gold)}
-.craft-arrow{text-align:center;font-size:20px;color:var(--tm);margin:8px 0}
-.craft-result{background:var(--s2);border:1px solid var(--border);border-radius:var(--r-lg);padding:16px;text-align:center;margin-bottom:12px}
-.cr-label{font-size:10px;color:var(--tm);text-transform:uppercase;margin-bottom:6px}.cr-icon{font-size:48px}.cr-name{font-size:14px;font-weight:600;color:var(--tp);margin-top:4px}
+/* Вертикальная монетка */
+.coin-overlay{position:fixed;inset:0;background:rgba(0,0,0,.98);z-index:400;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px}
+.coin-fighters{display:flex;align-items:center;gap:32px;margin-bottom:8px}
+.fighter-box{display:flex;flex-direction:column;align-items:center;gap:6px}
+.fighter-label{font-size:10px;color:var(--tm);text-transform:uppercase;letter-spacing:1px}
+.fighter-icon-big{font-size:60px;filter:drop-shadow(0 0 20px rgba(255,255,255,.1))}
+.coin-vs{font-family:var(--font-d);font-size:44px;color:var(--tm);letter-spacing:3px}
+.coin-wrap{perspective:400px;width:100px;height:100px}
+.coin{width:100px;height:100px;transform-style:preserve-3d;animation:coinFlipVertical 2.5s cubic-bezier(0.2,0,0.8,1) forwards}
+@keyframes coinFlipVertical{
+  0%{transform:rotateX(0) translateY(0);}
+  20%{transform:rotateX(180deg) translateY(-60px);}
+  40%{transform:rotateX(360deg) translateY(0);}
+  60%{transform:rotateX(540deg) translateY(-40px);}
+  80%{transform:rotateX(720deg) translateY(0);}
+  100%{transform:rotateX(900deg) translateY(0);}
+}
+.coin-face{position:absolute;inset:0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:40px;border:2px solid var(--borderL);backface-visibility:hidden}
+.coin-head{background:linear-gradient(135deg,#2a2a2a,#1a1a1a)}.coin-tail{background:linear-gradient(135deg,#1a1a1a,#2a2a2a);transform:rotateY(180deg)}
+.coin-result-banner{font-family:var(--font-d);font-size:48px;letter-spacing:2px;animation:popIn .5s var(--spring)}
+.coin-result-sub{font-size:13px;color:var(--ts);margin-top:4px}
 
-/* PVP */
-.pvp-tabs{display:flex;gap:6px;margin-bottom:14px}
-.pvp-tab{padding:8px 16px;border-radius:var(--r-full);background:var(--s2);border:1px solid var(--border);color:var(--ts);font-size:12px;font-weight:600;transition:.15s;cursor:pointer}
-.pvp-tab.active{background:var(--s3);border-color:var(--borderL);color:var(--white)}.pvp-tab:active{transform:scale(.95)}
-.battle-create-box{background:var(--s1);border:1px solid var(--border);border-radius:var(--r-lg);padding:16px;margin-bottom:14px}
-.battle-stake-pick{background:var(--s2);border:1px solid var(--border);border-radius:var(--r-md);padding:12px;margin:8px 0;display:flex;align-items:center;gap:10px;font-size:13px;color:var(--ts)}
-
-/* LOBBY CARD */
-.lobby-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r-lg);padding:14px;display:flex;align-items:center;gap:12px;margin-bottom:8px;transition:.15s;position:relative;overflow:hidden}
-.lobby-card::before{content:'';position:absolute;left:0;top:20%;bottom:20%;width:2px;background:linear-gradient(180deg,transparent,var(--borderL),transparent)}
-.lobby-card:hover{border-color:var(--borderL)}
-.lc-creator{display:flex;flex-direction:column;align-items:center;gap:3px;min-width:52px}
-.lc-creator-avatar{width:36px;height:36px;border-radius:50%;background:var(--s3);border:1px solid var(--borderL);overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:16px}
-.lc-creator-avatar img{width:100%;height:100%;object-fit:cover}
-.lc-creator-name{font-size:9px;color:var(--tm);text-align:center;max-width:52px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.lc-gift{display:flex;flex-direction:column;align-items:center;gap:3px;min-width:60px}
-.lc-icon{font-size:32px}.lc-name{font-size:9px;color:var(--tm);text-align:center}.lc-val{font-size:11px;font-weight:700;color:var(--gold)}
-.lc-mid{flex:1;text-align:center}
-.lc-vs{font-family:var(--font-d);font-size:24px;color:var(--tm)}
-.lc-status{font-size:10px;color:var(--green);display:flex;align-items:center;justify-content:center;gap:4px;margin-top:2px}
-.lc-status::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--green);animation:glow2 1.5s infinite}
-.lc-private{font-size:9px;color:var(--gold);margin-top:2px}
-.lc-join-btn{padding:8px 16px;background:var(--s3);border:1px solid var(--borderL);border-radius:var(--r-full);color:var(--white);font-size:11px;font-weight:700;transition:.15s;white-space:nowrap;cursor:pointer}
-.lc-join-btn:hover{background:var(--white);color:var(--bg)}.lc-join-btn:active{transform:scale(.95)}
-.no-battles{color:var(--tm);text-align:center;padding:40px 20px;font-size:12px}
-
-/* PRIVATE BATTLES SECTION */
-.pvp-section-title{font-family:var(--font-d);font-size:18px;letter-spacing:1px;margin-bottom:8px;margin-top:4px}
-.pvp-section-title.public-title{color:var(--ts)}
-.pvp-section-title.private-title{color:var(--gold)}
-
-/* PROFILE */
-.profile-hero{background:var(--s1);border:1px solid var(--border);border-radius:var(--r-lg);padding:20px;margin-bottom:12px;position:relative;overflow:hidden}
-.profile-hero::after{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(200,169,110,.04),transparent 70%);pointer-events:none}
-.avatar-wrap{position:relative;width:64px;margin-bottom:12px}
-.avatar-img{width:64px;height:64px;border-radius:50%;background:var(--s2);border:2px solid var(--borderL);overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:28px;cursor:pointer;transition:.15s}
-.avatar-img img{width:100%;height:100%;object-fit:cover}.avatar-img:hover{border-color:#555}
-.avatar-edit{position:absolute;bottom:0;right:-4px;width:22px;height:22px;border-radius:50%;background:var(--s3);border:1px solid var(--borderL);display:flex;align-items:center;justify-content:center;font-size:10px;cursor:pointer;transition:.15s}
-.avatar-edit:hover{background:var(--s4)}
-#avatarInput{display:none}
-.pname{font-family:var(--font-d);font-size:26px;letter-spacing:1px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.pname-text{flex:1}.edit-name-btn{background:var(--s3);border:1px solid var(--borderL);color:var(--ts);font-size:10px;padding:4px 12px;border-radius:var(--r-full);cursor:pointer;transition:.15s}
-.edit-name-btn:hover{color:var(--white);border-color:#555}
-.pid{font-size:10px;color:var(--tm);margin-top:2px}
-.luck-bar-wrap{margin-top:12px}
-.luck-label{font-size:10px;color:var(--tm);margin-bottom:4px;display:flex;justify-content:space-between}
-.luck-bar{height:3px;background:var(--s3);border-radius:var(--r-full);overflow:hidden}
-.luck-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--goldL));border-radius:var(--r-full);transition:width 1s var(--ease)}
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:12px}
-.stat-box{background:var(--s2);border:1px solid var(--border);border-radius:var(--r-md);padding:10px;text-align:center}
-.stat-n{font-family:var(--font-d);font-size:24px;color:var(--white)}.stat-l{font-size:9px;color:var(--tm);text-transform:uppercase}
-.p-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
-.p-btn{flex:1;min-width:80px;padding:10px;background:var(--s2);border:1px solid var(--border);border-radius:var(--r-full);color:var(--tp);font-size:12px;font-weight:600;transition:.15s;text-align:center;cursor:pointer}
-.p-btn:hover{border-color:var(--borderL);background:var(--s3)}
-
-.ref-box{background:var(--s1);border:1px solid var(--border);border-radius:var(--r-lg);padding:16px;margin-bottom:12px}
-.ref-title{font-family:var(--font-d);font-size:20px;letter-spacing:1px;margin-bottom:8px}
-.ref-link-row{display:flex;gap:8px;margin-top:8px}
-.ref-link-input{flex:1;background:var(--s2);border:1px solid var(--border);border-radius:var(--r-full);padding:9px 14px;color:var(--ts);font-size:12px;outline:none}
-.ref-stats{display:flex;gap:8px;margin-top:8px}
-.ref-stat{flex:1;background:var(--s2);border:1px solid var(--border);border-radius:var(--r-md);padding:10px;text-align:center}
-.ref-stat-n{font-family:var(--font-d);font-size:22px;color:var(--gold)}.ref-stat-l{font-size:10px;color:var(--tm)}
-
-.hist-table{width:100%;border-collapse:collapse}
-.hist-table th{font-size:9px;color:var(--tm);text-transform:uppercase;letter-spacing:.5px;padding:6px 8px;border-bottom:1px solid var(--border);text-align:left}
-.hist-table td{padding:9px 8px;border-bottom:1px solid var(--border);font-size:12px;color:var(--ts)}
-.hist-table tr:last-child td{border:none}
-.hist-pos{color:var(--green);font-weight:700}.hist-neg{color:var(--red);font-weight:700}
-
-/* ROULETTE */
+/* ROULETTE с энергетическим зарядом */
 .roulette-wrap{position:fixed;inset:0;background:rgba(0,0,0,.97);z-index:300;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
-.roulette-title{font-family:var(--font-d);font-size:32px;letter-spacing:3px;color:var(--ts)}
 .roulette-box{position:relative;overflow:hidden;width:min(580px,95vw);height:108px;border-radius:var(--r-md);border:1px solid var(--border);background:var(--s1)}
 .roulette-track{display:flex;align-items:center;height:100%;position:absolute;left:0;will-change:transform}
 .roulette-item{flex-shrink:0;width:100px;height:96px;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 4px;border-radius:var(--r-md);background:var(--s2);border:1px solid var(--border);font-size:32px;gap:4px}
@@ -224,97 +155,63 @@ img{display:block}
 .rl-center{position:absolute;left:50%;top:0;bottom:0;width:2px;margin-left:-1px;background:var(--white);box-shadow:0 0 10px rgba(255,255,255,.5);z-index:2}
 .rl-fade-l,.rl-fade-r{position:absolute;top:0;bottom:0;width:90px;z-index:1}
 .rl-fade-l{left:0;background:linear-gradient(90deg,var(--s1),transparent)}.rl-fade-r{right:0;background:linear-gradient(-90deg,var(--s1),transparent)}
+@keyframes energyPulse{0%,100%{opacity:0.3;transform:scale(0.8)}50%{opacity:1;transform:scale(1.5);box-shadow:0 0 10px var(--gold)}}
+@keyframes gradientShift{0%{background-position:0%}100%{background-position:200%}}
 
-/* RESULT */
-.result-overlay{position:fixed;inset:0;background:rgba(0,0,0,.97);z-index:400;display:flex;align-items:center;justify-content:center;animation:fadeIn .2s}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-.result-box{text-align:center;padding:36px 28px;max-width:320px;width:90%;animation:popIn .45s var(--spring)}
-@keyframes popIn{0%{opacity:0;transform:scale(.3) rotate(-10deg)}100%{opacity:1;transform:scale(1)}}
-.result-icon{font-size:90px;margin-bottom:12px;filter:drop-shadow(0 0 32px rgba(255,255,255,.15))}
-.result-title{font-family:var(--font-d);font-size:38px;letter-spacing:2px;color:var(--white)}
-.result-rarity{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-top:4px}
-.result-val{font-size:14px;color:var(--ts);margin-top:4px}
-.result-btns{display:flex;flex-direction:column;gap:8px;margin-top:20px}
+/* Модальное окно входа */
+.auth-modal{position:fixed;inset:0;background:rgba(0,0,0,.98);z-index:20000;display:flex;align-items:center;justify-content:center}
+.auth-box{background:var(--s2);border:1px solid var(--borderL);border-radius:var(--r-lg);padding:24px;width:90%;max-width:360px;text-align:center}
+.auth-tabs{display:flex;gap:8px;margin-bottom:20px}
+.auth-tab{flex:1;padding:10px;background:var(--s3);border:1px solid var(--border);border-radius:var(--r-full);color:var(--ts);cursor:pointer;font-size:14px;font-weight:600}
+.auth-tab.active{background:var(--gold);color:#000;border-color:var(--gold)}
+.auth-input{width:100%;padding:12px;background:var(--s3);border:1px solid var(--border);border-radius:var(--r-full);color:var(--white);font-size:14px;margin-bottom:12px}
+.auth-input:focus{outline:none;border-color:var(--gold)}
+.auth-btn{width:100%;padding:12px;background:var(--gold);border:none;border-radius:var(--r-full);color:#000;font-weight:700;font-size:14px;cursor:pointer;margin-top:8px}
+.auth-close{position:absolute;top:20px;right:20px;font-size:24px;color:var(--ts);cursor:pointer}
 
-/* COIN FLIP */
-.coin-overlay{position:fixed;inset:0;background:rgba(0,0,0,.98);z-index:400;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px}
-.coin-fighters{display:flex;align-items:center;gap:32px;margin-bottom:8px}
-.fighter-box{display:flex;flex-direction:column;align-items:center;gap:6px}
-.fighter-label{font-size:10px;color:var(--tm);text-transform:uppercase;letter-spacing:1px}
-.fighter-icon-big{font-size:60px;filter:drop-shadow(0 0 20px rgba(255,255,255,.1));animation:fighterAppear .5s var(--spring)}
-@keyframes fighterAppear{from{opacity:0;transform:scale(.5)}to{opacity:1;transform:scale(1)}}
-.coin-vs{font-family:var(--font-d);font-size:44px;color:var(--tm);letter-spacing:3px;animation:vsPop .6s .3s var(--spring) both}
-@keyframes vsPop{0%{opacity:0;transform:scale(.5)}100%{opacity:1;transform:scale(1)}}
-.coin-wrap{perspective:400px;width:100px;height:100px}
-.coin{width:100px;height:100px;transform-style:preserve-3d;animation:coinFlip 2.5s cubic-bezier(0.2,0,0.8,1) forwards}
-@keyframes coinFlip{0%{transform:rotateY(0)}30%{transform:rotateY(720deg)}70%{transform:rotateY(1620deg)}100%{transform:rotateY(var(--final-rot,1800deg))}}
-.coin-face{position:absolute;inset:0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:40px;border:2px solid var(--borderL);backface-visibility:hidden}
-.coin-head{background:linear-gradient(135deg,#2a2a2a,#1a1a1a)}.coin-tail{background:linear-gradient(135deg,#1a1a1a,#2a2a2a);transform:rotateY(180deg)}
-.coin-result-banner{font-family:var(--font-d);font-size:48px;letter-spacing:2px;animation:popIn .5s var(--spring)}
-.coin-result-sub{font-size:13px;color:var(--ts);margin-top:4px}
+/* INV */
+.inv-section{background:var(--s1);border:1px solid var(--border);border-radius:var(--r-lg);padding:16px;margin-top:16px}
+.inv-section h3{font-family:var(--font-d);font-size:20px;letter-spacing:1px;margin-bottom:12px}
+.inv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:7px;max-height:220px;overflow-y:auto}
+.inv-card{background:var(--s2);border:1px solid var(--border);border-radius:var(--r-md);padding:8px;display:flex;flex-direction:column;align-items:center;gap:3px;position:relative;transition:.15s;cursor:pointer}
+.inv-card:active{transform:scale(.95)}
+.inv-icon{font-size:24px}.inv-name{font-size:9px;font-weight:600;color:var(--ts);text-align:center}
+.inv-val{font-size:10px;font-weight:700;color:var(--gold)}
+.inv-rarity{position:absolute;top:5px;right:5px;width:5px;height:5px;border-radius:50%}
+.r-common{background:#555}.r-rare{background:#5577cc}.r-epic{background:#9955cc}.r-legendary{background:var(--gold)}
+.sell-chip{background:var(--s3);border:1px solid var(--borderL);color:var(--tm);font-size:9px;padding:2px 8px;border-radius:var(--r-full);margin-top:4px;cursor:pointer}
+.inv-empty{grid-column:1/-1;text-align:center;color:var(--tm);padding:24px;font-size:12px}
 
-/* TOAST */
-.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:var(--s2);border:1px solid var(--borderL);border-radius:var(--r-full);padding:10px 20px;font-size:13px;font-weight:600;color:var(--white);z-index:999;white-space:nowrap;animation:toastIn .3s var(--spring),toastOut .3s 2.2s ease forwards}
-@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(16px) scale(.9)}to{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}}
-@keyframes toastOut{from{opacity:1}to{opacity:0;transform:translateX(-50%) translateY(8px)}}
+/* UPGRADE new */
+.upgrade-selector{background:var(--s2);border:1px solid var(--border);border-radius:var(--r-lg);padding:16px;margin-bottom:12px}
+.upgrade-slider{width:100%;margin:12px 0}
+.upgrade-slider input{width:100%;height:4px;-webkit-appearance:none;background:var(--s3);border-radius:2px;outline:none}
+.upgrade-slider input::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--gold);cursor:pointer}
+.upgrade-target-value{font-size:24px;font-weight:700;color:var(--gold);text-align:center;margin:8px 0}
+.upgrade-chance-show{font-size:36px;font-family:var(--font-d);text-align:center;margin:8px 0}
+.upgrade-chance-bar{height:8px;background:var(--s3);border-radius:4px;overflow:hidden;margin:8px 0}
+.upgrade-chance-fill{height:100%;background:linear-gradient(90deg,var(--red),var(--gold),var(--green));width:0%;transition:width .3s}
+.upgrade-history{max-height:150px;overflow-y:auto;margin-top:12px}
+.upgrade-history-item{font-size:11px;color:var(--ts);padding:4px 0;border-bottom:1px solid var(--border)}
 
-#cfv{position:fixed;inset:0;pointer-events:none;z-index:800}
+/* CRAFT new */
+.craft-preview{background:var(--s2);border:1px solid var(--border);border-radius:var(--r-lg);padding:16px;margin-bottom:12px}
+.craft-chance-info{display:flex;justify-content:space-between;margin:8px 0;font-size:12px}
+.craft-chance-bar{height:6px;background:var(--s3);border-radius:3px;overflow:hidden}
+.craft-chance-fill{height:100%;width:35%;background:var(--gold);transition:width .3s}
+.craft-result-range{font-size:12px;color:var(--tm);text-align:center;margin:8px 0}
 
-.rl-banner{position:fixed;top:66px;left:50%;transform:translateX(-50%);background:#2a0a0a;border:1px solid #4a1a1a;border-radius:var(--r-full);padding:7px 18px;font-size:12px;color:var(--red);z-index:100;display:none;white-space:nowrap}
-
-.sync-indicator{width:5px;height:5px;border-radius:50%;background:var(--borderL);margin-left:4px;transition:background .3s}
-.sync-indicator.ok{background:var(--green)}.sync-indicator.err{background:var(--red)}
-
-/* INSTALL BANNER */
-.install-banner{position:fixed;bottom:72px;left:50%;transform:translateX(-50%);background:var(--s2);border:1px solid var(--borderL);border-radius:var(--r-xl);padding:12px 16px;max-width:340px;width:90%;display:flex;align-items:center;gap:10px;z-index:60;animation:toastIn .4s var(--spring);box-shadow:var(--sh)}
-.ib-icon{font-size:28px}.ib-text{flex:1}.ib-title{font-size:13px;font-weight:700;color:var(--white)}.ib-sub{font-size:10px;color:var(--tm)}
-.ib-btn{padding:7px 14px;background:var(--white);border-radius:var(--r-full);color:var(--bg);font-size:12px;font-weight:700;flex-shrink:0;transition:.15s;cursor:pointer}
-.ib-btn:hover{background:#e8e8e8}.ib-close{width:20px;height:20px;border-radius:50%;background:var(--s3);color:var(--tm);font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.15s;cursor:pointer}
-.ib-close:hover{color:var(--white)}
-
-/* RESPONSIVE */
-@media(min-width:480px){.cases-grid{grid-template-columns:repeat(2,1fr)}}
-@media(min-width:768px){
-.topbar{padding:0 28px}.content{padding:20px 28px;padding-bottom:80px}
-.cases-grid{grid-template-columns:repeat(3,1fr);gap:14px}
-.case-visual{height:120px}.case-emoji{font-size:52px}
-.case-name{font-size:18px}.case-price{font-size:12px}
-.inv-grid{grid-template-columns:repeat(auto-fill,minmax(110px,1fr))}
-.stats-grid{grid-template-columns:repeat(4,1fr)}
-}
-@media(min-width:1024px){
-.app{flex-direction:row}
-.tabs{position:relative;flex-direction:column;width:72px;height:100vh;border-top:none;border-right:1px solid var(--border);padding:0;flex-shrink:0}
-.tab::after{top:auto;left:0;right:auto;bottom:50%;transform:translateY(50%);width:3px;height:0}
-.tab.active::after{height:32px;width:3px}
-.content{padding:24px 36px;padding-bottom:24px}
-.cases-grid{grid-template-columns:repeat(3,1fr);gap:20px}
-.case-visual{height:140px}.case-emoji{font-size:62px}
-.tabs{order:-1}.craft-slots{grid-template-columns:repeat(3,1fr)}
-}
-@media(min-width:1280px){.cases-grid{grid-template-columns:repeat(4,1fr)}}
-@media(min-width:1600px){.cases-grid{grid-template-columns:repeat(5,1fr)}.case-visual{height:160px}.case-emoji{font-size:72px}.content{padding:32px 48px}}
-
-/* BATTLE LOADING */
-.battle-skeleton{background:var(--s1);border:1px solid var(--border);border-radius:var(--r-lg);padding:14px;margin-bottom:8px;display:flex;align-items:center;gap:12px;opacity:.5}
-.skel-box{border-radius:var(--r-sm);background:var(--s3);animation:shimmer 1.5s infinite}
-@keyframes shimmer{0%{opacity:.4}50%{opacity:.7}100%{opacity:.4}}
+.btn{width:100%;padding:14px;border-radius:var(--r-full);font-size:14px;font-weight:700;text-transform:uppercase;transition:.15s}
+.btn-primary{background:var(--white);color:var(--bg)}
+.btn-primary:disabled{background:var(--s3);color:var(--tm)}
+.btn-gold{background:linear-gradient(135deg,#c8a96e,#e8c98e);color:#000}
+.btn-sm{padding:9px 18px;font-size:12px;width:auto}
 </style>
-
 </head>
 <body>
 <canvas id="cfv"></canvas>
 <div class="rl-banner" id="rlBanner">⚠️ Слишком быстро, подождите</div>
 <div id="loadingIndicator" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:var(--s2); padding:12px 24px; border-radius:var(--r-full); z-index:10000; font-size:14px; color:var(--gold);">⏳ Загрузка...</div>
-
-<!-- Модальное окно для входа через Telegram -->
-<div id="telegramLogin" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:var(--s2); border:1px solid var(--borderL); border-radius:var(--r-lg); padding:24px; z-index:10001; text-align:center; flex-direction:column; align-items:center;">
-  <div style="font-size:24px; margin-bottom:12px">📱</div>
-  <div style="font-size:16px; font-weight:700; margin-bottom:8px">Войдите через Telegram</div>
-  <div style="font-size:12px; color:var(--tm); margin-bottom:16px">Для синхронизации профиля между устройствами</div>
-  <a href="https://t.me/Ruslan158bot" target="_blank" style="display:inline-block; background:var(--gold); color:#000; padding:12px 24px; border-radius:var(--r-full); text-decoration:none; font-weight:700;">Открыть в Telegram</a>
-  <button id="closeTelegramLogin" style="margin-top:16px; background:none; color:var(--ts); cursor:pointer;">Закрыть</button>
-</div>
 
 <div class="app" id="app">
   <div class="topbar">
@@ -323,134 +220,97 @@ img{display:block}
       <div class="online-badge"><div class="online-dot"></div><span id="onlineCount">—</span></div>
       <div class="balance-pill" id="balancePill"><span class="bal-star">★</span><span class="bal-val" id="balVal">250</span><span class="sync-indicator" id="syncDot"></span></div>
       <button class="add-btn" id="addBtn">+100 ★</button>
+      <button class="login-btn" id="loginBtn">👤 Войти</button>
     </div>
   </div>
 
   <div class="content" id="mainContent">
+    <!-- CASES -->
+    <div class="panel active" id="casesPanel">
+      <div class="sec-hdr"><div class="sec-title">КЕЙСЫ</div><div class="sec-sub">открой и выиграй</div></div>
+      <div class="cases-grid" id="casesGrid"></div>
+      <div class="inv-section"><h3>МОИ ПОДАРКИ</h3><div class="inv-grid" id="invCases"></div></div>
+    </div>
 
-<!-- CASES -->
-<div class="panel active" id="casesPanel">
-  <div class="sec-hdr"><div class="sec-title">КЕЙСЫ</div><div class="sec-sub">открой и выиграй</div></div>
-  <div class="cases-grid" id="casesGrid"></div>
-  <div class="inv-section"><h3>МОИ ПОДАРКИ</h3><div class="inv-grid" id="invCases"></div></div>
-</div>
+    <!-- UPGRADE новый -->
+    <div class="panel" id="upgradePanel">
+      <div class="sec-hdr"><div class="sec-title">АПГРЕЙД</div><div class="sec-sub">рискни и прокачай</div></div>
+      <div class="upgrade-selector" id="upgradeSelector">
+        <div style="font-size:12px;color:var(--tm);margin-bottom:8px">Выбери подарок для апгрейда</div>
+        <div class="battle-stake-pick" id="upgradeStakePick" style="margin-bottom:12px">Нажми на подарок в инвентаре</div>
+        <div id="upgradeTargetSlider" style="display:none">
+          <div style="font-size:12px;color:var(--tm);margin:8px 0">Выбери цель:</div>
+          <div class="upgrade-slider"><input type="range" id="targetSlider" min="0" max="1000" step="10" value="100"></div>
+          <div class="upgrade-target-value" id="targetValue">★ 100</div>
+          <div class="upgrade-chance-show" id="chanceShow">0%</div>
+          <div class="upgrade-chance-bar"><div class="upgrade-chance-fill" id="chanceFill" style="width:0%"></div></div>
+          <button class="btn btn-gold" id="upgradeConfirmBtn" style="margin-top:12px">ПОВЫСИТЬ СТАВКУ</button>
+        </div>
+      </div>
+      <div class="inv-section"><h3>МОИ ПОДАРКИ</h3><div class="inv-grid" id="invUpgrade"></div></div>
+      <div class="inv-section"><h3>ИСТОРИЯ АПГРЕЙДОВ</h3><div id="upgradeHistoryList" class="upgrade-history"></div></div>
+    </div>
 
-<!-- UPGRADE -->
-<div class="panel" id="upgradePanel">
-  <div class="sec-hdr"><div class="sec-title">АПГРЕЙД</div><div class="sec-sub">рискни и прокачай</div></div>
-  <div class="upgrade-slots" id="upgradeSlots"></div>
-  <div class="chance-box">
-    <div class="chance-lbl">Шанс успеха</div>
-    <div class="chance-num" id="upgradeChanceNum">—</div>
-    <div class="chance-bar"><div class="chance-fill" id="upgradeChanceFill" style="width:0%"></div></div>
-    <div class="chance-desc" id="upgradeChanceDesc">Нажми на подарок в инвентаре</div>
-  </div>
-  <div class="upgrade-result-preview" id="upgradeResultPreview" style="display:none">
-    <div class="urp-label">При успехе получишь</div>
-    <div class="urp-icon" id="urpIcon">❓</div>
-    <div class="urp-name" id="urpName"></div>
-  </div>
-  <button class="btn btn-primary" id="upgradeDoBtn" disabled>УЛУЧШИТЬ</button>
-  <div class="inv-section" style="margin-top:14px"><h3>МОИ ПОДАРКИ</h3><div class="inv-grid" id="invUpgrade"></div></div>
-</div>
+    <!-- CRAFT новый -->
+    <div class="panel" id="craftPanel">
+      <div class="sec-hdr"><div class="sec-title">КРАФТ</div><div class="sec-sub">3 → 1</div></div>
+      <p style="font-size:12px;color:var(--tm);margin-bottom:12px">Выбери 3 подарка <strong style="color:var(--ts)">одной редкости</strong></p>
+      <div class="craft-slots" style="display:flex;gap:8px;margin-bottom:12px">
+        <div class="craft-slot empty" data-slot="0" style="flex:1;background:var(--s1);border:2px dashed var(--borderL);border-radius:var(--r-lg);padding:14px;text-align:center;cursor:pointer"><div style="font-size:28px">❓</div><div style="font-size:9px">Выбрать</div></div>
+        <div class="craft-slot empty" data-slot="1" style="flex:1;background:var(--s1);border:2px dashed var(--borderL);border-radius:var(--r-lg);padding:14px;text-align:center;cursor:pointer"><div style="font-size:28px">❓</div><div style="font-size:9px">Выбрать</div></div>
+        <div class="craft-slot empty" data-slot="2" style="flex:1;background:var(--s1);border:2px dashed var(--borderL);border-radius:var(--r-lg);padding:14px;text-align:center;cursor:pointer"><div style="font-size:28px">❓</div><div style="font-size:9px">Выбрать</div></div>
+      </div>
+      <div class="craft-preview">
+        <div class="craft-chance-info"><span>🎲 Шанс успеха</span><span id="craftChancePercent">35%</span></div>
+        <div class="craft-chance-bar"><div class="craft-chance-fill" style="width:35%"></div></div>
+        <div class="craft-result-range" id="craftResultRange">При успехе: x1.3-2.0 | При провале: x0.5-0.9</div>
+      </div>
+      <button class="btn btn-gold" id="craftBtn" disabled>СКРАФТИТЬ</button>
+      <div class="inv-section" style="margin-top:14px"><h3>МОИ ПОДАРКИ</h3><div class="inv-grid" id="invCraft"></div></div>
+    </div>
 
-<!-- CRAFT -->
-<div class="panel" id="craftPanel">
-  <div class="sec-hdr"><div class="sec-title">КРАФТ</div><div class="sec-sub">3 → 1 гарантировано</div></div>
-  <p style="font-size:12px;color:var(--tm);margin-bottom:12px">Нажми на 3 подарка <strong style="color:var(--ts)">одной редкости</strong> чтобы скрафтить</p>
-  <div class="craft-slots" id="craftSlots">
-    <div class="craft-slot empty" data-slot="0"><div class="craft-slot-icon">❓</div><div class="craft-slot-name">Выбрать</div></div>
-    <div class="craft-slot empty" data-slot="1"><div class="craft-slot-icon">❓</div><div class="craft-slot-name">Выбрать</div></div>
-    <div class="craft-slot empty" data-slot="2"><div class="craft-slot-icon">❓</div><div class="craft-slot-name">Выбрать</div></div>
-  </div>
-  <div class="craft-arrow">▼</div>
-  <div class="craft-result" id="craftResult"><div class="cr-label">Результат</div><div class="cr-icon" id="crIcon">❓</div><div class="cr-name" id="crName">Добавьте 3 подарка</div></div>
-  <button class="btn btn-gold" id="craftBtn" disabled>СКРАФТИТЬ</button>
-  <div class="inv-section" style="margin-top:14px"><h3>МОИ ПОДАРКИ</h3><div class="inv-grid" id="invCraft"></div></div>
-</div>
+    <!-- PVP -->
+    <div class="panel" id="pvpPanel">
+      <div class="sec-hdr"><div class="sec-title">PvP БАТЛЫ</div><div class="sec-sub">победитель забирает всё</div></div>
+      <div class="pvp-tabs" style="display:flex;gap:6px;margin-bottom:14px">
+        <button class="pvp-tab active" data-pvptab="public" style="padding:8px 16px;background:var(--s2);border:1px solid var(--border);border-radius:var(--r-full);color:var(--ts);cursor:pointer">🌐 Публичные</button>
+        <button class="pvp-tab" data-pvptab="private" style="padding:8px 16px;background:var(--s2);border:1px solid var(--border);border-radius:var(--r-full);color:var(--ts);cursor:pointer">🔒 Приватные</button>
+      </div>
+      <div class="battle-create-box" id="publicCreateBox" style="background:var(--s1);border:1px solid var(--border);border-radius:var(--r-lg);padding:16px;margin-bottom:14px">
+        <div style="font-size:12px;color:var(--tm);margin-bottom:8px">Поставь подарок и создай публичный батл</div>
+        <div class="battle-stake-pick" id="pvpStakeDisplay" style="background:var(--s2);border:1px solid var(--border);border-radius:var(--r-md);padding:12px;display:flex;gap:10px"><span>⚔️</span><span id="pvpStakeText">Нажми на подарок в инвентаре</span></div>
+        <button class="btn btn-primary" id="createBattleBtn" disabled style="margin-top:12px">СОЗДАТЬ ПУБЛИЧНЫЙ БАТЛ</button>
+      </div>
+      <div id="publicLobbyWrap"><div class="pvp-section-title public-title" style="font-family:var(--font-d);font-size:18px;color:var(--ts);margin-bottom:8px">АКТИВНЫЕ БАТЛЫ</div><div id="pvpLobby"></div></div>
+      <div class="inv-section"><h3>МОИ ПОДАРКИ</h3><div class="inv-grid" id="invPvp"></div></div>
+    </div>
 
-<!-- PVP -->
-<div class="panel" id="pvpPanel">
-  <div class="sec-hdr"><div class="sec-title">PvP БАТЛЫ</div><div class="sec-sub">победитель забирает всё</div></div>
-  <div class="pvp-tabs">
-    <button class="pvp-tab active" data-pvptab="public">🌐 Публичные</button>
-    <button class="pvp-tab" data-pvptab="private">🔒 Приватные</button>
-  </div>
-
-  <!-- PUBLIC CREATE -->
-  <div class="battle-create-box" id="publicCreateBox">
-    <div style="font-size:12px;color:var(--tm);margin-bottom:8px">Поставь подарок и создай публичный батл</div>
-    <div class="battle-stake-pick" id="pvpStakeDisplay"><span>⚔️</span><span id="pvpStakeText">Нажми на подарок в инвентаре</span><span style="font-size:12px;font-weight:700;color:var(--gold);margin-left:auto" id="pvpStakeVal"></span></div>
-    <button class="btn btn-primary" id="createBattleBtn" disabled>СОЗДАТЬ ПУБЛИЧНЫЙ БАТЛ</button>
-  </div>
-
-  <!-- PRIVATE CREATE -->
-  <div class="battle-create-box" id="privateCreateBox" style="display:none">
-    <div style="font-size:12px;color:var(--tm);margin-bottom:8px">🔒 Приватный батл — только по ссылке-приглашению</div>
-    <div class="battle-stake-pick" id="pvpPrivateStakeDisplay"><span>🔒</span><span id="pvpPrivateStakeText">Нажми на подарок в инвентаре</span><span style="font-size:12px;font-weight:700;color:var(--gold);margin-left:auto" id="pvpPrivateStakeVal"></span></div>
-    <button class="btn btn-gold" id="createPrivateBattleBtn" disabled>СОЗДАТЬ ПРИВАТНЫЙ БАТЛ</button>
-    <div id="privateLinkRow" style="display:none;margin-top:10px">
-      <div style="font-size:11px;color:var(--tm);margin-bottom:6px">🔗 Ссылка для приглашения (отправь другу):</div>
-      <div style="display:flex;gap:8px"><input class="ref-link-input" id="privateBattleLink" readonly><button class="btn btn-outline btn-sm" id="copyPrivateLinkBtn">Копировать</button></div>
+    <!-- PROFILE -->
+    <div class="panel" id="profilePanel">
+      <div class="profile-hero" style="background:var(--s1);border:1px solid var(--border);border-radius:var(--r-lg);padding:20px">
+        <div class="avatar-wrap" style="position:relative;width:64px;margin-bottom:12px">
+          <div class="avatar-img" id="avatarDisplay" style="width:64px;height:64px;border-radius:50%;background:var(--s2);border:2px solid var(--borderL);display:flex;align-items:center;justify-content:center;font-size:28px;cursor:pointer">👤</div>
+          <div class="avatar-edit" onclick="document.getElementById('avatarInput').click()" style="position:absolute;bottom:0;right:-4px;width:22px;height:22px;border-radius:50%;background:var(--s3);border:1px solid var(--borderL);display:flex;align-items:center;justify-content:center;font-size:10px;cursor:pointer">✏️</div>
+          <input type="file" id="avatarInput" accept="image/*" style="display:none">
+        </div>
+        <div class="pname" style="font-family:var(--font-d);font-size:26px;display:flex;align-items:center;gap:8px"><span class="pname-text" id="pName">ИГРОК</span><button class="edit-name-btn" id="editNameBtn" style="background:var(--s3);border:1px solid var(--borderL);color:var(--ts);font-size:10px;padding:4px 12px;border-radius:var(--r-full);cursor:pointer">✏️</button></div>
+        <div class="pid" id="pId" style="font-size:10px;color:var(--tm);margin-top:2px"></div>
+        <div class="luck-bar-wrap" style="margin-top:12px"><div class="luck-label" style="display:flex;justify-content:space-between;font-size:10px"><span>🍀 Удача</span><span id="luckPct">0%</span></div><div class="luck-bar" style="height:3px;background:var(--s3);border-radius:var(--r-full);overflow:hidden"><div class="luck-fill" id="luckFill" style="width:0%;height:100%;background:linear-gradient(90deg,var(--gold),var(--goldL))"></div></div></div>
+        <div class="stats-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:12px">
+          <div class="stat-box" style="background:var(--s2);border:1px solid var(--border);border-radius:var(--r-md);padding:10px;text-align:center"><div class="stat-n" id="sTotalGifts" style="font-family:var(--font-d);font-size:24px">0</div><div class="stat-l" style="font-size:9px">Подарков</div></div>
+          <div class="stat-box" style="background:var(--s2);border:1px solid var(--border);border-radius:var(--r-md);padding:10px;text-align:center"><div class="stat-n" id="sTotalStars" style="font-family:var(--font-d);font-size:24px">0</div><div class="stat-l" style="font-size:9px">★ Ценность</div></div>
+          <div class="stat-box" style="background:var(--s2);border:1px solid var(--border);border-radius:var(--r-md);padding:10px;text-align:center"><div class="stat-n" id="sCasesOpened" style="font-family:var(--font-d);font-size:24px">0</div><div class="stat-l" style="font-size:9px">Кейсов</div></div>
+          <div class="stat-box" style="background:var(--s2);border:1px solid var(--border);border-radius:var(--r-md);padding:10px;text-align:center"><div class="stat-n" id="sPvpWins" style="font-family:var(--font-d);font-size:24px">0</div><div class="stat-l" style="font-size:9px">Победы</div></div>
+        </div>
+      </div>
+      <div class="ref-box" style="background:var(--s1);border:1px solid var(--border);border-radius:var(--r-lg);padding:16px;margin-bottom:12px">
+        <div class="ref-title" style="font-family:var(--font-d);font-size:20px">РЕФЕРАЛЬНАЯ ПРОГРАММА</div>
+        <div class="ref-link-row" style="display:flex;gap:8px;margin-top:8px"><input class="ref-link-input" id="refLinkInput" readonly style="flex:1;background:var(--s2);border:1px solid var(--border);border-radius:var(--r-full);padding:9px 14px;color:var(--ts);font-size:12px"><button class="btn btn-outline btn-sm" id="copyRefBtn" style="padding:9px 18px;font-size:12px;background:transparent;border:1px solid var(--borderL);border-radius:var(--r-full);color:var(--tp);cursor:pointer">Копировать</button></div>
+      </div>
+      <div class="inv-section"><h3>МОИ ПОДАРКИ</h3><div class="inv-grid" id="invProfile"></div></div>
+      <div class="inv-section" style="margin-top:10px"><h3>ИСТОРИЯ</h3><table class="hist-table" style="width:100%"><thead><tr><th>Предмет</th><th>Действие</th><th>Итог</th></tr></thead><tbody id="histBody"></tbody></table></div>
     </div>
   </div>
-
-  <!-- PUBLIC LOBBY -->
-  <div id="publicLobbyWrap">
-    <div class="pvp-section-title public-title">АКТИВНЫЕ БАТЛЫ</div>
-    <div id="pvpLobby"></div>
-  </div>
-
-  <!-- PRIVATE LOBBY -->
-  <div id="privateLobbyWrap" style="display:none">
-    <div class="pvp-section-title private-title">🔒 МОИ ПРИВАТНЫЕ БАТЛЫ</div>
-    <div id="pvpPrivateLobby"></div>
-    <div style="font-size:11px;color:var(--tm);margin-top:8px">Чужие приватные батлы видны только по ссылке-приглашению</div>
-  </div>
-
-  <div class="inv-section"><h3>МОИ ПОДАРКИ</h3><div class="inv-grid" id="invPvp"></div></div>
-</div>
-
-<!-- PROFILE -->
-<div class="panel" id="profilePanel">
-  <div class="profile-hero">
-    <div class="avatar-wrap">
-      <div class="avatar-img" id="avatarDisplay" onclick="document.getElementById('avatarInput').click()">👤</div>
-      <div class="avatar-edit" onclick="document.getElementById('avatarInput').click()">✏️</div>
-      <input type="file" id="avatarInput" accept="image/*">
-    </div>
-    <div class="pname"><span class="pname-text" id="pName">ИГРОК</span><button class="edit-name-btn" id="editNameBtn">✏️</button></div>
-    <div class="pid" id="pId"></div>
-    <div class="luck-bar-wrap"><div class="luck-label"><span>🍀 Удача</span><span id="luckPct">0%</span></div><div class="luck-bar"><div class="luck-fill" id="luckFill" style="width:0%"></div></div></div>
-    <div class="stats-grid">
-      <div class="stat-box"><div class="stat-n" id="sTotalGifts">0</div><div class="stat-l">Подарков</div></div>
-      <div class="stat-box"><div class="stat-n" id="sTotalStars">0</div><div class="stat-l">★ Ценность</div></div>
-      <div class="stat-box"><div class="stat-n" id="sCasesOpened">0</div><div class="stat-l">Кейсов</div></div>
-      <div class="stat-box"><div class="stat-n" id="sPvpWins">0</div><div class="stat-l">Победы</div></div>
-    </div>
-    <div class="p-actions">
-      <button class="p-btn" id="depositBtn">💎 Пополнить</button>
-      <button class="p-btn" id="withdrawBtn">💰 Вывести</button>
-      <button class="p-btn" id="shareProfileBtn">🔗 Поделиться</button>
-    </div>
-  </div>
-  <div class="ref-box">
-    <div class="ref-title">РЕФЕРАЛЬНАЯ ПРОГРАММА</div>
-    <p style="font-size:12px;color:var(--tm)">Приглашай друзей и получай 10% от их первого пополнения</p>
-    <div class="ref-link-row"><input class="ref-link-input" id="refLinkInput" readonly><button class="btn btn-outline btn-sm" id="copyRefBtn">Копировать</button></div>
-    <div class="ref-stats">
-      <div class="ref-stat"><div class="ref-stat-n" id="refCount">0</div><div class="ref-stat-l">Рефералов</div></div>
-      <div class="ref-stat"><div class="ref-stat-n" id="refEarned">0</div><div class="ref-stat-l">★ Заработано</div></div>
-    </div>
-  </div>
-  <div class="inv-section"><h3>МОИ ПОДАРКИ</h3><div class="inv-grid" id="invProfile"></div></div>
-  <div class="inv-section" style="margin-top:10px">
-    <h3>ИСТОРИЯ</h3>
-    <table class="hist-table"><thead><tr><th>Предмет</th><th>Действие</th><th>Итог</th></tr></thead><tbody id="histBody"></tbody></tr>
-  </div>
-</div>
-
-  </div><!-- /content -->
 
   <div class="tabs">
     <button class="tab active" data-tab="cases"><span class="tab-icon">🎁</span><span class="tab-lbl">Кейсы</span></button>
@@ -468,1115 +328,170 @@ img{display:block}
 const SUPABASE_URL='https://riwzrplciliebgexltll.supabase.co';
 const SUPABASE_ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJpd3pycGxjaWxpZWJnZXhsdGxsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyNjM5MjEsImV4cCI6MjA5MTgzOTkyMX0.jrrI78rQ-3VARU0I1eazM6iKHbSJLpcK5HCjJ4VRxnQ';
 
-// ═══════════════════════════════════════════════════════
-// ПОДАРКИ (РАСШИРЕННАЯ БАЗА)
-// ═══════════════════════════════════════════════════════
+// ПОДАРКИ
 const GIFTS={
-  "Розовый мишка":      {icon:"🧸",val:15, rarity:"common"},
-  "Букет цветов":       {icon:"💐",val:15, rarity:"common"},
-  "Шоколадка":          {icon:"🍫",val:15, rarity:"common"},
-  "Воздушный шар":      {icon:"🎈",val:12, rarity:"common"},
-  "Кексик":             {icon:"🧁",val:10, rarity:"common"},
-  "Конфеты":            {icon:"🍬",val:8,  rarity:"common"},
-  "Плюшевый кот":       {icon:"🐱",val:18, rarity:"common"},
-  "Открытка":           {icon:"💌",val:10, rarity:"common"},
-  "Золотая звезда":     {icon:"⭐️",val:50, rarity:"rare"},
-  "Алмазное сердце":    {icon:"💎",val:50, rarity:"rare"},
-  "Серебряная луна":    {icon:"🌙",val:40, rarity:"rare"},
-  "Золотое яблоко":     {icon:"🍎",val:45, rarity:"rare"},
-  "Кристалл":           {icon:"💠",val:55, rarity:"rare"},
-  "Золотой кубок":      {icon:"🏆",val:60, rarity:"rare"},
-  "Музыкальная шкатулка":{icon:"🎵",val:45, rarity:"rare"},
-  "Легендарный дракон": {icon:"🐉",val:200, rarity:"epic"},
-  "Космический корабль":{icon:"🚀",val:200, rarity:"epic"},
-  "Феникс":             {icon:"🦅",val:180, rarity:"epic"},
-  "Единорог":           {icon:"🦄",val:220, rarity:"epic"},
-  "Чёрная дыра":        {icon:"🌑",val:250, rarity:"epic"},
-  "Волшебный меч":      {icon:"⚔️",val:190, rarity:"epic"},
-  "Трон короля":        {icon:"👑",val:1000, rarity:"legendary"},
-  "Бесконечный камень": {icon:"💫",val:1500, rarity:"legendary"},
-  "Врата богов":        {icon:"⛩️",val:2000, rarity:"legendary"}
+  "Розовый мишка":{icon:"🧸",val:15,rarity:"common"}, "Букет цветов":{icon:"💐",val:15,rarity:"common"},
+  "Шоколадка":{icon:"🍫",val:15,rarity:"common"}, "Воздушный шар":{icon:"🎈",val:12,rarity:"common"},
+  "Кексик":{icon:"🧁",val:10,rarity:"common"}, "Конфеты":{icon:"🍬",val:8,rarity:"common"},
+  "Плюшевый кот":{icon:"🐱",val:18,rarity:"common"}, "Открытка":{icon:"💌",val:10,rarity:"common"},
+  "Золотая звезда":{icon:"⭐️",val:50,rarity:"rare"}, "Алмазное сердце":{icon:"💎",val:50,rarity:"rare"},
+  "Серебряная луна":{icon:"🌙",val:40,rarity:"rare"}, "Золотое яблоко":{icon:"🍎",val:45,rarity:"rare"},
+  "Кристалл":{icon:"💠",val:55,rarity:"rare"}, "Золотой кубок":{icon:"🏆",val:60,rarity:"rare"},
+  "Музыкальная шкатулка":{icon:"🎵",val:45,rarity:"rare"}, "Легендарный дракон":{icon:"🐉",val:200,rarity:"epic"},
+  "Космический корабль":{icon:"🚀",val:200,rarity:"epic"}, "Феникс":{icon:"🦅",val:180,rarity:"epic"},
+  "Единорог":{icon:"🦄",val:220,rarity:"epic"}, "Чёрная дыра":{icon:"🌑",val:250,rarity:"epic"},
+  "Волшебный меч":{icon:"⚔️",val:190,rarity:"epic"}, "Трон короля":{icon:"👑",val:1000,rarity:"legendary"},
+  "Бесконечный камень":{icon:"💫",val:1500,rarity:"legendary"}, "Врата богов":{icon:"⛩️",val:2000,rarity:"legendary"}
 };
 
-const GIFTS_BY_RARITY = {
-  common: ["Розовый мишка","Букет цветов","Шоколадка","Воздушный шар","Кексик","Конфеты","Плюшевый кот","Открытка"],
-  rare: ["Золотая звезда","Алмазное сердце","Серебряная луна","Золотое яблоко","Кристалл","Золотой кубок","Музыкальная шкатулка"],
-  epic: ["Легендарный дракон","Космический корабль","Феникс","Единорог","Чёрная дыра","Волшебный меч"],
-  legendary: ["Трон короля","Бесконечный камень","Врата богов"]
-};
-
+const GIFTS_BY_RARITY={common:["Розовый мишка","Букет цветов","Шоколадка","Воздушный шар","Кексик","Конфеты","Плюшевый кот","Открытка"],rare:["Золотая звезда","Алмазное сердце","Серебряная луна","Золотое яблоко","Кристалл","Золотой кубок","Музыкальная шкатулка"],epic:["Легендарный дракон","Космический корабль","Феникс","Единорог","Чёрная дыра","Волшебный меч"],legendary:["Трон короля","Бесконечный камень","Врата богов"]};
 const RARITY_ORDER=["common","rare","epic","legendary"];
 const RARITY_LABELS={common:"Обычный",rare:"Редкий",epic:"Эпический",legendary:"Легендарный"};
 const RARITY_COLORS={common:"#666",rare:"#5577cc",epic:"#9955cc",legendary:"#c8a96e"};
-const UPGRADE_CH={common:70,rare:50,epic:30,legendary:0};
 
-function getRandomGiftByRarity(rarity){
-  const list = GIFTS_BY_RARITY[rarity];
-  if(!list || list.length===0) return null;
-  const randomName = list[Math.floor(Math.random() * list.length)];
-  const g = GIFTS[randomName];
-  return {name:randomName, icon:g.icon, val:g.val, rarity:g.rarity};
-}
-
-function getNextRarity(currentRarity){
-  const idx = RARITY_ORDER.indexOf(currentRarity);
-  if(idx >= 0 && idx < RARITY_ORDER.length-1) return RARITY_ORDER[idx+1];
-  return null;
-}
-
-function calculateCasePrice(gifts){
-  let totalValue=0;
-  let totalChance=0;
-  for(const g of gifts){
-    const giftInfo=GIFTS[g.n];
-    if(giftInfo){
-      totalValue+=giftInfo.val * (g.c/100);
-      totalChance+=g.c;
-    }
-  }
-  if(totalChance>0) totalValue=totalValue / (totalChance/100);
-  let price=Math.round(totalValue * 0.8);
-  price=Math.max(30, Math.min(1500, price));
-  return Math.round(price/5)*5;
-}
+function getRandomGiftByRarity(rarity){let l=GIFTS_BY_RARITY[rarity];if(!l||!l.length)return null;let n=l[Math.floor(Math.random()*l.length)];let g=GIFTS[n];return{name:n,icon:g.icon,val:g.val,rarity:g.rarity};}
+function getNextRarity(r){let i=RARITY_ORDER.indexOf(r);if(i>=0&&i<RARITY_ORDER.length-1)return RARITY_ORDER[i+1];return null;}
+function calculateCasePrice(gifts){let tv=0,tc=0;for(let g of gifts){let gi=GIFTS[g.n];if(gi){tv+=gi.val*(g.c/100);tc+=g.c;}}if(tc>0)tv=tv/(tc/100);let p=Math.round(tv*0.8);p=Math.max(30,Math.min(1500,p));return Math.round(p/5)*5;}
 
 const CASES=[
-  {id:"starter",name:"СТАРТОВЫЙ",emoji:"🎀",cls:"c-common", price:0,
-   gifts:[{n:"Конфеты",c:25},{n:"Открытка",c:20},{n:"Кексик",c:18},{n:"Воздушный шар",c:15},{n:"Шоколадка",c:12},{n:"Плюшевый кот",c:10}]},
-  {id:"common",name:"ОБЫЧНЫЙ",emoji:"📦",cls:"c-common", price:0,
-   gifts:[{n:"Розовый мишка",c:18},{n:"Букет цветов",c:16},{n:"Шоколадка",c:15},{n:"Плюшевый кот",c:14},{n:"Воздушный шар",c:12},{n:"Кексик",c:10},{n:"Конфеты",c:8},{n:"Открытка",c:7}]},
-  {id:"sweet",name:"СЛАДКИЙ",emoji:"🍭",cls:"c-common", price:0,
-   gifts:[{n:"Шоколадка",c:22},{n:"Кексик",c:18},{n:"Конфеты",c:16},{n:"Золотое яблоко",c:14},{n:"Розовый мишка",c:12},{n:"Плюшевый кот",c:10},{n:"Букет цветов",c:8}]},
-  {id:"rare",name:"РЕДКИЙ",emoji:"✨",cls:"c-rare", price:0,
-   gifts:[{n:"Золотая звезда",c:18},{n:"Алмазное сердце",c:16},{n:"Серебряная луна",c:14},{n:"Золотое яблоко",c:13},{n:"Кристалл",c:12},{n:"Золотой кубок",c:10},{n:"Музыкальная шкатулка",c:9},{n:"Розовый мишка",c:8}]},
-  {id:"music",name:"МУЗЫКАЛЬНЫЙ",emoji:"🎵",cls:"c-rare", price:0,
-   gifts:[{n:"Музыкальная шкатулка",c:22},{n:"Золотой кубок",c:18},{n:"Кристалл",c:16},{n:"Золотая звезда",c:14},{n:"Алмазное сердце",c:12},{n:"Серебряная луна",c:10},{n:"Открытка",c:8}]},
-  {id:"crystal",name:"КРИСТАЛЛ",emoji:"💠",cls:"c-rare", price:0,
-   gifts:[{n:"Кристалл",c:20},{n:"Алмазное сердце",c:18},{n:"Золотой кубок",c:16},{n:"Серебряная луна",c:14},{n:"Золотая звезда",c:12},{n:"Золотое яблоко",c:10},{n:"Музыкальная шкатулка",c:10}]},
-  {id:"epic",name:"ЭПИЧЕСКИЙ",emoji:"🔥",cls:"c-epic", price:0,
-   gifts:[{n:"Легендарный дракон",c:16},{n:"Космический корабль",c:15},{n:"Феникс",c:14},{n:"Единорог",c:13},{n:"Чёрная дыра",c:12},{n:"Волшебный меч",c:11},{n:"Золотая звезда",c:10},{n:"Алмазное сердце",c:9}]},
-  {id:"cosmos",name:"КОСМИЧЕСКИЙ",emoji:"🌌",cls:"c-premium", price:0,
-   gifts:[{n:"Космический корабль",c:18},{n:"Чёрная дыра",c:16},{n:"Феникс",c:15},{n:"Единорог",c:14},{n:"Волшебный меч",c:12},{n:"Легендарный дракон",c:11},{n:"Кристалл",c:8},{n:"Золотой кубок",c:6}]},
-  {id:"dragon",name:"ДРАКОН",emoji:"🐉",cls:"c-epic", price:0,
-   gifts:[{n:"Легендарный дракон",c:22},{n:"Единорог",c:18},{n:"Чёрная дыра",c:15},{n:"Волшебный меч",c:14},{n:"Феникс",c:12},{n:"Космический корабль",c:10},{n:"Золотая звезда",c:5},{n:"Алмазное сердце",c:4}]},
-  {id:"legendary",name:"ЛЕГЕНДАРНЫЙ",emoji:"👑",cls:"c-legendary", price:0,
-   gifts:[{n:"Трон короля",c:12},{n:"Легендарный дракон",c:14},{n:"Космический корабль",c:13},{n:"Единорог",c:12},{n:"Чёрная дыра",c:11},{n:"Феникс",c:10},{n:"Волшебный меч",c:10},{n:"Бесконечный камень",c:9},{n:"Врата богов",c:9}]},
-  {id:"mythic",name:"МИФИЧЕСКИЙ",emoji:"💫",cls:"c-legendary", price:0,
-   gifts:[{n:"Трон короля",c:20},{n:"Бесконечный камень",c:18},{n:"Врата богов",c:16},{n:"Легендарный дракон",c:12},{n:"Космический корабль",c:10},{n:"Феникс",c:8},{n:"Единорог",c:8},{n:"Чёрная дыра",c:8}]},
-  {id:"event",name:"СОБЫТИЕ",emoji:"🎄",cls:"c-special", price:0,
-   gifts:[{n:"Бесконечный камень",c:12},{n:"Трон короля",c:10},{n:"Феникс",c:14},{n:"Легендарный дракон",c:13},{n:"Космический корабль",c:12},{n:"Единорог",c:11},{n:"Золотой кубок",c:10},{n:"Кристалл",c:10},{n:"Музыкальная шкатулка",c:8}]}
+  {id:"starter",name:"СТАРТОВЫЙ",emoji:"🎀",cls:"c-common",gifts:[{n:"Конфеты",c:25},{n:"Открытка",c:20},{n:"Кексик",c:18},{n:"Воздушный шар",c:15},{n:"Шоколадка",c:12},{n:"Плюшевый кот",c:10}]},
+  {id:"common",name:"ОБЫЧНЫЙ",emoji:"📦",cls:"c-common",gifts:[{n:"Розовый мишка",c:18},{n:"Букет цветов",c:16},{n:"Шоколадка",c:15},{n:"Плюшевый кот",c:14},{n:"Воздушный шар",c:12},{n:"Кексик",c:10},{n:"Конфеты",c:8},{n:"Открытка",c:7}]},
+  {id:"rare",name:"РЕДКИЙ",emoji:"✨",cls:"c-rare",gifts:[{n:"Золотая звезда",c:18},{n:"Алмазное сердце",c:16},{n:"Серебряная луна",c:14},{n:"Золотое яблоко",c:13},{n:"Кристалл",c:12},{n:"Золотой кубок",c:10},{n:"Музыкальная шкатулка",c:9},{n:"Розовый мишка",c:8}]},
+  {id:"epic",name:"ЭПИЧЕСКИЙ",emoji:"🔥",cls:"c-epic",gifts:[{n:"Легендарный дракон",c:16},{n:"Космический корабль",c:15},{n:"Феникс",c:14},{n:"Единорог",c:13},{n:"Чёрная дыра",c:12},{n:"Волшебный меч",c:11},{n:"Золотая звезда",c:10},{n:"Алмазное сердце",c:9}]},
+  {id:"legendary",name:"ЛЕГЕНДАРНЫЙ",emoji:"👑",cls:"c-legendary",gifts:[{n:"Трон короля",c:12},{n:"Легендарный дракон",c:14},{n:"Космический корабль",c:13},{n:"Единорог",c:12},{n:"Чёрная дыра",c:11},{n:"Феникс",c:10},{n:"Волшебный меч",c:10},{n:"Бесконечный камень",c:9},{n:"Врата богов",c:9}]}
 ];
+for(let c of CASES)c.price=calculateCasePrice(c.gifts);
 
-for(const c of CASES){ c.price=calculateCasePrice(c.gifts); }
-
-// ═══════════════════════════════════════════════════════
 // STATE
-// ═══════════════════════════════════════════════════════
 let userId=null,tgUser=null;
-let state={balance:250,inventory:[],casesOpened:0,pvpWins:0,history:[],luck:0,refCode:null,refCount:0,refEarned:0,avatarUrl:null,displayName:null};
-let upgradeSlots=[];
+let state={balance:250,inventory:[],casesOpened:0,pvpWins:0,history:[],luck:0,refCode:null,refCount:0,refEarned:0,avatarUrl:null,displayName:null,upgradeHistory:[]};
+let upgradeSelectedGift=null;
+let upgradeTargetValue=100;
 let craftSlots=[null,null,null];
-let pvpStakeIdx=null;
-let pvpPrivateStakeIdx=null;
-let pvpMode='public';
-let battles=[];
-let privateBattles=[];
-let debounceSave=null;
-let ws=null;
-let wsReconnectTimer=null;
-let wsHeartbeatTimer=null;
-let activeCoinFlipBattleId=null;
-let activeCoinAnimation = false;
-let dataLoaded = false;
+let pvpStakeIdx=null,pvpMode='public',battles=[],privateBattles=[];
+let ws=null,activeCoinFlipBattleId=null,activeCoinAnimation=false,dataLoaded=false;
 
-// ═══════════════════════════════════════════════════════
-// RATE LIMITER
-// ═══════════════════════════════════════════════════════
-const RL={_map:{},check(k,max=4){
-  const now=Date.now();
-  if(!this._map[k])this._map[k]=[];
-  this._map[k]=this._map[k].filter(t=>now-t<1000);
-  if(this._map[k].length>=max){
-    const b=document.getElementById('rlBanner');
-    b.style.display='block';clearTimeout(this._t);
-    this._t=setTimeout(()=>b.style.display='none',2000);
-    return false;
-  }
-  this._map[k].push(now);return true;
-}};
-
-// ═══════════════════════════════════════════════════════
-// SOUND & CONFETTI
-// ═══════════════════════════════════════════════════════
-const SFX={_ctx:null,
-  _get(){if(!this._ctx)this._ctx=new(window.AudioContext||window.webkitAudioContext)();return this._ctx},
-  _tone(freq,dur,vol=0.15,type='sine'){try{const c=this._get();const o=c.createOscillator();const g=c.createGain();o.connect(g);g.connect(c.destination);o.type=type;o.frequency.value=freq;g.gain.setValueAtTime(vol,c.currentTime);g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+dur);o.start();o.stop(c.currentTime+dur);}catch(e){}},
-  click(){this._tone(440,.08,.1)},win(){[523,659,784].forEach((f,i)=>setTimeout(()=>this._tone(f,.2,.12),i*100))},
-  lose(){[300,250].forEach((f,i)=>setTimeout(()=>this._tone(f,.25,.1,'sawtooth'),i*150))},
-  roulette(){this._tone(800,.05,.08)},coin(){this._tone(600,.1,.1,'triangle')},
-  craft(){[523,659,784,1047].forEach((f,i)=>setTimeout(()=>this._tone(f,.15,.1),i*80))}
-};
-function vibrate(p=[10]){try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}}
-
-const CF=(()=>{
-  const cv=document.getElementById('cfv');const cx=cv.getContext('2d');let ps=[];let af=null;
-  function resize(){cv.width=window.innerWidth;cv.height=window.innerHeight}
-  window.addEventListener('resize',resize);resize();
-  function burst(x,y,n=80){
-    const cols=['hsl(45,30%,70%)','hsl(0,0%,80%)','hsl(0,0%,60%)','hsl(40,20%,65%)'];
-    for(let i=0;i<n;i++){const a=(Math.PI*2/n)*i+Math.random()*.5;const s=Math.random()*7+3;ps.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-5,life:1,decay:Math.random()*.012+.008,sz:Math.random()*5+2,color:cols[Math.floor(Math.random()*cols.length)],rot:Math.random()*Math.PI*2,rs:(Math.random()-.5)*.2});}
-    if(!af)loop();
-  }
-  function loop(){cx.clearRect(0,0,cv.width,cv.height);ps=ps.filter(p=>p.life>0);ps.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.25;p.vx*=.99;p.life-=p.decay;p.rot+=p.rs;cx.save();cx.globalAlpha=p.life;cx.translate(p.x,p.y);cx.rotate(p.rot);cx.fillStyle=p.color;cx.fillRect(-p.sz/2,-p.sz/2,p.sz,p.sz);cx.restore();});af=ps.length>0?requestAnimationFrame(loop):null;}
-  return{burst};
-})();
-
-function toast(msg){document.querySelectorAll('.toast').forEach(t=>t.remove());const t=document.createElement('div');t.className='toast';t.innerHTML=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2600);}
-function showLoading(){ const el=document.getElementById('loadingIndicator'); if(el) el.style.display='block'; }
-function hideLoading(){ const el=document.getElementById('loadingIndicator'); if(el) el.style.display='none'; }
-
-// ═══════════════════════════════════════════════════════
-// SUPABASE REST (с кэшированием)
-// ═══════════════════════════════════════════════════════
-let cache = {};
-
-async function sbFetch(path,method='GET',body=null,extraHeaders={},skipCache=false){
-  const cacheKey = path + method;
-  if(!skipCache && cache[cacheKey] && Date.now() - cache[cacheKey].time < 30000){
-    return cache[cacheKey].data;
-  }
-  try{
-    const res=await fetch(SUPABASE_URL+path,{method,headers:{'apikey':SUPABASE_ANON,'Authorization':'Bearer '+SUPABASE_ANON,'Content-Type':'application/json','Prefer':'return=representation',...extraHeaders},body:body?JSON.stringify(body):null});
-    if(!res.ok){const e=await res.text();console.warn('SB err:',e);return null;}
-    const txt=await res.text();const data=txt?JSON.parse(txt):null;
-    if(!skipCache && method==='GET'){ cache[cacheKey] = { data, time: Date.now() }; }
-    return data;
-  }catch(e){console.warn('SB:',e);return null;}
-}
-
-async function loadUserFromDB(){
-  if(!userId)return;
-  const rows=await sbFetch(`/rest/v1/gc_users?id=eq.${encodeURIComponent(userId)}&select=*`);
-  if(rows&&rows.length>0){
-    const r=rows[0];
-    state.balance=r.balance??250;
-    state.inventory=safeJSON(r.inventory,[]);
-    state.casesOpened=r.cases_opened??0;
-    state.pvpWins=r.pvp_wins??0;
-    state.luck=r.luck??0;
-    state.history=safeJSON(r.history,[]);
-    state.refCode=r.ref_code||userId.slice(0,8).toUpperCase();
-    state.refCount=r.ref_count??0;
-    state.refEarned=r.ref_earned??0;
-    state.avatarUrl=r.avatar_url||null;
-    state.displayName=r.display_name||(tgUser?.first_name)||'ИГРОК';
-    dataLoaded = true;
-    updateAllUI();
-    return true;
-  }
-  state.displayName=tgUser?.first_name||'ИГРОК';
-  state.refCode=userId.slice(0,8).toUpperCase();
-  dataLoaded = true;
-  await saveUserToDB(true);
-  return false;
-}
-
-async function saveUserToDB(immediate=false){
-  if(!userId)return;
-  clearTimeout(debounceSave);
-  const doSave=async()=>{
-    const payload={
-      id:userId,
-      username:tgUser?.username||tgUser?.first_name||'Игрок',
-      display_name:state.displayName||'ИГРОК',
-      avatar_url:state.avatarUrl||null,
-      balance:state.balance,
-      inventory:JSON.stringify(state.inventory),
-      cases_opened:state.casesOpened,
-      pvp_wins:state.pvpWins,
-      luck:state.luck,
-      history:JSON.stringify(state.history.slice(0,50)),
-      ref_code:state.refCode||userId.slice(0,8),
-      ref_count:state.refCount,
-      ref_earned:state.refEarned,
-      updated_at:new Date().toISOString()
-    };
-    const res=await sbFetch('/rest/v1/gc_users','POST',payload,{'Prefer':'resolution=merge-duplicates,return=representation'},true);
-    const dot=document.getElementById('syncDot');
-    if(res){dot.className='sync-indicator ok';setTimeout(()=>dot.className='sync-indicator',1200);}
-    else{dot.className='sync-indicator err';setTimeout(()=>dot.className='sync-indicator',2000);}
-    cache = {};
-  };
-  if(immediate)await doSave();
-  else debounceSave=setTimeout(doSave,800);
-  try{localStorage.setItem('gc_state',JSON.stringify({state,userId,ts:Date.now()}));}catch(e){}
-}
-
-function safeJSON(v,def){try{return typeof v==='string'?JSON.parse(v):(v??def);}catch(e){return def;}}
-
-// ═══════════════════════════════════════════════════════
-// BATTLES
-// ═══════════════════════════════════════════════════════
-async function loadBattles(){
-  const pub=await sbFetch(`/rest/v1/battles?status=eq.waiting&or=(is_private.eq.false,is_private.is.null)&order=created_at.desc&limit=50`);
-  if(pub) battles=pub;
-  const priv=await sbFetch(`/rest/v1/battles?status=eq.waiting&is_private.eq.true&creator_id=eq.${encodeURIComponent(userId)}&order=created_at.desc&limit=20`);
-  if(priv) privateBattles=priv;
-  renderPvpLobby();
-}
-async function saveBattle(b){return await sbFetch('/rest/v1/battles','POST',b,{'Prefer':'resolution=merge-duplicates,return=representation'},true);}
-async function updateBattle(id,data){return await sbFetch(`/rest/v1/battles?id=eq.${id}`,'PATCH',data,{},true);}
-
-// REALTIME
-function initRealtime(){
-  if(wsReconnectTimer){clearTimeout(wsReconnectTimer);wsReconnectTimer=null;}
-  if(wsHeartbeatTimer){clearInterval(wsHeartbeatTimer);wsHeartbeatTimer=null;}
-  if(ws){try{ws.close();}catch(e){}}
-  try{
-    ws=new WebSocket(`wss://riwzrplciliebgexltll.supabase.co/realtime/v1/websocket?apikey=${SUPABASE_ANON}&vsn=1.0.0`);
-    ws.onopen=()=>{
-      ws.send(JSON.stringify({topic:'realtime:public:battles',event:'phx_join',payload:{},ref:'battles_join'}));
-      wsHeartbeatTimer=setInterval(()=>{if(ws.readyState===WebSocket.OPEN)ws.send(JSON.stringify({topic:'phoenix',event:'heartbeat',payload:{},ref:'hb_'+Date.now()}));},25000);
-    };
-    ws.onmessage=(evt)=>{try{const msg=JSON.parse(evt.data);handleRealtimeMessage(msg);}catch(e){}};
-    ws.onclose=()=>{if(wsHeartbeatTimer)clearInterval(wsHeartbeatTimer);wsReconnectTimer=setTimeout(initRealtime,4000);};
-  }catch(e){wsReconnectTimer=setTimeout(initRealtime,5000);}
-}
-
-function handleRealtimeMessage(msg){
-  if(msg.event==='phx_reply'||msg.event==='phx_error'||msg.event==='phx_close')return;
-  if(msg.topic==='realtime:public:battles'){
-    const row=msg.payload?.record||msg.payload?.new||msg.payload?.data;
-    if(!row)return;
-    const isPub = row.is_private===false || row.is_private===null;
-    if(msg.event==='INSERT'){
-      if(isPub && row.status==='waiting' && !battles.find(b=>b.id===row.id)) {
-        battles.unshift(row);
-        renderPvpLobby();
-      }
-      if(row.is_private===true && row.creator_id===userId && row.status==='waiting' && !privateBattles.find(b=>b.id===row.id)) {
-        privateBattles.unshift(row);
-        renderPvpLobby();
-      }
-    }
-    if(msg.event==='UPDATE'){
-      if(row.status!=='waiting'){
-        battles=battles.filter(b=>b.id!==row.id);
-        privateBattles=privateBattles.filter(b=>b.id!==row.id);
-        renderPvpLobby();
-      }else{
-        const bi=battles.findIndex(b=>b.id===row.id); if(bi>=0) battles[bi]=row;
-        const pi=privateBattles.findIndex(b=>b.id===row.id); if(pi>=0) privateBattles[pi]=row;
-        renderPvpLobby();
-      }
-      if(row.status==='fighting' && row.opponent_id && row.opponent_gift && !activeCoinAnimation && activeCoinFlipBattleId!==row.id){
-        activeCoinFlipBattleId=row.id;
-        const creatorGift=safeJSON(row.creator_gift,{});
-        const opponentGift=safeJSON(row.opponent_gift,{});
-        setTimeout(()=>{
-          if(!activeCoinAnimation){
-            showCoinFlip(creatorGift, opponentGift, row, row.creator_id);
-          }
-        }, 300);
-      }
-    }
-    if(msg.event==='DELETE'){
-      const id=msg.payload?.old?.id||row.id;
-      battles=battles.filter(b=>b.id!==id);
-      privateBattles=privateBattles.filter(b=>b.id!==id);
-      renderPvpLobby();
-    }
-  }
-}
-setInterval(()=>{if(!ws||ws.readyState!==WebSocket.OPEN)loadBattles();},10000);
-
-// ═══════════════════════════════════════════════════════
-// BALANCE & LUCK & INVENTORY
-// ═══════════════════════════════════════════════════════
-function setBalance(v){
-  const prev=state.balance;state.balance=Math.max(0,Math.floor(v));
-  const el=document.getElementById('balVal');
-  if(el){el.innerText=state.balance;el.classList.remove('up','dn');void el.offsetWidth;el.classList.add(state.balance>prev?'up':'dn');setTimeout(()=>el.classList.remove('up','dn'),600);}
-  saveUserToDB();
-}
-function applyLuck(base){return Math.min(95,base+state.luck*0.005);}
-function incrementLuck(n){state.luck=Math.min(200,state.luck+(n||1));updateLuckBar();}
-function updateLuckBar(){const pct=Math.min(100,state.luck/2);const el=document.getElementById('luckFill');const pt=document.getElementById('luckPct');if(el)el.style.width=pct+'%';if(pt)pt.innerText=Math.round(pct)+'%';}
+// HELPER
+function toast(msg){let t=document.createElement('div');t.className='toast';t.style.cssText='position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:var(--s2);border:1px solid var(--borderL);border-radius:999px;padding:10px 20px;font-size:13px;font-weight:600;color:var(--white);z-index:999;white-space:nowrap';t.innerHTML=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2600);}
+function showLoading(){let el=document.getElementById('loadingIndicator');if(el)el.style.display='block';}
+function hideLoading(){let el=document.getElementById('loadingIndicator');if(el)el.style.display='none';}
+function setBalance(v){let p=state.balance;state.balance=Math.max(0,Math.floor(v));let el=document.getElementById('balVal');if(el){el.innerText=state.balance;el.classList.remove('up','dn');void el.offsetWidth;el.classList.add(state.balance>p?'up':'dn');setTimeout(()=>el.classList.remove('up','dn'),600);}saveUserToDB();}
 function addHist(icon,action,result,pos){state.history.unshift({icon,action,result,pos,ts:Date.now()});if(state.history.length>60)state.history=state.history.slice(0,60);}
-function makeGift(name){const g=GIFTS[name];if(!g)return null;return{name,icon:g.icon,val:g.val,rarity:g.rarity};}
+function makeGift(name){let g=GIFTS[name];if(!g)return null;return{name,icon:g.icon,val:g.val,rarity:g.rarity};}
 function validateInventory(){state.inventory=state.inventory.filter(g=>g&&g.name&&GIFTS[g.name]&&g.val>0&&g.rarity);}
 
-// ═══════════════════════════════════════════════════════
-// INV RENDER
-// ═══════════════════════════════════════════════════════
+// RENDER
 function renderInv(cid,withSell=false,mode=null){
-  const el=document.getElementById(cid);if(!el)return;
+  let el=document.getElementById(cid);if(!el)return;
   if(!state.inventory.length){el.innerHTML='<div class="inv-empty">📭 Нет подарков</div>';return;}
   el.innerHTML=state.inventory.map((g,i)=>`<div class="inv-card" data-gift-idx="${i}" data-mode="${mode||''}"><div class="inv-rarity r-${g.rarity}"></div><div class="inv-icon">${g.icon}</div><div class="inv-name">${g.name}</div><div class="inv-val">★ ${g.val}</div>${withSell?`<button class="sell-chip" data-idx="${i}">Продать</button>`:''}</div>`).join('');
   if(withSell){el.querySelectorAll('.sell-chip').forEach(btn=>{btn.onclick=e=>{e.stopPropagation();sellGift(+btn.dataset.idx)};});}
-  el.querySelectorAll('.inv-card').forEach(card=>{
-    card.onclick=e=>{
-      if(e.target.classList.contains('sell-chip'))return;
-      const idx=+card.dataset.giftIdx;
-      const m=card.dataset.mode;
-      if(m==='upgrade')selectForUpgrade(idx);
-      else if(m==='craft')selectForCraft(idx);
-      else if(m==='pvp_public')selectForPvp(idx,'public');
-      else if(m==='pvp_private')selectForPvp(idx,'private');
-    };
-  });
+  el.querySelectorAll('.inv-card').forEach(card=>{card.onclick=e=>{if(e.target.classList.contains('sell-chip'))return;let idx=+card.dataset.giftIdx,m=card.dataset.mode;if(m==='upgrade')selectForUpgrade(idx);else if(m==='craft')selectForCraft(idx);else if(m==='pvp_public')selectForPvp(idx);};});
 }
-function renderAllInv(){
-  renderInv('invCases',false);
-  renderInv('invUpgrade',false,'upgrade');
-  renderInv('invCraft',false,'craft');
-  renderInv('invPvp',false, pvpMode==='private'?'pvp_private':'pvp_public');
-  renderInv('invProfile',true);
-}
+function renderAllInv(){renderInv('invCases',false);renderInv('invUpgrade',false,'upgrade');renderInv('invCraft',false,'craft');renderInv('invPvp',false,'pvp_public');renderInv('invProfile',true);}
+function sellGift(i){let g=state.inventory[i];if(!g)return;let p=Math.floor(g.val*.7);state.inventory.splice(i,1);setBalance(state.balance+p);addHist(g.icon,'Продан: '+g.name,'+'+p+' ★',true);updateAllUI();toast('💰 Продано за '+p+' ★');}
+function updateProfileStats(){let total=0;state.inventory.forEach(g=>total+=g.val);document.getElementById('sTotalGifts')&&(document.getElementById('sTotalGifts').innerText=state.inventory.length);document.getElementById('sTotalStars')&&(document.getElementById('sTotalStars').innerText=total);document.getElementById('sCasesOpened')&&(document.getElementById('sCasesOpened').innerText=state.casesOpened||0);document.getElementById('sPvpWins')&&(document.getElementById('sPvpWins').innerText=state.pvpWins||0);let name=state.displayName||'ИГРОК';document.getElementById('pName')&&(document.getElementById('pName').innerText=name);let baseUrl=window.location.origin+window.location.pathname;let refEl=document.getElementById('refLinkInput');if(refEl)refEl.value=baseUrl+'?ref='+(state.refCode||'');}
+function updateAllUI(){document.getElementById('balVal').innerText=state.balance;renderAllInv();updateProfileStats();renderUpgradeUI();renderCraftSlots();renderPvpLobby();}
 
-function sellGift(i){
-  if(!RL.check('sell',5))return;
-  const g=state.inventory[i];if(!g)return;
-  const p=Math.floor(g.val*.7);
-  state.inventory.splice(i,1);setBalance(state.balance+p);
-  addHist(g.icon,'Продан: '+g.name,'+'+p+' ★',true);
-  vibrate([8]);updateAllUI();toast('💰 Продано за '+p+' ★');
-}
+// АПГРЕЙД новый
+function renderUpgradeUI(){let pickDiv=document.getElementById('upgradeStakePick');if(upgradeSelectedGift){pickDiv.innerHTML=`<span>🎁</span><span>${upgradeSelectedGift.icon} ${upgradeSelectedGift.name} (★ ${upgradeSelectedGift.val})</span><button class="slot-remove" id="clearUpgradeGift" style="margin-left:auto">✕</button>`;document.getElementById('clearUpgradeGift')?.addEventListener('click',()=>{upgradeSelectedGift=null;renderUpgradeUI();});document.getElementById('upgradeTargetSlider').style.display='block';let slider=document.getElementById('targetSlider');slider.min=upgradeSelectedGift.val+10;slider.max=Math.min(upgradeSelectedGift.val*5,5000);slider.value=Math.min(upgradeSelectedGift.val*2,slider.max);updateUpgradeChance();}else{pickDiv.innerHTML='Нажми на подарок в инвентаре';document.getElementById('upgradeTargetSlider').style.display='none';}}
+function updateUpgradeChance(){if(!upgradeSelectedGift)return;let target=parseInt(document.getElementById('targetSlider').value);let chance=Math.min(95,Math.floor((upgradeSelectedGift.val/target)*100));document.getElementById('targetValue').innerHTML=`★ ${target}`;document.getElementById('chanceShow').innerHTML=chance+'%';document.getElementById('chanceFill').style.width=chance+'%';upgradeTargetValue=target;}
+function selectForUpgrade(idx){let g=state.inventory[idx];if(!g)return;if(upgradeSelectedGift){toast('Уже выбран подарок для апгрейда');return;}upgradeSelectedGift={...g};state.inventory.splice(idx,1);renderUpgradeUI();renderAllInv();updateAllUI();}
+async function doUpgrade(){if(!upgradeSelectedGift)return;let chance=Math.min(95,Math.floor((upgradeSelectedGift.val/upgradeTargetValue)*100));let roll=Math.random()*100;let success=roll<=chance;let almostWin=!success && chance>40;showUpgradeAnimation(upgradeSelectedGift.val,upgradeTargetValue,success,almostWin,async()=>{if(success){let newGift={...upgradeSelectedGift,val:upgradeTargetValue,name:upgradeSelectedGift.name,icon:upgradeSelectedGift.icon};state.inventory.push(newGift);addHist(newGift.icon,'Апгрейд → ★'+upgradeTargetValue,'✅ Успех!',true);CF.burst(window.innerWidth/2,window.innerHeight/2,80);SFX.win();vibrate([30,60,30]);state.upgradeHistory.unshift({from:upgradeSelectedGift.val,to:upgradeTargetValue,success:true,time:Date.now()});}else{addHist('💀','Апгрейд провален','−'+upgradeSelectedGift.val+' ★',false);SFX.lose();vibrate([50]);toast('💀 Неудача! Подарок потерян');state.upgradeHistory.unshift({from:upgradeSelectedGift.val,to:upgradeTargetValue,success:false,time:Date.now()});}upgradeSelectedGift=null;updateAllUI();renderUpgradeUI();let histDiv=document.getElementById('upgradeHistoryList');if(histDiv)histDiv.innerHTML=state.upgradeHistory.slice(0,10).map(h=>`<div class="upgrade-history-item">${h.from}★ → ${h.to}★ ${h.success?'✅ Успех':'❌ Провал'}</div>`).join('');});}
+function showUpgradeAnimation(from,to,success,almostWin,callback){let overlay=document.createElement('div');overlay.className='upgrade-animation-overlay';overlay.innerHTML=`<div class="upgrade-numbers"><span>★ ${from}</span><span class="upgrade-arrow">→</span><span id="targetNum">★ ${to}</span></div><div class="upgrade-chance-meter"><div class="upgrade-chance-fill" style="width:0%"></div></div><div class="upgrade-spinner"></div><div id="upgradeResultMsg"></div>`;document.body.appendChild(overlay);let fill=overlay.querySelector('.upgrade-chance-fill');let targetSpan=overlay.getElementById('targetNum');let step=0;let intv=setInterval(()=>{step+=5;fill.style.width=Math.min(step,100)+'%';if(step>=100){clearInterval(intv);setTimeout(()=>{let resultMsg=overlay.getElementById('upgradeResultMsg');if(success){resultMsg.innerHTML=`<div style="font-size:32px;color:var(--green)">🏆 ПОБЕДА!</div><div>★ ${from} → ★ ${to}</div>`;SFX.win();}else{resultMsg.innerHTML=`<div style="font-size:32px;color:var(--red)">💀 ПРОВАЛ</div><div>★ ${from} потерян</div>`;if(almostWin){let aw=document.createElement('div');aw.className='almost-win';aw.innerHTML='🔥 ПОЧТИ ВЫИГРАЛ! 🔥';overlay.appendChild(aw);}SFX.lose();}setTimeout(()=>{overlay.remove();if(callback)callback();},2000);},500);}},30);}
 
-function updateProfileStats(){
-  let total=0;state.inventory.forEach(g=>total+=g.val);
-  const s=id=>document.getElementById(id);
-  s('sTotalGifts')&&(s('sTotalGifts').innerText=state.inventory.length);
-  s('sTotalStars')&&(s('sTotalStars').innerText=total);
-  s('sCasesOpened')&&(s('sCasesOpened').innerText=state.casesOpened||0);
-  s('sPvpWins')&&(s('sPvpWins').innerText=state.pvpWins||0);
-  const name=state.displayName||tgUser?.first_name||'ИГРОК';
-  s('pName')&&(s('pName').innerText=name);
-  const baseUrl=window.location.origin+window.location.pathname;
-  const refEl=s('refLinkInput');if(refEl)refEl.value=baseUrl+'?ref='+(state.refCode||'');
-  s('refCount')&&(s('refCount').innerText=state.refCount||0);
-  s('refEarned')&&(s('refEarned').innerText=state.refEarned||0);
-  if(tgUser?.username)s('pId')&&(s('pId').innerText='@'+tgUser.username);
-  else s('pId')&&(s('pId').innerText='ID: '+(userId||'').slice(0,12));
-  updateLuckBar();renderHistory();renderAvatar();
-}
+// КРАФТ новый
+function renderCraftSlots(){for(let i=0;i<3;i++){let el=document.querySelector(`.craft-slot[data-slot="${i}"]`);if(!el)continue;let g=craftSlots[i];if(g){el.innerHTML=`<div style="font-size:28px">${g.icon}</div><div style="font-size:9px">${g.name}</div><div style="font-size:10px">★ ${g.val}</div>`;el.style.borderStyle='solid';el.onclick=()=>{state.inventory.push(g);craftSlots[i]=null;renderCraftSlots();renderAllInv();};}else{el.innerHTML=`<div style="font-size:28px">❓</div><div style="font-size:9px">Выбрать</div>`;el.style.borderStyle='dashed';el.onclick=()=>{}}}}
+function selectForCraft(idx){let g=state.inventory[idx];if(!g)return;for(let i=0;i<3;i++){if(craftSlots[i]===null){let placed=craftSlots.filter(Boolean);if(placed.length>0&&g.rarity!==placed[0].rarity){toast('⚠️ Только подарки одной редкости!');return;}craftSlots[i]=g;state.inventory.splice(idx,1);renderCraftSlots();renderAllInv();return;}}toast('Все слоты заняты!');}
+async function doCraft(){let placed=craftSlots.filter(Boolean);if(placed.length<3){toast('Добавь 3 подарка');return;}let rarities=[...new Set(placed.map(g=>g.rarity))];if(rarities.length>1){toast('Только одна редкость!');return;}let totalVal=placed.reduce((s,g)=>s+g.val,0);let success=Math.random()*100<35;let multiplier;let almostWin=false;if(success){multiplier=1.3+Math.random()*0.7;almostWin=multiplier>1.9;}else{multiplier=0.5+Math.random()*0.4;almostWin=multiplier>0.85;}let resultVal=Math.floor(totalVal*multiplier);let possibleGifts=Object.keys(GIFTS).filter(n=>GIFTS[n].val>=resultVal*0.8&&GIFTS[n].val<=resultVal*1.2);if(possibleGifts.length===0)possibleGifts=Object.keys(GIFTS);let rareChance=Math.random()*100;let resultName;if(rareChance<3){let leg=GIFTS_BY_RARITY.legendary;if(leg.length)resultName=leg[Math.floor(Math.random()*leg.length)];else resultName=possibleGifts[0];}else{resultName=possibleGifts[Math.floor(Math.random()*possibleGifts.length)];}let resultGift=makeGift(resultName);showCraftAnimation(placed,resultGift,almostWin,()=>{craftSlots=[null,null,null];state.inventory.push(resultGift);addHist(resultGift.icon,'Крафт → '+resultGift.name,'✅ Создано!',true);CF.burst(window.innerWidth/2,window.innerHeight*.4,90);SFX.craft();renderCraftSlots();renderAllInv();updateAllUI();});}
+function showCraftAnimation(items,result,almostWin,callback){let overlay=document.createElement('div');overlay.className='craft-animation-overlay';overlay.innerHTML=`<div class="craft-items-rotate" style="display:flex;gap:16px">${items.map(i=>`<div style="font-size:48px">${i.icon}</div>`).join('')}</div><div class="craft-result-glow" id="craftResultIcon" style="font-size:64px">❓</div><div id="craftAlmostMsg"></div>`;document.body.appendChild(overlay);setTimeout(()=>{let resIcon=overlay.getElementById('craftResultIcon');resIcon.innerHTML=result.icon;resIcon.style.animation='resultGlow 0.5s ease infinite';if(almostWin){let aw=document.createElement('div');aw.innerHTML='🔥 ПОЧТИ ВЫПАЛ ДОРОГОЙ ПРЕДМЕТ! 🔥';aw.style.cssText='position:absolute;bottom:20%;font-size:12px;color:var(--gold);animation:almostFlash 0.3s ease 3';overlay.appendChild(aw);}setTimeout(()=>{overlay.remove();if(callback)callback();},2000);},1500);}
 
-function renderAvatar(){
-  const el=document.getElementById('avatarDisplay');if(!el)return;
-  if(state.avatarUrl){el.innerHTML=`<img src="${state.avatarUrl}" alt="av">`;}
-  else if(tgUser?.photo_url){el.innerHTML=`<img src="${tgUser.photo_url}" alt="tg">`;}
-  else{el.innerText='👤';}
-}
-
-function renderHistory(){
-  const el=document.getElementById('histBody');if(!el)return;
-  if(!state.history.length){el.innerHTML='<tr><td colspan="3" style="color:var(--tm);text-align:center;padding:16px;font-size:12px">Нет истории</td></tr>';return;}
-  el.innerHTML=state.history.slice(0,25).map(h=>`<tr><td style="font-size:16px">${h.icon}</td><td>${h.action}</td><td class="${h.pos?'hist-pos':'hist-neg'}">${h.result}</td></tr>`).join('');
-}
-
-function updateAllUI(){
-  document.getElementById('balVal').innerText=state.balance;
-  renderAllInv();updateProfileStats();renderUpgradeSlots();renderCraftSlots();renderPvpLobby();
-}
-
-// ═══════════════════════════════════════════════════════
-// CASES
-// ═══════════════════════════════════════════════════════
-function renderCases(){
-  const g=document.getElementById('casesGrid');if(!g)return;
-  g.innerHTML=CASES.map(c=>`<div class="case-card ${c.cls}"><div class="case-visual"><div class="case-emoji">${c.emoji}</div></div><div class="case-body"><div class="case-top"><div class="case-name">${c.name}</div><div class="case-price">★ ${c.price}</div></div><div class="case-drops">${c.gifts.slice(0,4).map(gf=>`<span class="drop-tag">${GIFTS[gf.n]?.icon||''} ${gf.n}</span>`).join('')}</div><button class="open-btn" data-id="${c.id}">ОТКРЫТЬ</button></div></div>`).join('');
-  g.querySelectorAll('.open-btn').forEach(btn=>{btn.onclick=()=>openCase(CASES.find(c=>c.id===btn.dataset.id));});
-}
-
-function rollCase(gifts){
-  const tot=gifts.reduce((s,g)=>s+g.c,0);
-  let r=Math.random()*tot,acc=0;
-  for(const g of gifts){acc+=g.c;if(r<=acc)return g.n}
-  return gifts[0].n;
-}
-
-function openCase(caseData){
-  if(!RL.check('openCase',2))return;
-  if(state.balance<caseData.price){toast('❌ Нужно '+caseData.price+' ★');return;}
-  setBalance(state.balance-caseData.price);
-  state.casesOpened=(state.casesOpened||0)+1;
-  const wonName=rollCase(caseData.gifts);
-  const names=caseData.gifts.map(g=>g.n);
-  const strip=Array.from({length:64},()=>names[Math.floor(Math.random()*names.length)]);
-  const wonPos=50;strip[wonPos]=wonName;
-  showRoulette(strip,wonPos,()=>{
-    const info=GIFTS[wonName];
-    const isRare=info.rarity!=='common';
-    if(isRare){CF.burst(window.innerWidth/2,window.innerHeight*.35,isRare?100:50);SFX.win();vibrate([20,50,20]);}
-    showResultModal(wonName,null,action=>{
-      if(action==='keep'){state.inventory.push(makeGift(wonName));addHist(info.icon,'Кейс: '+caseData.name,'+'+wonName,true);toast('📦 '+wonName+' добавлен');}
-      else{const p=Math.floor(info.val*.7);setBalance(state.balance+p);addHist(info.icon,'Продан: '+wonName,'+'+p+' ★',true);toast('💰 '+p+' ★');}
-      updateAllUI();
-    });
-  });
-}
-
+// КЕЙСЫ с новой анимацией
+function renderCases(){let g=document.getElementById('casesGrid');if(!g)return;g.innerHTML=CASES.map(c=>`<div class="case-card ${c.cls}"><div class="case-visual"><div class="case-emoji">${c.emoji}</div></div><div class="case-body"><div class="case-top"><div class="case-name">${c.name}</div><div class="case-price">★ ${c.price}</div></div><div class="case-drops">${c.gifts.slice(0,4).map(gf=>`<span class="drop-tag">${GIFTS[gf.n]?.icon||''} ${gf.n}</span>`).join('')}</div><button class="open-btn" data-id="${c.id}">ОТКРЫТЬ</button></div></div>`).join('');g.querySelectorAll('.open-btn').forEach(btn=>{btn.onclick=()=>openCase(CASES.find(c=>c.id===btn.dataset.id));});}
+function rollCase(gifts){let tot=gifts.reduce((s,g)=>s+g.c,0);let r=Math.random()*tot,acc=0;for(let g of gifts){acc+=g.c;if(r<=acc)return g.n}return gifts[0].n;}
+function openCase(caseData){if(state.balance<caseData.price){toast('❌ Нужно '+caseData.price+' ★');return;}setBalance(state.balance-caseData.price);state.casesOpened=(state.casesOpened||0)+1;let wonName=rollCase(caseData.gifts);let names=caseData.gifts.map(g=>g.n);let strip=Array.from({length:64},()=>names[Math.floor(Math.random()*names.length)]);let wonPos=50;strip[wonPos]=wonName;showRoulette(strip,wonPos,()=>{let info=GIFTS[wonName];let isRare=info.rarity!=='common';if(isRare){CF.burst(window.innerWidth/2,window.innerHeight*.35,isRare?100:50);SFX.win();vibrate([20,50,20]);}showResultModal(wonName,null,action=>{if(action==='keep'){state.inventory.push(makeGift(wonName));addHist(info.icon,'Кейс: '+caseData.name,'+'+wonName,true);toast('📦 '+wonName+' добавлен');}else{let p=Math.floor(info.val*.7);setBalance(state.balance+p);addHist(info.icon,'Продан: '+wonName,'+'+p+' ★',true);toast('💰 '+p+' ★');}updateAllUI();});});}
 function showRoulette(strip,wonPos,cb){
-  const wrap=document.createElement('div');wrap.className='roulette-wrap';
-  wrap.innerHTML=`<div class="roulette-title">ОТКРЫВАЕМ...</div><div class="roulette-box" id="rlBox"><div class="rl-center"></div><div class="rl-fade-l"></div><div class="rl-fade-r"></div><div class="roulette-track" id="rlTrack"></div></div>`;
+  let wrap=document.createElement('div');wrap.className='roulette-wrap';
+  wrap.innerHTML=`
+    <div class="roulette-title" style="display:flex; flex-direction:column; align-items:center; gap:12px;">
+      <div style="display:flex; gap:12px; align-items:center;">
+        <div style="width:8px; height:8px; border-radius:50%; background:var(--gold); animation:energyPulse 0.8s ease infinite"></div>
+        <div style="font-family:var(--font-d); font-size:24px; letter-spacing:4px; background:linear-gradient(90deg, var(--gold), #fff, var(--gold)); background-size:200%; -webkit-background-clip:text; background-clip:text; color:transparent; animation:gradientShift 1.5s ease infinite;">⚡ ЗАРЯД ⚡</div>
+        <div style="width:8px; height:8px; border-radius:50%; background:var(--gold); animation:energyPulse 0.8s ease infinite 0.4s"></div>
+      </div>
+      <div style="font-size:10px; color:var(--tm); letter-spacing:2px;">АКТИВАЦИЯ КЕЙСА</div>
+    </div>
+    <div class="roulette-box" id="rlBox"><div class="rl-center"></div><div class="rl-fade-l"></div><div class="rl-fade-r"></div><div class="roulette-track" id="rlTrack"></div></div>`;
   document.body.appendChild(wrap);
-  const track=wrap.querySelector('#rlTrack');const ITEM=108;
-  strip.forEach(name=>{const g=GIFTS[name]||{icon:'🎁'};const el=document.createElement('div');el.className='roulette-item';el.innerHTML=`<div style="font-size:32px">${g.icon}</div><div class="roulette-item-lbl">${name}</div>`;track.appendChild(el);});
-  const boxW=wrap.querySelector('#rlBox').offsetWidth||400;const center=boxW/2-ITEM/2;
-  const finalX=-(wonPos*ITEM-center+Math.round((Math.random()-.5)*30));
+  let track=wrap.querySelector('#rlTrack');let ITEM=108;
+  strip.forEach(name=>{let g=GIFTS[name]||{icon:'🎁'};let el=document.createElement('div');el.className='roulette-item';el.innerHTML=`<div style="font-size:32px">${g.icon}</div><div class="roulette-item-lbl">${name}</div>`;track.appendChild(el);});
+  let boxW=wrap.querySelector('#rlBox').offsetWidth||400;let center=boxW/2-ITEM/2;
+  let finalX=-(wonPos*ITEM-center+Math.round((Math.random()-.5)*30));
   track.style.transform='translateX(0)';
   requestAnimationFrame(()=>{track.style.transition='transform 4s cubic-bezier(0.08,0.82,0.17,1)';track.style.transform=`translateX(${finalX}px)`;});
-  let ticks=0;const ti=setInterval(()=>{SFX.roulette();ticks++;if(ticks>30)clearInterval(ti)},120);
+  let ticks=0;let ti=setInterval(()=>{SFX.roulette();ticks++;if(ticks>30)clearInterval(ti);},120);
   setTimeout(()=>{wrap.remove();vibrate([30]);if(cb)cb();},4800);
 }
+function showResultModal(name,isUpgrade,cb){let info=GIFTS[name];if(!info)return;let overlay=document.createElement('div');overlay.className='result-overlay';overlay.innerHTML=`<div class="result-box"><div class="result-icon">${info.icon}</div><div class="result-title">${name}</div><div class="result-rarity" style="color:${RARITY_COLORS[info.rarity]}">${RARITY_LABELS[info.rarity]}</div><div class="result-val">★ ${info.val} Stars</div><div class="result-btns">${isUpgrade===null?`<button class="btn btn-primary" id="rKeep">📦 Забрать</button><button class="btn btn-outline" id="rSell">💰 Продать за ${Math.floor(info.val*.7)} ★</button>`:`<button class="btn btn-primary" id="rKeep">✅ Получено!</button>`}</div></div>`;document.body.appendChild(overlay);document.getElementById('rKeep').onclick=()=>{overlay.remove();if(cb)cb('keep');};let rsBtn=document.getElementById('rSell');if(rsBtn)rsBtn.onclick=()=>{overlay.remove();if(cb)cb('sell');};}
 
-function showResultModal(name,isUpgrade,cb){
-  const info=GIFTS[name];if(!info)return;
-  const overlay=document.createElement('div');overlay.className='result-overlay';
-  overlay.innerHTML=`<div class="result-box"><div class="result-icon">${info.icon}</div><div class="result-title">${name}</div><div class="result-rarity" style="color:${RARITY_COLORS[info.rarity]}">${RARITY_LABELS[info.rarity]}</div><div class="result-val">★ ${info.val} Stars</div><div class="result-btns">${isUpgrade===null?`<button class="btn btn-primary" id="rKeep">📦 Забрать</button><button class="btn btn-outline" id="rSell">💰 Продать за ${Math.floor(info.val*.7)} ★</button>`:`<button class="btn btn-primary" id="rKeep">✅ Получено!</button>`}</div></div>`;
+// PVP с вертикальной монеткой
+function selectForPvp(idx){let g=state.inventory[idx];if(!g)return;pvpStakeIdx=idx;document.getElementById('pvpStakeText').innerHTML=g.icon+' '+g.name;document.getElementById('createBattleBtn').disabled=false;}
+async function createBattle(){if(pvpStakeIdx===null||!state.inventory[pvpStakeIdx]){toast('Выбери подарок!');return;}let g={...state.inventory[pvpStakeIdx]};state.inventory.splice(pvpStakeIdx,1);pvpStakeIdx=null;let battleId='b_'+Date.now()+'_'+Math.random().toString(36).slice(2,6);let battle={id:battleId,creator_id:userId,creator_name:state.displayName||'Игрок',creator_username:tgUser?.username||'',creator_avatar:state.avatarUrl||null,creator_gift:JSON.stringify(g),opponent_id:null,opponent_gift:null,status:'waiting',winner_id:null,is_private:false,created_at:new Date().toISOString()};battles.unshift(battle);renderPvpLobby();saveUserToDB();document.getElementById('pvpStakeText').innerHTML='Нажми на подарок в инвентаре';document.getElementById('createBattleBtn').disabled=true;await saveBattle(battle);toast('⚔️ Публичный батл создан!');addHist(g.icon,'PvP ставка','★ '+g.val,false);}
+async function joinBattle(battleId){if(!dataLoaded){toast('⏳ Загрузка...');setTimeout(()=>joinBattle(battleId),1000);return;}let battle=battles.find(b=>b.id===battleId);if(!battle){let rows=await sbFetch(`/rest/v1/battles?id=eq.${battleId}&select=*`);if(rows&&rows.length>0)battle=rows[0];}if(!battle||battle.status!=='waiting'){toast('❌ Батл недоступен');return;}if(battle.creator_id===userId){toast('❌ Нельзя войти в свой батл');return;}if(!state.inventory.length){toast('📭 Нет подарков');return;}let myGift={...state.inventory[0]};state.inventory.splice(0,1);activeCoinFlipBattleId=battleId;await updateBattle(battleId,{status:'fighting',opponent_id:userId,opponent_gift:JSON.stringify(myGift)});battles=battles.filter(b=>b.id!==battleId);saveUserToDB();renderPvpLobby();let creatorGift=safeJSON(battle.creator_gift,{});showCoinFlip(creatorGift,myGift,battle,battle.creator_id);}
+function showCoinFlip(gift1,gift2,battle,creatorId){
+  if(document.querySelector('.coin-overlay'))return;if(activeCoinAnimation)return;activeCoinAnimation=true;
+  let overlay=document.createElement('div');overlay.className='coin-overlay';
+  overlay.innerHTML=`<div class="coin-fighters"><div class="fighter-box"><div class="fighter-label">${(battle.creator_name||'Игрок 1').slice(0,12)} · ОРЁЛ</div><div class="fighter-icon-big">${gift1.icon||'❓'}</div><div style="font-size:10px;color:var(--gold)">★ ${gift1.val||0}</div></div><div class="coin-vs">VS</div><div class="fighter-box"><div class="fighter-label">${userId===creatorId?'Ты':'Игрок 2'} · РЕШКА</div><div class="fighter-icon-big">${gift2.icon||'❓'}</div><div style="font-size:10px;color:var(--gold)">★ ${gift2.val||0}</div></div></div><div class="coin-wrap"><div class="coin" id="coinEl"><div class="coin-face coin-head">🦅</div><div class="coin-face coin-tail">👾</div></div></div><div id="coinResultArea" style="text-align:center;min-height:120px"></div>`;
   document.body.appendChild(overlay);
-  document.getElementById('rKeep').onclick=()=>{overlay.remove();if(cb)cb('keep');};
-  const rsBtn=document.getElementById('rSell');
-  if(rsBtn)rsBtn.onclick=()=>{overlay.remove();if(cb)cb('sell');};
+  let val1=gift1.val||50,val2=gift2.val||50;let creatorWins=(val1*0.1+Math.random()*(val1*0.9))>=(val2*0.1+Math.random()*(val2*0.9));let iAmCreator=userId===creatorId;let iWon=iAmCreator?creatorWins:!creatorWins;
+  let coinEl=document.getElementById('coinEl');coinEl.style.animation='coinFlipVertical 2.5s cubic-bezier(0.2,0,0.8,1) forwards';
+  SFX.coin();vibrate([15]);let ticks=0;let ti=setInterval(()=>{SFX.roulette();vibrate([5]);ticks++;if(ticks>18)clearInterval(ti);},140);
+  setTimeout(()=>{let area=document.getElementById('coinResultArea');if(!area)return;
+    if(iWon){area.innerHTML=`<div class="coin-result-banner" style="color:var(--gold)">🏆 ПОБЕДА!</div><div class="coin-result-sub">Ты забираешь оба подарка!</div>`;CF.burst(window.innerWidth/2,window.innerHeight*.5,120);SFX.win();vibrate([50,100,50]);let g1=typeof gift1==='object'?gift1:{};let g2=typeof gift2==='object'?gift2:{};if(g1.name&&GIFTS[g1.name])state.inventory.push({...g1});if(g2.name&&GIFTS[g2.name])state.inventory.push({...g2});state.pvpWins=(state.pvpWins||0)+1;addHist(iAmCreator?g1.icon:g2.icon,'PvP Победа!','+'+((g1.val||0)+(g2.val||0))+' ★',true);}
+    else{area.innerHTML=`<div class="coin-result-banner" style="color:var(--red)">💀 ПОРАЖЕНИЕ</div><div class="coin-result-sub">Подарок ушёл победителю</div>`;SFX.lose();vibrate([80,30,80]);addHist(iAmCreator?gift1.icon:gift2.icon,'PvP Поражение','−'+((iAmCreator?gift1.val:gift2.val)||0)+' ★',false);}
+    updateAllUI();saveUserToDB();updateBattle(battle.id,{status:'done',winner_id:creatorWins?creatorId:(battle.opponent_id||userId)});activeCoinFlipBattleId=null;activeCoinAnimation=false;
+    let closeBtn=document.createElement('button');closeBtn.className='btn btn-outline btn-sm';closeBtn.style.marginTop='20px';closeBtn.innerText='Закрыть';closeBtn.onclick=()=>overlay.remove();area.appendChild(closeBtn);},3000);
 }
+function renderPvpLobby(){let el=document.getElementById('pvpLobby');if(!el)return;let active=battles.filter(b=>b.status==='waiting'&&(b.is_private===false||b.is_private===null));if(!active.length){el.innerHTML='<div class="no-battles">Нет публичных батлов.<br>Создай первый!</div>';return;}el.innerHTML=active.map(b=>{let cg=safeJSON(b.creator_gift,{});let isOwn=b.creator_id===userId;return `<div class="lobby-card" style="background:var(--s1);border:1px solid var(--border);border-radius:var(--r-lg);padding:14px;display:flex;align-items:center;gap:12px;margin-bottom:8px"><div class="lc-gift"><div class="lc-icon">${cg.icon||'❓'}</div><div class="lc-name">${cg.name||'?'}</div><div class="lc-val">★ ${cg.val||0}</div></div><div class="lc-mid"><div class="lc-vs">VS</div><div class="lc-status">Ожидание</div></div><div>${isOwn?`<button class="btn btn-danger btn-sm" onclick="cancelBattle('${b.id}')">Отменить</button>`:`<button class="lc-join-btn" onclick="joinBattle('${b.id}')">Войти</button>`}</div></div>`;}).join('');}
+async function cancelBattle(battleId){let b=battles.find(b=>b.id===battleId);if(!b||b.creator_id!==userId)return;let g=safeJSON(b.creator_gift,{});state.inventory.push(g);battles=battles.filter(x=>x.id!==battleId);await updateBattle(battleId,{status:'cancelled'});saveUserToDB();renderPvpLobby();toast('Батл отменён, подарок возвращён');}
+async function loadBattles(){let pub=await sbFetch(`/rest/v1/battles?status=eq.waiting&or=(is_private.eq.false,is_private.is.null)&order=created_at.desc&limit=50`);if(pub)battles=pub;renderPvpLobby();}
+async function saveBattle(b){return await sbFetch('/rest/v1/battles','POST',b,{'Prefer':'resolution=merge-duplicates,return=representation'});}
+async function updateBattle(id,data){return await sbFetch(`/rest/v1/battles?id=eq.${id}`,'PATCH',data);}
+function safeJSON(v,def){try{return typeof v==='string'?JSON.parse(v):(v??def);}catch(e){return def;}}
 
-// ═══════════════════════════════════════════════════════
-// UPGRADE
-// ═══════════════════════════════════════════════════════
-function renderUpgradeSlots(){
-  const container=document.getElementById('upgradeSlots');if(!container)return;
-  if(!upgradeSlots.length){container.innerHTML='<div style="color:var(--tm);font-size:12px;text-align:center;padding:12px">Нажми на подарок в инвентаре ниже</div>';updateUpgradeChance();return;}
-  container.innerHTML=upgradeSlots.map((g,i)=>`<div class="upgrade-slot-row"><div class="slot-icon">${g.icon}</div><div class="slot-info"><div class="slot-name">${g.name}</div><div class="slot-val">★ ${g.val} · <span style="color:${RARITY_COLORS[g.rarity]}">${RARITY_LABELS[g.rarity]}</span></div></div><button class="slot-remove" data-si="${i}">✕</button></div>`).join('');
-  container.querySelectorAll('.slot-remove').forEach(b=>{b.onclick=()=>{state.inventory.push(upgradeSlots[+b.dataset.si]);upgradeSlots.splice(+b.dataset.si,1);updateAllUI();SFX.click();};});
-  updateUpgradeChance();
-}
-function updateUpgradeChance(){
-  const cn=document.getElementById('upgradeChanceNum');const cf=document.getElementById('upgradeChanceFill');const cd=document.getElementById('upgradeChanceDesc');const btn=document.getElementById('upgradeDoBtn');const rp=document.getElementById('upgradeResultPreview');
-  if(!cn)return;
-  if(!upgradeSlots.length){cn.innerText='—';cn.className='chance-num';if(cf)cf.style.width='0%';if(cd)cd.innerText='Нажми на подарок в инвентаре';if(btn)btn.disabled=true;if(rp)rp.style.display='none';return;}
-  const rarities=[...new Set(upgradeSlots.map(g=>g.rarity))];
-  if(rarities.length>1){cn.innerText='!';cn.className='chance-num low';if(cf)cf.style.width='5%';if(cd)cd.innerText='⚠️ Разная редкость!';if(btn)btn.disabled=true;if(rp)rp.style.display='none';return;}
-  const rarity=rarities[0];const base=UPGRADE_CH[rarity];
-  const bonus=Math.min(20,(upgradeSlots.length-1)*5);
-  const finalCh=Math.round(applyLuck(base+bonus));
-  const cls=finalCh>=60?'high':finalCh>=35?'med':'low';
-  cn.innerText=finalCh>0?finalCh+'%':'0%';cn.className='chance-num '+cls;
-  if(cf)cf.style.width=finalCh+'%';
-  const nextRarity=getNextRarity(rarity);
-  if(nextRarity){
-    const possibleGifts=GIFTS_BY_RARITY[nextRarity];
-    if(possibleGifts && possibleGifts.length>0){
-      const randomTarget=possibleGifts[Math.floor(Math.random()*possibleGifts.length)];
-      const t=GIFTS[randomTarget];
-      if(cd)cd.innerText=`При успехе: случайный ${RARITY_LABELS[nextRarity]} подарок (★ ~${t.val})`;
-      if(rp){rp.style.display='block';document.getElementById('urpIcon').innerText=t.icon;document.getElementById('urpName').innerText=randomTarget;}
-      if(btn)btn.disabled=false;
-    }else{cd.innerText='Максимальный уровень';if(rp)rp.style.display='none';if(btn)btn.disabled=true;}
-  }else{cd.innerText='Максимальный уровень (Легендарный)';if(rp)rp.style.display='none';if(btn)btn.disabled=true;}
-}
-function selectForUpgrade(idx){
-  const g=state.inventory[idx];if(!g)return;
-  if(upgradeSlots.length>0&&g.rarity!==upgradeSlots[0].rarity){toast('⚠️ Только подарки одной редкости!');return;}
-  upgradeSlots.push({...g});state.inventory.splice(idx,1);updateAllUI();SFX.click();
-}
-function doUpgrade(){
-  if(!RL.check('upgrade',2))return;
-  if(!upgradeSlots.length)return;
-  const rarities=[...new Set(upgradeSlots.map(g=>g.rarity))];
-  if(rarities.length>1){toast('⚠️ Разная редкость!');return;}
-  const rarity=rarities[0];const base=UPGRADE_CH[rarity];
-  const bonus=Math.min(20,(upgradeSlots.length-1)*5);
-  const chance=Math.round(applyLuck(base+bonus));
-  const nextRarity=getNextRarity(rarity);
-  if(!nextRarity||chance===0){toast('Нельзя улучшить (максимальный уровень)');return;}
-  const snap=[...upgradeSlots];upgradeSlots=[];
-  const success=Math.random()*100<chance;
-  if(success){
-    const targetGift=getRandomGiftByRarity(nextRarity);
-    if(targetGift){
-      state.inventory.push(targetGift);
-      addHist(targetGift.icon,'Апгрейд → '+targetGift.name,'✅ Успех!',true);
-      state.luck=Math.max(0,state.luck-10);
-      showResultModal(targetGift.name,true,()=>{});
-      CF.burst(window.innerWidth/2,window.innerHeight/2,80);
-      SFX.win();
-      vibrate([30,60,30]);
-    }
-  }else{
-    incrementLuck(snap.length*3);
-    addHist('💀','Апгрейд провален','−'+snap.reduce((s,g)=>s+g.val,0)+' ★',false);
-    SFX.lose();
-    vibrate([50]);
-    toast('💀 Неудача! '+snap.length+' подарок(ов) потеряно');
-  }
-  updateAllUI();
-}
+// АВТОРИЗАЦИЯ
+function showAuthModal(){let modal=document.createElement('div');modal.className='auth-modal';modal.innerHTML=`<div class="auth-box"><div class="auth-tabs"><div class="auth-tab active" data-auth="telegram">📱 Telegram</div><div class="auth-tab" data-auth="phone">📞 Телефон</div></div><div id="authContent"><div style="text-align:center;padding:20px"><div style="font-size:48px">📱</div><div style="margin:16px 0">Войдите через Telegram Mini App</div><button id="telegramAuthBtn" class="auth-btn">Войти через Telegram</button></div></div><div class="auth-close">✕</div></div>`;document.body.appendChild(modal);modal.querySelectorAll('.auth-tab').forEach(t=>{t.onclick=()=>{modal.querySelectorAll('.auth-tab').forEach(tt=>tt.classList.remove('active'));t.classList.add('active');let cont=modal.getElementById('authContent');if(t.dataset.auth==='telegram'){cont.innerHTML=`<div style="text-align:center;padding:20px"><div style="font-size:48px">📱</div><div style="margin:16px 0">Войдите через Telegram Mini App</div><button id="telegramAuthBtn" class="auth-btn">Войти через Telegram</button></div>`;modal.getElementById('telegramAuthBtn').onclick=()=>{toast('Откройте приложение через Telegram Mini App');modal.remove();};}else{cont.innerHTML=`<div style="text-align:center;padding:20px"><div style="font-size:48px">📞</div><div style="margin:16px 0">Демо-вход по номеру телефона</div><input type="tel" id="phoneInput" class="auth-input" placeholder="+7 999 123-45-67"><button id="phoneAuthBtn" class="auth-btn">Получить код</button><div id="codeSection" style="display:none;margin-top:12px"><input type="text" id="codeInput" class="auth-input" placeholder="Код из SMS (123456)"><button id="verifyCodeBtn" class="auth-btn">Подтвердить</button></div></div>`;let phoneBtn=modal.getElementById('phoneAuthBtn');phoneBtn.onclick=()=>{let phone=modal.getElementById('phoneInput').value;if(phone){let codeSec=modal.getElementById('codeSection');codeSec.style.display='block';toast('Код отправлен: 123456');}};let verifyBtn=modal.getElementById('verifyCodeBtn');if(verifyBtn)verifyBtn.onclick=()=>{let code=modal.getElementById('codeInput').value;if(code==='123456'){userId='phone_'+Date.now();localStorage.setItem('gc_user_id',userId);state.displayName='Игрок';updateAllUI();toast('✅ Вход выполнен!');modal.remove();}else{toast('❌ Неверный код');}};}});});modal.querySelector('.auth-close').onclick=()=>modal.remove();let tgBtn=modal.getElementById('telegramAuthBtn');if(tgBtn)tgBtn.onclick=()=>{toast('Откройте приложение через Telegram Mini App');modal.remove();};}
 
-// ═══════════════════════════════════════════════════════
-// CRAFT
-// ═══════════════════════════════════════════════════════
-function renderCraftSlots(){
-  for(let i=0;i<3;i++){
-    const el=document.querySelector(`.craft-slot[data-slot="${i}"]`);if(!el)continue;
-    const g=craftSlots[i];
-    if(g){el.classList.add('filled');el.innerHTML=`<div class="craft-slot-icon">${g.icon}</div><div class="craft-slot-name">${g.name}</div><div class="craft-slot-val">★ ${g.val}</div>`;el.onclick=()=>{state.inventory.push(g);craftSlots[i]=null;updateCraftResult();renderAllInv();saveUserToDB();renderCraftSlots();};}
-    else{el.classList.remove('filled');el.innerHTML=`<div class="craft-slot-icon">❓</div><div class="craft-slot-name">Выбрать</div>`;el.onclick=()=>{};}
-  }
-  updateCraftResult();
-}
-function selectForCraft(idx){
-  const g=state.inventory[idx];if(!g)return;
-  for(let i=0;i<3;i++){
-    if(craftSlots[i]===null){
-      const placed=craftSlots.filter(Boolean);
-      if(placed.length>0&&g.rarity!==placed[0].rarity){toast('⚠️ Только подарки одной редкости!');return;}
-      craftSlots[i]=g;state.inventory.splice(idx,1);renderCraftSlots();renderAllInv();saveUserToDB();return;
-    }
-  }
-  toast('Все слоты заняты!');
-}
-function updateCraftResult(){
-  const placed=craftSlots.filter(Boolean);
-  const crIcon=document.getElementById('crIcon');const crName=document.getElementById('crName');const cb=document.getElementById('craftBtn');if(!crIcon)return;
-  if(placed.length<3){crIcon.innerText='❓';crName.innerText='Добавьте 3 подарка';if(cb)cb.disabled=true;return;}
-  const rarities=[...new Set(placed.map(g=>g.rarity))];
-  if(rarities.length>1){crIcon.innerText='⚠️';crName.innerText='Разная редкость!';if(cb)cb.disabled=true;return;}
-  const rarity=rarities[0];
-  const nextRarity=getNextRarity(rarity);
-  if(!nextRarity){crIcon.innerText='👑';crName.innerText='Макс уровень, нельзя крафтить';if(cb)cb.disabled=true;return;}
-  const possibleGifts=GIFTS_BY_RARITY[nextRarity];
-  if(possibleGifts && possibleGifts.length>0){
-    const randomTarget=possibleGifts[Math.floor(Math.random()*possibleGifts.length)];
-    const ri=GIFTS[randomTarget];
-    crIcon.innerText=ri.icon;
-    crName.innerText=randomTarget+' (★ '+ri.val+')';
-    if(cb)cb.disabled=false;
-  }else{crIcon.innerText='❓';crName.innerText='Недоступно';if(cb)cb.disabled=true;}
-}
-function doCraft(){
-  if(!RL.check('craft',2))return;
-  const placed=craftSlots.filter(Boolean);if(placed.length<3){toast('Добавь 3 подарка');return;}
-  const rarities=[...new Set(placed.map(g=>g.rarity))];if(rarities.length>1){toast('Только одна редкость!');return;}
-  const rarity=rarities[0];
-  const nextRarity=getNextRarity(rarity);
-  if(!nextRarity){toast('Нельзя крафтить (макс уровень)');return;}
-  const targetGift=getRandomGiftByRarity(nextRarity);
-  if(!targetGift){toast('Нельзя крафтить');return;}
-  craftSlots=[null,null,null];
-  state.inventory.push(targetGift);
-  addHist(targetGift.icon,'Крафт → '+targetGift.name,'✅ Создано!',true);
-  CF.burst(window.innerWidth/2,window.innerHeight*.4,90);SFX.craft();vibrate([20,40,20]);
-  showResultModal(targetGift.name,true,()=>{});
-  renderCraftSlots();renderAllInv();updateProfileStats();saveUserToDB();
-}
+// TELEGRAM
+function initTelegram(){let tg=window.Telegram?.WebApp;if(tg){tg.expand();tg.ready();let u=tg.initDataUnsafe?.user;if(u){tgUser={...u};userId='tg_'+u.id;localStorage.setItem('gc_user_id',userId);if(!state.displayName)state.displayName=u.first_name||'ИГРОК';let pn=document.getElementById('pName');if(pn)pn.innerText=state.displayName.toUpperCase();return true;}}let saved=localStorage.getItem('gc_user_id');if(saved){userId=saved;return true;}let stored=localStorage.getItem('gc_uid2');if(!stored){stored='temp_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);localStorage.setItem('gc_uid2',stored);}userId=stored;return false;}
+async function sbFetch(path,method='GET',body=null,extraHeaders={}){try{let res=await fetch(SUPABASE_URL+path,{method,headers:{'apikey':SUPABASE_ANON,'Authorization':'Bearer '+SUPABASE_ANON,'Content-Type':'application/json','Prefer':'return=representation',...extraHeaders},body:body?JSON.stringify(body):null});if(!res.ok)return null;let txt=await res.text();return txt?JSON.parse(txt):null;}catch(e){return null;}}
+async function loadUserFromDB(){if(!userId)return;let rows=await sbFetch(`/rest/v1/gc_users?id=eq.${encodeURIComponent(userId)}&select=*`);if(rows&&rows.length>0){let r=rows[0];state.balance=r.balance??250;state.inventory=safeJSON(r.inventory,[]);state.casesOpened=r.cases_opened??0;state.pvpWins=r.pvp_wins??0;state.luck=r.luck??0;state.history=safeJSON(r.history,[]);state.refCode=r.ref_code||userId.slice(0,8).toUpperCase();state.avatarUrl=r.avatar_url||null;state.displayName=r.display_name||'ИГРОК';state.upgradeHistory=safeJSON(r.upgrade_history,[]);dataLoaded=true;updateAllUI();return true;}dataLoaded=true;await saveUserToDB(true);return false;}
+async function saveUserToDB(immediate=false){if(!userId)return;clearTimeout(debounceSave);let doSave=async()=>{let payload={id:userId,username:tgUser?.username||'Игрок',display_name:state.displayName||'ИГРОК',avatar_url:state.avatarUrl||null,balance:state.balance,inventory:JSON.stringify(state.inventory),cases_opened:state.casesOpened,pvp_wins:state.pvpWins,luck:state.luck,history:JSON.stringify(state.history.slice(0,50)),ref_code:state.refCode||userId.slice(0,8),upgrade_history:JSON.stringify(state.upgradeHistory.slice(0,30)),updated_at:new Date().toISOString()};await sbFetch('/rest/v1/gc_users','POST',payload,{'Prefer':'resolution=merge-duplicates,return=representation'});let dot=document.getElementById('syncDot');if(dot){dot.className='sync-indicator ok';setTimeout(()=>dot.className='sync-indicator',1200);}};if(immediate)await doSave();else debounceSave=setTimeout(doSave,800);}
+function copyToClipboard(text){try{navigator.clipboard.writeText(text);toast('🔗 Скопировано!');}catch(e){let ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();toast('🔗 Скопировано!');}}
 
-// ═══════════════════════════════════════════════════════
-// PVP
-// ═══════════════════════════════════════════════════════
-function selectForPvp(idx,mode){
-  const g=state.inventory[idx];if(!g)return;
-  if(mode==='private'){
-    pvpPrivateStakeIdx=idx;
-    document.getElementById('pvpPrivateStakeText').innerHTML=g.icon+' '+g.name;
-    document.getElementById('pvpPrivateStakeVal').innerText='★ '+g.val;
-    document.getElementById('createPrivateBattleBtn').disabled=false;
-  }else{
-    pvpStakeIdx=idx;
-    document.getElementById('pvpStakeText').innerHTML=g.icon+' '+g.name;
-    document.getElementById('pvpStakeVal').innerText='★ '+g.val;
-    document.getElementById('createBattleBtn').disabled=false;
-  }
-}
+// SFX
+const SFX={_ctx:null,_get(){if(!this._ctx)this._ctx=new(window.AudioContext||window.webkitAudioContext)();return this._ctx},_tone(f,d,v,type='sine'){try{let c=this._get();let o=c.createOscillator();let g=c.createGain();o.connect(g);g.connect(c.destination);o.type=type;o.frequency.value=f;g.gain.setValueAtTime(v,c.currentTime);g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+d);o.start();o.stop(c.currentTime+d);}catch(e){}},click(){this._tone(440,.08,.1)},win(){[523,659,784].forEach((f,i)=>setTimeout(()=>this._tone(f,.2,.12),i*100))},lose(){[300,250].forEach((f,i)=>setTimeout(()=>this._tone(f,.25,.1,'sawtooth'),i*150))},roulette(){this._tone(800,.05,.08)},coin(){this._tone(600,.1,.1,'triangle')},craft(){[523,659,784,1047].forEach((f,i)=>setTimeout(()=>this._tone(f,.15,.1),i*80))}};
+function vibrate(p){try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}}
+const CF=(()=>{let cv=document.getElementById('cfv');let cx=cv.getContext('2d');let ps=[];let af=null;function resize(){cv.width=window.innerWidth;cv.height=window.innerHeight}window.addEventListener('resize',resize);resize();function burst(x,y,n=80){let cols=['hsl(45,30%,70%)','hsl(0,0%,80%)','hsl(0,0%,60%)','hsl(40,20%,65%)'];for(let i=0;i<n;i++){let a=(Math.PI*2/n)*i+Math.random()*.5;let s=Math.random()*7+3;ps.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-5,life:1,decay:Math.random()*.012+.008,sz:Math.random()*5+2,color:cols[Math.floor(Math.random()*cols.length)],rot:Math.random()*Math.PI*2,rs:(Math.random()-.5)*.2});}if(!af)loop();}function loop(){cx.clearRect(0,0,cv.width,cv.height);ps=ps.filter(p=>p.life>0);ps.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.25;p.vx*=.99;p.life-=p.decay;p.rot+=p.rs;cx.save();cx.globalAlpha=p.life;cx.translate(p.x,p.y);cx.rotate(p.rot);cx.fillStyle=p.color;cx.fillRect(-p.sz/2,-p.sz/2,p.sz,p.sz);cx.restore();});af=ps.length>0?requestAnimationFrame(loop):null;}return{burst};})();
 
-function renderPvpLobby(){
-  if(pvpMode==='public'){renderPublicLobby();}
-  else{renderPrivateLobby();}
-}
-
-function getCreatorAvatarHtml(b){
-  const avatarUrl=b.creator_avatar||null;
-  const name=(b.creator_name||b.creator_username||'?').slice(0,6).toUpperCase();
-  const avatarHtml=avatarUrl?`<img src="${avatarUrl}" alt="av">`:`<span style="font-size:14px">${name.charAt(0)}</span>`;
-  return `<div class="lc-creator"><div class="lc-creator-avatar">${avatarHtml}</div><div class="lc-creator-name">${name}</div></div>`;
-}
-
-function renderPublicLobby(){
-  const el=document.getElementById('pvpLobby');if(!el)return;
-  const active=battles.filter(b=>b.status==='waiting' && (b.is_private===false || b.is_private===null) && Date.now()-new Date(b.created_at).getTime()<180000);
-  if(!active.length){el.innerHTML='<div class="no-battles">Нет публичных батлов.<br>Создай первый!</div>';return;}
-  el.innerHTML=active.map(b=>{
-    const cg=safeJSON(b.creator_gift,{});
-    const isOwn=b.creator_id===userId;
-    return `<div class="lobby-card">${getCreatorAvatarHtml(b)}<div class="lc-gift"><div class="lc-icon">${cg.icon||'❓'}</div><div class="lc-name">${cg.name||'?'}</div><div class="lc-val">★ ${cg.val||0}</div></div><div class="lc-mid"><div class="lc-vs">VS</div><div class="lc-status">Ожидание</div></div><div>${isOwn?`<button class="btn btn-danger btn-sm" onclick="cancelBattle('${b.id}')">Отменить</button>`:`<button class="lc-join-btn" onclick="joinBattle('${b.id}')">Войти</button>`}</div></div>`;
-  }).join('');
-}
-
-function renderPrivateLobby(){
-  const el=document.getElementById('pvpPrivateLobby');if(!el)return;
-  const myPrivate=privateBattles.filter(b=>b.creator_id===userId&&b.status==='waiting'&&Date.now()-new Date(b.created_at).getTime()<300000);
-  if(!myPrivate.length){el.innerHTML='<div class="no-battles">У тебя нет активных приватных батлов.<br>Создай и отправь ссылку другу!</div>';return;}
-  el.innerHTML=myPrivate.map(b=>{
-    const cg=safeJSON(b.creator_gift,{});
-    const link=window.location.origin+window.location.pathname+'?join='+b.id;
-    return `<div class="lobby-card"><div class="lc-gift"><div class="lc-icon">${cg.icon||'❓'}</div><div class="lc-name">${cg.name||'?'}</div><div class="lc-val">★ ${cg.val||0}</div></div><div class="lc-mid"><div class="lc-vs">VS</div><div class="lc-status">Ожидание</div><div class="lc-private">🔒 Приватный</div></div><div style="display:flex;flex-direction:column;gap:6px;"><button class="lc-join-btn" onclick="copyToClipboard('${link}');toast('🔗 Ссылка скопирована!')">🔗 Скопировать</button><button class="btn btn-danger btn-sm" onclick="cancelBattle('${b.id}')">Отменить</button></div></div>`;
-  }).join('');
-}
-
-async function createBattle(){
-  if(!RL.check('createBattle',1))return;
-  if(pvpStakeIdx===null||!state.inventory[pvpStakeIdx]){toast('Выбери подарок!');return;}
-  const g={...state.inventory[pvpStakeIdx]};
-  state.inventory.splice(pvpStakeIdx,1);pvpStakeIdx=null;
-  const battleId='b_'+Date.now()+'_'+Math.random().toString(36).slice(2,6);
-  const battle={id:battleId,creator_id:userId,creator_name:state.displayName||tgUser?.first_name||'Игрок',creator_username:tgUser?.username||'',creator_avatar:state.avatarUrl||tgUser?.photo_url||null,creator_gift:JSON.stringify(g),opponent_id:null,opponent_gift:null,status:'waiting',winner_id:null,is_private:false,created_at:new Date().toISOString()};
-  battles.unshift(battle);renderPvpLobby();saveUserToDB();
-  document.getElementById('pvpStakeText').innerHTML='Нажми на подарок в инвентаре';
-  document.getElementById('pvpStakeVal').innerText='';
-  document.getElementById('createBattleBtn').disabled=true;
-  await saveBattle(battle);
-  toast('⚔️ Публичный батл создан!');
-  addHist(g.icon,'PvP ставка','★ '+g.val,false);
-}
-
-async function createPrivateBattle(){
-  if(!RL.check('createBattle',1))return;
-  if(pvpPrivateStakeIdx===null||!state.inventory[pvpPrivateStakeIdx]){toast('Выбери подарок!');return;}
-  const g={...state.inventory[pvpPrivateStakeIdx]};
-  state.inventory.splice(pvpPrivateStakeIdx,1);pvpPrivateStakeIdx=null;
-  const battleId='pb_'+Date.now()+'_'+Math.random().toString(36).slice(2,6);
-  const battle={id:battleId,creator_id:userId,creator_name:state.displayName||tgUser?.first_name||'Игрок',creator_username:tgUser?.username||'',creator_avatar:state.avatarUrl||tgUser?.photo_url||null,creator_gift:JSON.stringify(g),opponent_id:null,opponent_gift:null,status:'waiting',winner_id:null,is_private:true,created_at:new Date().toISOString()};
-  privateBattles.unshift(battle);renderPvpLobby();saveUserToDB();
-  document.getElementById('pvpPrivateStakeText').innerHTML='Нажми на подарок в инвентаре';
-  document.getElementById('pvpPrivateStakeVal').innerText='';
-  document.getElementById('createPrivateBattleBtn').disabled=true;
-  await saveBattle(battle);
-  const link=window.location.origin+window.location.pathname+'?join='+battleId;
-  document.getElementById('privateLinkRow').style.display='block';
-  document.getElementById('privateBattleLink').value=link;
-  toast('🔒 Приватный батл создан!');
-  addHist(g.icon,'Приватный батл','★ '+g.val,false);
-}
-
-// ИСПРАВЛЕННАЯ joinBattle - ждёт загрузки данных
-async function joinBattle(battleId){
-  if(!RL.check('joinBattle',2))return;
-  
-  if(!dataLoaded || !state.inventory || state.inventory.length === undefined){
-    toast('⏳ Загрузка данных... Подождите');
-    setTimeout(() => joinBattle(battleId), 1000);
-    return;
-  }
-  
-  let battle=battles.find(b=>b.id===battleId)||privateBattles.find(b=>b.id===battleId);
-  if(!battle){const rows=await sbFetch(`/rest/v1/battles?id=eq.${battleId}&select=*`);if(rows&&rows.length>0)battle=rows[0];}
-  if(!battle||battle.status!=='waiting'){toast('❌ Батл недоступен или уже занят');return;}
-  if(battle.creator_id===userId){toast('❌ Нельзя войти в свой батл');return;}
-  
-  if(!state.inventory || state.inventory.length === 0){
-    toast('📭 Нет подарков для ставки! Откройте кейсы');
-    return;
-  }
-  
-  const myGift={...state.inventory[0]};
-  state.inventory.splice(0,1);
-  activeCoinFlipBattleId=battleId;
-  
-  await updateBattle(battleId,{
-    status:'fighting',
-    opponent_id:userId,
-    opponent_gift:JSON.stringify(myGift)
-  });
-  
-  battles=battles.filter(b=>b.id!==battleId);
-  privateBattles=privateBattles.filter(b=>b.id!==battleId);
-  saveUserToDB();
-  renderPvpLobby();
-  
-  const creatorGift=safeJSON(battle.creator_gift,{});
-  
-  setTimeout(() => {
-    if(!activeCoinAnimation && activeCoinFlipBattleId === battleId){
-      showCoinFlip(creatorGift, myGift, battle, battle.creator_id);
-    }
-  }, 1500);
-}
-
-async function cancelBattle(battleId){
-  const b=battles.find(b=>b.id===battleId)||privateBattles.find(b=>b.id===battleId);
-  if(!b||b.creator_id!==userId)return;
-  const g=safeJSON(b.creator_gift,{});
-  state.inventory.push(g);
-  battles=battles.filter(x=>x.id!==battleId);
-  privateBattles=privateBattles.filter(x=>x.id!==battleId);
-  await updateBattle(battleId,{status:'cancelled'});
-  saveUserToDB();renderPvpLobby();
-  toast('Батл отменён, подарок возвращён');
-}
-
-function determineWinner(battleId, gift1, gift2){
-  let seed = 0;
-  for(let i = 0; i < battleId.length; i++){
-    seed = (seed * 31 + battleId.charCodeAt(i)) % 1000000;
-  }
-  function seededRandom(){
-    seed = (seed * 9301 + 49297) % 233280;
-    return seed / 233280;
-  }
-  const val1 = gift1.val || 50;
-  const val2 = gift2.val || 50;
-  const power1 = val1 * 0.1 + seededRandom() * (val1 * 0.9);
-  const power2 = val2 * 0.1 + seededRandom() * (val2 * 0.9);
-  return power1 >= power2 ? 'creator' : 'opponent';
-}
-
-function showCoinFlip(gift1, gift2, battle, creatorId){
-  if(document.querySelector('.coin-overlay')) return;
-  if(activeCoinAnimation) return;
-  activeCoinAnimation = true;
-  
-  const overlay=document.createElement('div'); 
-  overlay.className='coin-overlay';
-  overlay.innerHTML=`
-    <div style="position:absolute; top:20px; left:50%; transform:translateX(-50%); text-align:center; z-index:10;">
-      <div style="font-family:var(--font-d); font-size:24px; color:var(--gold); letter-spacing:2px;">⚔️ БИТВА ⚔️</div>
-      <div style="font-size:11px; color:var(--tm); margin-top:4px">Определение победителя...</div>
-    </div>
-    <div class="coin-fighters">
-      <div class="fighter-box">
-        <div class="fighter-label">${(battle.creator_name || 'Игрок 1').slice(0,12)} · ОРЁЛ</div>
-        <div class="fighter-icon-big">${gift1.icon||'❓'}</div>
-        <div style="font-size:10px;color:var(--gold);margin-top:4px">★ ${gift1.val||0}</div>
-        <div style="font-size:9px;color:var(--tm)">${gift1.name||''}</div>
-      </div>
-      <div class="coin-vs">VS</div>
-      <div class="fighter-box">
-        <div class="fighter-label">${userId===creatorId ? 'Ты' : 'Игрок 2'} · РЕШКА</div>
-        <div class="fighter-icon-big">${gift2.icon||'❓'}</div>
-        <div style="font-size:10px;color:var(--gold);margin-top:4px">★ ${gift2.val||0}</div>
-        <div style="font-size:9px;color:var(--tm)">${gift2.name||''}</div>
-      </div>
-    </div>
-    <div class="coin-wrap">
-      <div class="coin" id="coinEl">
-        <div class="coin-face coin-head">🦅</div>
-        <div class="coin-face coin-tail">👾</div>
-      </div>
-    </div>
-    <div id="coinResultArea" style="text-align:center; min-height:120px;"></div>
-  `;
-  document.body.appendChild(overlay);
-  
-  const winner = determineWinner(battle.id, gift1, gift2);
-  const creatorWins = winner === 'creator';
-  const iAmCreator = userId === creatorId;
-  const iWon = iAmCreator ? creatorWins : !creatorWins;
-  
-  const coinEl = document.getElementById('coinEl');
-  const finalRot = 1800 + (creatorWins ? 0 : 180);
-  coinEl.style.setProperty('--final-rot', finalRot + 'deg');
-  
-  SFX.coin();
-  vibrate([15]);
-  
-  let ticks = 0;
-  const ti = setInterval(() => {
-    SFX.roulette();
-    vibrate([5]);
-    ticks++;
-    if(ticks > 18) clearInterval(ti);
-  }, 140);
-  
-  setTimeout(() => {
-    const area = document.getElementById('coinResultArea');
-    if(!area) return;
-    
-    if(iWon){
-      area.innerHTML = `
-        <div class="coin-result-banner" style="color:var(--gold); animation:popIn .5s var(--spring)">🏆 ПОБЕДА!</div>
-        <div class="coin-result-sub" style="margin-top:8px">Ты забираешь оба подарка!</div>
-        <div style="display:flex; justify-content:center; gap:16px; margin-top:16px;">
-          <div style="text-align:center"><div style="font-size:32px">${gift1.icon||'🎁'}</div><div style="font-size:10px;color:var(--ts)">+${gift1.val||0} ★</div></div>
-          <div style="text-align:center"><div style="font-size:32px">${gift2.icon||'🎁'}</div><div style="font-size:10px;color:var(--ts)">+${gift2.val||0} ★</div></div>
-        </div>
-      `;
-      CF.burst(window.innerWidth/2, window.innerHeight*.5, 120);
-      SFX.win();
-      vibrate([50,100,50]);
-      
-      const g1 = typeof gift1 === 'object' ? gift1 : {};
-      const g2 = typeof gift2 === 'object' ? gift2 : {};
-      if(g1.name && GIFTS[g1.name]) state.inventory.push({...g1});
-      if(g2.name && GIFTS[g2.name]) state.inventory.push({...g2});
-      state.pvpWins = (state.pvpWins || 0) + 1;
-      addHist(iAmCreator ? g1.icon : g2.icon, 'PvP Победа!', '+' + ((g1.val||0)+(g2.val||0)) + ' ★', true);
-    } else {
-      area.innerHTML = `
-        <div class="coin-result-banner" style="color:var(--red); animation:popIn .5s var(--spring)">💀 ПОРАЖЕНИЕ</div>
-        <div class="coin-result-sub" style="margin-top:8px">Подарок ушёл победителю</div>
-        <div style="margin-top:16px; opacity:0.5"><div style="font-size:32px">${iAmCreator ? (gift1.icon||'🎁') : (gift2.icon||'🎁')}</div><div style="font-size:10px;color:var(--ts)">−${(iAmCreator ? (gift1.val||0) : (gift2.val||0))} ★</div></div>
-      `;
-      SFX.lose();
-      vibrate([80,30,80]);
-      incrementLuck(5);
-      addHist(iAmCreator ? gift1.icon : gift2.icon, 'PvP Поражение', '−' + ((iAmCreator ? gift1.val : gift2.val)||0) + ' ★', false);
-    }
-    
-    updateAllUI();
-    saveUserToDB();
-    
-    updateBattle(battle.id, {
-      status: 'done',
-      winner_id: creatorWins ? creatorId : (battle.opponent_id || userId)
-    }).catch(console.warn);
-    
-    activeCoinFlipBattleId = null;
-    activeCoinAnimation = false;
-    
-    const closeBtn = document.createElement('button');
-    closeBtn.className = 'btn btn-outline btn-sm';
-    closeBtn.style.marginTop = '20px';
-    closeBtn.innerText = 'Закрыть';
-    closeBtn.onclick = () => overlay.remove();
-    area.appendChild(closeBtn);
-  }, 3000);
-}
-
-function copyToClipboard(text){try{navigator.clipboard.writeText(text);}catch(e){const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();}}
-
-// ═══════════════════════════════════════════════════════
-// PVP TABS
-// ═══════════════════════════════════════════════════════
-document.querySelectorAll('.pvp-tab').forEach(btn=>{
-  btn.onclick=()=>{
-    document.querySelectorAll('.pvp-tab').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    pvpMode=btn.dataset.pvptab;
-    const isPublic=pvpMode==='public';
-    document.getElementById('publicCreateBox').style.display=isPublic?'':'none';
-    document.getElementById('privateCreateBox').style.display=isPublic?'none':'';
-    document.getElementById('publicLobbyWrap').style.display=isPublic?'':'none';
-    document.getElementById('privateLobbyWrap').style.display=isPublic?'none':'';
-    renderInv('invPvp',false,isPublic?'pvp_public':'pvp_private');
-    renderPvpLobby();
-    SFX.click();
-  };
-});
-
-// ═══════════════════════════════════════════════════════
-// REFERRAL (ИСПРАВЛЕННАЯ)
-function checkReferral(){
-  const params=new URLSearchParams(window.location.search);
-  const ref=params.get('ref');
-  if(ref&&ref!==state.refCode&&!localStorage.getItem('gc_ref_used')){
-    localStorage.setItem('gc_ref_used','1');
-    state.balance+=50;toast('🎁 Реферальный бонус: +50 ★');
-  }
-  const joinId=params.get('join');
-  if(joinId){
-    showLoading();
-    const waitForUser = setInterval(() => {
-      if(dataLoaded && userId){
-        clearInterval(waitForUser);
-        hideLoading();
-        setTimeout(async()=>{
-          const rows=await sbFetch(`/rest/v1/battles?id=eq.${joinId}&select=*`);
-          if(rows&&rows.length>0&&rows[0].status==='waiting'){
-            joinBattle(joinId);
-          }else{
-            toast('❌ Батл не найден или уже занят');
-          }
-        }, 500);
-      }
-    }, 200);
-    setTimeout(() => {
-      clearInterval(waitForUser);
-      hideLoading();
-    }, 10000);
-  }
-}
-
-// ═══════════════════════════════════════════════════════
-// AVATAR & NAME
-// ═══════════════════════════════════════════════════════
-document.getElementById('avatarInput').onchange=function(e){
-  const file=e.target.files[0];if(!file)return;
-  if(file.size>2*1024*1024){toast('Файл слишком большой (макс 2MB)');return;}
-  const reader=new FileReader();
-  reader.onload=ev=>{state.avatarUrl=ev.target.result;renderAvatar();saveUserToDB();toast('✅ Аватар обновлён');};
-  reader.readAsDataURL(file);
-};
-document.getElementById('editNameBtn').onclick=()=>{
-  const newName=prompt('Введите новое имя:',state.displayName||'ИГРОК');
-  if(newName&&newName.trim()){state.displayName=newName.trim().slice(0,20).toUpperCase();document.getElementById('pName').innerText=state.displayName;saveUserToDB();toast('✅ Имя обновлено');}
-};
-
-// ═══════════════════════════════════════════════════════
-// TABS
-// ═══════════════════════════════════════════════════════
-document.querySelectorAll('.tab').forEach(btn=>{
-  btn.onclick=()=>{
-    if(!RL.check('tab',10))return;
-    document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-    const tab=btn.dataset.tab;
-    document.getElementById(tab+'Panel').classList.add('active');
-    document.getElementById('mainContent').scrollTop=0;
-    if(tab==='pvp')loadBattles();
-    if(tab==='profile')updateProfileStats();
-    SFX.click();vibrate([5]);
-  };
-});
-
-// ═══════════════════════════════════════════════════════
-// BUTTONS
-// ═══════════════════════════════════════════════════════
-document.getElementById('addBtn').onclick=()=>{if(!RL.check('add',3))return;setBalance(state.balance+100);addHist('⭐️','Пополнение','+100 ★',true);toast('★ +100 Stars');saveUserToDB();};
-document.getElementById('balancePill').onclick=()=>{if(!RL.check('add',3))return;setBalance(state.balance+100);addHist('⭐️','Пополнение','+100 ★',true);toast('★ +100 Stars');saveUserToDB();};
-document.getElementById('upgradeDoBtn').onclick=doUpgrade;
-document.getElementById('craftBtn').onclick=doCraft;
-document.getElementById('createBattleBtn').onclick=createBattle;
-document.getElementById('createPrivateBattleBtn').onclick=createPrivateBattle;
-document.getElementById('depositBtn').onclick=()=>{setBalance(state.balance+500);addHist('💎','Пополнение','+500 ★',true);toast('💎 +500 Stars (демо)');saveUserToDB();};
-document.getElementById('withdrawBtn').onclick=()=>toast('💰 Вывод — скоро');
-document.getElementById('shareProfileBtn').onclick=()=>{copyToClipboard(window.location.href);toast('🔗 Ссылка скопирована!');};
-document.getElementById('copyRefBtn').onclick=()=>{const el=document.getElementById('refLinkInput');if(el){copyToClipboard(el.value);toast('🔗 Реф ссылка скопирована!');}};
-document.getElementById('copyPrivateLinkBtn').onclick=()=>{const el=document.getElementById('privateBattleLink');if(el){copyToClipboard(el.value);toast('🔗 Ссылка скопирована!');}};
-
-function updateOnline(){document.getElementById('onlineCount').innerText=140+Math.round((Math.random()-.5)*30);}
-setInterval(updateOnline,6000);updateOnline();
-
-function setupPWA(){
-  const m={name:"GiftCase",short_name:"GiftCase",start_url:window.location.pathname,display:"standalone",background_color:"#060606",theme_color:"#060606",icons:[{src:"https://fav.farm/🎁",sizes:"192x192",type:"image/png"}]};
-  const blob=new Blob([JSON.stringify(m)],{type:'application/manifest+json'});
-  const link=document.createElement('link');link.rel='manifest';link.href=URL.createObjectURL(blob);
-  document.head.appendChild(link);
-  let dp=null;
-  window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e;setTimeout(()=>{const b=document.createElement('div');b.className='install-banner';b.innerHTML=`<div class="ib-icon">🎁</div><div class="ib-text"><div class="ib-title">Добавить на экран</div><div class="ib-sub">Быстрый доступ к GiftCase</div></div><button class="ib-btn" id="installBtn">Добавить</button><button class="ib-close" id="installClose">✕</button>`;document.body.appendChild(b);document.getElementById('installBtn').onclick=async()=>{dp.prompt();await dp.userChoice;b.remove();dp=null;};document.getElementById('installClose').onclick=()=>b.remove();},4000);});
-}
-setupPWA();
-
-// ═══════════════════════════════════════════════════════
-// TELEGRAM (ЕДИНЫЙ ID С СОХРАНЕНИЕМ В LOCALSTORAGE)
-// ═══════════════════════════════════════════════════════
-function isInTelegramWebView(){
-  return !!(window.Telegram?.WebApp);
-}
-
-function initTelegram(){
-  const tg = window.Telegram?.WebApp;
-  
-  if(tg){
-    tg.expand();
-    tg.ready();
-    try{ tg.setHeaderColor('#0f0f0f'); }catch(e){}
-    
-    const u = tg.initDataUnsafe?.user;
-    if(u){
-      tgUser = {...u};
-      // Единый ID на основе Telegram ID
-      userId = 'tg_' + u.id;
-      
-      // Сохраняем в localStorage для синхронизации
-      localStorage.setItem('gc_user_id', userId);
-      localStorage.setItem('gc_user_data', JSON.stringify({
-        id: u.id,
-        username: u.username,
-        first_name: u.first_name,
-        photo_url: u.photo_url
-      }));
-      
-      renderAvatar();
-      if(!state.displayName) state.displayName = u.first_name || 'ИГРОК';
-      const pn = document.getElementById('pName');
-      if(pn) pn.innerText = state.displayName.toUpperCase();
-      const pid = document.getElementById('pId');
-      if(pid) pid.innerText = u.username ? ('@'+u.username) : ('ID: '+u.id);
-      
-      console.log('[Telegram] Авторизован как:', userId);
-      return true;
-    }
-  }
-  
-  // Проверяем, нет ли сохранённого Telegram ID из прошлых сессий
-  const savedUserId = localStorage.getItem('gc_user_id');
-  if(savedUserId && savedUserId.startsWith('tg_')){
-    userId = savedUserId;
-    console.log('[Telegram] Восстановлен ID из localStorage:', userId);
-    
-    // Пытаемся восстановить данные пользователя
-    const savedUserData = localStorage.getItem('gc_user_data');
-    if(savedUserData){
-      try{
-        const u = JSON.parse(savedUserData);
-        tgUser = u;
-        renderAvatar();
-        if(!state.displayName) state.displayName = u.first_name || 'ИГРОК';
-        const pn = document.getElementById('pName');
-        if(pn) pn.innerText = state.displayName.toUpperCase();
-        const pid = document.getElementById('pId');
-        if(pid) pid.innerText = u.username ? ('@'+u.username) : ('ID: '+u.id);
-      }catch(e){}
-    }
-    return true;
-  }
-  
-  // Если нет Telegram, создаём временный ID
-  console.warn('[Telegram] Не удалось определить пользователя. Рекомендуется открывать через Telegram!');
-  let stored = localStorage.getItem('gc_uid2');
-  if(!stored){
-    stored = 'temp_' + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
-    localStorage.setItem('gc_uid2', stored);
-  }
-  userId = stored;
-  
-  // Показываем модальное окно для входа через Telegram (только если не в Telegram)
-  if(!isInTelegramWebView() && !localStorage.getItem('gc_telegram_reminded')){
-    setTimeout(() => {
-      const modal = document.getElementById('telegramLogin');
-      if(modal) modal.style.display = 'flex';
-      localStorage.setItem('gc_telegram_reminded', 'true');
-    }, 3000);
-  }
-  
-  return false;
-}
-
-// Закрытие модального окна
-document.getElementById('closeTelegramLogin')?.addEventListener('click', () => {
-  document.getElementById('telegramLogin').style.display = 'none';
-});
-
-// ═══════════════════════════════════════════════════════
 // INIT
-// ═══════════════════════════════════════════════════════
+let debounceSave;
 async function init(){
-  initTelegram();
-  
-  try{
-    const local = localStorage.getItem('gc_state');
-    if(local){
-      const d = JSON.parse(local);
-      if(d.userId === userId && d.state && Date.now() - d.ts < 3600000){
-        state = {...state, ...d.state};
-      }
-    }
-  }catch(e){}
-  
-  validateInventory();
-  renderCases();
-  updateAllUI();
-  
-  await loadUserFromDB();
-  validateInventory();
-  updateAllUI();
-  
-  loadBattles();
-  initRealtime();
-  checkReferral();
+  initTelegram();await loadUserFromDB();validateInventory();renderCases();updateAllUI();loadBattles();
+  document.getElementById('addBtn').onclick=()=>{setBalance(state.balance+100);addHist('⭐️','Пополнение','+100 ★',true);toast('★ +100 Stars');};
+  document.getElementById('balancePill').onclick=()=>{setBalance(state.balance+100);addHist('⭐️','Пополнение','+100 ★',true);toast('★ +100 Stars');};
+  document.getElementById('upgradeConfirmBtn').onclick=doUpgrade;
+  document.getElementById('craftBtn').onclick=doCraft;
+  document.getElementById('createBattleBtn').onclick=createBattle;
+  document.getElementById('copyRefBtn').onclick=()=>{let el=document.getElementById('refLinkInput');if(el)copyToClipboard(el.value);};
+  document.getElementById('editNameBtn').onclick=()=>{let newName=prompt('Введите новое имя:',state.displayName||'ИГРОК');if(newName&&newName.trim()){state.displayName=newName.trim().slice(0,20).toUpperCase();document.getElementById('pName').innerText=state.displayName;saveUserToDB();toast('✅ Имя обновлено');}};
+  document.getElementById('avatarInput').onchange=function(e){let file=e.target.files[0];if(!file)return;if(file.size>2*1024*1024){toast('Файл слишком большой');return;}let reader=new FileReader();reader.onload=ev=>{state.avatarUrl=ev.target.result;renderAvatar();saveUserToDB();toast('✅ Аватар обновлён');};reader.readAsDataURL(file);};
+  document.getElementById('loginBtn').onclick=showAuthModal;
+  document.getElementById('targetSlider').addEventListener('input',updateUpgradeChance);
+  document.querySelectorAll('.tab').forEach(btn=>{btn.onclick=()=>{document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.getElementById(btn.dataset.tab+'Panel').classList.add('active');if(btn.dataset.tab==='upgrade')renderUpgradeUI();if(btn.dataset.tab==='craft')renderCraftSlots();SFX.click();};});
 }
+function renderAvatar(){let el=document.getElementById('avatarDisplay');if(!el)return;if(state.avatarUrl){el.innerHTML=`<img src="${state.avatarUrl}" style="width:100%;height:100%;object-fit:cover">`;}else if(tgUser?.photo_url){el.innerHTML=`<img src="${tgUser.photo_url}" style="width:100%;height:100%;object-fit:cover">`;}else{el.innerText='👤';}}
 init();
 </script>
-
 </body>
 </html>
