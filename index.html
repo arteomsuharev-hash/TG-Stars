@@ -1057,7 +1057,8 @@ function showResultModal(name,type,cb){
     </div></div>`;
   document.body.appendChild(ov);
   document.getElementById('rKeep').onclick=()=>{ov.remove();if(cb)cb('keep');};
-  document.getElementById('rSell')?.onclick=()=>{ov.remove();if(cb)cb('sell');};
+const sellBtn = document.getElementById('rSell');
+if(sellBtn) sellBtn.onclick=()=>{ov.remove();if(cb)cb('sell');};
 }
 
 function upgStakeClick(){renderInv('invUpgrade',false,'upgrade');toast('👇 Нажми на подарок чтобы поставить');}
