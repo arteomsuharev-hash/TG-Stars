@@ -497,13 +497,11 @@ img{display:block}
   </div>
 
   <div class="content" id="mainContent">
-
     <div class="panel active" id="casesPanel">
       <div class="sec-hdr"><div class="sec-title">КЕЙСЫ</div><div class="sec-sub">открой и выиграй</div></div>
       <div class="cases-grid" id="casesGrid"></div>
       <div class="inv-section"><h3>МОИ ПОДАРКИ</h3><div class="inv-grid" id="invCases"></div></div>
     </div>
-
     <div class="panel" id="upgradePanel">
       <div class="sec-hdr"><div class="sec-title">АПГРЕЙД</div><div class="sec-sub">ставка → цель → шанс</div></div>
       <div class="upg-layout">
@@ -542,7 +540,6 @@ img{display:block}
       </div>
       <div class="inv-section" style="margin-top:14px"><h3>МОИ ПОДАРКИ</h3><div class="inv-grid" id="invUpgrade"></div></div>
     </div>
-
     <div class="panel" id="craftPanel">
       <div class="sec-hdr"><div class="sec-title">КРАФТ</div><div class="sec-sub">3 подарка → 1 случайный</div></div>
       <p style="font-size:11px;color:var(--tm);margin-bottom:10px">Нажми на 3 подарка в инвентаре. <strong style="color:var(--ts)">35% победа</strong> — получишь дороже. <strong style="color:var(--red)">65% проигрыш</strong> — получишь дешевле.</p>
@@ -571,7 +568,6 @@ img{display:block}
       <button class="btn btn-gold" id="craftBtn" disabled>⚗️ СКРАФТИТЬ</button>
       <div class="inv-section" style="margin-top:14px"><h3>МОИ ПОДАРКИ</h3><div class="inv-grid" id="invCraft"></div></div>
     </div>
-
     <div class="panel" id="pvpPanel">
       <div class="sec-hdr"><div class="sec-title">PvP БАТЛЫ</div><div class="sec-sub">победитель забирает всё</div></div>
       <div class="pvp-tabs">
@@ -596,7 +592,6 @@ img{display:block}
       <div id="privateLobbyWrap" style="display:none"><div class="pvp-sec-title priv">🔒 МОИ ПРИВАТНЫЕ БАТЛЫ</div><div id="pvpPrivateLobby"></div></div>
       <div class="inv-section"><h3>МОИ ПОДАРКИ</h3><div class="inv-grid" id="invPvp"></div></div>
     </div>
-
     <div class="panel" id="profilePanel">
       <div class="profile-hero">
         <div class="avatar-wrap">
@@ -634,7 +629,6 @@ img{display:block}
         <table class="hist-table"><thead><tr><th>Предмет</th><th>Действие</th><th>Итог</th></tr></thead><tbody id="histBody"></tbody></table>
       </div>
     </div>
-
   </div>
 
   <div class="tabs" id="tabsBar">
@@ -1057,8 +1051,8 @@ function showResultModal(name,type,cb){
     </div></div>`;
   document.body.appendChild(ov);
   document.getElementById('rKeep').onclick=()=>{ov.remove();if(cb)cb('keep');};
-if(document.getElementById('rSell')){
-  document.getElementById('rSell').onclick=()=>{ov.remove();if(cb)cb('sell');};
+  const sellBtn = document.getElementById('rSell');
+  if(sellBtn) sellBtn.onclick=()=>{ov.remove();if(cb)cb('sell');};
 }
 
 function upgStakeClick(){renderInv('invUpgrade',false,'upgrade');toast('👇 Нажми на подарок чтобы поставить');}
@@ -1293,21 +1287,17 @@ async function joinBattle(bid){
 async function cancelBattle(bid){const b=battles.find(x=>x.id===bid)||privateBattles.find(x=>x.id===bid);if(!b||b.creator_id!==userId)return;const g=safeJ(b.creator_gift,{});state.inventory.push(g);battles=battles.filter(x=>x.id!==bid);privateBattles=privateBattles.filter(x=>x.id!==bid);await updateBattle(bid,{status:'cancelled'});saveUser();renderPvpLobby();toast('Батл отменён');}
 
 function detWinner(bid,g1,g2){
-  let hash = 0;
-  for(let i = 0; i < bid.length; i++){
-    hash = (hash * 31 + bid.charCodeAt(i)) % 1000000;
+  let s=0;
+  for(let i=0;i<bid.length;i++){
+    s = (s * 31 + bid.charCodeAt(i)) % 1000000;
   }
-  const rand = function(){
-    hash = (hash * 9301 + 49297) % 233280;
-    return hash / 233280;
+  const rng = function(){
+    s = (s * 9301 + 49297) % 233280;
+    return s / 233280;
   };
-  const val1 = Math.floor(g1.val * 0.1 + rand() * (g1.val * 0.9));
-  const val2 = Math.floor(g2.val * 0.1 + rand() * (g2.val * 0.9));
-  if(val1 >= val2){
-    return 'creator';
-  } else {
-    return 'opponent';
-  }
+  const v1 = Math.floor(g1.val * 0.1 + rng() * (g1.val * 0.9));
+  const v2 = Math.floor(g2.val * 0.1 + rng() * (g2.val * 0.9));
+  return v1 >= v2 ? 'creator' : 'opponent';
 }
 
 function showCoinFlip(gift1,gift2,battle,creatorId){
