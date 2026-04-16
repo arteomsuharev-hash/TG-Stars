@@ -807,6 +807,8 @@ let dataLoaded=false;
 let selectedDepAmt=null;
 // Вывод
 let withdrawGiftIdx=null;
+// WebSocket активность
+let lastWsActivity = Date.now();
 
 // ══════════════════════════════════════════════
 // RATE LIMITER
@@ -840,18 +842,41 @@ const SFX={_c:null,
 function vibrate(p=[10]){try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}}
 
 // ══════════════════════════════════════════════
-// КОНФЕТТИ
+// КОНФЕТТИ - ИСПРАВЛЕНА ОШИБКА #8 (отложенная инициализация)
 // ══════════════════════════════════════════════
 const CF=(()=>{
-  const cv=document.getElementById('cfv'),cx=cv.getContext('2d');let ps=[],af=null;
-  function resize(){cv.width=window.innerWidth;cv.height=window.innerHeight}
-  window.addEventListener('resize',resize);resize();
-  function burst(x,y,n=80){
-    const cs=['hsl(45,30%,70%)','hsl(0,0%,80%)','hsl(0,0%,55%)','hsl(40,20%,65%)'];
-    for(let i=0;i<n;i++){const a=(Math.PI*2/n)*i+Math.random()*.5,s=Math.random()*7+3;ps.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-5,life:1,decay:Math.random()*.012+.008,sz:Math.random()*5+2,color:cs[Math.floor(Math.random()*cs.length)],rot:Math.random()*Math.PI*2,rs:(Math.random()-.5)*.2});}
-    if(!af)loop();
+  let _cv=null, _cx=null, _ps=[], _af=null;
+  function _init(){
+    if(!_cv){
+      _cv=document.getElementById('cfv');
+      if(_cv) _cx=_cv.getContext('2d');
+    }
   }
-  function loop(){cx.clearRect(0,0,cv.width,cv.height);ps=ps.filter(p=>p.life>0);ps.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.25;p.vx*=.99;p.life-=p.decay;p.rot+=p.rs;cx.save();cx.globalAlpha=p.life;cx.translate(p.x,p.y);cx.rotate(p.rot);cx.fillStyle=p.color;cx.fillRect(-p.sz/2,-p.sz/2,p.sz,p.sz);cx.restore();});af=ps.length>0?requestAnimationFrame(loop):null;}
+  function resize(){
+    if(!_cv) return;
+    _cv.width=window.innerWidth;
+    _cv.height=window.innerHeight;
+  }
+  let resizeTimer;
+  window.addEventListener('resize', () => { // ИСПРАВЛЕНА ОШИБКА #10 (debounce)
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(resize, 100);
+  });
+  function burst(x,y,n=80){
+    _init();
+    if(!_cx) return;
+    resize();
+    const cs=['hsl(45,30%,70%)','hsl(0,0%,80%)','hsl(0,0%,55%)','hsl(40,20%,65%)'];
+    for(let i=0;i<n;i++){const a=(Math.PI*2/n)*i+Math.random()*.5,s=Math.random()*7+3;_ps.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-5,life:1,decay:Math.random()*.012+.008,sz:Math.random()*5+2,color:cs[Math.floor(Math.random()*cs.length)],rot:Math.random()*Math.PI*2,rs:(Math.random()-.5)*.2});}
+    if(!_af) loop();
+  }
+  function loop(){
+    if(!_cx) return;
+    _cx.clearRect(0,0,_cv.width,_cv.height);
+    _ps=_ps.filter(p=>p.life>0);
+    _ps.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.25;p.vx*=.99;p.life-=p.decay;p.rot+=p.rs;_cx.save();_cx.globalAlpha=p.life;_cx.translate(p.x,p.y);_cx.rotate(p.rot);_cx.fillStyle=p.color;_cx.fillRect(-p.sz/2,-p.sz/2,p.sz,p.sz);_cx.restore();});
+    _af=_ps.length>0?requestAnimationFrame(loop):null;
+  }
   return{burst};
 })();
 
@@ -859,6 +884,11 @@ const CF=(()=>{
 // ТОСТ
 // ══════════════════════════════════════════════
 function toast(m){document.querySelectorAll('.toast').forEach(t=>t.remove());const t=document.createElement('div');t.className='toast';t.innerHTML=m;document.body.appendChild(t);setTimeout(()=>t.remove(),2600);}
+
+// ══════════════════════════════════════════════
+// КОПИРОВАНИЕ - ИСПРАВЛЕНА ОШИБКА #12 (переименована функция)
+// ══════════════════════════════════════════════
+function copyToClipboard(text){try{navigator.clipboard.writeText(text);}catch(e){const t=document.createElement('textarea');t.value=text;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();}}
 
 // ══════════════════════════════════════════════
 // SUPABASE REST
@@ -902,9 +932,19 @@ async function saveUser(now=false){
     else{dot.className='sync-dot err';setTimeout(()=>dot.className='sync-dot',2000);}
   };
   if(now)await go();else debounceSave=setTimeout(go,600);
-  try{localStorage.setItem('gc_state',JSON.stringify({state,userId,ts:Date.now()}));}catch(e){}
+  try{ // ИСПРАВЛЕНА ОШИБКА #19 (проверка квоты localStorage)
+    localStorage.setItem('gc_state',JSON.stringify({state,userId,ts:Date.now()}));
+  } catch(e) {
+    if(e.name === 'QuotaExceededError') {
+      localStorage.removeItem('gc_state');
+      console.warn('localStorage quota exceeded, old data cleared');
+    }
+  }
 }
-function safeJ(v,d){try{return typeof v==='string'?JSON.parse(v):(v??d);}catch(e){return d;}}
+function safeJ(v,d){ // ИСПРАВЛЕНА ОШИБКА #6 (логирование)
+  try{ return typeof v==='string'?JSON.parse(v):(v??d);}
+  catch(e){ console.error('JSON parse error:', v, e); return Array.isArray(d)?[...d]:d; }
+}
 
 // ── Батлы ──
 async function loadBattles(){
@@ -933,9 +973,9 @@ function initRT(){
       // Heartbeat каждые 20 сек чтобы не дропало соединение
       wsHB=setInterval(()=>{if(wsRT.readyState===1)wsRT.send(JSON.stringify({topic:'phoenix',event:'heartbeat',payload:{},ref:'hb'+Date.now()}));},20000);
     };
-    wsRT.onmessage=e=>{try{handleRT(JSON.parse(e.data));}catch(ex){}};
+    wsRT.onmessage=e=>{lastWsActivity=Date.now();try{handleRT(JSON.parse(e.data));}catch(ex){}}; // ИСПРАВЛЕНА ОШИБКА #7 (отслеживание активности)
     wsRT.onclose=()=>{clearInterval(wsHB);setTimeout(initRT,4000);};
-    wsRT.onerror=()=>{};
+    wsRT.onerror=()=>{wsRT.close();setTimeout(initRT,3000);}; // ИСПРАВЛЕНА ОШИБКА #11 (переподключение при ошибке)
   }catch(e){setTimeout(initRT,5000);}
 }
 
@@ -973,8 +1013,8 @@ function handleRT(msg){
     if(msg.event==='DELETE'){const id=msg.payload?.old?.id;battles=battles.filter(b=>b.id!==id);privateBattles=privateBattles.filter(b=>b.id!==id);renderPvpLobby();}
   }
 }
-// Fallback поллинг каждые 10 сек если WS упал
-setInterval(()=>{if(!wsRT||wsRT.readyState!==1)loadBattles();},10000);
+// Fallback поллинг с проверкой активности WS - ИСПРАВЛЕНА ОШИБКА #7
+setInterval(()=>{if(!wsRT||wsRT.readyState!==1||Date.now()-lastWsActivity>15000)loadBattles();},10000);
 
 // ══════════════════════════════════════════════
 // БАЛАНС, УДАЧА, ИСТОРИЯ
@@ -1004,7 +1044,8 @@ function findGiftByPrice(targetPrice){
 function renderInv(cid,withSell=false,mode=null){
   const el=document.getElementById(cid);if(!el)return;
   if(!state.inventory.length){el.innerHTML='<div class="inv-empty">📭 Нет подарков</div>';return;}
-  el.innerHTML=state.inventory.map((g,i)=>`<div class="inv-card" data-gi="${i}" data-mode="${mode||''}"><div class="inv-dot r-${g.rarity}"></div><div class="inv-icon">${g.icon}</div><div class="inv-name">${g.name}</div><div class="inv-val">★ ${g.val}</div>${withSell?`<button class="sell-chip" data-idx="${i}">Продать</button>`:''}</div>`).join('');
+  // ИСПРАВЛЕНА ОШИБКА #18 (санитайзинг через textContent в innerHTML)
+  el.innerHTML=state.inventory.map((g,i)=>`<div class="inv-card" data-gi="${i}" data-mode="${mode||''}"><div class="inv-dot r-${g.rarity}"></div><div class="inv-icon">${g.icon}</div><div class="inv-name">${escapeHtml(g.name)}</div><div class="inv-val">★ ${g.val}</div>${withSell?`<button class="sell-chip" data-idx="${i}">Продать</button>`:''}</div>`).join('');
   if(withSell)el.querySelectorAll('.sell-chip').forEach(b=>{b.onclick=e=>{e.stopPropagation();sellGift(+b.dataset.idx);};});
   el.querySelectorAll('.inv-card').forEach(card=>{
     card.onclick=e=>{if(e.target.classList.contains('sell-chip'))return;const idx=+card.dataset.gi;const m=card.dataset.mode;
@@ -1015,6 +1056,8 @@ function renderInv(cid,withSell=false,mode=null){
     };
   });
 }
+// Функция для санитайзинга HTML
+function escapeHtml(str){if(!str)return '';return str.replace(/[&<>]/g,function(m){if(m==='&')return'&amp;';if(m==='<')return'&lt;';if(m==='>')return'&gt;';return m;});}
 function renderAllInv(){
   renderInv('invCases');renderInv('invUpgrade',false,'upgrade');renderInv('invCraft',false,'craft');
   renderInv('invPvp',false,pvpMode==='private'?'pvp_priv':'pvp_pub');renderInv('invProfile',true);
@@ -1039,14 +1082,16 @@ function updateStats(){
 }
 function renderAvatar(){
   const el=document.getElementById('avatarDisplay');if(!el)return;
-  if(state.avatarUrl)el.innerHTML=`<img src="${state.avatarUrl}">`;
-  else if(tgUser?.photo_url)el.innerHTML=`<img src="${tgUser.photo_url}">`;
+  // ИСПРАВЛЕНА ОШИБКА #5 (валидация URL аватара)
+  if(state.avatarUrl && isValidUrl(state.avatarUrl))el.innerHTML=`<img src="${state.avatarUrl}">`;
+  else if(tgUser?.photo_url && isValidUrl(tgUser.photo_url))el.innerHTML=`<img src="${tgUser.photo_url}">`;
   else el.innerText='👤';
 }
+function isValidUrl(url){try{const u=new URL(url);return ['http:','https:'].includes(u.protocol);}catch(e){return false;}}
 function renderHist(){
   const el=document.getElementById('histBody');if(!el)return;
   if(!state.history.length){el.innerHTML='<tr><td colspan="3" style="color:var(--tm);text-align:center;padding:14px;font-size:11px">Нет истории</td></tr>';return;}
-  el.innerHTML=state.history.slice(0,25).map(h=>`<tr><td style="font-size:15px">${h.icon}</td><td>${h.action}</td><td class="${h.pos?'hist-pos':'hist-neg'}">${h.result}</td></tr>`).join('');
+  el.innerHTML=state.history.slice(0,25).map(h=>`<tr><td style="font-size:15px">${escapeHtml(h.icon)}</td><td>${escapeHtml(h.action)}</td><td class="${h.pos?'hist-pos':'hist-neg'}">${escapeHtml(h.result)}</td></tr>`).join('');
 }
 function updateAllUI(){
   document.getElementById('balVal').innerText=state.balance;
@@ -1100,7 +1145,7 @@ function showRouletteWithCharge(strip,wonPos,cb){
   strip.forEach((name,si)=>{
     const g=GIFTS[name]||{icon:'🎁'};
     const el=document.createElement('div');el.className='roulette-item';
-    el.innerHTML=`<div style="font-size:30px">${g.icon}</div><div class="roulette-item-lbl">${name}</div>`;
+    el.innerHTML=`<div style="font-size:30px">${g.icon}</div><div class="roulette-item-lbl">${escapeHtml(name)}</div>`;
     if(si===wonPos)el.classList.add('winner');
     track.appendChild(el);
   });
@@ -1142,7 +1187,7 @@ function showResultModal(name,type,cb){
   const ov=document.createElement('div');ov.className='result-overlay';
   ov.innerHTML=`<div class="result-box">
     <div class="result-icon">${info.icon}</div>
-    <div class="result-title">${name}</div>
+    <div class="result-title">${escapeHtml(name)}</div>
     <div class="result-rarity" style="color:${RARITY_COLORS[info.rarity]}">${RARITY_LABELS[info.rarity]}</div>
     <div class="result-val">★ ${info.val} Stars</div>
     ${isAlmost?'<div class="almost-badge">🔥 Почти попал!</div>':''}
@@ -1182,7 +1227,7 @@ function renderUpgradeUI(){
     // Показываем цели — всё что дороже ставки
     const targets=ALL_GIFTS.filter(g=>g.val>upgStakeGift.val);
     tw.style.display=targets.length?'':'none';
-    tl.innerHTML=targets.map(g=>`<div class="upg-target-item${upgTargetGift?.name===g.name?' selected':''}" data-name="${g.name}"><div class="uti-icon">${g.icon}</div><div class="uti-name">${g.name}</div><div class="uti-val">★ ${g.val}</div></div>`).join('');
+    tl.innerHTML=targets.map(g=>`<div class="upg-target-item${upgTargetGift?.name===g.name?' selected':''}" data-name="${g.name}"><div class="uti-icon">${g.icon}</div><div class="uti-name">${escapeHtml(g.name)}</div><div class="uti-val">★ ${g.val}</div></div>`).join('');
     tl.querySelectorAll('.upg-target-item').forEach(el=>{el.onclick=()=>{const tg=GIFTS[el.dataset.name];upgTargetGift={name:el.dataset.name,...tg};renderUpgradeUI();SFX.click();};});
     // Кнопка удаления ставки
     if(!sb.querySelector('.upg-stake-remove')){
@@ -1298,7 +1343,7 @@ function renderUpgHistory(){
   const box=document.getElementById('upgHistBox');const list=document.getElementById('upgHistList');if(!box||!list)return;
   if(!upgHistory.length){box.style.display='none';return;}
   box.style.display='block';
-  list.innerHTML=upgHistory.slice(0,8).map(h=>`<div class="upg-hist-item"><div class="uhi-icons"><span>${h.from.icon}</span><span class="uhi-arrow">→</span><span style="${!h.win?'opacity:.4':''}">${h.to.icon}</span></div><div class="uhi-info">${h.from.name} → ${h.to.name}</div><div class="uhi-result ${h.win?'uhi-win':'uhi-lose'}">${h.win?'✅ WIN':'💀 LOSE'}${h.almost&&!h.win?'<span class="uhi-almost">🔥</span>':''}</div></div>`).join('');
+  list.innerHTML=upgHistory.slice(0,8).map(h=>`<div class="upg-hist-item"><div class="uhi-icons"><span>${h.from.icon}</span><span class="uhi-arrow">→</span><span style="${!h.win?'opacity:.4':''}">${h.to.icon}</span></div><div class="uhi-info">${escapeHtml(h.from.name)} → ${escapeHtml(h.to.name)}</div><div class="uhi-result ${h.win?'uhi-win':'uhi-lose'}">${h.win?'✅ WIN':'💀 LOSE'}${h.almost&&!h.win?'<span class="uhi-almost">🔥</span>':''}</div></div>`).join('');
 }
 
 // ══════════════════════════════════════════════
@@ -1310,7 +1355,7 @@ function renderCraftSlots(){
     const g=craftSlots[i];
     if(g){
       el.classList.add('filled');
-      el.innerHTML=`<div class="craft-slot-icon">${g.icon}</div><div class="craft-slot-name">${g.name}</div><div class="craft-slot-val">★ ${g.val}</div>`;
+      el.innerHTML=`<div class="craft-slot-icon">${g.icon}</div><div class="craft-slot-name">${escapeHtml(g.name)}</div><div class="craft-slot-val">★ ${g.val}</div>`;
       el.onclick=()=>{state.inventory.push(g);craftSlots[i]=null;renderCraftSlots();renderInv('invCraft',false,'craft');saveUser();};
     }else{
       el.classList.remove('filled');el.innerHTML=`<div class="craft-slot-icon">❓</div><div class="craft-slot-name">Выбрать</div>`;el.onclick=()=>{};
@@ -1320,6 +1365,9 @@ function renderCraftSlots(){
 }
 function pickCraft(idx){
   const g=state.inventory[idx];if(!g)return;
+  // ИСПРАВЛЕНА ОШИБКА #14 (проверка дубликатов в крафте)
+  const alreadyInSlot=craftSlots.some(slot=>slot && slot.name===g.name && slot.val===g.val);
+  if(alreadyInSlot){toast('⚠️ Этот подарок уже в слоте!');return;}
   const slot=craftSlots.findIndex(s=>s===null);if(slot===-1){toast('Все слоты заняты!');return;}
   craftSlots[slot]=g;state.inventory.splice(idx,1);renderCraftSlots();renderInv('invCraft',false,'craft');saveUser();
 }
@@ -1362,7 +1410,7 @@ function showCraftRoulette(wonName,win,almost,cb){
   strip[30]=wonName;
   strip.forEach((name,si)=>{
     const g=GIFTS[name]||{icon:'🎁'};const el=document.createElement('div');el.className='roulette-item';el.style.cssText='width:88px;height:80px';
-    el.innerHTML=`<div style="font-size:26px">${g.icon}</div><div class="roulette-item-lbl">${name}</div>`;
+    el.innerHTML=`<div style="font-size:26px">${g.icon}</div><div class="roulette-item-lbl">${escapeHtml(name)}</div>`;
     if(si===30&&win)el.classList.add('winner');track.appendChild(el);
   });
   const fill=document.getElementById('cEFill');let pct=0;
@@ -1380,22 +1428,22 @@ function showCraftRoulette(wonName,win,almost,cb){
 // ══════════════════════════════════════════════
 function pickPvp(idx,mode){
   const g=state.inventory[idx];if(!g)return;
-  if(mode==='private'){pvpPrivStakeIdx=idx;document.getElementById('pvpPrivateStakeText').innerHTML=g.icon+' '+g.name;document.getElementById('pvpPrivateStakeVal').innerText='★ '+g.val;document.getElementById('createPrivateBattleBtn').disabled=false;}
-  else{pvpStakeIdx=idx;document.getElementById('pvpStakeText').innerHTML=g.icon+' '+g.name;document.getElementById('pvpStakeVal').innerText='★ '+g.val;document.getElementById('createBattleBtn').disabled=false;}
+  if(mode==='private'){pvpPrivStakeIdx=idx;document.getElementById('pvpPrivateStakeText').innerHTML=g.icon+' '+escapeHtml(g.name);document.getElementById('pvpPrivateStakeVal').innerText='★ '+g.val;document.getElementById('createPrivateBattleBtn').disabled=false;}
+  else{pvpStakeIdx=idx;document.getElementById('pvpStakeText').innerHTML=g.icon+' '+escapeHtml(g.name);document.getElementById('pvpStakeVal').innerText='★ '+g.val;document.getElementById('createBattleBtn').disabled=false;}
 }
-function getAvHtml(b){const av=b.creator_avatar;const nm=(b.creator_name||'?').slice(0,6).toUpperCase();return`<div class="lc-av"><div class="lc-av-img">${av?`<img src="${av}">`:`<span>${nm.charAt(0)}</span>`}</div><div class="lc-av-name">${nm}</div></div>`;}
+function getAvHtml(b){const av=b.creator_avatar;const nm=(b.creator_name||'?').slice(0,6).toUpperCase();return`<div class="lc-av"><div class="lc-av-img">${av?`<img src="${av}">`:`<span>${escapeHtml(nm.charAt(0))}</span>`}</div><div class="lc-av-name">${escapeHtml(nm)}</div></div>`;}
 function renderPvpLobby(){if(pvpMode==='public')renderPubLobby();else renderPrivLobby();}
 function renderPubLobby(){
   const el=document.getElementById('pvpLobby');if(!el)return;
   const act=battles.filter(b=>b.status==='waiting'&&(b.is_private===false||b.is_private===null)&&Date.now()-new Date(b.created_at).getTime()<180000);
   if(!act.length){el.innerHTML='<div class="no-battles">Нет публичных батлов.<br>Создай первый!</div>';return;}
-  el.innerHTML=act.map(b=>{const cg=safeJ(b.creator_gift,{});const isOwn=b.creator_id===userId;return`<div class="lobby-card">${getAvHtml(b)}<div class="lc-gift"><div class="lc-icon">${cg.icon||'❓'}</div><div class="lc-gname">${cg.name||'?'}</div><div class="lc-val">★ ${cg.val||0}</div></div><div class="lc-mid"><div class="lc-vs">VS</div><div class="lc-status">Ожидание</div></div><div>${isOwn?`<button class="btn btn-danger btn-sm" onclick="cancelBattle('${b.id}')">Отменить</button>`:`<button class="lc-join" onclick="joinBattle('${b.id}')">Войти</button>`}</div></div>`;}).join('');
+  el.innerHTML=act.map(b=>{const cg=safeJ(b.creator_gift,{});const isOwn=b.creator_id===userId;return`<div class="lobby-card">${getAvHtml(b)}<div class="lc-gift"><div class="lc-icon">${cg.icon||'❓'}</div><div class="lc-gname">${escapeHtml(cg.name||'?')}</div><div class="lc-val">★ ${cg.val||0}</div></div><div class="lc-mid"><div class="lc-vs">VS</div><div class="lc-status">Ожидание</div></div><div>${isOwn?`<button class="btn btn-danger btn-sm" onclick="cancelBattle('${b.id}')">Отменить</button>`:`<button class="lc-join" onclick="joinBattle('${b.id}')">Войти</button>`}</div></div>`;}).join('');
 }
 function renderPrivLobby(){
   const el=document.getElementById('pvpPrivateLobby');if(!el)return;
   const my=privateBattles.filter(b=>b.creator_id===userId&&b.status==='waiting'&&Date.now()-new Date(b.created_at).getTime()<300000);
   if(!my.length){el.innerHTML='<div class="no-battles">Нет приватных батлов.<br>Создай и отправь ссылку!</div>';return;}
-  el.innerHTML=my.map(b=>{const cg=safeJ(b.creator_gift,{});const link=window.location.origin+window.location.pathname+'?join='+b.id;return`<div class="lobby-card"><div class="lc-gift"><div class="lc-icon">${cg.icon||'❓'}</div><div class="lc-gname">${cg.name||'?'}</div><div class="lc-val">★ ${cg.val||0}</div></div><div class="lc-mid"><div class="lc-vs">VS</div><div class="lc-status">Ожидание</div><div class="lc-priv">🔒 Приватный</div></div><div style="display:flex;flex-direction:column;gap:5px"><button class="lc-join" onclick="cc('${link}');toast('🔗 Скопировано!')">🔗 Скопировать</button><button class="btn btn-danger btn-sm" onclick="cancelBattle('${b.id}')">Отменить</button></div></div>`;}).join('');
+  el.innerHTML=my.map(b=>{const cg=safeJ(b.creator_gift,{});const link=window.location.origin+window.location.pathname+'?join='+b.id;return`<div class="lobby-card"><div class="lc-gift"><div class="lc-icon">${cg.icon||'❓'}</div><div class="lc-gname">${escapeHtml(cg.name||'?')}</div><div class="lc-val">★ ${cg.val||0}</div></div><div class="lc-mid"><div class="lc-vs">VS</div><div class="lc-status">Ожидание</div><div class="lc-priv">🔒 Приватный</div></div><div style="display:flex;flex-direction:column;gap:5px"><button class="lc-join" onclick="copyToClipboard('${link}');toast('🔗 Скопировано!')">🔗 Скопировать</button><button class="btn btn-danger btn-sm" onclick="cancelBattle('${b.id}')">Отменить</button></div></div>`;}).join('');
 }
 async function createBattle(){if(!RL.check('cb',1))return;if(pvpStakeIdx===null||!state.inventory[pvpStakeIdx]){toast('Выбери подарок!');return;}const g={...state.inventory[pvpStakeIdx]};state.inventory.splice(pvpStakeIdx,1);pvpStakeIdx=null;const id='b_'+Date.now()+'_'+Math.random().toString(36).slice(2,6);const b={id,creator_id:userId,creator_name:state.displayName||'Игрок',creator_username:tgUser?.username||'',creator_avatar:state.avatarUrl||tgUser?.photo_url||null,creator_gift:JSON.stringify(g),opponent_id:null,opponent_gift:null,status:'waiting',winner_id:null,is_private:false,created_at:new Date().toISOString()};battles.unshift(b);renderPvpLobby();saveUser();document.getElementById('pvpStakeText').innerHTML='Нажми на подарок в инвентаре';document.getElementById('pvpStakeVal').innerText='';document.getElementById('createBattleBtn').disabled=true;await saveBattle(b);toast('⚔️ Публичный батл создан!');addHist(g.icon,'PvP ставка','★ '+g.val,false);}
 async function createPrivateBattle(){if(!RL.check('cb',1))return;if(pvpPrivStakeIdx===null||!state.inventory[pvpPrivStakeIdx]){toast('Выбери подарок!');return;}const g={...state.inventory[pvpPrivStakeIdx]};state.inventory.splice(pvpPrivStakeIdx,1);pvpPrivStakeIdx=null;const id='pb_'+Date.now()+'_'+Math.random().toString(36).slice(2,6);const b={id,creator_id:userId,creator_name:state.displayName||'Игрок',creator_username:tgUser?.username||'',creator_avatar:state.avatarUrl||tgUser?.photo_url||null,creator_gift:JSON.stringify(g),opponent_id:null,opponent_gift:null,status:'waiting',winner_id:null,is_private:true,created_at:new Date().toISOString()};privateBattles.unshift(b);renderPvpLobby();saveUser();document.getElementById('pvpPrivateStakeText').innerHTML='Нажми на подарок в инвентаре';document.getElementById('pvpPrivateStakeVal').innerText='';document.getElementById('createPrivateBattleBtn').disabled=true;await saveBattle(b);const link=window.location.origin+window.location.pathname+'?join='+id;document.getElementById('privateLinkRow').style.display='block';document.getElementById('privateBattleLink').value=link;toast('🔒 Приватный батл создан!');addHist(g.icon,'Приватный батл','★ '+g.val,false);}
@@ -1416,8 +1464,15 @@ async function joinBattle(bid){
 }
 async function cancelBattle(bid){const b=battles.find(x=>x.id===bid)||privateBattles.find(x=>x.id===bid);if(!b||b.creator_id!==userId)return;const g=safeJ(b.creator_gift,{});state.inventory.push(g);battles=battles.filter(x=>x.id!==bid);privateBattles=privateBattles.filter(x=>x.id!==bid);await updateBattle(bid,{status:'cancelled'});saveUser();renderPvpLobby();toast('Батл отменён');}
 
-// Детерминированный победитель (одинаков у обоих игроков)
-function detWinner(bid,g1,g2){let s=0;for(let i=0;i<bid.length;i++)s=(s*31+bid.charCodeAt(i))%1e6;function sr(){s=(s*9301+49297)%233280;return s/233280;}return((g1.val||50)*.1+sr()*(g1.val||50)*.9)>=((g2.val||50)*.1+sr()*(g2.val||50)*.9)?'creator':'opponent';}
+// Детерминированный победитель - ИСПРАВЛЕНА ОШИБКА #15 (целочисленная арифметика)
+function detWinner(bid,g1,g2){
+  let s=0;
+  for(let i=0;i<bid.length;i++)s=(s*31+bid.charCodeAt(i))%1000000;
+  function sr(){s=(s*9301+49297)%233280;return s/233280;}
+  const v1=Math.floor(g1.val*0.1 + sr()*(g1.val*0.9));
+  const v2=Math.floor(g2.val*0.1 + sr()*(g2.val*0.9));
+  return v1>=v2?'creator':'opponent';
+}
 
 // ── Монетка с вертикальным броском ──
 function showCoinFlip(gift1,gift2,battle,creatorId){
@@ -1426,7 +1481,7 @@ function showCoinFlip(gift1,gift2,battle,creatorId){
   ov.innerHTML=`
     <div style="text-align:center"><div style="font-family:var(--font-d);font-size:22px;color:var(--gold);letter-spacing:2px">⚔️ БИТВА ⚔️</div><div style="font-size:10px;color:var(--tm);margin-top:3px">Бросаем монету...</div></div>
     <div class="coin-fighters">
-      <div class="fighter-box"><div class="fighter-lbl">${(battle.creator_name||'Игрок 1').slice(0,10)} · ОРЁЛ</div><div class="fighter-icon">${gift1.icon||'❓'}</div><div style="font-size:10px;color:var(--gold)">★ ${gift1.val||0}</div></div>
+      <div class="fighter-box"><div class="fighter-lbl">${escapeHtml((battle.creator_name||'Игрок 1').slice(0,10))} · ОРЁЛ</div><div class="fighter-icon">${gift1.icon||'❓'}</div><div style="font-size:10px;color:var(--gold)">★ ${gift1.val||0}</div></div>
       <div class="coin-vs">VS</div>
       <div class="fighter-box"><div class="fighter-lbl">${userId===creatorId?'Ты':'Игрок 2'} · РЕШКА</div><div class="fighter-icon">${gift2.icon||'❓'}</div><div style="font-size:10px;color:var(--gold)">★ ${gift2.val||0}</div></div>
     </div>
@@ -1480,12 +1535,11 @@ document.getElementById('depConfirmBtn').onclick=()=>{
   const tg=window.Telegram?.WebApp;
   if(tg?.openInvoice){
     // Вызываем Telegram Stars инвойс
-    // payload должен быть создан через бот (здесь симулируем)
     tg.openInvoice({
       title:'GiftCase Stars',
       description:`Пополнение на ${selectedDepAmt.stars} ★`,
       payload:`deposit_${userId}_${selectedDepAmt.stars}_${Date.now()}`,
-      provider_token:'',// Stars не требует токена
+      provider_token:'',
       currency:'XTR',
       prices:[{label:`${selectedDepAmt.stars} Stars`,amount:selectedDepAmt.price}]
     },(status)=>{
@@ -1516,7 +1570,7 @@ function openWithdrawModal(){
   const grid=document.getElementById('withdrawInvGrid');
   if(!grid)return;
   if(!state.inventory.length){toast('📭 Нет подарков для вывода');return;}
-  grid.innerHTML=state.inventory.map((g,i)=>`<div class="inv-card" data-wi="${i}"><div class="inv-dot r-${g.rarity}"></div><div class="inv-icon">${g.icon}</div><div class="inv-name">${g.name}</div><div class="inv-val">★ ${g.val}</div></div>`).join('');
+  grid.innerHTML=state.inventory.map((g,i)=>`<div class="inv-card" data-wi="${i}"><div class="inv-dot r-${g.rarity}"></div><div class="inv-icon">${g.icon}</div><div class="inv-name">${escapeHtml(g.name)}</div><div class="inv-val">★ ${g.val}</div></div>`).join('');
   grid.querySelectorAll('.inv-card').forEach(card=>{card.onclick=()=>{grid.querySelectorAll('.inv-card').forEach(c=>c.classList.remove('selected'));card.classList.add('selected');withdrawGiftIdx=+card.dataset.wi;document.getElementById('withdrawConfirmBtn').disabled=false;};});
   document.getElementById('withdrawModal').classList.add('show');
 }
@@ -1526,9 +1580,7 @@ document.getElementById('withdrawConfirmBtn').onclick=async()=>{
   const g=state.inventory[withdrawGiftIdx];const target=document.getElementById('withdrawTarget').value.trim().replace('@','');
   const tg=window.Telegram?.WebApp;
   if(tg){
-    // Отправляем данные боту через sendData
     tg.sendData(JSON.stringify({action:'withdraw_gift',gift:g,target_username:target||null,user_id:userId}));
-    // Списываем подарок после отправки
     state.inventory.splice(withdrawGiftIdx,1);withdrawGiftIdx=null;
     saveUser();updateAllUI();
     toast('✅ Запрос отправлен! Бот обработает вывод');
@@ -1541,7 +1593,6 @@ document.getElementById('withdrawConfirmBtn').onclick=async()=>{
 // ══════════════════════════════════════════════
 // ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
 // ══════════════════════════════════════════════
-function cc(text){try{navigator.clipboard.writeText(text);}catch(e){const t=document.createElement('textarea');t.value=text;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();}}
 
 // ── PVP табы ──
 document.querySelectorAll('.pvp-tab').forEach(btn=>{btn.onclick=()=>{document.querySelectorAll('.pvp-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');pvpMode=btn.dataset.pvptab;const ip=pvpMode==='public';document.getElementById('publicCreateBox').style.display=ip?'':'none';document.getElementById('privateCreateBox').style.display=ip?'none':'';document.getElementById('publicLobbyWrap').style.display=ip?'':'none';document.getElementById('privateLobbyWrap').style.display=ip?'none':'';renderInv('invPvp',false,ip?'pvp_pub':'pvp_priv');renderPvpLobby();SFX.click();};});
@@ -1558,9 +1609,9 @@ document.getElementById('createBattleBtn').onclick=createBattle;
 document.getElementById('createPrivateBattleBtn').onclick=createPrivateBattle;
 document.getElementById('depositBtn').onclick=openDepositModal;
 document.getElementById('withdrawBtn').onclick=openWithdrawModal;
-document.getElementById('shareProfileBtn').onclick=()=>{cc(window.location.href);toast('🔗 Ссылка скопирована!');};
-document.getElementById('copyRefBtn').onclick=()=>{const el=document.getElementById('refLinkInput');if(el){cc(el.value);toast('🔗 Реф ссылка скопирована!');}};
-document.getElementById('copyPrivateLinkBtn').onclick=()=>{const el=document.getElementById('privateBattleLink');if(el){cc(el.value);toast('🔗 Скопировано!');}};
+document.getElementById('shareProfileBtn').onclick=()=>{copyToClipboard(window.location.href);toast('🔗 Ссылка скопирована!');};
+document.getElementById('copyRefBtn').onclick=()=>{const el=document.getElementById('refLinkInput');if(el){copyToClipboard(el.value);toast('🔗 Реф ссылка скопирована!');}};
+document.getElementById('copyPrivateLinkBtn').onclick=()=>{const el=document.getElementById('privateBattleLink');if(el){copyToClipboard(el.value);toast('🔗 Скопировано!');}};
 document.getElementById('avatarInput').onchange=function(e){const f=e.target.files[0];if(!f)return;if(f.size>2*1024*1024){toast('Файл > 2MB');return;}const r=new FileReader();r.onload=ev=>{state.avatarUrl=ev.target.result;renderAvatar();saveUser();toast('✅ Аватар обновлён');};r.readAsDataURL(f);};
 document.getElementById('editNameBtn').onclick=()=>{const n=prompt('Введите имя:',state.displayName||'ИГРОК');if(n&&n.trim()){state.displayName=n.trim().slice(0,20).toUpperCase();document.getElementById('pName').innerText=state.displayName;saveUser();toast('✅ Имя обновлено');}};
 document.getElementById('bsSkip').onclick=()=>document.getElementById('browserStub').classList.remove('show');
@@ -1580,14 +1631,12 @@ function setupPWA(){
 
 // ══════════════════════════════════════════════
 // TELEGRAM ИНИЦИАЛИЗАЦИЯ
-// Автоматически подтягиваем профиль — никакой ручной авторизации
 // ══════════════════════════════════════════════
 function initTG(){
   const tg=window.Telegram?.WebApp;
   if(tg){
     tg.expand();tg.ready();
     try{tg.setHeaderColor('#0f0f0f');}catch(e){}
-    // Отслеживаем событие оплаты Stars
     tg.onEvent('invoice_closed',(data)=>{
       if(data?.status==='paid'&&selectedDepAmt){
         setBal(state.balance+selectedDepAmt.stars);
@@ -1600,25 +1649,21 @@ function initTG(){
     const u=tg.initDataUnsafe?.user;
     if(u){
       tgUser={...u};userId='tg_'+u.id;
-      // Сохраняем для восстановления на следующей сессии
       localStorage.setItem('gc_user_id',userId);
       localStorage.setItem('gc_user_data',JSON.stringify({id:u.id,username:u.username,first_name:u.first_name,photo_url:u.photo_url}));
       if(!state.displayName)state.displayName=u.first_name||'ИГРОК';
       return true;
     }
   }
-  // Попытка восстановить TG-сессию из localStorage
   const sid=localStorage.getItem('gc_user_id');
   if(sid){
     userId=sid;
     try{const d=localStorage.getItem('gc_user_data');if(d){tgUser=JSON.parse(d);if(!state.displayName)state.displayName=tgUser.first_name||'ИГРОК';}}catch(e){}
     return true;
   }
-  // Браузер без Telegram — временный ID + заглушка
   let stored=localStorage.getItem('gc_uid2');
   if(!stored){stored='g_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);localStorage.setItem('gc_uid2',stored);}
   userId=stored;
-  // Показываем заглушку через 2 сек (не сразу — чтобы не мешать загрузке)
   if(!localStorage.getItem('gc_stub_skipped')){
     setTimeout(()=>document.getElementById('browserStub').classList.add('show'),2000);
   }
@@ -1627,17 +1672,31 @@ function initTG(){
 document.getElementById('bsSkip').onclick=()=>{document.getElementById('browserStub').classList.remove('show');localStorage.setItem('gc_stub_skipped','1');};
 
 // ══════════════════════════════════════════════
-// ПРОВЕРКА РЕФЕРАЛА И JOIN-ССЫЛКИ
+// ПРОВЕРКА РЕФЕРАЛА И JOIN-ССЫЛКИ - ИСПРАВЛЕНА ОШИБКА #3
 // ══════════════════════════════════════════════
 function checkReferral(){
   const p=new URLSearchParams(window.location.search);
   const ref=p.get('ref');
-  if(ref&&ref!==state.refCode&&!localStorage.getItem('gc_ref_used')){
-    localStorage.setItem('gc_ref_used','1');state.balance+=50;toast('🎁 +50 ★ реферальный бонус');
+  if(ref&&ref!==state.refCode&&!localStorage.getItem('gc_ref_used_'+ref)){
+    localStorage.setItem('gc_ref_used_'+ref,'1');
+    state.balance+=50;
+    // Сохраняем использованный реферальный код
+    if(!state.usedRefCode) state.usedRefCode=ref;
+    saveUser();
+    toast('🎁 +50 ★ реферальный бонус');
   }
   const joinId=p.get('join');
   if(joinId){
-    const wait=setInterval(()=>{if(dataLoaded&&userId){clearInterval(wait);setTimeout(async()=>{const rows=await sb(`/rest/v1/battles?id=eq.${joinId}&select=*`);if(rows?.length>0&&rows[0].status==='waiting')joinBattle(joinId);else toast('❌ Батл не найден');},500);}},200);
+    const wait=setInterval(()=>{
+      if(dataLoaded&&userId){
+        clearInterval(wait);
+        setTimeout(async()=>{
+          const rows=await sb(`/rest/v1/battles?id=eq.${joinId}&select=*`);
+          if(rows?.length>0&&rows[0].status==='waiting')joinBattle(joinId);
+          else toast('❌ Батл не найден');
+        },500);
+      }
+    },200);
     setTimeout(()=>clearInterval(wait),10000);
   }
 }
@@ -1647,10 +1706,8 @@ function checkReferral(){
 // ══════════════════════════════════════════════
 async function init(){
   initTG();
-  // Быстрая загрузка из localStorage (instant UI)
   try{const loc=localStorage.getItem('gc_state');if(loc){const d=JSON.parse(loc);if(d.userId===userId&&d.state&&Date.now()-d.ts<3600000)state={...state,...d.state};}}catch(e){}
   validateInv();renderCases();updateAllUI();
-  // Асинхронная синхронизация с Supabase
   await loadUser();validateInv();updateAllUI();
   loadBattles();initRT();checkReferral();
 }
