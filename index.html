@@ -733,11 +733,18 @@ function handleRealtimeMessage(msg){
     if(!row)return;
     const isPub = row.is_private===false || row.is_private===null;
     if(msg.event==='INSERT'){
-      if(isPub && row.status==='waiting' && !battles.find(b=>b.id===row.id)) battles.unshift(row);
-      if(row.is_private===true && row.creator_id===userId && row.status==='waiting' && !privateBattles.find(b=>b.id===row.id)) privateBattles.unshift(row);
-      renderPvpLobby();
+      if(isPub && row.status==='waiting' && !battles.find(b=>b.id===row.id)) {
+        battles.unshift(row);
+        renderPvpLobby();
+        console.log('[WS] Новый батл добавлен:', row.id);
+      }
+      if(row.is_private===true && row.creator_id===userId && row.status==='waiting' && !privateBattles.find(b=>b.id===row.id)) {
+        privateBattles.unshift(row);
+        renderPvpLobby();
+      }
     }
     if(msg.event==='UPDATE'){
+      console.log('[WS] Обновление батла:', row.id, row.status);
       if(row.status!=='waiting'){
         battles=battles.filter(b=>b.id!==row.id);
         privateBattles=privateBattles.filter(b=>b.id!==row.id);
@@ -752,7 +759,12 @@ function handleRealtimeMessage(msg){
         activeCoinFlipBattleId=row.id;
         const creatorGift=safeJSON(row.creator_gift,{});
         const opponentGift=safeJSON(row.opponent_gift,{});
-        setTimeout(()=>{showCoinFlip(creatorGift,opponentGift,row,row.creator_id);},500);
+        console.log('[WS] Запуск анимации монетки для батла:', row.id);
+        setTimeout(()=>{
+          if(!activeCoinAnimation){
+            showCoinFlip(creatorGift, opponentGift, row, row.creator_id);
+          }
+        }, 300);
       }
     }
     if(msg.event==='DELETE'){
@@ -845,7 +857,7 @@ function renderAvatar(){
 
 function renderHistory(){
   const el=document.getElementById('histBody');if(!el)return;
-  if(!state.history.length){el.innerHTML='<tr><td colspan="3" style="color:var(--tm);text-align:center;padding:16px;font-size:12px">Нет истории</td></tr>';return;}
+  if(!state.history.length){el.innerHTML='<tr><td colspan="3" style="color:var(--tm);text-align:center;padding:16px;font-size:12px">Нет истории</td><tr>';return;}
   el.innerHTML=state.history.slice(0,25).map(h=>`<tr><td style="font-size:16px">${h.icon}</td><td>${h.action}</td><td class="${h.pos?'hist-pos':'hist-neg'}">${h.result}</td></tr>`).join('');
 }
 
@@ -1148,7 +1160,12 @@ async function joinBattle(battleId){
   privateBattles=privateBattles.filter(b=>b.id!==battleId);
   saveUserToDB();renderPvpLobby();
   const creatorGift=safeJSON(battle.creator_gift,{});
-  showCoinFlip(creatorGift,myGift,battle,battle.creator_id);
+  // Резервный запуск анимации (если WebSocket не сработает)
+  setTimeout(() => {
+    if(!activeCoinAnimation && activeCoinFlipBattleId === battleId){
+      showCoinFlip(creatorGift, myGift, battle, battle.creator_id);
+    }
+  }, 1500);
 }
 
 async function cancelBattle(battleId){
