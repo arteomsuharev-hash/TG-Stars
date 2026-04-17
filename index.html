@@ -837,45 +837,100 @@ var autoJoinProcessed = false;
 var realGiftsList = [];
 var giftImagesCache = {};
 
-// Загрузка настоящих подарков Telegram
+// Загрузка настоящих подарков Telegram (оптимизированная)
 async function loadRealGifts() {
   try {
-    var response = await fetch(BOT_API_URL + '/api/getGifts');
+    // Добавляем таймаут 5 секунд, чтобы не виснуть
+    var controller = new AbortController();
+    var timeoutId = setTimeout(() => controller.abort(), 5000);
+    
+    var response = await fetch(BOT_API_URL + '/api/getGifts', {
+      signal: controller.signal
+    });
+    clearTimeout(timeoutId);
+    
     var data = await response.json();
     if (data.success && data.gifts) {
       realGiftsList = data.gifts;
       console.log('✅ Загружено настоящих подарков Telegram:', realGiftsList.length);
       
-      // Загружаем URL изображений для подарков
+      // Загружаем URL изображений для подарков (асинхронно, не блокируя UI)
       for (var i = 0; i < realGiftsList.length; i++) {
         var gift = realGiftsList[i];
         if (gift.icon && gift.icon.startsWith('CAAC')) {
-          await loadGiftImageUrl(gift.icon, i);
+          // Не ждём загрузку каждого изображения - грузим в фоне
+          loadGiftImageUrl(gift.icon, i).catch(e => console.warn('Ошибка загрузки иконки:', e));
         }
       }
       return true;
     }
   } catch (error) {
     console.error('❌ Ошибка загрузки подарков:', error);
+    // Если ошибка - создаём тестовые подарки, чтобы сайт работал
+    createMockGifts();
   }
   return false;
 }
 
-// Загрузка URL изображения подарка по file_id
+// Функция-заглушка для тестовых подарков (если API не отвечает)
+function createMockGifts() {
+  realGiftsList = [
+    { id: 1, name: "Золотая Звезда", price: 50, icon: "⭐" },
+    { id: 2, name: "Серебряный Кристалл", price: 100, icon: "💎" },
+    { id: 3, name: "Бронзовый Сундук", price: 25, icon: "📦" },
+    { id: 4, name: "Рубиновое Сердце", price: 200, icon: "❤️" },
+    { id: 5, name: "Сапфир Удачи", price: 150, icon: "🔵" },
+    { id: 6, name: "Изумрудный Ключ", price: 300, icon: "🟢" },
+    { id: 7, name: "Алмазная Корона", price: 500, icon: "👑" },
+    { id: 8, name: "Мифический Артефакт", price: 800, icon: "🏆" }
+  ];
+  console.log('✅ Созданы тестовые подарки (API недоступен)');
+}
+
+// Загрузка URL изображения подарка по file_id (с кешем)
+var imageLoadQueue = [];
+var isLoadingImages = false;
+
 async function loadGiftImageUrl(fileId, index) {
-  try {
-    var url = `https://api.telegram.org/bot${BOT_TOKEN}/getFile?file_id=${fileId}`;
-    var response = await fetch(url);
-    var data = await response.json();
-    if (data.ok && data.result.file_path) {
-      giftImagesCache[fileId] = `https://api.telegram.org/file/bot${BOT_TOKEN}/${data.result.file_path}`;
-      if (realGiftsList[index]) {
-        realGiftsList[index].imageUrl = giftImagesCache[fileId];
-      }
-    }
-  } catch (e) {
-    console.error('Ошибка загрузки изображения:', e);
+  // Проверяем кеш
+  if (giftImagesCache[fileId]) {
+    if (realGiftsList[index]) realGiftsList[index].imageUrl = giftImagesCache[fileId];
+    return;
   }
+  
+  // Добавляем в очередь
+  imageLoadQueue.push({ fileId, index });
+  processImageQueue();
+}
+
+async function processImageQueue() {
+  if (isLoadingImages) return;
+  if (imageLoadQueue.length === 0) return;
+  
+  isLoadingImages = true;
+  
+  while (imageLoadQueue.length > 0) {
+    var task = imageLoadQueue.shift();
+    try {
+      var url = `https://api.telegram.org/bot${BOT_TOKEN}/getFile?file_id=${task.fileId}`;
+      var response = await fetch(url);
+      var data = await response.json();
+      if (data.ok && data.result.file_path) {
+        giftImagesCache[task.fileId] = `https://api.telegram.org/file/bot${BOT_TOKEN}/${data.result.file_path}`;
+        if (realGiftsList[task.index]) {
+          realGiftsList[task.index].imageUrl = giftImagesCache[task.fileId];
+          // Обновляем UI если нужно
+          updateAllUI();
+        }
+      }
+    } catch (e) {
+      console.warn('Ошибка загрузки изображения:', e);
+    }
+    // Небольшая задержка между запросами, чтобы не перегружать API
+    await new Promise(r => setTimeout(r, 100));
+  }
+  
+  isLoadingImages = false;
 }
 
 // Получить URL иконки подарка
@@ -2221,21 +2276,23 @@ setInterval(upOnline, 6000);
 upOnline();
 
 function setupPWA() {
-  // Получаем корректный start_url
-  var startUrl = window.location.pathname;
-  if (!startUrl || startUrl === '' || startUrl === '/') {
-    startUrl = '/';
-  }
+  // Получаем корректный start_url - используем корневой путь
+  var startUrl = '/';
   
   var m = { 
     name: "GiftCase", 
     short_name: "GiftCase", 
-    start_url: startUrl, 
+    start_url: startUrl,
+    scope: "/",
     display: "standalone", 
     background_color: "#060606", 
     theme_color: "#060606", 
     icons: [{ src: "https://fav.farm/🎁", sizes: "192x192", type: "image/png" }] 
   };
+  
+  // Удаляем старый манифест, если есть
+  var oldManifest = document.querySelector('link[rel="manifest"]');
+  if (oldManifest) oldManifest.remove();
   
   try {
     var b = new Blob([JSON.stringify(m)], { type: 'application/manifest+json' });
