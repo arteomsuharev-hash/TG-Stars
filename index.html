@@ -28,9 +28,6 @@
   --tab-h:58px;
 }
 
-/* ══════════════════════════════════════════
-   СБРОС И БАЗА
-══════════════════════════════════════════ */
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{height:100%;overflow:hidden}
 body{
@@ -48,9 +45,6 @@ button{font-family:var(--font-b);cursor:pointer;border:none;background:none;colo
 input,select,textarea{font-family:var(--font-b)}
 img{display:block}
 
-/* ══════════════════════════════════════════
-   КАРКАС
-══════════════════════════════════════════ */
 .app{display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden;position:relative}
 
 .topbar{
@@ -119,9 +113,6 @@ img{display:block}
 .sec-title{font-family:var(--font-d);font-size:28px;letter-spacing:2px;color:var(--white)}
 .sec-sub{font-size:10px;color:var(--tm);text-transform:uppercase;letter-spacing:.5px}
 
-/* ══════════════════════════════════════════
-   КЕЙСЫ — 6 ШТУК, 3 КОЛОНКИ, КАРТИНКИ
-══════════════════════════════════════════ */
 .cases-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 
 .case-card{
@@ -163,7 +154,8 @@ img{display:block}
   width:100%;padding:7px;
   border-radius:var(--r-full);color:var(--white);font-size:10px;font-weight:700;
   letter-spacing:.8px;text-transform:uppercase;transition:.15s;
-  position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.1)
+  position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.1);
+  cursor:pointer
 }
 .open-btn::after{
   content:'';position:absolute;inset:0;
@@ -173,7 +165,6 @@ img{display:block}
 .open-btn:hover::after{transform:translateX(100%)}
 .open-btn:active{transform:scale(.97)}
 
-/* ── ЦВЕТА РЕДКОСТЕЙ ── */
 .c-starter{
   border:1px solid rgba(136,136,136,.5);
   box-shadow:0 5px 15px rgba(136,136,136,.2);
@@ -305,9 +296,7 @@ img{display:block}
 .btn-gold{background:linear-gradient(135deg,#c8a96e,#e8c98e);color:#000}.btn-gold:hover{filter:brightness(1.1)}
 .btn-sm{padding:8px 16px;font-size:11px;width:auto}
 
-/* ══════════════════════════════════════════
-   АПГРЕЙД — ИСПРАВЛЕНА СТРЕЛКА
-══════════════════════════════════════════ */
+/* АПГРЕЙД — СТРЕЛКА В ОДНУ СТОРОНУ */
 .upg-layout{display:flex;flex-direction:column;gap:12px}
 .upg-stake-box{background:var(--s1);border:1px solid var(--border);border-radius:var(--r-lg);padding:14px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:.15s}
 .upg-stake-box:hover{border-color:var(--borderL)}.upg-stake-box.filled{border-color:var(--borderL)}
@@ -327,7 +316,7 @@ img{display:block}
 .upg-target-item.selected{border-color:var(--gold)}
 .uti-icon{font-size:20px}.uti-name{font-size:7px;color:var(--ts);text-align:center;line-height:1.2}.uti-val{font-size:9px;font-weight:700;color:var(--gold)}
 
-/* Колесо апгрейда — СТРЕЛКА ТЕПЕРЬ НА МЕСТЕ */
+/* Колесо апгрейда — СТРЕЛКА ТОЛЬКО ВВЕРХ */
 .upg-wheel-wrap{display:flex;flex-direction:column;align-items:center;gap:12px;padding:16px 0}
 .upg-wheel-svg{
   position:relative;
@@ -340,7 +329,6 @@ img{display:block}
   height:100%;
   display:block
 }
-/* Стрелка поверх SVG — строго по центру */
 .upg-arrow-wrap{
   position:absolute;
   top:0;
@@ -354,20 +342,30 @@ img{display:block}
 }
 .upg-arrow-inner{
   position:relative;
-  width:4px;
-  height:80px;
-  transform-origin:50% 100%;
-  transform:rotate(0deg)
+  width:0;
+  height:0;
+  transform-origin:50% 100%
 }
 .upg-arrow{
   position:absolute;
   bottom:0;
-  left:0;
+  left:-3px;
+  width:0;
+  height:0;
+  border-left:6px solid transparent;
+  border-right:6px solid transparent;
+  border-bottom:16px solid var(--white);
+  filter:drop-shadow(0 2px 4px rgba(0,0,0,.3))
+}
+.upg-arrow::after{
+  content:'';
+  position:absolute;
+  bottom:-16px;
+  left:-2px;
   width:4px;
-  height:80px;
+  height:70px;
   background:var(--white);
-  border-radius:2px;
-  filter:drop-shadow(0 0 6px rgba(255,255,255,.6))
+  border-radius:2px
 }
 .upg-arrow-center{
   position:absolute;
@@ -581,6 +579,7 @@ img{display:block}
 .bs-btn:hover{filter:brightness(1.1)}
 .bs-skip{margin-top:12px;font-size:12px;color:var(--tm);cursor:pointer;text-decoration:underline}
 
+/* МОДАЛЬНЫЕ ОКНА — УВЕЛИЧЕННАЯ ЗОНА СВАЙПА */
 .modal-ov{
   position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:600;
   display:none;align-items:flex-end;justify-content:center;
@@ -597,10 +596,28 @@ img{display:block}
   transition:height .1s ease;
   overscroll-behavior:contain
 }
+/* Увеличенная зона для свайпа — 40px от края */
 .modal-handle{
-  width:40px;height:4px;background:var(--borderL);border-radius:2px;
-  margin:0 auto 16px;cursor:ns-resize;touch-action:none;
-  transition:background .15s
+  width:80px;
+  height:6px;
+  background:var(--borderL);
+  border-radius:3px;
+  margin:0 auto 20px;
+  cursor:ns-resize;
+  touch-action:none;
+  transition:background .15s, transform .1s;
+  position:relative
+}
+/* Добавляем невидимую область для свайпа вокруг полоски */
+.modal-handle::before{
+  content:'';
+  position:absolute;
+  top:-20px;
+  left:-30px;
+  right:-30px;
+  bottom:-20px;
+  background:transparent;
+  z-index:-1
 }
 .modal-handle:hover,.modal-handle:active{background:var(--gold)}
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
@@ -611,6 +628,29 @@ img{display:block}
 .ib-btn{padding:6px 12px;background:var(--white);border-radius:var(--r-full);color:var(--bg);font-size:11px;font-weight:700;flex-shrink:0;cursor:pointer;transition:.15s}
 .ib-btn:hover{background:#e8e8e8}
 .ib-close{width:18px;height:18px;border-radius:50%;background:var(--s3);color:var(--tm);font-size:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer}
+
+/* ПК оптимизация — курсоры, hover эффекты */
+@media(min-width:768px){
+  .tab{cursor:pointer}
+  .tab:hover{color:var(--gold)}
+  .case-card{cursor:pointer}
+  .open-btn{cursor:pointer}
+  .inv-card{cursor:pointer}
+  .btn{cursor:pointer}
+  .lc-join{cursor:pointer}
+  .pvp-tab{cursor:pointer}
+  .dep-amt{cursor:pointer}
+  .balance-pill{cursor:pointer}
+  .add-btn{cursor:pointer}
+  .edit-nm-btn{cursor:pointer}
+  .avatar-img{cursor:pointer}
+  .avatar-edit{cursor:pointer}
+  .sell-chip{cursor:pointer}
+  .upg-stake-box{cursor:pointer}
+  .upg-target-item{cursor:pointer}
+  .craft-slot{cursor:pointer}
+  .modal-handle{cursor:ns-resize}
+}
 
 @media(max-width:359px){
   .cases-grid{grid-template-columns:repeat(2,1fr);gap:7px}
@@ -1336,8 +1376,9 @@ function spinArrowAndResult(chance,win){
     var wz=chance/100;
     var land=win?(Math.random()*wz*360):(wz*360+Math.random()*(360-wz*360));
     var total=spins*360+land;
-    arrow.style.transition='transform '+(2.5+Math.random()*.5)+'s cubic-bezier(0.08,0.82,0.17,1)';
-    arrow.style.transform='rotate('+total+'deg)';
+    arrow.parentElement.style.transformOrigin='50% 100%';
+    arrow.parentElement.style.transition='transform '+(2.5+Math.random()*.5)+'s cubic-bezier(0.08,0.82,0.17,1)';
+    arrow.parentElement.style.transform='rotate('+total+'deg)';
     var startT=performance.now(),dur=2700,prevPos=0,prevTick=0;
     function arrowTick(now){
       if(now-startT>dur)return;
@@ -1376,7 +1417,8 @@ async function doUpgrade(){
     document.body.appendChild(loseOv);document.getElementById('lClose').onclick=function(){loseOv.remove();};
   }
   updateAllUI();saveUser();
-  var arrow=document.getElementById('upgArrow');if(arrow){arrow.style.transition='none';arrow.style.transform='rotate(0deg)';}
+  var arrowInner=document.querySelector('#upgArrow').parentElement;
+  if(arrowInner){arrowInner.style.transition='none';arrowInner.style.transform='rotate(0deg)';}
 }
 function renderUpgHistory(){
   var box=document.getElementById('upgHistBox');var list=document.getElementById('upgHistList');if(!box||!list)return;
