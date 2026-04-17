@@ -980,7 +980,7 @@ function renderAvatar(){
 }
 function renderHist(){
   const el=document.getElementById('histBody');if(!el)return;
-  if(!state.history.length){el.innerHTML='<tr><td colspan="3" style="color:var(--tm);text-align:center;padding:14px;font-size:11px">Нет истории</td></table>';return;}
+  if(!state.history.length){el.innerHTML='<tr><td colspan="3" style="color:var(--tm);text-align:center;padding:14px;font-size:11px">Нет истории</td></tr>';return;}
   el.innerHTML=state.history.slice(0,25).map(h=>`<tr><td style="font-size:15px">${escapeHtml(h.icon)}</td><td>${escapeHtml(h.action)}</td><td class="${h.pos?'hist-pos':'hist-neg'}">${escapeHtml(h.result)}</td></tr>`).join('');
 }
 function updateAllUI(){
