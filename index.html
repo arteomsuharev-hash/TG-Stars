@@ -838,36 +838,72 @@ var autoJoinProcessed = false;
 var realGiftsList = [];
 var giftImagesCache = {};
 
-// Загрузка настоящих подарков Telegram (оптимизированная)
+// Загрузка подарков напрямую из Telegram API
+async function fetchGiftsFromTelegramAPI() {
+  try {
+    console.log('🔄 Прямой запрос к Telegram API...');
+    var response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getAvailableGifts`);
+    var data = await response.json();
+    
+    if (data.ok && data.result && data.result.gifts) {
+      var gifts = [];
+      for (var i = 0; i < data.result.gifts.length; i++) {
+        var tgGift = data.result.gifts[i];
+        gifts.push({
+          id: tgGift.id,
+          name: tgGift.title || tgGift.name || "Подарок",
+          price: tgGift.star_count || 50,
+          icon: tgGift.sticker?.file_id || null,
+          imageUrl: null
+        });
+      }
+      console.log('✅ Загружено через Telegram API:', gifts.length);
+      return gifts;
+    }
+  } catch (e) {
+    console.warn('Ошибка получения подарков из Telegram API:', e);
+  }
+  return null;
+}
+
+// Загрузка настоящих подарков Telegram
 async function loadRealGifts() {
   try {
-    // Добавляем таймаут 5 секунд, чтобы не виснуть
-    var controller = new AbortController();
-    var timeoutId = setTimeout(() => controller.abort(), 5000);
+    console.log('🔄 Загрузка подарков...');
     
-    var response = await fetch(BOT_API_URL + '/api/getGifts', {
-      signal: controller.signal
-    });
-    clearTimeout(timeoutId);
-    
+    // Пытаемся загрузить через свой API
+    var response = await fetch(BOT_API_URL + '/api/getGifts');
     var data = await response.json();
-    if (data.success && data.gifts) {
+    
+    if (data.success && data.gifts && data.gifts.length > 0) {
       realGiftsList = data.gifts;
-      console.log('✅ Загружено настоящих подарков Telegram:', realGiftsList.length);
-      
-      // Загружаем URL изображений для подарков (асинхронно, не блокируя UI)
-      for (var i = 0; i < realGiftsList.length; i++) {
-        var gift = realGiftsList[i];
-        if (gift.icon && gift.icon.startsWith('CAAC')) {
-          // Не ждём загрузку каждого изображения - грузим в фоне
-          loadGiftImageUrl(gift.icon, i).catch(e => console.warn('Ошибка загрузки иконки:', e));
-        }
+      console.log('✅ Загружено через API:', realGiftsList.length);
+    } else {
+      // Если свой API не работает, пробуем напрямую через Telegram API
+      var tgGifts = await fetchGiftsFromTelegramAPI();
+      if (tgGifts && tgGifts.length > 0) {
+        realGiftsList = tgGifts;
+      } else {
+        // Если ничего не работает, создаём тестовые подарки
+        console.warn('⚠️ Не удалось загрузить подарки, создаём тестовые');
+        createMockGifts();
       }
-      return true;
     }
+    
+    // Загружаем URL изображений для подарков
+    for (var i = 0; i < realGiftsList.length; i++) {
+      var gift = realGiftsList[i];
+      if (gift.icon && gift.icon.startsWith('CAAC')) {
+        loadGiftImageUrl(gift.icon, i).catch(e => console.warn('Ошибка загрузки иконки:', e));
+      } else if (gift.image_url) {
+        realGiftsList[i].imageUrl = gift.image_url;
+      }
+    }
+    
+    updateAllUI();
+    return true;
   } catch (error) {
     console.error('❌ Ошибка загрузки подарков:', error);
-    // Если ошибка - создаём тестовые подарки, чтобы сайт работал
     createMockGifts();
   }
   return false;
@@ -876,16 +912,24 @@ async function loadRealGifts() {
 // Функция-заглушка для тестовых подарков (если API не отвечает)
 function createMockGifts() {
   realGiftsList = [
-    { id: 1, name: "Золотая Звезда", price: 50, icon: "⭐" },
-    { id: 2, name: "Серебряный Кристалл", price: 100, icon: "💎" },
-    { id: 3, name: "Бронзовый Сундук", price: 25, icon: "📦" },
-    { id: 4, name: "Рубиновое Сердце", price: 200, icon: "❤️" },
-    { id: 5, name: "Сапфир Удачи", price: 150, icon: "🔵" },
-    { id: 6, name: "Изумрудный Ключ", price: 300, icon: "🟢" },
-    { id: 7, name: "Алмазная Корона", price: 500, icon: "👑" },
-    { id: 8, name: "Мифический Артефакт", price: 800, icon: "🏆" }
+    { id: 1, name: "Золотая Звезда", price: 50, icon: "⭐", imageUrl: null },
+    { id: 2, name: "Серебряный Кристалл", price: 100, icon: "💎", imageUrl: null },
+    { id: 3, name: "Бронзовый Сундук", price: 25, icon: "📦", imageUrl: null },
+    { id: 4, name: "Рубиновое Сердце", price: 200, icon: "❤️", imageUrl: null },
+    { id: 5, name: "Сапфир Удачи", price: 150, icon: "🔵", imageUrl: null },
+    { id: 6, name: "Изумрудный Ключ", price: 300, icon: "🟢", imageUrl: null },
+    { id: 7, name: "Алмазная Корона", price: 500, icon: "👑", imageUrl: null },
+    { id: 8, name: "Мифический Артефакт", price: 800, icon: "🏆", imageUrl: null },
+    { id: 9, name: "Лунный Амулет", price: 45, icon: "🌙", imageUrl: null },
+    { id: 10, name: "Солнечный Медальон", price: 85, icon: "☀️", imageUrl: null },
+    { id: 11, name: "Драконий Глаз", price: 250, icon: "🐉", imageUrl: null },
+    { id: 12, name: "Феникс Перо", price: 400, icon: "🔥", imageUrl: null },
+    { id: 13, name: "Ключ Бесконечности", price: 650, icon: "🔑", imageUrl: null },
+    { id: 14, name: "Космический Камень", price: 750, icon: "🌌", imageUrl: null },
+    { id: 15, name: "Сердце Дракона", price: 900, icon: "❤️‍🔥", imageUrl: null }
   ];
-  console.log('✅ Созданы тестовые подарки (API недоступен)');
+  console.log('✅ Созданы тестовые подарки:', realGiftsList.length);
+  updateAllUI();
 }
 
 // Загрузка URL изображения подарка по file_id (с кешем)
@@ -895,7 +939,10 @@ var isLoadingImages = false;
 async function loadGiftImageUrl(fileId, index) {
   // Проверяем кеш
   if (giftImagesCache[fileId]) {
-    if (realGiftsList[index]) realGiftsList[index].imageUrl = giftImagesCache[fileId];
+    if (realGiftsList[index]) {
+      realGiftsList[index].imageUrl = giftImagesCache[fileId];
+      updateAllUI();
+    }
     return;
   }
   
@@ -920,15 +967,22 @@ async function processImageQueue() {
         giftImagesCache[task.fileId] = `https://api.telegram.org/file/bot${BOT_TOKEN}/${data.result.file_path}`;
         if (realGiftsList[task.index]) {
           realGiftsList[task.index].imageUrl = giftImagesCache[task.fileId];
-          // Обновляем UI если нужно
+          updateAllUI();
+        }
+      } else {
+        if (realGiftsList[task.index] && !realGiftsList[task.index].imageUrl) {
+          realGiftsList[task.index].icon = "🎁";
           updateAllUI();
         }
       }
     } catch (e) {
       console.warn('Ошибка загрузки изображения:', e);
+      if (realGiftsList[task.index] && !realGiftsList[task.index].imageUrl) {
+        realGiftsList[task.index].icon = "🎁";
+        updateAllUI();
+      }
     }
-    // Небольшая задержка между запросами, чтобы не перегружать API
-    await new Promise(r => setTimeout(r, 100));
+    await new Promise(r => setTimeout(r, 200));
   }
   
   isLoadingImages = false;
@@ -966,10 +1020,9 @@ var CASES = [
   {id:"mythic", name:"МИФИЧЕСКИЙ", price:990, cls:"c-mythic", emoji:"💀"}
 ];
 
-// Функция для получения случайного подарка из кейса (имитация)
+// Функция для получения случайного подарка из кейса
 function getRandomGiftFromCase(casePrice) {
   if (!realGiftsList.length) return null;
-  // Фильтруем подарки по цене (приблизительно)
   var minPrice = casePrice * 0.5;
   var maxPrice = casePrice * 2.5;
   var available = [];
@@ -984,7 +1037,6 @@ function getRandomGiftFromCase(casePrice) {
   return Object.assign({}, available[randomIndex]);
 }
 
-// Функции для работы с инвентарём (обновлены для работы с настоящими подарками)
 function addGiftToInventory(gift) {
   state.inventory.push({
     id: gift.id,
@@ -1302,7 +1354,7 @@ function renderHist() {
   var html = '';
   for (var i = 0; i < Math.min(state.history.length, 25); i++) {
     var h = state.history[i];
-    html += '<tr><td style="font-size:15px">' + escapeHtml(h.icon) + '</td><td>' + escapeHtml(h.action) + '</td><td class="' + (h.pos ? 'hist-pos' : 'hist-neg') + '">' + escapeHtml(h.result) + '<tr>';
+    html += '<tr><td style="font-size:15px">' + escapeHtml(h.icon) + '</td><td>' + escapeHtml(h.action) + '</td><td class="' + (h.pos ? 'hist-pos' : 'hist-neg') + '">' + escapeHtml(h.result) + '</td></tr>';
   }
   el.innerHTML = html;
 }
@@ -1325,8 +1377,7 @@ function renderCases() {
     html += '<div class="case-card ' + c.cls + '">';
     html += '<div class="case-visual">';
     html += '<div class="case-image">';
-    html += '<img class="case-img" src="images/cases/' + c.id + '.png" alt="' + c.name + '" onerror="this.style.display=\'none\';this.nextSibling.style.display=\'block\'">';
-    html += '<div class="case-emoji" style="display:none">' + c.emoji + '</div>';
+    html += '<div class="case-emoji">' + c.emoji + '</div>';
     html += '</div></div>';
     html += '<div class="case-body">';
     html += '<div class="case-name">' + c.name + '</div>';
@@ -2278,7 +2329,6 @@ upOnline();
 
 // PWA полностью отключён - удаляем все манифесты
 function setupPWA() {
-  // Удаляем все существующие манифесты
   var oldManifests = document.querySelectorAll('link[rel="manifest"]');
   oldManifests.forEach(function(m) { m.remove(); });
 }
