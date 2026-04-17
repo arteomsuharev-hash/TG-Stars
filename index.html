@@ -980,7 +980,7 @@ function renderAvatar(){
 }
 function renderHist(){
   const el=document.getElementById('histBody');if(!el)return;
-  if(!state.history.length){el.innerHTML='<tr><td colspan="3" style="color:var(--tm);text-align:center;padding:14px;font-size:11px">Нет истории</td></td>';return;}
+  if(!state.history.length){el.innerHTML='<tr><td colspan="3" style="color:var(--tm);text-align:center;padding:14px;font-size:11px">Нет истории</td></table>';return;}
   el.innerHTML=state.history.slice(0,25).map(h=>`<tr><td style="font-size:15px">${escapeHtml(h.icon)}</td><td>${escapeHtml(h.action)}</td><td class="${h.pos?'hist-pos':'hist-neg'}">${escapeHtml(h.result)}</td></tr>`).join('');
 }
 function updateAllUI(){
@@ -1387,24 +1387,24 @@ function openDepositModal(){
     let startY = 0;
     let startHeight = 0;
     
-    const onMove = (e) => {
-      const currentY = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
+    const onMove = function(e) {
+      var currentY = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
       if(!currentY) return;
-      const dy = currentY - startY;
-      let newHeight = startHeight - dy;
+      var dy = currentY - startY;
+      var newHeight = startHeight - dy;
       newHeight = Math.min(window.innerHeight * 0.85, Math.max(280, newHeight));
       sheet.style.height = newHeight + 'px';
       sheet.style.maxHeight = newHeight + 'px';
     };
     
-    const onStop = () => {
+    const onStop = function() {
       document.removeEventListener('mousemove', onMove);
       document.removeEventListener('mouseup', onStop);
       document.removeEventListener('touchmove', onMove);
       document.removeEventListener('touchend', onStop);
     };
     
-    const onStart = (e) => {
+    const onStart = function(e) {
       startY = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
       startHeight = sheet.offsetHeight;
       document.addEventListener('mousemove', onMove);
@@ -1418,7 +1418,7 @@ function openDepositModal(){
     handle.addEventListener('touchstart', onStart);
   }
 }
-document.getElementById('depCancelBtn').onclick=()=>document.getElementById('depositModal').classList.remove('show');
+document.getElementById('depCancelBtn').onclick=function(){ document.getElementById('depositModal').classList.remove('show'); };
 
 // ИСПРАВЛЕННАЯ ОПЛАТА ЧЕРЕЗ TELEGRAM STARS
 document.getElementById('depConfirmBtn').onclick = function() {
@@ -1427,7 +1427,6 @@ document.getElementById('depConfirmBtn').onclick = function() {
   var tg = window.Telegram?.WebApp;
   
   if (tg && tg.openInvoice) {
-    // Открываем окно оплаты
     tg.openInvoice({
       title: 'GiftCase Stars',
       description: 'Пополнение баланса',
@@ -1441,7 +1440,6 @@ document.getElementById('depConfirmBtn').onclick = function() {
       prices: [{ label: selectedDepAmt.stars + ' Stars', amount: selectedDepAmt.price }]
     });
     
-    // Обработка результата оплаты
     tg.onEvent('invoice_closed', function(data) {
       if (data.status === 'paid') {
         setBal(state.balance + selectedDepAmt.stars);
@@ -1456,7 +1454,6 @@ document.getElementById('depConfirmBtn').onclick = function() {
       }
     });
   } else {
-    // Демо-режим
     setBal(state.balance + selectedDepAmt.stars);
     addHist('💎', 'Пополнение (демо)', '+' + selectedDepAmt.stars + ' ★', true);
     toast('✅ Баланс пополнен на ' + selectedDepAmt.stars + ' ★ (демо)');
@@ -1474,11 +1471,12 @@ function openWithdrawModal(){
   grid.querySelectorAll('.inv-card').forEach(card=>{card.onclick=()=>{grid.querySelectorAll('.inv-card').forEach(c=>c.classList.remove('selected'));card.classList.add('selected');withdrawGiftIdx=+card.dataset.wi;document.getElementById('withdrawConfirmBtn').disabled=false;};});
   document.getElementById('withdrawModal').classList.add('show');
 }
-document.getElementById('withdrawCancelBtn').onclick=()=>document.getElementById('withdrawModal').classList.remove('show');
-document.getElementById('withdrawConfirmBtn').onclick=async()=>{
+document.getElementById('withdrawCancelBtn').onclick=function(){ document.getElementById('withdrawModal').classList.remove('show'); };
+document.getElementById('withdrawConfirmBtn').onclick=async function(){
   if(withdrawGiftIdx===null||!state.inventory[withdrawGiftIdx])return;
-  const g=state.inventory[withdrawGiftIdx];const target=document.getElementById('withdrawTarget').value.trim().replace('@','');
-  const tg=window.Telegram?.WebApp;
+  var g=state.inventory[withdrawGiftIdx];
+  var target=document.getElementById('withdrawTarget').value.trim().replace('@','');
+  var tg=window.Telegram?.WebApp;
   if(tg){
     tg.sendData(JSON.stringify({action:'withdraw_gift',gift:g,target_username:target||null,user_id:userId}));
     state.inventory.splice(withdrawGiftIdx,1);withdrawGiftIdx=null;
@@ -1490,52 +1488,53 @@ document.getElementById('withdrawConfirmBtn').onclick=async()=>{
   }
 };
 
-document.querySelectorAll('.pvp-tab').forEach(btn=>{btn.onclick=()=>{document.querySelectorAll('.pvp-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');pvpMode=btn.dataset.pvptab;const ip=pvpMode==='public';document.getElementById('publicCreateBox').style.display=ip?'':'none';document.getElementById('privateCreateBox').style.display=ip?'none':'';document.getElementById('publicLobbyWrap').style.display=ip?'':'none';document.getElementById('privateLobbyWrap').style.display=ip?'none':'';renderInv('invPvp',false,ip?'pvp_pub':'pvp_priv');renderPvpLobby();SFX.click();};});
+document.querySelectorAll('.pvp-tab').forEach(function(btn){ btn.onclick=function(){ document.querySelectorAll('.pvp-tab').forEach(function(b){ b.classList.remove('active'); }); btn.classList.add('active'); pvpMode=btn.dataset.pvptab; var ip=pvpMode==='public'; document.getElementById('publicCreateBox').style.display=ip?'':'none'; document.getElementById('privateCreateBox').style.display=ip?'none':''; document.getElementById('publicLobbyWrap').style.display=ip?'':'none'; document.getElementById('privateLobbyWrap').style.display=ip?'none':''; renderInv('invPvp',false,ip?'pvp_pub':'pvp_priv'); renderPvpLobby(); SFX.click(); }; });
 
-document.querySelectorAll('.tab').forEach(btn=>{btn.onclick=()=>{if(!RL.check('tab',10))return;document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));const tab=btn.dataset.tab;document.getElementById(tab+'Panel').classList.add('active');document.getElementById('mainContent').scrollTop=0;if(tab==='pvp')loadBattles();if(tab==='profile')updateStats();SFX.click();vibrate([5]);};});
+document.querySelectorAll('.tab').forEach(function(btn){ btn.onclick=function(){ if(!RL.check('tab',10))return; document.querySelectorAll('.tab').forEach(function(b){ b.classList.remove('active'); }); btn.classList.add('active'); document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); }); var tab=btn.dataset.tab; document.getElementById(tab+'Panel').classList.add('active'); document.getElementById('mainContent').scrollTop=0; if(tab==='pvp')loadBattles(); if(tab==='profile')updateStats(); SFX.click(); vibrate([5]); }; });
 
-document.getElementById('addBtn').onclick=()=>{if(!RL.check('add',3))return;setBal(state.balance+100);addHist('⭐️','Пополнение','+100 ★',true);toast('★ +100');saveUser();};
-document.getElementById('balancePill').onclick=()=>{if(!RL.check('add',3))return;setBal(state.balance+100);addHist('⭐️','Пополнение','+100 ★',true);toast('★ +100');saveUser();};
+document.getElementById('addBtn').onclick=function(){ if(!RL.check('add',3))return; setBal(state.balance+100); addHist('⭐️','Пополнение','+100 ★',true); toast('★ +100'); saveUser(); };
+document.getElementById('balancePill').onclick=function(){ if(!RL.check('add',3))return; setBal(state.balance+100); addHist('⭐️','Пополнение','+100 ★',true); toast('★ +100'); saveUser(); };
 document.getElementById('upgradeDoBtn').onclick=doUpgrade;
 document.getElementById('craftBtn').onclick=doCraft;
 document.getElementById('createBattleBtn').onclick=createBattle;
 document.getElementById('createPrivateBattleBtn').onclick=createPrivateBattle;
 document.getElementById('depositBtn').onclick=openDepositModal;
 document.getElementById('withdrawBtn').onclick=openWithdrawModal;
-document.getElementById('shareProfileBtn').onclick=()=>{copyToClipboard(window.location.href);toast('🔗 Ссылка скопирована!');};
-document.getElementById('copyRefBtn').onclick=()=>{const el=document.getElementById('refLinkInput');if(el){copyToClipboard(el.value);toast('🔗 Реф ссылка скопирована!');}};
-document.getElementById('copyPrivateLinkBtn').onclick=()=>{const el=document.getElementById('privateBattleLink');if(el){copyToClipboard(el.value);toast('🔗 Скопировано!');}};
-document.getElementById('avatarInput').onchange=function(e){const f=e.target.files[0];if(!f)return;if(f.size>2*1024*1024){toast('Файл > 2MB');return;}const r=new FileReader();r.onload=ev=>{state.avatarUrl=ev.target.result;renderAvatar();saveUser();toast('✅ Аватар обновлён');};r.readAsDataURL(f);};
-document.getElementById('editNameBtn').onclick=()=>{const n=prompt('Введите имя:',state.displayName||'ИГРОК');if(n&&n.trim()){state.displayName=n.trim().slice(0,20).toUpperCase();document.getElementById('pName').innerText=state.displayName;saveUser();toast('✅ Имя обновлено');}};
-document.getElementById('bsSkip').onclick=()=>document.getElementById('browserStub').classList.remove('show');
+document.getElementById('shareProfileBtn').onclick=function(){ copyToClipboard(window.location.href); toast('🔗 Ссылка скопирована!'); };
+document.getElementById('copyRefBtn').onclick=function(){ var el=document.getElementById('refLinkInput'); if(el){ copyToClipboard(el.value); toast('🔗 Реф ссылка скопирована!'); } };
+document.getElementById('copyPrivateLinkBtn').onclick=function(){ var el=document.getElementById('privateBattleLink'); if(el){ copyToClipboard(el.value); toast('🔗 Скопировано!'); } };
+document.getElementById('avatarInput').onchange=function(e){ var f=e.target.files[0]; if(!f)return; if(f.size>2*1024*1024){ toast('Файл > 2MB'); return; } var r=new FileReader(); r.onload=function(ev){ state.avatarUrl=ev.target.result; renderAvatar(); saveUser(); toast('✅ Аватар обновлён'); }; r.readAsDataURL(f); };
+document.getElementById('editNameBtn').onclick=function(){ var n=prompt('Введите имя:',state.displayName||'ИГРОК'); if(n&&n.trim()){ state.displayName=n.trim().slice(0,20).toUpperCase(); document.getElementById('pName').innerText=state.displayName; saveUser(); toast('✅ Имя обновлено'); } };
+document.getElementById('bsSkip').onclick=function(){ document.getElementById('browserStub').classList.remove('show'); };
 
-function upOnline(){document.getElementById('onlineCount').innerText=140+Math.round((Math.random()-.5)*30);}
-setInterval(upOnline,6000);upOnline();
+function upOnline(){ document.getElementById('onlineCount').innerText=140+Math.round((Math.random()-.5)*30); }
+setInterval(upOnline,6000); upOnline();
 
 function setupPWA(){
-  const m={name:"GiftCase",short_name:"GiftCase",start_url:window.location.pathname,display:"standalone",background_color:"#060606",theme_color:"#060606",icons:[{src:"https://fav.farm/🎁",sizes:"192x192",type:"image/png"}]};
-  const b=new Blob([JSON.stringify(m)],{type:'application/manifest+json'});
-  const l=document.createElement('link');l.rel='manifest';l.href=URL.createObjectURL(b);document.head.appendChild(l);
-  let dp=null;
-  window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e;setTimeout(()=>{const ban=document.createElement('div');ban.className='install-banner';ban.innerHTML=`<div class="ib-icon">🎁</div><div class="ib-text"><div class="ib-title">Добавить на экран</div><div class="ib-sub">Быстрый доступ к GiftCase</div></div><button class="ib-btn" id="ib">Добавить</button><button class="ib-close" id="ibc">✕</button>`;document.body.appendChild(ban);document.getElementById('ib').onclick=async()=>{dp.prompt();await dp.userChoice;ban.remove();dp=null;};document.getElementById('ibc').onclick=()=>ban.remove();},5000);});
-}setupPWA();
+  var m={name:"GiftCase",short_name:"GiftCase",start_url:window.location.pathname,display:"standalone",background_color:"#060606",theme_color:"#060606",icons:[{src:"https://fav.farm/🎁",sizes:"192x192",type:"image/png"}]};
+  var b=new Blob([JSON.stringify(m)],{type:'application/manifest+json'});
+  var l=document.createElement('link'); l.rel='manifest'; l.href=URL.createObjectURL(b); document.head.appendChild(l);
+  var dp=null;
+  window.addEventListener('beforeinstallprompt',function(e){ e.preventDefault(); dp=e; setTimeout(function(){ var ban=document.createElement('div'); ban.className='install-banner'; ban.innerHTML='<div class="ib-icon">🎁</div><div class="ib-text"><div class="ib-title">Добавить на экран</div><div class="ib-sub">Быстрый доступ к GiftCase</div></div><button class="ib-btn" id="ib">Добавить</button><button class="ib-close" id="ibc">✕</button>'; document.body.appendChild(ban); document.getElementById('ib').onclick=async function(){ dp.prompt(); await dp.userChoice; ban.remove(); dp=null; }; document.getElementById('ibc').onclick=function(){ ban.remove(); }; },5000); });
+}
+setupPWA();
 
 function initTG(){
   console.log('🔍 Инициализация Telegram...');
-  const tg = window.Telegram?.WebApp;
+  var tg = window.Telegram?.WebApp;
   
   if(tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
     console.log('✅ Telegram WebApp найден!');
-    const user = tg.initDataUnsafe.user;
+    var user = tg.initDataUnsafe.user;
     console.log('👤 Пользователь:', user.first_name);
     
     tg.expand();
     tg.ready();
     try{tg.setHeaderColor('#0f0f0f');}catch(e){}
     
-    tg.onEvent('invoice_closed',(data)=>{
-      if(data?.status==='paid'&&selectedDepAmt){
-        setBal(state.balance+selectedDepAmt.stars);
+    tg.onEvent('invoice_closed', function(data){
+      if(data && data.status==='paid' && selectedDepAmt){
+        setBal(state.balance + selectedDepAmt.stars);
         addHist('💎','Пополнение (Stars)','+'+selectedDepAmt.stars+' ★',true);
         toast('✅ Баланс пополнен на ' + selectedDepAmt.stars + ' ★');
         document.getElementById('depositModal').classList.remove('show');
@@ -1554,28 +1553,28 @@ function initTG(){
     }));
     if(!state.displayName) state.displayName = user.first_name || 'ИГРОК';
     
-    const stub = document.getElementById('browserStub');
+    var stub = document.getElementById('browserStub');
     if(stub) stub.classList.remove('show');
     
     return true;
   }
   
   console.log('⚠️ Не в Telegram WebApp, проверяем localStorage...');
-  const savedId = localStorage.getItem('gc_user_id');
+  var savedId = localStorage.getItem('gc_user_id');
   if(savedId && savedId.startsWith('tg_')) {
     userId = savedId;
-    const savedData = localStorage.getItem('gc_user_data');
+    var savedData = localStorage.getItem('gc_user_data');
     if(savedData) {
       tgUser = JSON.parse(savedData);
       console.log('🔄 Восстановлен пользователь из localStorage:', tgUser?.first_name);
       if(!state.displayName) state.displayName = tgUser.first_name || 'ИГРОК';
     }
-    const stub = document.getElementById('browserStub');
+    var stub = document.getElementById('browserStub');
     if(stub) stub.classList.remove('show');
     return true;
   }
   
-  let guestId = localStorage.getItem('gc_uid2');
+  var guestId = localStorage.getItem('gc_uid2');
   if(!guestId){
     guestId = 'guest_' + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
     localStorage.setItem('gc_uid2', guestId);
@@ -1583,51 +1582,63 @@ function initTG(){
   userId = guestId;
   
   if(!localStorage.getItem('gc_stub_skipped')){
-    setTimeout(() => {
-      const stub = document.getElementById('browserStub');
+    setTimeout(function() {
+      var stub = document.getElementById('browserStub');
       if(stub) stub.classList.add('show');
     }, 1000);
   }
   
   return false;
 }
-document.getElementById('bsSkip').onclick=()=>{
+document.getElementById('bsSkip').onclick=function(){
   document.getElementById('browserStub').classList.remove('show');
   localStorage.setItem('gc_stub_skipped','1');
 };
 
 function checkReferral(){
-  const p=new URLSearchParams(window.location.search);
-  const ref=p.get('ref');
-  if(ref&&ref!==state.refCode&&!localStorage.getItem('gc_ref_used_'+ref)){
+  var p=new URLSearchParams(window.location.search);
+  var ref=p.get('ref');
+  if(ref && ref !== state.refCode && !localStorage.getItem('gc_ref_used_'+ref)){
     localStorage.setItem('gc_ref_used_'+ref,'1');
-    state.balance+=50;
-    if(!state.usedRefCode) state.usedRefCode=ref;
+    state.balance += 50;
+    if(!state.usedRefCode) state.usedRefCode = ref;
     saveUser();
     toast('🎁 +50 ★ реферальный бонус');
   }
-  const joinId=p.get('join');
+  var joinId = p.get('join');
   if(joinId){
-    const wait=setInterval(()=>{
-      if(dataLoaded&&userId){
+    var wait = setInterval(function(){
+      if(dataLoaded && userId){
         clearInterval(wait);
-        setTimeout(async()=>{
-          const rows=await sb(`/rest/v1/battles?id=eq.${joinId}&select=*`);
-          if(rows?.length>0&&rows[0].status==='waiting')joinBattle(joinId);
+        setTimeout(async function(){
+          var rows = await sb(`/rest/v1/battles?id=eq.${joinId}&select=*`);
+          if(rows && rows.length>0 && rows[0].status==='waiting') joinBattle(joinId);
           else toast('❌ Батл не найден');
         },500);
       }
     },200);
-    setTimeout(()=>clearInterval(wait),10000);
+    setTimeout(function(){ clearInterval(wait); },10000);
   }
 }
 
 async function init(){
   initTG();
-  try{const loc=localStorage.getItem('gc_state');if(loc){const d=JSON.parse(loc);if(d.userId===userId&&d.state&&Date.now()-d.ts<3600000)state={...state,...d.state};}}catch(e){}
-  validateInv();renderCases();updateAllUI();
-  await loadUser();validateInv();updateAllUI();
-  loadBattles();initRT();checkReferral();
+  try{
+    var loc = localStorage.getItem('gc_state');
+    if(loc){
+      var d = JSON.parse(loc);
+      if(d.userId === userId && d.state && Date.now() - d.ts < 3600000) state = Object.assign({}, state, d.state);
+    }
+  }catch(e){}
+  validateInv();
+  renderCases();
+  updateAllUI();
+  await loadUser();
+  validateInv();
+  updateAllUI();
+  loadBattles();
+  initRT();
+  checkReferral();
 }
 init();
 </script>
