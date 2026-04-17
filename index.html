@@ -316,7 +316,6 @@ img{display:block}
 .upg-target-item.selected{border-color:var(--gold)}
 .uti-icon{font-size:20px}.uti-name{font-size:7px;color:var(--ts);text-align:center;line-height:1.2}.uti-val{font-size:9px;font-weight:700;color:var(--gold)}
 
-/* Колесо апгрейда — СТРЕЛКА ТОЛЬКО ВВЕРХ */
 .upg-wheel-wrap{display:flex;flex-direction:column;align-items:center;gap:12px;padding:16px 0}
 .upg-wheel-svg{
   position:relative;
@@ -579,7 +578,6 @@ img{display:block}
 .bs-btn:hover{filter:brightness(1.1)}
 .bs-skip{margin-top:12px;font-size:12px;color:var(--tm);cursor:pointer;text-decoration:underline}
 
-/* МОДАЛЬНЫЕ ОКНА — УВЕЛИЧЕННАЯ ЗОНА СВАЙПА */
 .modal-ov{
   position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:600;
   display:none;align-items:flex-end;justify-content:center;
@@ -596,7 +594,6 @@ img{display:block}
   transition:height .1s ease;
   overscroll-behavior:contain
 }
-/* Увеличенная зона для свайпа — 40px от края */
 .modal-handle{
   width:80px;
   height:6px;
@@ -608,7 +605,6 @@ img{display:block}
   transition:background .15s, transform .1s;
   position:relative
 }
-/* Добавляем невидимую область для свайпа вокруг полоски */
 .modal-handle::before{
   content:'';
   position:absolute;
@@ -629,7 +625,6 @@ img{display:block}
 .ib-btn:hover{background:#e8e8e8}
 .ib-close{width:18px;height:18px;border-radius:50%;background:var(--s3);color:var(--tm);font-size:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer}
 
-/* ПК оптимизация — курсоры, hover эффекты */
 @media(min-width:768px){
   .tab{cursor:pointer}
   .tab:hover{color:var(--gold)}
@@ -954,6 +949,7 @@ var selectedDepAmt=null;
 var withdrawGiftIdx=null;
 var lastWsActivity=Date.now();
 var rouletteStartTime=0, rouletteDuration=4000;
+var autoJoinProcessed = false;
 
 var RL={
   _m:{},
@@ -1193,7 +1189,7 @@ function renderAvatar(){
 }
 function renderHist(){
   var el=document.getElementById('histBody');if(!el)return;
-  if(!state.history.length){el.innerHTML='<tr><td colspan="3" style="color:var(--tm);text-align:center;padding:14px;font-size:11px">Нет истории</td></tr>';return;}
+  if(!state.history.length){el.innerHTML='<tr><td colspan="3" style="color:var(--tm);text-align:center;padding:14px;font-size:11px">Нет истории</td><tr>';return;}
   el.innerHTML=state.history.slice(0,25).map(function(h){return'<tr><td style="font-size:15px">'+escapeHtml(h.icon)+'</td><td>'+escapeHtml(h.action)+'</td><td class="'+(h.pos?'hist-pos':'hist-neg')+'">'+escapeHtml(h.result)+'</td></tr>';}).join('');
 }
 function updateAllUI(){
@@ -1516,7 +1512,15 @@ function renderPrivLobby(){
   var el=document.getElementById('pvpPrivateLobby');if(!el)return;
   var now=Date.now();var my=privateBattles.filter(function(b){return b.creator_id===userId&&b.status==='waiting'&&now-new Date(b.created_at).getTime()<300000;});
   if(!my.length){el.innerHTML='<div class="no-battles">Нет приватных батлов.<br>Создай и отправь ссылку!</div>';return;}
-  el.innerHTML=my.map(function(b){var cg=safeJ(b.creator_gift,{});var link=window.location.origin+window.location.pathname+'?join='+b.id;return'<div class="lobby-card"><div class="lc-gift"><div class="lc-icon">'+(cg.icon||'❓')+'</div><div class="lc-gname">'+escapeHtml(cg.name||'?')+'</div><div class="lc-val">★ '+(cg.val||0)+'</div></div><div class="lc-mid"><div class="lc-vs">VS</div><div class="lc-status">Ожидание</div><div class="lc-priv">🔒 Приватный</div></div><div style="display:flex;flex-direction:column;gap:5px"><button class="lc-join" onclick="copyToClipboard(\''+link+'\');toast(\'🔗 Скопировано!\')">🔗 Скопировать</button><button class="btn btn-danger btn-sm" onclick="cancelBattle(\''+b.id+'\')">Отменить</button></div></div>';}).join('');
+  var botUsername = 'Ruslan158bot';
+  var html='';
+  for(var j=0;j<my.length;j++){
+    var b=my[j];
+    var cg=safeJ(b.creator_gift,{});
+    var link='https://t.me/'+botUsername+'?start=join_'+b.id;
+    html+='<div class="lobby-card"><div class="lc-gift"><div class="lc-icon">'+(cg.icon||'❓')+'</div><div class="lc-gname">'+escapeHtml(cg.name||'?')+'</div><div class="lc-val">★ '+(cg.val||0)+'</div></div><div class="lc-mid"><div class="lc-vs">VS</div><div class="lc-status">Ожидание</div><div class="lc-priv">🔒 Приватный</div></div><div style="display:flex;flex-direction:column;gap:5px"><button class="lc-join" onclick="copyToClipboard(\''+link+'\');toast(\'🔗 Ссылка скопирована!\')">🔗 Скопировать ссылку</button><button class="btn btn-danger btn-sm" onclick="cancelBattle(\''+b.id+'\')">Отменить</button></div></div>';
+  }
+  el.innerHTML=html;
 }
 async function createBattle(){
   if(!RL.check('cb',1))return;if(pvpStakeIdx===null||!state.inventory[pvpStakeIdx]){toast('Выбери подарок!');return;}
@@ -1805,6 +1809,30 @@ function checkReferral(){
     },200);
     setTimeout(function(){clearInterval(wait);},10000);
   }
+}
+
+// АВТОМАТИЧЕСКОЕ ПОДКЛЮЧЕНИЕ К ПРИВАТНОМУ БАТЛУ ИЗ URL
+var urlParams = new URLSearchParams(window.location.search);
+var autoJoinId = urlParams.get('join');
+if(autoJoinId && !autoJoinProcessed){
+  autoJoinProcessed = true;
+  setTimeout(function(){
+    if(dataLoaded && userId){
+      joinBattle(autoJoinId);
+      var pvpTab = document.querySelector('.tab[data-tab="pvp"]');
+      if(pvpTab) pvpTab.click();
+    }else{
+      var checkInterval = setInterval(function(){
+        if(dataLoaded && userId){
+          clearInterval(checkInterval);
+          joinBattle(autoJoinId);
+          var pvpTab = document.querySelector('.tab[data-tab="pvp"]');
+          if(pvpTab) pvpTab.click();
+        }
+      },500);
+      setTimeout(function(){clearInterval(checkInterval);},10000);
+    }
+  },1500);
 }
 
 async function init(){
