@@ -980,7 +980,7 @@ function renderAvatar(){
 }
 function renderHist(){
   const el=document.getElementById('histBody');if(!el)return;
-  if(!state.history.length){el.innerHTML='<tr><td colspan="3" style="color:var(--tm);text-align:center;padding:14px;font-size:11px">Нет истории</tr>';return;}
+  if(!state.history.length){el.innerHTML='<tr><td colspan="3" style="color:var(--tm);text-align:center;padding:14px;font-size:11px">Нет истории</td></tr>';return;}
   el.innerHTML=state.history.slice(0,25).map(h=>`<tr><td style="font-size:15px">${escapeHtml(h.icon)}</td><td>${escapeHtml(h.action)}</td><td class="${h.pos?'hist-pos':'hist-neg'}">${escapeHtml(h.result)}</td></tr>`).join('');
 }
 function updateAllUI(){
@@ -1378,7 +1378,6 @@ function openDepositModal(){
   const modal = document.getElementById('depositModal');
   modal.classList.add('show');
   
-  // Делаем ползунок активным - возможность растягивать шторку
   const sheet = modal.querySelector('.modal-sheet');
   const handle = modal.querySelector('.modal-handle');
   
@@ -1420,12 +1419,15 @@ function openDepositModal(){
   }
 }
 document.getElementById('depCancelBtn').onclick=()=>document.getElementById('depositModal').classList.remove('show');
+
+// ИСПРАВЛЕННАЯ ОПЛАТА ЧЕРЕЗ TELEGRAM STARS
 document.getElementById('depConfirmBtn').onclick=()=>{
-  if(!selectedDepAmt)return;
+  if(!selectedDepAmt) return;
   
-  // Пытаемся оплатить через Telegram Stars
   const tg = window.Telegram?.WebApp;
-  if(tg && tg.openInvoice) {
+  
+  if (tg && tg.openInvoice) {
+    // Реальная оплата через Telegram Stars
     tg.openInvoice({
       title: 'GiftCase Stars',
       description: `Пополнение на ${selectedDepAmt.stars} ★`,
@@ -1434,13 +1436,13 @@ document.getElementById('depConfirmBtn').onclick=()=>{
       currency: 'XTR',
       prices: [{ label: `${selectedDepAmt.stars} Stars`, amount: selectedDepAmt.price }]
     }, (status) => {
-      if(status === 'paid') {
+      if (status === 'paid') {
         setBal(state.balance + selectedDepAmt.stars);
         addHist('💎', 'Пополнение (Stars)', '+' + selectedDepAmt.stars + ' ★', true);
         toast('✅ +' + selectedDepAmt.stars + ' ★ Stars зачислены!');
         document.getElementById('depositModal').classList.remove('show');
         saveUser();
-      } else if(status === 'cancelled') {
+      } else if (status === 'cancelled') {
         toast('Оплата отменена');
       } else {
         toast('❌ Ошибка оплаты: ' + status);
@@ -1450,7 +1452,7 @@ document.getElementById('depConfirmBtn').onclick=()=>{
     // Демо-режим (если не в Telegram)
     setBal(state.balance + selectedDepAmt.stars);
     addHist('💎', 'Пополнение (демо)', '+' + selectedDepAmt.stars + ' ★', true);
-    toast('✅ +' + selectedDepAmt.stars + ' ★ (демо)');
+    toast('✅ +' + selectedDepAmt.stars + ' ★ (демо-режим)');
     document.getElementById('depositModal').classList.remove('show');
     saveUser();
   }
