@@ -12,7 +12,6 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎁</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<!-- остальной CSS и код -->
 <style>
 :root{
   --bg:#060606;--s1:#0f0f0f;--s2:#161616;--s3:#1e1e1e;--s4:#262626;
@@ -1303,7 +1302,7 @@ function renderHist() {
   var html = '';
   for (var i = 0; i < Math.min(state.history.length, 25); i++) {
     var h = state.history[i];
-    html += '<tr><td style="font-size:15px">' + escapeHtml(h.icon) + '</td><td>' + escapeHtml(h.action) + '</td><td class="' + (h.pos ? 'hist-pos' : 'hist-neg') + '">' + escapeHtml(h.result) + '</td></tr>';
+    html += '<tr><td style="font-size:15px">' + escapeHtml(h.icon) + '</td><td>' + escapeHtml(h.action) + '</td><td class="' + (h.pos ? 'hist-pos' : 'hist-neg') + '">' + escapeHtml(h.result) + '<tr>';
   }
   el.innerHTML = html;
 }
@@ -2277,62 +2276,11 @@ function upOnline() { document.getElementById('onlineCount').innerText = 140 + M
 setInterval(upOnline, 6000);
 upOnline();
 
+// PWA полностью отключён - удаляем все манифесты
 function setupPWA() {
-  // Полностью отключаем PWA манифест — удаляем все ссылки на манифест
-  var oldManifest = document.querySelector('link[rel="manifest"]');
-  if (oldManifest) oldManifest.remove();
-}
-  
-  var m = { 
-    name: "GiftCase", 
-    short_name: "GiftCase", 
-    start_url: startUrl,
-    scope: "/",
-    display: "standalone", 
-    background_color: "#060606", 
-    theme_color: "#060606", 
-    icons: [{ src: "https://fav.farm/🎁", sizes: "192x192", type: "image/png" }] 
-  };
-  
-  // Удаляем старый манифест, если есть
-  var oldManifest = document.querySelector('link[rel="manifest"]');
-  if (oldManifest) oldManifest.remove();
-  
-  try {
-    var b = new Blob([JSON.stringify(m)], { type: 'application/manifest+json' });
-    var l = document.createElement('link');
-    l.rel = 'manifest';
-    l.href = URL.createObjectURL(b);
-    document.head.appendChild(l);
-  } catch (e) {
-    console.warn('PWA manifest error:', e);
-  }
-  
-  var dp = null;
-  window.addEventListener('beforeinstallprompt', function(e) {
-    e.preventDefault();
-    dp = e;
-    setTimeout(function() {
-      if (document.querySelector('.install-banner')) return;
-      var ban = document.createElement('div');
-      ban.className = 'install-banner';
-      ban.innerHTML = '<div class="ib-icon">🎁</div><div class="ib-text"><div class="ib-title">Добавить на экран</div><div class="ib-sub">Быстрый доступ к GiftCase</div></div><button class="ib-btn" id="ib">Добавить</button><button class="ib-close" id="ibc">✕</button>';
-      document.body.appendChild(ban);
-      var ibBtn = document.getElementById('ib');
-      var ibClose = document.getElementById('ibc');
-      if (ibBtn) {
-        ibBtn.onclick = async function() { 
-          if (dp) {
-            dp.prompt(); 
-            await dp.userChoice; 
-            ban.remove(); 
-            dp = null;
-          }
-        };
-      }
-      if (ibClose) ibClose.onclick = function() { ban.remove(); };
-    }, 5000);
-  });
+  // Удаляем все существующие манифесты
+  var oldManifests = document.querySelectorAll('link[rel="manifest"]');
+  oldManifests.forEach(function(m) { m.remove(); });
 }
 setupPWA();
 
