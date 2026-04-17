@@ -1291,7 +1291,7 @@ function renderPrivLobby(){
   const el=document.getElementById('pvpPrivateLobby');if(!el)return;
   const my=privateBattles.filter(b=>b.creator_id===userId&&b.status==='waiting'&&Date.now()-new Date(b.created_at).getTime()<300000);
   if(!my.length){el.innerHTML='<div class="no-battles">Нет приватных батлов.<br>Создай и отправь ссылку!</div>';return;}
-  el.innerHTML=my.map(b=>{const cg=safeJ(b.creator_gift,{});const link=window.location.origin+window.location.pathname+'?join='+b.id;return`<div class="lobby-card"><div class="lc-gift"><div class="lc-icon">${cg.icon||'❓'}</div><div class="lc-gname">${escapeHtml(cg.name||'?')}</div><div class="lc-val">★ ${cg.val||0}</div></div><div class="lc-mid"><div class="lc-vs">VS</div><div class="lc-status">Ожидание</div><div class="lc-priv">🔒 Приватный</div></div><div style="display:flex;flex-direction:column;gap:5px"><button class="lc-join" onclick="copyToClipboard('${link}');toast('🔗 Скопировано!')">🔗 Скопировать</button><button class="btn btn-danger btn-sm" onclick="cancelBattle('${b.id}')">Отменить</button></div></div>`;}).join('');
+  el.innerHTML=my.map(b=>{const cg=safeJ(b.creator_gift,{});const link=window.location.origin+window.location.pathname+'?join='+b.id;return`<div class="lobby-card"><div class="lc-gift"><div class="lc-icon">${cg.icon||'❓'}</div><div class="lc-gname">${escapeHtml(cg.name||'?')}</div><div class="lc-val">★ ${cg.val||0}</div></div><div class="lc-mid"><div class="lc-vs">VS</div><div class="lc-status">Ожидание</div><div class="lc-priv">🔒 Приватный</div></div><div style="display:flex;flex-direction:column;gap:5px"><button class="lc-join" onclick="copyToClipboard('${link}');toast('🔗 Скопировано!')">🔗 Скопировать</button><button class="btn btn-danger btn-sm" onclick="cancelBattle('${b.id}')">Отменить</button></div></div>`);}).join('');
 }
 async function createBattle(){if(!RL.check('cb',1))return;if(pvpStakeIdx===null||!state.inventory[pvpStakeIdx]){toast('Выбери подарок!');return;}const g={...state.inventory[pvpStakeIdx]};state.inventory.splice(pvpStakeIdx,1);pvpStakeIdx=null;const id='b_'+Date.now()+'_'+Math.random().toString(36).slice(2,6);const b={id,creator_id:userId,creator_name:state.displayName||'Игрок',creator_username:tgUser?.username||'',creator_avatar:state.avatarUrl||tgUser?.photo_url||null,creator_gift:JSON.stringify(g),opponent_id:null,opponent_gift:null,status:'waiting',winner_id:null,is_private:false,created_at:new Date().toISOString()};battles.unshift(b);renderPvpLobby();saveUser();document.getElementById('pvpStakeText').innerHTML='Нажми на подарок в инвентаре';document.getElementById('pvpStakeVal').innerText='';document.getElementById('createBattleBtn').disabled=true;await saveBattle(b);toast('⚔️ Публичный батл создан!');addHist(g.icon,'PvP ставка','★ '+g.val,false);}
 async function createPrivateBattle(){if(!RL.check('cb',1))return;if(pvpPrivStakeIdx===null||!state.inventory[pvpPrivStakeIdx]){toast('Выбери подарок!');return;}const g={...state.inventory[pvpPrivStakeIdx]};state.inventory.splice(pvpPrivStakeIdx,1);pvpPrivStakeIdx=null;const id='pb_'+Date.now()+'_'+Math.random().toString(36).slice(2,6);const b={id,creator_id:userId,creator_name:state.displayName||'Игрок',creator_username:tgUser?.username||'',creator_avatar:state.avatarUrl||tgUser?.photo_url||null,creator_gift:JSON.stringify(g),opponent_id:null,opponent_gift:null,status:'waiting',winner_id:null,is_private:true,created_at:new Date().toISOString()};privateBattles.unshift(b);renderPvpLobby();saveUser();document.getElementById('pvpPrivateStakeText').innerHTML='Нажми на подарок в инвентаре';document.getElementById('pvpPrivateStakeVal').innerText='';document.getElementById('createPrivateBattleBtn').disabled=true;await saveBattle(b);const link=window.location.origin+window.location.pathname+'?join='+id;document.getElementById('privateLinkRow').style.display='block';document.getElementById('privateBattleLink').value=link;toast('🔒 Приватный батл создан!');addHist(g.icon,'Приватный батл','★ '+g.val,false);}
@@ -1420,7 +1420,7 @@ function openDepositModal(){
 }
 document.getElementById('depCancelBtn').onclick=()=>document.getElementById('depositModal').classList.remove('show');
 
-// НАСТОЯЩАЯ ОПЛАТА ЧЕРЕЗ TELEGRAM STARS
+// ИСПРАВЛЕННАЯ ОПЛАТА ЧЕРЕЗ TELEGRAM STARS
 document.getElementById('depConfirmBtn').onclick = () => {
   if (!selectedDepAmt) return;
   
@@ -1431,7 +1431,12 @@ document.getElementById('depConfirmBtn').onclick = () => {
     tg.openInvoice({
       title: 'GiftCase Stars',
       description: `Пополнение на ${selectedDepAmt.stars} ★`,
-      payload: `deposit_${userId}_${selectedDepAmt.stars}_${Date.now()}`,
+      payload: JSON.stringify({
+        userId: userId,
+        stars: selectedDepAmt.stars,
+        amount: selectedDepAmt.price,
+        timestamp: Date.now()
+      }),
       provider_token: '',
       currency: 'XTR',
       prices: [{ label: `${selectedDepAmt.stars} Stars`, amount: selectedDepAmt.price }]
