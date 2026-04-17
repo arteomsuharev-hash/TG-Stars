@@ -2221,23 +2221,55 @@ setInterval(upOnline, 6000);
 upOnline();
 
 function setupPWA() {
-  var m = { name: "GiftCase", short_name: "GiftCase", start_url: window.location.pathname, display: "standalone", background_color: "#060606", theme_color: "#060606", icons: [{ src: "https://fav.farm/🎁", sizes: "192x192", type: "image/png" }] };
-  var b = new Blob([JSON.stringify(m)], { type: 'application/manifest+json' });
-  var l = document.createElement('link');
-  l.rel = 'manifest';
-  l.href = URL.createObjectURL(b);
-  document.head.appendChild(l);
+  // Получаем корректный start_url
+  var startUrl = window.location.pathname;
+  if (!startUrl || startUrl === '' || startUrl === '/') {
+    startUrl = '/';
+  }
+  
+  var m = { 
+    name: "GiftCase", 
+    short_name: "GiftCase", 
+    start_url: startUrl, 
+    display: "standalone", 
+    background_color: "#060606", 
+    theme_color: "#060606", 
+    icons: [{ src: "https://fav.farm/🎁", sizes: "192x192", type: "image/png" }] 
+  };
+  
+  try {
+    var b = new Blob([JSON.stringify(m)], { type: 'application/manifest+json' });
+    var l = document.createElement('link');
+    l.rel = 'manifest';
+    l.href = URL.createObjectURL(b);
+    document.head.appendChild(l);
+  } catch (e) {
+    console.warn('PWA manifest error:', e);
+  }
+  
   var dp = null;
   window.addEventListener('beforeinstallprompt', function(e) {
     e.preventDefault();
     dp = e;
     setTimeout(function() {
+      if (document.querySelector('.install-banner')) return;
       var ban = document.createElement('div');
       ban.className = 'install-banner';
       ban.innerHTML = '<div class="ib-icon">🎁</div><div class="ib-text"><div class="ib-title">Добавить на экран</div><div class="ib-sub">Быстрый доступ к GiftCase</div></div><button class="ib-btn" id="ib">Добавить</button><button class="ib-close" id="ibc">✕</button>';
       document.body.appendChild(ban);
-      document.getElementById('ib').onclick = async function() { dp.prompt(); await dp.userChoice; ban.remove(); dp = null; };
-      document.getElementById('ibc').onclick = function() { ban.remove(); };
+      var ibBtn = document.getElementById('ib');
+      var ibClose = document.getElementById('ibc');
+      if (ibBtn) {
+        ibBtn.onclick = async function() { 
+          if (dp) {
+            dp.prompt(); 
+            await dp.userChoice; 
+            ban.remove(); 
+            dp = null;
+          }
+        };
+      }
+      if (ibClose) ibClose.onclick = function() { ban.remove(); };
     }, 5000);
   });
 }
