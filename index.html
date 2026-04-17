@@ -2278,8 +2278,10 @@ setInterval(upOnline, 6000);
 upOnline();
 
 function setupPWA() {
-  // Получаем корректный start_url - используем корневой путь
-  var startUrl = '/';
+  // Полностью отключаем PWA манифест — удаляем все ссылки на манифест
+  var oldManifest = document.querySelector('link[rel="manifest"]');
+  if (oldManifest) oldManifest.remove();
+}
   
   var m = { 
     name: "GiftCase", 
