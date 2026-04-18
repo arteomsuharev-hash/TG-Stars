@@ -13,7 +13,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
-/* ВЕСЬ ТВОЙ CSS ОСТАЁТСЯ БЕЗ ИЗМЕНЕНИЙ - такой же как был */
+/* ВЕСЬ ТВОЙ CSS ОСТАЁТСЯ БЕЗ ИЗМЕНЕНИЙ */
 :root{
   --bg:#060606;--s1:#0f0f0f;--s2:#161616;--s3:#1e1e1e;--s4:#262626;
   --border:#252525;--borderL:#323232;
@@ -835,38 +835,62 @@ var lastWsActivity = Date.now();
 var rouletteStartTime = 0, rouletteDuration = 4000;
 var autoJoinProcessed = false;
 
-// НАСТОЯЩИЕ ПОДАРКИ Astral Shard из вашего JSON
+// НАСТОЯЩИЕ ПОДАРКИ Astral Shard
 var realGiftsList = [];
 var giftImagesCache = {};
 
-// ========== ВАШИ NFT ДАННЫЕ ИЗ nft_collection_data.json ==========
-// Я добавил первые 20 подарков как пример. 
-// Вы можете добавить все 100 или загружать JSON динамически через fetch
+// Базовый URL для API получения изображений
+var BASE_IMAGE_URL = '/api/getGiftImage?id=';
 
-// БАЗОВЫЙ СПИСОК ПОДАРКОВ (на основе вашего JSON)
-var ASTRAL_SHARDS_DATA = [
-  {collectible_id:1, name:"Astral Shard #1", model:"Moonstone 2.3%", backdrop:"Black 2%", symbol:"Manta Ray 0.2%", price:15, gradient_from:"#363738", gradient_to:"#0e0f0f"},
-  {collectible_id:2, name:"Astral Shard #2", model:"Sapphire 2.4%", backdrop:"Desert Sand 2%", symbol:"Tie 0.8%", price:25, gradient_from:"#b39f82", gradient_to:"#7e735b"},
-  {collectible_id:3, name:"Astral Shard #3", model:"Eve's Apple 0.8%", backdrop:"Pure Gold 2%", symbol:"Skull 0.2%", price:40, gradient_from:"#ccab41", gradient_to:"#987b32"},
-  {collectible_id:4, name:"Astral Shard #4", model:"Aquamarine 2.4%", backdrop:"Dark Lilac 2%", symbol:"Moon Eagle 1%", price:50, gradient_from:"#b17da5", gradient_to:"#8c577a"},
-  {collectible_id:5, name:"Astral Shard #5", model:"Moonstone 2.3%", backdrop:"Fandango 2%", symbol:"Owl 1%", price:50, gradient_from:"#e28ab6", gradient_to:"#a4588b"},
-  {collectible_id:6, name:"Astral Shard #6", model:"Ruby Fuchsite 2.4%", backdrop:"Pacific Green 1.5%", symbol:"Cicada 0.8%", price:60, gradient_from:"#6fc793", gradient_to:"#3b9c84"},
-  {collectible_id:7, name:"Astral Shard #7", model:"Red Ruby 2.4%", backdrop:"Copper 2%", symbol:"Tribal Shield 1%", price:80, gradient_from:"#d08656", gradient_to:"#9d6531"},
-  {collectible_id:8, name:"Astral Shard #8", model:"Blender 1.7%", backdrop:"Copper 2%", symbol:"Yogi Shaman 0.5%", price:100, gradient_from:"#d08656", gradient_to:"#9d6531"},
-  {collectible_id:9, name:"Astral Shard #9", model:"Moonstone 2.3%", backdrop:"Cyberpunk 1.5%", symbol:"Bell Pepper 0.2%", price:120, gradient_from:"#858ff3", gradient_to:"#865fd3"},
-  {collectible_id:10, name:"Astral Shard #10", model:"Ruby Fuchsite 2.4%", backdrop:"Desert Sand 2%", symbol:"Fehu Rune 1%", price:150, gradient_from:"#b39f82", gradient_to:"#7e735b"},
-  {collectible_id:11, name:"Astral Shard #11", model:"Candy Flossite 2.4%", backdrop:"Pine Green 1.5%", symbol:"Gold 0.5%", price:180, gradient_from:"#6ba97c", gradient_to:"#3e7970"},
-  {collectible_id:12, name:"Astral Shard #12", model:"Ammolite 2.4%", backdrop:"Electric Purple 1.5%", symbol:"Dice 1%", price:200, gradient_from:"#ca70c6", gradient_to:"#9662d4"},
-  {collectible_id:13, name:"Astral Shard #13", model:"Crystal Punk 1.3%", backdrop:"Grape 1.5%", symbol:"Cobra 0.8%", price:250, gradient_from:"#9d74c1", gradient_to:"#794da0"},
-  {collectible_id:14, name:"Astral Shard #14", model:"Arctite 1.7%", backdrop:"Lemongrass 2%", symbol:"Fehu Rune 1%", price:300, gradient_from:"#aeb85a", gradient_to:"#559345"},
-  {collectible_id:15, name:"Astral Shard #15", model:"Blender 1.7%", backdrop:"Black 2%", symbol:"Sauron 0.5%", price:350, gradient_from:"#363738", gradient_to:"#0e0f0f"},
-  {collectible_id:16, name:"Astral Shard #16", model:"Bogartite 2%", backdrop:"Chestnut 2%", symbol:"The Eye 0.8%", price:400, gradient_from:"#be6f54", gradient_to:"#994838"},
-  {collectible_id:17, name:"Astral Shard #17", model:"Ivy Vine 1.7%", backdrop:"Pacific Green 1.5%", symbol:"Eagle 1%", price:450, gradient_from:"#6fc793", gradient_to:"#3b9c84"},
-  {collectible_id:18, name:"Astral Shard #18", model:"Elven Might 0.8%", backdrop:"Orange 2%", symbol:"Coconut 0.5%", price:500, gradient_from:"#d19a3a", gradient_to:"#c06f47"},
-  {collectible_id:19, name:"Astral Shard #19", model:"Gramite 2%", backdrop:"Aquamarine 1.5%", symbol:"Knight 1%", price:550, gradient_from:"#60b195", gradient_to:"#46abb4"},
-  {collectible_id:20, name:"Astral Shard #20", model:"Pure Silver 2%", backdrop:"Light Olive 1.5%", symbol:"Inguz Rune 1%", price:600, gradient_from:"#c2af64", gradient_to:"#887e45"}
-  // Добавьте остальные 80 подарков по аналогии или загружайте JSON динамически
-];
+// Маппинг ID подарка к номеру файла
+var GIFT_ID_TO_FILE_NUMBER = {
+  "5170145012310081615": 1,
+  "5170233102089322756": 2,
+  "5170250947678437525": 3,
+  "5168103777563050263": 4,
+  "5170144170496491616": 5,
+  "5170314324215857265": 6,
+  "5170564780938756245": 7,
+  "5168043875654172773": 8,
+  "5170690322832818290": 9,
+  "5170521118301225164": 10,
+  "6028601630662853006": 11
+};
+
+// ========== ИСПРАВЛЕННАЯ ФУНКЦИЯ getGiftIcon ==========
+function getGiftIcon(gift) {
+  // Определяем номер файла для изображения
+  var fileNumber = null;
+  
+  // Если есть collectible_id (1-100)
+  if (gift.collectible_id && gift.collectible_id >= 1 && gift.collectible_id <= 100) {
+    fileNumber = gift.collectible_id;
+  }
+  // Если ID подарка есть в маппинге
+  else if (gift.id && GIFT_ID_TO_FILE_NUMBER[gift.id]) {
+    fileNumber = GIFT_ID_TO_FILE_NUMBER[gift.id];
+  }
+  // Если ID это число от 1 до 100
+  else if (typeof gift.id === 'number' && gift.id >= 1 && gift.id <= 100) {
+    fileNumber = gift.id;
+  }
+  // Ищем индекс подарка в realGiftsList
+  else if (realGiftsList.length > 0) {
+    var index = realGiftsList.findIndex(function(g) { return g.id == gift.id; });
+    if (index !== -1) {
+      fileNumber = index + 1;
+    }
+  }
+  
+  // Загружаем изображение через API эндпоинт
+  if (fileNumber && fileNumber >= 1 && fileNumber <= 100) {
+    var imageUrl = '/api/getGiftImage?id=' + fileNumber;
+    return '<img src="' + imageUrl + '" style="width:32px;height:32px;object-fit:contain" onerror="this.style.display=\'none\';this.parentElement.innerHTML=\'' + (gift.icon || '🎁') + '\'">';
+  }
+  
+  // Если ничего не подошло - показываем эмодзи
+  return gift.icon || '🎁';
+}
 
 // Функция getGiftNameByPrice
 function getGiftNameByPrice(price) {
@@ -904,68 +928,30 @@ function getEmojiByPrice(price) {
   return "🏆";
 }
 
-// ========== ИСПРАВЛЕННАЯ ФУНКЦИЯ getGiftIcon ==========
-function getGiftIcon(gift) {
-  // Определяем номер файла для изображения (collectible_id от 1 до 100)
-  var fileNumber = gift.collectible_id;
-  
-  // Если есть collectible_id (1-100) - загружаем изображение из папки /gifts/НОМЕР.png
-  if (fileNumber && fileNumber >= 1 && fileNumber <= 100) {
-    var imageUrl = '/gifts/' + fileNumber + '.png';
-    return '<img src="' + imageUrl + '" style="width:32px;height:32px;object-fit:contain" onerror="this.style.display=\'none\';this.parentElement.innerHTML=\'' + (gift.icon || '🎁') + '\'">';
-  }
-  
-  // Если нет collectible_id, но есть imageUrl
-  if (gift.imageUrl) {
-    return '<img src="' + gift.imageUrl + '" style="width:32px;height:32px;object-fit:contain" onerror="this.style.display=\'none\';this.parentElement.innerHTML=\'' + (gift.icon || '🎁') + '\'">';
-  }
-  
-  // Fallback - эмодзи
-  return gift.icon || '🎁';
-}
-
 // Загрузка подарков
 async function loadRealGifts() {
   try {
     console.log('🔄 Загрузка подарков Astral Shard...');
     
-    // Создаем список подарков из ASTRAL_SHARDS_DATA
+    // Создаем 100 подарков
     realGiftsList = [];
-    for (var i = 0; i < ASTRAL_SHARDS_DATA.length; i++) {
-      var shard = ASTRAL_SHARDS_DATA[i];
-      var price = shard.price;
-      var name = shard.name;
+    for (var i = 1; i <= 100; i++) {
+      var price;
+      if (i <= 20) price = 15 + Math.floor(Math.random() * 20);
+      else if (i <= 40) price = 40 + Math.floor(Math.random() * 40);
+      else if (i <= 60) price = 80 + Math.floor(Math.random() * 80);
+      else if (i <= 80) price = 160 + Math.floor(Math.random() * 100);
+      else price = 260 + Math.floor(Math.random() * 200);
       
       realGiftsList.push({
-        id: shard.collectible_id,
-        name: name,
+        id: i,
+        name: `Astral Shard #${i}`,
         price: price,
         icon: getEmojiByPrice(price),
-        imageUrl: '/gifts/' + shard.collectible_id + '.png',
-        collectible_id: shard.collectible_id,
-        model: shard.model,
-        backdrop: shard.backdrop,
-        symbol: shard.symbol,
-        gradient_from: shard.gradient_from,
-        gradient_to: shard.gradient_to
+        imageUrl: null,
+        collectible_id: i
       });
-      console.log(`📦 Подарок #${shard.collectible_id}: ${name} — ${price} ★ — /gifts/${shard.collectible_id}.png`);
-    }
-    
-    // Если нужно дополнить до 100 подарков
-    if (realGiftsList.length < 100) {
-      console.log(`Добавляем еще ${100 - realGiftsList.length} подарков...`);
-      for (var j = realGiftsList.length + 1; j <= 100; j++) {
-        var price = 15 + Math.floor(Math.random() * 600);
-        realGiftsList.push({
-          id: j,
-          name: getGiftNameByPrice(price) + " " + j,
-          price: price,
-          icon: getEmojiByPrice(price),
-          imageUrl: '/gifts/' + j + '.png',
-          collectible_id: j
-        });
-      }
+      console.log(`📦 Подарок #${i}: Astral Shard #${i} — ${price} ★`);
     }
     
     console.log('✅ Загружено подарков:', realGiftsList.length);
@@ -983,18 +969,18 @@ function createFallbackGifts() {
   realGiftsList = [];
   for (var i = 1; i <= 100; i++) {
     var price;
-    if (i <= 20) price = 15 + Math.floor(Math.random() * 20);
-    else if (i <= 40) price = 40 + Math.floor(Math.random() * 40);
-    else if (i <= 60) price = 80 + Math.floor(Math.random() * 80);
-    else if (i <= 80) price = 160 + Math.floor(Math.random() * 100);
-    else price = 260 + Math.floor(Math.random() * 200);
+    if (i <= 20) price = 15;
+    else if (i <= 40) price = 25;
+    else if (i <= 60) price = 50;
+    else if (i <= 80) price = 100;
+    else price = 200;
     
     realGiftsList.push({
       id: i,
-      name: getGiftNameByPrice(price) + " " + i,
+      name: `Astral Shard #${i}`,
       price: price,
       icon: getEmojiByPrice(price),
-      imageUrl: '/gifts/' + i + '.png',
+      imageUrl: null,
       collectible_id: i
     });
   }
@@ -1051,7 +1037,7 @@ function getRarityByPrice(price) {
   return 'legendary';
 }
 
-// ========== ОСТАЛЬНЫЕ ФУНКЦИИ (без изменений) ==========
+// ========== ВСЕ ОСТАЛЬНЫЕ ФУНКЦИИ (БЕЗ ИЗМЕНЕНИЙ) ==========
 // Rate Limiter
 var RL = {
   _m: {},
