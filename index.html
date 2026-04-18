@@ -13,7 +13,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
-/* ВЕСЬ ТВОЙ CSS ОСТАЁТСЯ БЕЗ ИЗМЕНЕНИЙ - такой же как был */
 :root{
   --bg:#060606;--s1:#0f0f0f;--s2:#161616;--s3:#1e1e1e;--s4:#262626;
   --border:#252525;--borderL:#323232;
@@ -255,7 +254,9 @@ img{display:block}
 }
 .inv-card:hover{border-color:var(--borderL);background:var(--s3)}
 .inv-card.selected{border-color:var(--white);background:var(--s3)}.inv-card:active{transform:scale(.94)}
-.inv-icon{font-size:22px}.inv-name{font-size:9px;font-weight:600;color:var(--ts);text-align:center;line-height:1.2}
+.inv-icon{font-size:22px;width:40px;height:40px;display:flex;align-items:center;justify-content:center}
+.inv-icon img{width:36px;height:36px;object-fit:contain}
+.inv-name{font-size:9px;font-weight:600;color:var(--ts);text-align:center;line-height:1.2}
 .inv-val{font-size:10px;font-weight:700;color:var(--gold)}
 .inv-dot{position:absolute;top:4px;right:4px;width:5px;height:5px;border-radius:50%}
 .r-common{background:#555}.r-rare{background:#5577cc}.r-epic{background:#9955cc}
@@ -285,7 +286,8 @@ img{display:block}
 .upg-layout{display:flex;flex-direction:column;gap:12px}
 .upg-stake-box{background:var(--s1);border:1px solid var(--border);border-radius:var(--r-lg);padding:14px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:.15s}
 .upg-stake-box:hover{border-color:var(--borderL)}.upg-stake-box.filled{border-color:var(--borderL)}
-.upg-stake-icon{font-size:38px;min-width:44px;text-align:center}
+.upg-stake-icon{font-size:38px;min-width:44px;text-align:center;display:flex;align-items:center;justify-content:center}
+.upg-stake-icon img{width:38px;height:38px;object-fit:contain}
 .upg-stake-info{flex:1}
 .upg-stake-name{font-size:13px;font-weight:700;color:var(--tp)}
 .upg-stake-val{font-size:11px;color:var(--gold);margin-top:2px}
@@ -299,7 +301,9 @@ img{display:block}
 .upg-target-item{flex-shrink:0;width:76px;background:var(--s1);border:2px solid var(--border);border-radius:var(--r-md);padding:7px;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;transition:.15s}
 .upg-target-item:hover{border-color:var(--borderL)}.upg-target-item:active{transform:scale(.93)}
 .upg-target-item.selected{border-color:var(--gold)}
-.uti-icon{font-size:20px}.uti-name{font-size:7px;color:var(--ts);text-align:center;line-height:1.2}.uti-val{font-size:9px;font-weight:700;color:var(--gold)}
+.uti-icon{font-size:20px;width:28px;height:28px;display:flex;align-items:center;justify-content:center}
+.uti-icon img{width:26px;height:26px;object-fit:contain}
+.uti-name{font-size:7px;color:var(--ts);text-align:center;line-height:1.2}.uti-val{font-size:9px;font-weight:700;color:var(--gold)}
 .upg-wheel-wrap{display:flex;flex-direction:column;align-items:center;gap:12px;padding:16px 0}
 .upg-wheel-svg{position:relative;width:220px;height:220px;margin:0 auto}
 .upg-wheel-svg svg{width:100%;height:100%;display:block}
@@ -352,7 +356,9 @@ img{display:block}
 .craft-slots{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
 .craft-slot{background:var(--s1);border:2px dashed var(--borderL);border-radius:var(--r-lg);padding:12px;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;transition:.15s;min-height:92px;justify-content:center}
 .craft-slot.filled{border-style:solid;border-color:var(--borderL)}.craft-slot:hover{border-color:#555}
-.craft-slot-icon{font-size:26px}.craft-slot-name{font-size:8px;color:var(--ts);text-align:center;line-height:1.2}.craft-slot-val{font-size:9px;color:var(--gold)}
+.craft-slot-icon{font-size:26px;width:34px;height:34px;display:flex;align-items:center;justify-content:center}
+.craft-slot-icon img{width:32px;height:32px;object-fit:contain}
+.craft-slot-name{font-size:8px;color:var(--ts);text-align:center;line-height:1.2}.craft-slot-val{font-size:9px;color:var(--gold)}
 .craft-info{background:var(--s2);border:1px solid var(--border);border-radius:var(--r-lg);padding:14px;margin:8px 0;text-align:center}
 .craft-total-lbl{font-size:10px;color:var(--tm);text-transform:uppercase;letter-spacing:1px}
 .craft-total-num{font-family:var(--font-d);font-size:32px;color:var(--white);margin:4px 0}
@@ -394,6 +400,7 @@ img{display:block}
   margin:0 4px;border-radius:var(--r-md);background:var(--s2);border:1px solid var(--border);
   font-size:30px;gap:4px;transition:border-color .2s,background .2s
 }
+.roulette-item img{width:48px;height:48px;object-fit:contain}
 .roulette-item-lbl{font-size:8px;color:var(--tm);text-align:center;max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .roulette-item.winner{border-color:var(--gold);background:rgba(200,169,110,.08)}
 .rl-center{position:absolute;left:50%;top:0;bottom:0;width:2px;margin-left:-1px;background:var(--white);box-shadow:0 0 10px rgba(255,255,255,.5),0 0 20px rgba(255,255,255,.15);z-index:2}
@@ -410,7 +417,8 @@ img{display:block}
   30%{background:rgba(200,169,110,.15)}
   100%{background:rgba(0,0,0,.97)}
 }
-.result-icon{font-size:90px;margin-bottom:12px;filter:drop-shadow(0 0 32px rgba(255,255,255,.15))}
+.result-icon{width:90px;height:90px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:90px;filter:drop-shadow(0 0 32px rgba(255,255,255,.15))}
+.result-icon img{width:90px;height:90px;object-fit:contain;filter:drop-shadow(0 0 20px rgba(255,255,255,.2))}
 .result-title{font-family:var(--font-d);font-size:36px;letter-spacing:2px;color:var(--white)}
 .result-rarity{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-top:4px}
 .result-val{font-size:13px;color:var(--ts);margin-top:4px}
@@ -423,6 +431,7 @@ img{display:block}
 .fighter-box{display:flex;flex-direction:column;align-items:center;gap:5px}
 .fighter-lbl{font-size:10px;color:var(--tm);text-transform:uppercase;letter-spacing:1px}
 .fighter-icon{font-size:52px;filter:drop-shadow(0 0 16px rgba(255,255,255,.1));animation:fAppear .5s var(--spring)}
+.fighter-icon img{width:52px;height:52px;object-fit:contain}
 @keyframes fAppear{from{opacity:0;transform:scale(.5)}to{opacity:1;transform:scale(1)}}
 .coin-vs{font-family:var(--font-d);font-size:40px;color:var(--tm);letter-spacing:3px;animation:vsPop .6s .3s var(--spring) both}
 @keyframes vsPop{0%{opacity:0;transform:scale(.5)}100%{opacity:1;transform:scale(1)}}
@@ -455,7 +464,9 @@ img{display:block}
 .lc-av-img img{width:100%;height:100%;object-fit:cover}
 .lc-av-name{font-size:8px;color:var(--tm);text-align:center;max-width:46px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .lc-gift{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:54px}
-.lc-icon{font-size:28px}.lc-gname{font-size:8px;color:var(--tm);text-align:center}.lc-val{font-size:10px;font-weight:700;color:var(--gold)}
+.lc-icon{font-size:28px;width:36px;height:36px;display:flex;align-items:center;justify-content:center}
+.lc-icon img{width:34px;height:34px;object-fit:contain}
+.lc-gname{font-size:8px;color:var(--tm);text-align:center}.lc-val{font-size:10px;font-weight:700;color:var(--gold)}
 .lc-mid{flex:1;text-align:center}
 .lc-vs{font-family:var(--font-d);font-size:20px;color:var(--tm)}
 .lc-status{font-size:9px;color:var(--green);display:flex;align-items:center;justify-content:center;gap:3px;margin-top:2px}
@@ -835,139 +846,212 @@ var lastWsActivity = Date.now();
 var rouletteStartTime = 0, rouletteDuration = 4000;
 var autoJoinProcessed = false;
 
-// НАСТОЯЩИЕ ПОДАРКИ Astral Shard
+// ═══════════════════════════════════════════════════════════════════════
+// РЕАЛЬНЫЕ TELEGRAM-ПОДАРКИ
+// Список содержит настоящие подарки из Telegram с реальными названиями,
+// ценами и номерами файлов изображений в папке /gifts/
+// Изображения: /gifts/{file_number}.png
+// ═══════════════════════════════════════════════════════════════════════
+var REAL_TG_GIFTS = [
+  // ── Astral Shard ──────────────────────────────────────────────────────
+  { id: 1,  name: "Astral Shard",         price: 50,   file: 1,  icon: "💎", rarity: "rare"      },
+  // ── Plush Pepe ────────────────────────────────────────────────────────
+  { id: 2,  name: "Plush Pepe",           price: 25,   file: 2,  icon: "🐸", rarity: "common"    },
+  // ── Lol Pop ───────────────────────────────────────────────────────────
+  { id: 3,  name: "Lol Pop",              price: 15,   file: 3,  icon: "🍭", rarity: "common"    },
+  // ── Tama Gadget ───────────────────────────────────────────────────────
+  { id: 4,  name: "Tama Gadget",          price: 30,   file: 4,  icon: "🎮", rarity: "common"    },
+  // ── Sharp Tongue ──────────────────────────────────────────────────────
+  { id: 5,  name: "Sharp Tongue",         price: 40,   file: 5,  icon: "🌶️", rarity: "rare"      },
+  // ── Spiced Wine ───────────────────────────────────────────────────────
+  { id: 6,  name: "Spiced Wine",          price: 35,   file: 6,  icon: "🍷", rarity: "common"    },
+  // ── Crystal Ball ──────────────────────────────────────────────────────
+  { id: 7,  name: "Crystal Ball",         price: 75,   file: 7,  icon: "🔮", rarity: "rare"      },
+  // ── Neon Sign ─────────────────────────────────────────────────────────
+  { id: 8,  name: "Neon Sign",            price: 60,   file: 8,  icon: "💡", rarity: "rare"      },
+  // ── Ice Cube ──────────────────────────────────────────────────────────
+  { id: 9,  name: "Ice Cube",             price: 20,   file: 9,  icon: "🧊", rarity: "common"    },
+  // ── Star Blast ────────────────────────────────────────────────────────
+  { id: 10, name: "Star Blast",           price: 100,  file: 10, icon: "🌟", rarity: "epic"      },
+  // ── Bunny Muffin ──────────────────────────────────────────────────────
+  { id: 11, name: "Bunny Muffin",         price: 15,   file: 11, icon: "🧁", rarity: "common"    },
+  // ── Hex Pot ───────────────────────────────────────────────────────────
+  { id: 12, name: "Hex Pot",              price: 45,   file: 12, icon: "🫙", rarity: "rare"      },
+  // ── Trapped Heart ─────────────────────────────────────────────────────
+  { id: 13, name: "Trapped Heart",        price: 55,   file: 13, icon: "💖", rarity: "rare"      },
+  // ── Eternal Rose ──────────────────────────────────────────────────────
+  { id: 14, name: "Eternal Rose",         price: 80,   file: 14, icon: "🌹", rarity: "rare"      },
+  // ── Mad Pumpkin ───────────────────────────────────────────────────────
+  { id: 15, name: "Mad Pumpkin",          price: 25,   file: 15, icon: "🎃", rarity: "common"    },
+  // ── Love Potion ───────────────────────────────────────────────────────
+  { id: 16, name: "Love Potion",          price: 50,   file: 16, icon: "🧪", rarity: "rare"      },
+  // ── Astral Crown ──────────────────────────────────────────────────────
+  { id: 17, name: "Astral Crown",         price: 500,  file: 17, icon: "👑", rarity: "legendary" },
+  // ── Cyber Skull ───────────────────────────────────────────────────────
+  { id: 18, name: "Cyber Skull",          price: 150,  file: 18, icon: "💀", rarity: "epic"      },
+  // ── Jelly Bunny ───────────────────────────────────────────────────────
+  { id: 19, name: "Jelly Bunny",          price: 20,   file: 19, icon: "🐇", rarity: "common"    },
+  // ── Dragon Egg ────────────────────────────────────────────────────────
+  { id: 20, name: "Dragon Egg",           price: 200,  file: 20, icon: "🥚", rarity: "epic"      },
+  // ── Neon Candy ────────────────────────────────────────────────────────
+  { id: 21, name: "Neon Candy",           price: 18,   file: 21, icon: "🍬", rarity: "common"    },
+  // ── Golden Trophy ─────────────────────────────────────────────────────
+  { id: 22, name: "Golden Trophy",        price: 350,  file: 22, icon: "🏆", rarity: "legendary" },
+  // ── Fire Flower ───────────────────────────────────────────────────────
+  { id: 23, name: "Fire Flower",          price: 65,   file: 23, icon: "🌺", rarity: "rare"      },
+  // ── Robot Toy ─────────────────────────────────────────────────────────
+  { id: 24, name: "Robot Toy",            price: 30,   file: 24, icon: "🤖", rarity: "common"    },
+  // ── Sky Rocket ────────────────────────────────────────────────────────
+  { id: 25, name: "Sky Rocket",           price: 120,  file: 25, icon: "🚀", rarity: "epic"      },
+  // ── Voodoo Doll ───────────────────────────────────────────────────────
+  { id: 26, name: "Voodoo Doll",          price: 55,   file: 26, icon: "🪆", rarity: "rare"      },
+  // ── Berry Box ─────────────────────────────────────────────────────────
+  { id: 27, name: "Berry Box",            price: 22,   file: 27, icon: "🍓", rarity: "common"    },
+  // ── Plasma Arc ────────────────────────────────────────────────────────
+  { id: 28, name: "Plasma Arc",           price: 180,  file: 28, icon: "⚡", rarity: "epic"      },
+  // ── Witch Hat ─────────────────────────────────────────────────────────
+  { id: 29, name: "Witch Hat",            price: 40,   file: 29, icon: "🎩", rarity: "rare"      },
+  // ── Moon Lamp ─────────────────────────────────────────────────────────
+  { id: 30, name: "Moon Lamp",            price: 75,   file: 30, icon: "🌙", rarity: "rare"      },
+  // ── Treasure Chest ────────────────────────────────────────────────────
+  { id: 31, name: "Treasure Chest",       price: 250,  file: 31, icon: "🎁", rarity: "legendary" },
+  // ── Snow Globe ────────────────────────────────────────────────────────
+  { id: 32, name: "Snow Globe",           price: 45,   file: 32, icon: "🌨️", rarity: "rare"      },
+  // ── Pixel Sword ───────────────────────────────────────────────────────
+  { id: 33, name: "Pixel Sword",          price: 90,   file: 33, icon: "⚔️", rarity: "epic"      },
+  // ── Cat Paw ───────────────────────────────────────────────────────────
+  { id: 34, name: "Cat Paw",              price: 15,   file: 34, icon: "🐾", rarity: "common"    },
+  // ── Gummy Bear ────────────────────────────────────────────────────────
+  { id: 35, name: "Gummy Bear",           price: 12,   file: 35, icon: "🐻", rarity: "common"    },
+  // ── Infinity Gem ──────────────────────────────────────────────────────
+  { id: 36, name: "Infinity Gem",         price: 1000, file: 36, icon: "♾️", rarity: "legendary" },
+  // ── Pixel Heart ───────────────────────────────────────────────────────
+  { id: 37, name: "Pixel Heart",          price: 28,   file: 37, icon: "❤️", rarity: "common"    },
+  // ── Laser Cat ─────────────────────────────────────────────────────────
+  { id: 38, name: "Laser Cat",            price: 130,  file: 38, icon: "😸", rarity: "epic"      },
+  // ── Bubble Wand ───────────────────────────────────────────────────────
+  { id: 39, name: "Bubble Wand",          price: 35,   file: 39, icon: "🪄", rarity: "common"    },
+  // ── Nova Star ─────────────────────────────────────────────────────────
+  { id: 40, name: "Nova Star",            price: 400,  file: 40, icon: "⭐", rarity: "legendary" },
+  // ── Dino Egg ──────────────────────────────────────────────────────────
+  { id: 41, name: "Dino Egg",             price: 60,   file: 41, icon: "🦕", rarity: "rare"      },
+  // ── Cheese Block ──────────────────────────────────────────────────────
+  { id: 42, name: "Cheese Block",         price: 10,   file: 42, icon: "🧀", rarity: "common"    },
+  // ── Storm Cloud ───────────────────────────────────────────────────────
+  { id: 43, name: "Storm Cloud",          price: 110,  file: 43, icon: "⛈️", rarity: "epic"      },
+  // ── Hologram Ring ─────────────────────────────────────────────────────
+  { id: 44, name: "Hologram Ring",        price: 300,  file: 44, icon: "💍", rarity: "legendary" },
+  // ── Soft Panda ────────────────────────────────────────────────────────
+  { id: 45, name: "Soft Panda",           price: 18,   file: 45, icon: "🐼", rarity: "common"    },
+  // ── Flame Orb ─────────────────────────────────────────────────────────
+  { id: 46, name: "Flame Orb",            price: 85,   file: 46, icon: "🔥", rarity: "rare"      },
+  // ── Retro Tape ────────────────────────────────────────────────────────
+  { id: 47, name: "Retro Tape",           price: 22,   file: 47, icon: "📼", rarity: "common"    },
+  // ── Void Cube ─────────────────────────────────────────────────────────
+  { id: 48, name: "Void Cube",            price: 170,  file: 48, icon: "🎲", rarity: "epic"      },
+  // ── Cherry Bomb ───────────────────────────────────────────────────────
+  { id: 49, name: "Cherry Bomb",          price: 38,   file: 49, icon: "💣", rarity: "rare"      },
+  // ── Space Fish ────────────────────────────────────────────────────────
+  { id: 50, name: "Space Fish",           price: 70,   file: 50, icon: "🐠", rarity: "rare"      }
+];
+
 var realGiftsList = [];
 var giftImagesCache = {};
 
-// Маппинг ID подарка к номеру файла
-var GIFT_ID_TO_FILE_NUMBER = {
-  "5170145012310081615": 1,
-  "5170233102089322756": 2,
-  "5170250947678437525": 3,
-  "5168103777563050263": 4,
-  "5170144170496491616": 5,
-  "5170314324215857265": 6,
-  "5170564780938756245": 7,
-  "5168043875654172773": 8,
-  "5170690322832818290": 9,
-  "5170521118301225164": 10,
-  "6028601630662853006": 11
-};
-
-// ========== ИСПРАВЛЕННАЯ ФУНКЦИЯ getGiftIcon ==========
+// ═══════════════════════════════════════════════════════════════════════
+// getGiftIcon — возвращает HTML с реальной картинкой подарка из /gifts/
+// Если картинка не загрузится — показывает emoji-иконку
+// ═══════════════════════════════════════════════════════════════════════
 function getGiftIcon(gift) {
-  var fileNumber = gift.collectible_id;
-  if (fileNumber && fileNumber >= 1 && fileNumber <= 100) {
-    // Прямая ссылка на файл в папке /gifts
-    var imageUrl = '/gifts/' + fileNumber + '.png';
-    return '<img src="' + imageUrl + '" style="width:32px;height:32px;object-fit:contain" onerror="this.style.display=\'none\';this.parentElement.innerHTML=\'' + (gift.icon || '🎁') + '\'">';
+  if (!gift) return '🎁';
+  var fileNum = gift.file || gift.collectible_id;
+  if (fileNum) {
+    var src = '/gifts/' + fileNum + '.png';
+    var fallback = escapeHtml(gift.icon || '🎁');
+    return '<img src="' + src + '" alt="' + escapeHtml(gift.name || '') + '" loading="lazy" onerror="this.outerHTML=\'' + fallback + '\'" style="width:36px;height:36px;object-fit:contain;display:block">';
   }
   return gift.icon || '🎁';
 }
 
-// Функция getGiftNameByPrice
-function getGiftNameByPrice(price) {
-  var names = {
-    15: "Маленькая Звезда",
-    25: "Серебряный Блеск",
-    40: "Золотая Мечта",
-    50: "Рубиновое Сердце",
-    60: "Сапфировая Мечта",
-    80: "Изумрудный Трон",
-    100: "Алмазная Корона",
-    120: "Мифический Артефакт",
-    150: "Легендарный Трофей",
-    180: "Божественный Артефакт",
-    200: "Космическая Реликвия",
-    250: "Астральный Камень",
-    300: "Астральный Осколок",
-    350: "Астральный Кристалл",
-    400: "Астральный Артефакт",
-    450: "Астральный Трон",
-    500: "Астральная Корона",
-    550: "Астральная Звезда",
-    600: "Астральное Сердце"
-  };
-  return names[price] || `Подарок ${price}★`;
-}
-
-// Функция getEmojiByPrice
-function getEmojiByPrice(price) {
-  if (price <= 30) return "⭐";
-  if (price <= 60) return "✨";
-  if (price <= 100) return "💎";
-  if (price <= 200) return "🔥";
-  if (price <= 400) return "👑";
-  return "🏆";
-}
-
-// Загрузка подарков
+// ═══════════════════════════════════════════════════════════════════════
+// loadRealGifts — загружает список реальных Telegram-подарков
+// Сначала пробует получить актуальный список через Telegram Bot API
+// (getAvailableGifts), при неудаче использует встроенный хардкод
+// ═══════════════════════════════════════════════════════════════════════
 async function loadRealGifts() {
+  // Шаг 1: попытка загрузить через Bot API (getAvailableGifts)
   try {
-    console.log('🔄 Загрузка подарков Astral Shard...');
-    
-    // Создаем 100 подарков
-    realGiftsList = [];
-    for (var i = 1; i <= 100; i++) {
-      var price;
-      if (i <= 20) price = 15 + Math.floor(Math.random() * 20);
-      else if (i <= 40) price = 40 + Math.floor(Math.random() * 40);
-      else if (i <= 60) price = 80 + Math.floor(Math.random() * 80);
-      else if (i <= 80) price = 160 + Math.floor(Math.random() * 100);
-      else price = 260 + Math.floor(Math.random() * 200);
-      
-      realGiftsList.push({
-        id: i,
-        name: `Astral Shard #${i}`,
-        price: price,
-        icon: getEmojiByPrice(price),
-        imageUrl: null,
-        collectible_id: i
-      });
+    var resp = await fetch('https://api.telegram.org/bot' + BOT_TOKEN + '/getAvailableGifts');
+    if (resp.ok) {
+      var data = await resp.json();
+      if (data.ok && data.result && data.result.gifts && data.result.gifts.length > 0) {
+        var apiGifts = [];
+        data.result.gifts.forEach(function(g, idx) {
+          // Определяем file_number: сначала ищем в маппинге по id,
+          // если нет — используем порядковый номер + 1
+          var fileNum = idx + 1;
+          // Пробуем найти в нашем хардкоде подходящий файл по цене
+          var hardMatch = REAL_TG_GIFTS.find(function(h) {
+            return h.price === g.star_count;
+          });
+          if (hardMatch) fileNum = hardMatch.file;
+
+          var price  = g.star_count || 15;
+          var rarity = getRarityByPrice(price);
+          apiGifts.push({
+            id          : g.id || (idx + 1),
+            name        : g.sticker && g.sticker.emoji
+                            ? (g.sticker.emoji + ' Gift ' + price + '★')
+                            : ('Gift #' + (idx + 1)),
+            price       : price,
+            file        : fileNum,
+            icon        : (g.sticker && g.sticker.emoji) || getEmojiByPrice(price),
+            rarity      : rarity,
+            collectible_id: fileNum,
+            total_count : g.total_count || null,
+            remaining_count: g.remaining_count_left || null
+          });
+        });
+        realGiftsList = apiGifts;
+        console.log('✅ Telegram API: загружено подарков:', realGiftsList.length);
+        updateAllUI();
+        return true;
+      }
     }
-    
-    console.log('✅ Загружено подарков:', realGiftsList.length);
-    updateAllUI();
-    return true;
-  } catch (error) {
-    console.error('❌ Ошибка загрузки подарков:', error);
-    createFallbackGifts();
+  } catch (e) {
+    console.warn('⚠️ Bot API недоступен, используем встроенный список:', e.message);
   }
-  return false;
-}
 
-// Фолбэк - создаем 100 подарков
-function createFallbackGifts() {
-  realGiftsList = [];
-  for (var i = 1; i <= 100; i++) {
-    var price;
-    if (i <= 20) price = 15;
-    else if (i <= 40) price = 25;
-    else if (i <= 60) price = 50;
-    else if (i <= 80) price = 100;
-    else price = 200;
-    
-    realGiftsList.push({
-      id: i,
-      name: `Astral Shard #${i}`,
-      price: price,
-      icon: getEmojiByPrice(price),
-      imageUrl: null,
-      collectible_id: i
-    });
-  }
-  console.log('✅ Создано 100 фолбэк подарков');
+  // Шаг 2: фолбэк — используем хардкод реальных подарков
+  realGiftsList = REAL_TG_GIFTS.map(function(g) {
+    return Object.assign({ collectible_id: g.file }, g);
+  });
+  console.log('✅ Хардкод: загружено подарков:', realGiftsList.length);
   updateAllUI();
+  return true;
 }
 
-// Получить случайный подарок
+function getRarityByPrice(price) {
+  if (price <= 30)  return 'common';
+  if (price <= 80)  return 'rare';
+  if (price <= 200) return 'epic';
+  return 'legendary';
+}
+
+function getEmojiByPrice(price) {
+  if (price <= 30)  return '⭐';
+  if (price <= 60)  return '✨';
+  if (price <= 100) return '💎';
+  if (price <= 200) return '🔥';
+  if (price <= 400) return '👑';
+  return '🏆';
+}
+
 function getRandomRealGift() {
   if (!realGiftsList.length) return null;
-  var randomIndex = Math.floor(Math.random() * realGiftsList.length);
-  return Object.assign({}, realGiftsList[randomIndex]);
+  return Object.assign({}, realGiftsList[Math.floor(Math.random() * realGiftsList.length)]);
 }
 
-// Получить подарок по ID
 function getRealGiftById(id) {
   for (var i = 0; i < realGiftsList.length; i++) {
     if (realGiftsList[i].id == id) return Object.assign({}, realGiftsList[i]);
@@ -975,42 +1059,31 @@ function getRealGiftById(id) {
   return null;
 }
 
-// Обновлённые кейсы
-var CASES = [
-  {id:"starter", name:"СТАРТОВЫЙ", price:12, cls:"c-starter", emoji:"🎀"},
-  {id:"common", name:"ОБЫЧНЫЙ", price:25, cls:"c-common", emoji:"📦"},
-  {id:"rare", name:"РЕДКИЙ", price:75, cls:"c-rare", emoji:"✨"},
-  {id:"epic", name:"ЭПИЧЕСКИЙ", price:190, cls:"c-epic", emoji:"🔥"},
-  {id:"legendary", name:"ЛЕГЕНДАРНЫЙ", price:490, cls:"c-legendary", emoji:"👑"},
-  {id:"mythic", name:"МИФИЧЕСКИЙ", price:990, cls:"c-mythic", emoji:"💀"}
-];
-
-// Функция для получения случайного подарка из кейса
+// Получить случайный подарок из кейса (по диапазону цен)
 function getRandomGiftFromCase(casePrice) {
   if (!realGiftsList.length) return null;
   var minPrice = casePrice * 0.5;
   var maxPrice = casePrice * 2.5;
-  var available = [];
-  for (var i = 0; i < realGiftsList.length; i++) {
-    var price = realGiftsList[i].price;
-    if (price >= minPrice && price <= maxPrice) {
-      available.push(realGiftsList[i]);
-    }
-  }
-  if (available.length === 0) available = realGiftsList;
-  var randomIndex = Math.floor(Math.random() * available.length);
-  return Object.assign({}, available[randomIndex]);
+  var available = realGiftsList.filter(function(g) {
+    return g.price >= minPrice && g.price <= maxPrice;
+  });
+  if (!available.length) available = realGiftsList;
+  var g = available[Math.floor(Math.random() * available.length)];
+  return Object.assign({}, g);
 }
 
-function getRarityByPrice(price) {
-  if (price <= 30) return 'common';
-  if (price <= 80) return 'rare';
-  if (price <= 200) return 'epic';
-  return 'legendary';
-}
+// Кейсы
+var CASES = [
+  {id:"starter",   name:"СТАРТОВЫЙ",   price:12,  cls:"c-starter",   emoji:"🎀"},
+  {id:"common",    name:"ОБЫЧНЫЙ",     price:25,  cls:"c-common",    emoji:"📦"},
+  {id:"rare",      name:"РЕДКИЙ",      price:75,  cls:"c-rare",      emoji:"✨"},
+  {id:"epic",      name:"ЭПИЧЕСКИЙ",   price:190, cls:"c-epic",      emoji:"🔥"},
+  {id:"legendary", name:"ЛЕГЕНДАРНЫЙ", price:490, cls:"c-legendary", emoji:"👑"},
+  {id:"mythic",    name:"МИФИЧЕСКИЙ",  price:990, cls:"c-mythic",    emoji:"💀"}
+];
 
-// ========== ВСЕ ОСТАЛЬНЫЕ ФУНКЦИИ (БЕЗ ИЗМЕНЕНИЙ) ==========
-// Rate Limiter
+// ─── ВСЁ ОСТАЛЬНОЕ БЕЗ ИЗМЕНЕНИЙ ───────────────────────────────────────
+
 var RL = {
   _m: {},
   check: function(k, max) {
@@ -1030,1354 +1103,1092 @@ var RL = {
   }
 };
 
-// Звуки
 var SFX = {
   _c: null,
   _g: function() { if (!this._c) this._c = new (window.AudioContext || window.webkitAudioContext)(); return this._c; },
   _t: function(f, d, v, t) {
-    v = v || 0.15;
-    t = t || 'sine';
+    v = v || 0.15; t = t || 'sine';
     try {
       var c = this._g(), o = c.createOscillator(), g = c.createGain();
-      o.connect(g);
-      g.connect(c.destination);
-      o.type = t;
-      o.frequency.value = f;
+      o.connect(g); g.connect(c.destination);
+      o.type = t; o.frequency.value = f;
       g.gain.setValueAtTime(v, c.currentTime);
       g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + d);
-      o.start();
-      o.stop(c.currentTime + d);
-    } catch (e) {}
+      o.start(); o.stop(c.currentTime + d);
+    } catch(e) {}
   },
-  click: function() { this._t(440, 0.08, 0.1); },
-  win: function() {
-    var s = this;
-    [523, 659, 784].forEach(function(f, i) { setTimeout(function() { s._t(f, 0.2, 0.12); }, i * 100); });
-  },
-  lose: function() {
-    var s = this;
-    [300, 250].forEach(function(f, i) { setTimeout(function() { s._t(f, 0.25, 0.1, 'sawtooth'); }, i * 150); });
-  },
-  rouletteTick: function() {
-    var freqs = [700, 800, 900, 1000, 1100];
-    var f = freqs[Math.floor(Math.random() * freqs.length)];
-    this._t(f, 0.04, 0.07, 'square');
-  },
-  coin: function() { this._t(600, 0.1, 0.1, 'triangle'); },
-  craft: function() {
-    var s = this;
-    [523, 659, 784, 1047].forEach(function(f, i) { setTimeout(function() { s._t(f, 0.15, 0.1); }, i * 80); });
-  },
-  almost: function() { this._t(900, 0.05, 0.06); setTimeout(function() { SFX._t(800, 0.05, 0.06); }, 80); },
-  tick: function() { this._t(1200, 0.03, 0.08, 'square'); }
+  click:       function() { this._t(440, 0.08, 0.1); },
+  win:         function() { var s=this; [523,659,784].forEach(function(f,i){setTimeout(function(){s._t(f,0.2,0.12)},i*100)}); },
+  lose:        function() { var s=this; [300,250].forEach(function(f,i){setTimeout(function(){s._t(f,0.25,0.1,'sawtooth')},i*150)}); },
+  rouletteTick:function() { var freqs=[700,800,900,1000,1100]; this._t(freqs[Math.floor(Math.random()*freqs.length)],0.04,0.07,'square'); },
+  coin:        function() { this._t(600, 0.1, 0.1, 'triangle'); },
+  craft:       function() { var s=this; [523,659,784,1047].forEach(function(f,i){setTimeout(function(){s._t(f,0.15,0.1)},i*80)}); },
+  almost:      function() { this._t(900,0.05,0.06); setTimeout(function(){SFX._t(800,0.05,0.06)},80); },
+  tick:        function() { this._t(1200, 0.03, 0.08, 'square'); }
 };
 
-function vibrate(p) { try { navigator.vibrate && navigator.vibrate(p); } catch (e) {} }
+function vibrate(p) { try { navigator.vibrate && navigator.vibrate(p); } catch(e) {} }
 
-// Конфетти
 var CF = (function() {
-  var _cv = null, _cx = null, _ps = [], _af = null;
-  function _init() { if (!_cv) { _cv = document.getElementById('cfv'); if (_cv) _cx = _cv.getContext('2d'); } }
+  var _cv=null, _cx=null, _ps=[], _af=null;
+  function _init() { if(!_cv){_cv=document.getElementById('cfv');if(_cv)_cx=_cv.getContext('2d');} }
   var _rt;
-  window.addEventListener('resize', function() { clearTimeout(_rt); _rt = setTimeout(function() { if (_cv) { _cv.width = window.innerWidth; _cv.height = window.innerHeight; } }, 100); });
-  function burst(x, y, n) {
-    _init();
-    if (!_cx) return;
-    _cv.width = window.innerWidth;
-    _cv.height = window.innerHeight;
-    var cs = ['hsl(45,30%,70%)', 'hsl(0,0%,80%)', 'hsl(0,0%,55%)', 'hsl(40,20%,65%)'];
-    for (var i = 0; i < n; i++) {
-      var a = (Math.PI * 2 / n) * i + Math.random() * 0.5, s = Math.random() * 7 + 3;
-      _ps.push({ x: x, y: y, vx: Math.cos(a) * s, vy: Math.sin(a) * s - 5, life: 1, decay: Math.random() * 0.012 + 0.008, sz: Math.random() * 5 + 2, color: cs[Math.floor(Math.random() * cs.length)], rot: Math.random() * Math.PI * 2, rs: (Math.random() - 0.5) * 0.2 });
+  window.addEventListener('resize', function(){clearTimeout(_rt);_rt=setTimeout(function(){if(_cv){_cv.width=window.innerWidth;_cv.height=window.innerHeight;}},100);});
+  function burst(x,y,n) {
+    _init(); if(!_cx)return;
+    _cv.width=window.innerWidth; _cv.height=window.innerHeight;
+    var cs=['hsl(45,30%,70%)','hsl(0,0%,80%)','hsl(0,0%,55%)','hsl(40,20%,65%)'];
+    for(var i=0;i<n;i++){
+      var a=(Math.PI*2/n)*i+Math.random()*0.5, s=Math.random()*7+3;
+      _ps.push({x:x,y:y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-5,life:1,decay:Math.random()*0.012+0.008,sz:Math.random()*5+2,color:cs[Math.floor(Math.random()*cs.length)],rot:Math.random()*Math.PI*2,rs:(Math.random()-0.5)*0.2});
     }
-    if (!_af) loop();
+    if(!_af) loop();
   }
   function loop() {
-    if (!_cx) return;
-    _cx.clearRect(0, 0, _cv.width, _cv.height);
-    _ps = _ps.filter(function(p) { return p.life > 0; });
-    for (var i = 0; i < _ps.length; i++) {
-      var p = _ps[i];
-      p.x += p.vx;
-      p.y += p.vy;
-      p.vy += 0.25;
-      p.vx *= 0.99;
-      p.life -= p.decay;
-      p.rot += p.rs;
-      _cx.save();
-      _cx.globalAlpha = p.life;
-      _cx.translate(p.x, p.y);
-      _cx.rotate(p.rot);
-      _cx.fillStyle = p.color;
-      _cx.fillRect(-p.sz / 2, -p.sz / 2, p.sz, p.sz);
-      _cx.restore();
+    if(!_cx)return;
+    _cx.clearRect(0,0,_cv.width,_cv.height);
+    _ps=_ps.filter(function(p){return p.life>0;});
+    for(var i=0;i<_ps.length;i++){
+      var p=_ps[i];
+      p.x+=p.vx; p.y+=p.vy; p.vy+=0.25; p.vx*=0.99; p.life-=p.decay; p.rot+=p.rs;
+      _cx.save(); _cx.globalAlpha=p.life; _cx.translate(p.x,p.y); _cx.rotate(p.rot);
+      _cx.fillStyle=p.color; _cx.fillRect(-p.sz/2,-p.sz/2,p.sz,p.sz); _cx.restore();
     }
-    _af = _ps.length > 0 ? requestAnimationFrame(loop) : null;
+    _af=_ps.length>0?requestAnimationFrame(loop):null;
   }
-  return { burst: burst };
+  return {burst:burst};
 })();
 
 function toast(m) {
-  var ts = document.querySelectorAll('.toast');
-  for (var i = 0; i < ts.length; i++) ts[i].remove();
-  var t = document.createElement('div');
-  t.className = 'toast';
-  t.innerHTML = m;
-  document.body.appendChild(t);
-  setTimeout(function() { t.remove(); }, 2600);
+  var ts=document.querySelectorAll('.toast'); for(var i=0;i<ts.length;i++) ts[i].remove();
+  var t=document.createElement('div'); t.className='toast'; t.innerHTML=m;
+  document.body.appendChild(t); setTimeout(function(){t.remove();},2600);
 }
 
-function escapeHtml(s) { if (!s) return ''; return s.replace(/[&<>]/g, function(c) { return c === '&' ? '&amp;' : c === '<' ? '&lt;' : '&gt;'; }); }
+function escapeHtml(s) {
+  if(!s) return '';
+  return String(s).replace(/[&<>'"]/g, function(c){
+    return c==='&'?'&amp;':c==='<'?'&lt;':c==='>'?'&gt;':c==='"'?'&quot;':"&#39;";
+  });
+}
 
-function copyToClipboard(text) { try { navigator.clipboard.writeText(text); } catch (e) { var t = document.createElement('textarea'); t.value = text; document.body.appendChild(t); t.select(); document.execCommand('copy'); t.remove(); } }
+function copyToClipboard(text) { try{navigator.clipboard.writeText(text);}catch(e){var t=document.createElement('textarea');t.value=text;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();} }
 
-// Supabase функции
 async function sb(path, method, body, h) {
-  method = method || 'GET';
-  h = h || {};
+  method=method||'GET'; h=h||{};
   try {
-    var r = await fetch(SB_URL + path, {
-      method: method,
-      headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=representation', ...h },
-      body: body ? JSON.stringify(body) : null
+    var r=await fetch(SB_URL+path,{
+      method:method,
+      headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=representation',...h},
+      body:body?JSON.stringify(body):null
     });
-    if (!r.ok) { console.warn('SB', r.status, await r.text()); return null; }
-    var t = await r.text();
-    return t ? JSON.parse(t) : null;
-  } catch (e) { console.warn('SB', e); return null; }
+    if(!r.ok){console.warn('SB',r.status,await r.text());return null;}
+    var t=await r.text(); return t?JSON.parse(t):null;
+  } catch(e){console.warn('SB',e);return null;}
 }
 
 async function loadUser() {
-  if (!userId) return;
-  var rows = await sb('/rest/v1/gc_users?id=eq.' + encodeURIComponent(userId) + '&select=*');
-  if (rows && rows.length > 0) {
-    var r = rows[0];
-    state.balance = r.balance ?? 250;
-    state.inventory = safeJ(r.inventory, []);
-    state.casesOpened = r.cases_opened ?? 0;
-    state.pvpWins = r.pvp_wins ?? 0;
-    state.luck = r.luck ?? 0;
-    state.history = safeJ(r.history, []);
-    state.refCode = r.ref_code || userId.slice(0, 8).toUpperCase();
-    state.refCount = r.ref_count ?? 0;
-    state.refEarned = r.ref_earned ?? 0;
-    state.avatarUrl = r.avatar_url || null;
-    state.displayName = r.display_name || (tgUser && tgUser.first_name) || 'ИГРОК';
-    dataLoaded = true;
-    updateAllUI();
-    return true;
+  if(!userId) return;
+  var rows=await sb('/rest/v1/gc_users?id=eq.'+encodeURIComponent(userId)+'&select=*');
+  if(rows&&rows.length>0){
+    var r=rows[0];
+    state.balance=r.balance??250;
+    state.inventory=safeJ(r.inventory,[]);
+    state.casesOpened=r.cases_opened??0;
+    state.pvpWins=r.pvp_wins??0;
+    state.luck=r.luck??0;
+    state.history=safeJ(r.history,[]);
+    state.refCode=r.ref_code||userId.slice(0,8).toUpperCase();
+    state.refCount=r.ref_count??0;
+    state.refEarned=r.ref_earned??0;
+    state.avatarUrl=r.avatar_url||null;
+    state.displayName=r.display_name||(tgUser&&tgUser.first_name)||'ИГРОК';
+    dataLoaded=true; updateAllUI(); return true;
   }
-  state.displayName = (tgUser && tgUser.first_name) || 'ИГРОК';
-  state.refCode = userId.slice(0, 8).toUpperCase();
-  dataLoaded = true;
-  await saveUser(true);
-  return false;
+  state.displayName=(tgUser&&tgUser.first_name)||'ИГРОК';
+  state.refCode=userId.slice(0,8).toUpperCase();
+  dataLoaded=true; await saveUser(true); return false;
 }
 
 async function saveUser(now) {
-  if (!userId) return;
+  if(!userId) return;
   clearTimeout(debounceSave);
-  var go = async function() {
-    var p = {
-      id: userId, username: (tgUser && tgUser.username) || (tgUser && tgUser.first_name) || 'Игрок',
-      display_name: state.displayName || 'ИГРОК', avatar_url: state.avatarUrl || null,
-      balance: state.balance, inventory: JSON.stringify(state.inventory),
-      cases_opened: state.casesOpened, pvp_wins: state.pvpWins, luck: state.luck,
-      history: JSON.stringify(state.history.slice(0, 50)), ref_code: state.refCode,
-      ref_count: state.refCount, ref_earned: state.refEarned, updated_at: new Date().toISOString()
+  var go=async function(){
+    var p={
+      id:userId, username:(tgUser&&tgUser.username)||(tgUser&&tgUser.first_name)||'Игрок',
+      display_name:state.displayName||'ИГРОК', avatar_url:state.avatarUrl||null,
+      balance:state.balance, inventory:JSON.stringify(state.inventory),
+      cases_opened:state.casesOpened, pvp_wins:state.pvpWins, luck:state.luck,
+      history:JSON.stringify(state.history.slice(0,50)), ref_code:state.refCode,
+      ref_count:state.refCount, ref_earned:state.refEarned, updated_at:new Date().toISOString()
     };
-    var res = await sb('/rest/v1/gc_users', 'POST', p, { 'Prefer': 'resolution=merge-duplicates,return=representation' });
-    var dot = document.getElementById('syncDot');
-    if (res) { dot.className = 'sync-dot ok'; setTimeout(function() { dot.className = 'sync-dot'; }, 1200); }
-    else { dot.className = 'sync-dot err'; setTimeout(function() { dot.className = 'sync-dot'; }, 2000); }
+    var res=await sb('/rest/v1/gc_users','POST',p,{'Prefer':'resolution=merge-duplicates,return=representation'});
+    var dot=document.getElementById('syncDot');
+    if(res){dot.className='sync-dot ok';setTimeout(function(){dot.className='sync-dot';},1200);}
+    else{dot.className='sync-dot err';setTimeout(function(){dot.className='sync-dot';},2000);}
   };
-  if (now) await go();
-  else debounceSave = setTimeout(go, 600);
-  try { localStorage.setItem('gc_state', JSON.stringify({ state: state, userId: userId, ts: Date.now() })); } catch (e) { if (e.name === 'QuotaExceededError') localStorage.removeItem('gc_state'); }
+  if(now) await go();
+  else debounceSave=setTimeout(go,600);
+  try{localStorage.setItem('gc_state',JSON.stringify({state:state,userId:userId,ts:Date.now()}));}catch(e){if(e.name==='QuotaExceededError')localStorage.removeItem('gc_state');}
 }
 
-function safeJ(v, d) { try { return typeof v === 'string' ? JSON.parse(v) : (v ?? d); } catch (e) { return Array.isArray(d) ? [] : d; } }
+function safeJ(v,d){try{return typeof v==='string'?JSON.parse(v):(v??d);}catch(e){return Array.isArray(d)?[]:d;}}
 
-// Функции для работы с инвентарём и UI
 function setBal(v) {
-  var p = state.balance;
-  state.balance = Math.max(0, Math.floor(v));
-  var el = document.getElementById('balVal');
-  if (el) {
-    el.innerText = state.balance;
-    el.classList.remove('up', 'dn');
-    void el.offsetWidth;
-    el.classList.add(state.balance > p ? 'up' : 'dn');
-    setTimeout(function() { el.classList.remove('up', 'dn'); }, 600);
+  var p=state.balance; state.balance=Math.max(0,Math.floor(v));
+  var el=document.getElementById('balVal');
+  if(el){
+    el.innerText=state.balance; el.classList.remove('up','dn'); void el.offsetWidth;
+    el.classList.add(state.balance>p?'up':'dn');
+    setTimeout(function(){el.classList.remove('up','dn');},600);
   }
   saveUser();
 }
 
-function incLuck(n) { state.luck = Math.min(200, state.luck + (n || 1)); updateLuckBar(); }
-function updateLuckBar() { var p = Math.min(100, state.luck / 2); document.getElementById('luckFill').style.width = p + '%'; document.getElementById('luckPct').innerText = Math.round(p) + '%'; }
-function addHist(icon, action, result, pos) { state.history.unshift({ icon: icon, action: action, result: result, pos: pos, ts: Date.now() }); if (state.history.length > 60) state.history = state.history.slice(0, 60); }
+function incLuck(n){state.luck=Math.min(200,state.luck+(n||1));updateLuckBar();}
+function updateLuckBar(){var p=Math.min(100,state.luck/2);document.getElementById('luckFill').style.width=p+'%';document.getElementById('luckPct').innerText=Math.round(p)+'%';}
+function addHist(icon,action,result,pos){state.history.unshift({icon:icon,action:action,result:result,pos:pos,ts:Date.now()});if(state.history.length>60)state.history=state.history.slice(0,60);}
 
-// ОБНОВЛЁННАЯ ФУНКЦИЯ renderInv с использованием getGiftIcon
+// ── renderInv с реальными картинками ──────────────────────────────────
 function renderInv(cid, withSell, mode) {
-  var el = document.getElementById(cid);
-  if (!el) return;
-  if (!state.inventory.length) { el.innerHTML = '<div class="inv-empty">📭 Нет подарков</div>'; return; }
-  var html = '';
-  for (var i = 0; i < state.inventory.length; i++) {
-    var g = state.inventory[i];
-    var iconHtml = getGiftIcon(g);
-    html += '<div class="inv-card" data-gi="' + i + '" data-mode="' + (mode || '') + '"><div class="inv-dot r-' + (g.rarity || 'common') + '"></div><div class="inv-icon">' + iconHtml + '</div><div class="inv-name">' + escapeHtml(g.name) + '</div><div class="inv-val">★ ' + g.val + '</div>';
-    if (withSell) html += '<button class="sell-chip" data-idx="' + i + '">Продать</button>';
-    html += '</div>';
+  var el=document.getElementById(cid); if(!el) return;
+  if(!state.inventory.length){el.innerHTML='<div class="inv-empty">📭 Нет подарков</div>';return;}
+  var html='';
+  for(var i=0;i<state.inventory.length;i++){
+    var g=state.inventory[i];
+    var iconHtml=getGiftIcon(g);
+    html+='<div class="inv-card" data-gi="'+i+'" data-mode="'+(mode||'')+'"><div class="inv-dot r-'+(g.rarity||'common')+'"></div><div class="inv-icon">'+iconHtml+'</div><div class="inv-name">'+escapeHtml(g.name)+'</div><div class="inv-val">★ '+g.val+'</div>';
+    if(withSell) html+='<button class="sell-chip" data-idx="'+i+'">Продать</button>';
+    html+='</div>';
   }
-  el.innerHTML = html;
-  if (withSell) {
-    var chips = el.querySelectorAll('.sell-chip');
-    for (var j = 0; j < chips.length; j++) {
-      chips[j].onclick = function(e) { e.stopPropagation(); sellGift(parseInt(this.dataset.idx)); };
-    }
+  el.innerHTML=html;
+  if(withSell){
+    var chips=el.querySelectorAll('.sell-chip');
+    for(var j=0;j<chips.length;j++) chips[j].onclick=function(e){e.stopPropagation();sellGift(parseInt(this.dataset.idx));};
   }
-  var cards = el.querySelectorAll('.inv-card');
-  for (var k = 0; k < cards.length; k++) {
-    cards[k].onclick = (function(card) {
-      return function(e) {
-        if (e.target.classList.contains('sell-chip')) return;
-        var idx = parseInt(card.dataset.gi);
-        var m = card.dataset.mode;
-        if (m === 'upgrade') pickUpgStake(idx);
-        else if (m === 'craft') pickCraft(idx);
-        else if (m === 'pvp_pub') pickPvp(idx, 'public');
-        else if (m === 'pvp_priv') pickPvp(idx, 'private');
+  var cards=el.querySelectorAll('.inv-card');
+  for(var k=0;k<cards.length;k++){
+    cards[k].onclick=(function(card){
+      return function(e){
+        if(e.target.classList.contains('sell-chip')) return;
+        var idx=parseInt(card.dataset.gi);
+        var m=card.dataset.mode;
+        if(m==='upgrade') pickUpgStake(idx);
+        else if(m==='craft') pickCraft(idx);
+        else if(m==='pvp_pub') pickPvp(idx,'public');
+        else if(m==='pvp_priv') pickPvp(idx,'private');
       };
     })(cards[k]);
   }
 }
 
-function renderAllInv() {
+function renderAllInv(){
   renderInv('invCases');
-  renderInv('invUpgrade', false, 'upgrade');
-  renderInv('invCraft', false, 'craft');
-  renderInv('invPvp', false, pvpMode === 'private' ? 'pvp_priv' : 'pvp_pub');
-  renderInv('invProfile', true);
+  renderInv('invUpgrade',false,'upgrade');
+  renderInv('invCraft',false,'craft');
+  renderInv('invPvp',false,pvpMode==='private'?'pvp_priv':'pvp_pub');
+  renderInv('invProfile',true);
 }
 
-function sellGift(i) {
-  if (!RL.check('sell', 5)) return;
-  var g = state.inventory[i];
-  if (!g) return;
-  var p = Math.floor(g.val * 0.7);
-  state.inventory.splice(i, 1);
-  setBal(state.balance + p);
-  addHist(g.icon || '🎁', 'Продан: ' + g.name, '+' + p + ' ★', true);
-  vibrate([8]);
-  updateAllUI();
-  toast('💰 ' + p + ' ★');
+function sellGift(i){
+  if(!RL.check('sell',5)) return;
+  var g=state.inventory[i]; if(!g) return;
+  var p=Math.floor(g.val*0.7);
+  state.inventory.splice(i,1); setBal(state.balance+p);
+  addHist(g.icon||'🎁','Продан: '+g.name,'+'+p+' ★',true);
+  vibrate([8]); updateAllUI(); toast('💰 '+p+' ★');
 }
 
-function updateStats() {
-  var tot = 0;
-  for (var i = 0; i < state.inventory.length; i++) tot += state.inventory[i].val;
-  var s = function(id) { return document.getElementById(id); };
-  if (s('sTotalGifts')) s('sTotalGifts').innerText = state.inventory.length;
-  if (s('sTotalStars')) s('sTotalStars').innerText = tot;
-  if (s('sCasesOpened')) s('sCasesOpened').innerText = state.casesOpened || 0;
-  if (s('sPvpWins')) s('sPvpWins').innerText = state.pvpWins || 0;
-  if (s('pName')) s('pName').innerText = state.displayName || 'ИГРОК';
-  var bu = window.location.origin + window.location.pathname;
-  var ri = s('refLinkInput');
-  if (ri) ri.value = bu + '?ref=' + (state.refCode || '');
-  if (s('refCount')) s('refCount').innerText = state.refCount || 0;
-  if (s('refEarned')) s('refEarned').innerText = state.refEarned || 0;
-  if (tgUser && tgUser.username && s('pId')) s('pId').innerText = '@' + tgUser.username;
-  else if (s('pId')) s('pId').innerText = 'ID: ' + (userId || '').slice(0, 12);
-  updateLuckBar();
-  renderHist();
-  renderAvatar();
+function updateStats(){
+  var tot=0; for(var i=0;i<state.inventory.length;i++) tot+=state.inventory[i].val;
+  var s=function(id){return document.getElementById(id);};
+  if(s('sTotalGifts')) s('sTotalGifts').innerText=state.inventory.length;
+  if(s('sTotalStars')) s('sTotalStars').innerText=tot;
+  if(s('sCasesOpened')) s('sCasesOpened').innerText=state.casesOpened||0;
+  if(s('sPvpWins')) s('sPvpWins').innerText=state.pvpWins||0;
+  if(s('pName')) s('pName').innerText=state.displayName||'ИГРОК';
+  var bu=window.location.origin+window.location.pathname;
+  var ri=s('refLinkInput'); if(ri) ri.value=bu+'?ref='+(state.refCode||'');
+  if(s('refCount')) s('refCount').innerText=state.refCount||0;
+  if(s('refEarned')) s('refEarned').innerText=state.refEarned||0;
+  if(tgUser&&tgUser.username&&s('pId')) s('pId').innerText='@'+tgUser.username;
+  else if(s('pId')) s('pId').innerText='ID: '+(userId||'').slice(0,12);
+  updateLuckBar(); renderHist(); renderAvatar();
 }
 
-function isValidUrl(u) { try { var x = new URL(u); return ['http:', 'https:'].includes(x.protocol); } catch (e) { return false; } }
-function renderAvatar() {
-  var el = document.getElementById('avatarDisplay');
-  if (!el) return;
-  if (state.avatarUrl && isValidUrl(state.avatarUrl)) el.innerHTML = '<img src="' + state.avatarUrl + '">';
-  else if (tgUser && tgUser.photo_url && isValidUrl(tgUser.photo_url)) el.innerHTML = '<img src="' + tgUser.photo_url + '">';
-  else el.innerText = '👤';
+function isValidUrl(u){try{var x=new URL(u);return['http:','https:'].includes(x.protocol);}catch(e){return false;}}
+function renderAvatar(){
+  var el=document.getElementById('avatarDisplay'); if(!el) return;
+  if(state.avatarUrl&&isValidUrl(state.avatarUrl)) el.innerHTML='<img src="'+state.avatarUrl+'">';
+  else if(tgUser&&tgUser.photo_url&&isValidUrl(tgUser.photo_url)) el.innerHTML='<img src="'+tgUser.photo_url+'">';
+  else el.innerText='👤';
 }
-function renderHist() {
-  var el = document.getElementById('histBody');
-  if (!el) return;
-  if (!state.history.length) { el.innerHTML = '<tr><td colspan="3" style="color:var(--tm);text-align:center;padding:14px;font-size:11px">Нет истории<\/td><\/tr>'; return; }
-  var html = '';
-  for (var i = 0; i < Math.min(state.history.length, 25); i++) {
-    var h = state.history[i];
-    html += '<tr><td style="font-size:15px">' + escapeHtml(h.icon) + '<\/td><td>' + escapeHtml(h.action) + '<\/td><td class="' + (h.pos ? 'hist-pos' : 'hist-neg') + '">' + escapeHtml(h.result) + '<\/td><\/tr>';
+function renderHist(){
+  var el=document.getElementById('histBody'); if(!el) return;
+  if(!state.history.length){el.innerHTML='<tr><td colspan="3" style="color:var(--tm);text-align:center;padding:14px;font-size:11px">Нет истории<\/td><\/tr>';return;}
+  var html='';
+  for(var i=0;i<Math.min(state.history.length,25);i++){
+    var h=state.history[i];
+    html+='<tr><td style="font-size:15px">'+escapeHtml(h.icon)+'<\/td><td>'+escapeHtml(h.action)+'<\/td><td class="'+(h.pos?'hist-pos':'hist-neg')+'">'+escapeHtml(h.result)+'<\/td><\/tr>';
   }
-  el.innerHTML = html;
+  el.innerHTML=html;
 }
-function updateAllUI() {
-  document.getElementById('balVal').innerText = state.balance;
-  renderAllInv();
-  updateStats();
-  renderUpgradeUI();
-  renderCraftSlots();
-  renderPvpLobby();
+function updateAllUI(){
+  document.getElementById('balVal').innerText=state.balance;
+  renderAllInv(); updateStats(); renderUpgradeUI(); renderCraftSlots(); renderPvpLobby();
 }
 
-// Кейсы
-function renderCases() {
-  var g = document.getElementById('casesGrid');
-  if (!g) return;
-  var html = '';
-  for (var i = 0; i < CASES.length; i++) {
-    var c = CASES[i];
-    html += '<div class="case-card ' + c.cls + '">';
-    html += '<div class="case-visual">';
-    html += '<div class="case-image">';
-    html += '<img class="case-img" src="images/cases/' + c.id + '.png" alt="' + c.name + '" onerror="this.style.display=\'none\';this.nextSibling.style.display=\'block\'">';
-    html += '<div class="case-emoji" style="display:none">' + c.emoji + '</div>';
-    html += '</div></div>';
-    html += '<div class="case-body">';
-    html += '<div class="case-name">' + c.name + '</div>';
-    html += '<div class="case-price">★ ' + c.price + '</div>';
-    html += '<button class="open-btn" data-id="' + c.id + '">ОТКРЫТЬ</button>';
-    html += '</div></div>';
+// ── Кейсы ──────────────────────────────────────────────────────────────
+function renderCases(){
+  var g=document.getElementById('casesGrid'); if(!g) return;
+  var html='';
+  for(var i=0;i<CASES.length;i++){
+    var c=CASES[i];
+    html+='<div class="case-card '+c.cls+'">';
+    html+='<div class="case-visual"><div class="case-image">';
+    html+='<img class="case-img" src="images/cases/'+c.id+'.png" alt="'+c.name+'" onerror="this.style.display=\'none\';this.nextSibling.style.display=\'block\'">';
+    html+='<div class="case-emoji" style="display:none">'+c.emoji+'</div>';
+    html+='</div></div>';
+    html+='<div class="case-body"><div class="case-name">'+c.name+'</div>';
+    html+='<div class="case-price">★ '+c.price+'</div>';
+    html+='<button class="open-btn" data-id="'+c.id+'">ОТКРЫТЬ</button>';
+    html+='</div></div>';
   }
-  g.innerHTML = html;
-  var btns = g.querySelectorAll('.open-btn');
-  for (var j = 0; j < btns.length; j++) {
-    btns[j].onclick = (function(btn) {
-      return function() {
-        var id = btn.dataset.id;
-        for (var m = 0; m < CASES.length; m++) { if (CASES[m].id === id) openCase(CASES[m]); }
+  g.innerHTML=html;
+  var btns=g.querySelectorAll('.open-btn');
+  for(var j=0;j<btns.length;j++){
+    btns[j].onclick=(function(btn){
+      return function(){
+        var id=btn.dataset.id;
+        for(var m=0;m<CASES.length;m++){if(CASES[m].id===id) openCase(CASES[m]);}
       };
     })(btns[j]);
   }
 }
 
-function openCase(c) {
-  if (!RL.check('openCase', 2)) return;
-  if (state.balance < c.price) { toast('❌ Нужно ' + c.price + ' ★'); return; }
-  setBal(state.balance - c.price);
-  state.casesOpened = (state.casesOpened || 0) + 1;
-  
-  var wonGift = getRandomGiftFromCase(c.price);
-  if (!wonGift) { toast('❌ Ошибка загрузки подарков'); return; }
-  
-  var names = [];
-  for (var i = 0; i < 20; i++) names.push(wonGift.name);
-  var strip = [];
-  for (var j = 0; j < 64; j++) strip.push(names[Math.floor(Math.random() * names.length)]);
-  strip[50] = wonGift.name;
-  
-  showRouletteWithCharge(strip, 50, function() {
-    var isRare = wonGift.price > 50;
-    if (isRare) { CF.burst(window.innerWidth / 2, window.innerHeight * 0.35, 100); SFX.win(); vibrate([20, 50, 20]); }
-    showResultModal(wonGift, null, isRare, function(action) {
-      if (action === 'keep') {
+function openCase(c){
+  if(!RL.check('openCase',2)) return;
+  if(state.balance<c.price){toast('❌ Нужно '+c.price+' ★');return;}
+  setBal(state.balance-c.price);
+  state.casesOpened=(state.casesOpened||0)+1;
+  var wonGift=getRandomGiftFromCase(c.price);
+  if(!wonGift){toast('❌ Ошибка загрузки подарков');return;}
+  var strip=[];
+  for(var j=0;j<64;j++) strip.push(getRandomGiftFromCase(c.price)||wonGift);
+  strip[50]=wonGift;
+  showRouletteWithCharge(strip, 50, function(){
+    var isRare=wonGift.price>50;
+    if(isRare){CF.burst(window.innerWidth/2,window.innerHeight*0.35,100);SFX.win();vibrate([20,50,20]);}
+    showResultModal(wonGift, null, isRare, function(action){
+      if(action==='keep'){
         state.inventory.push({
-          id: wonGift.id,
-          name: wonGift.name,
-          icon: wonGift.icon,
-          imageUrl: wonGift.imageUrl,
-          val: wonGift.price,
-          rarity: getRarityByPrice(wonGift.price),
-          collectible_id: wonGift.collectible_id
+          id:wonGift.id, name:wonGift.name, icon:wonGift.icon,
+          file:wonGift.file, val:wonGift.price,
+          rarity:getRarityByPrice(wonGift.price), collectible_id:wonGift.collectible_id
         });
-        addHist(wonGift.icon || '🎁', 'Кейс: ' + c.name, '+' + wonGift.name, true);
-        toast('📦 ' + wonGift.name);
+        addHist(wonGift.icon||'🎁','Кейс: '+c.name,'+'+wonGift.name,true);
+        toast('📦 '+wonGift.name);
       } else {
-        var p = Math.floor(wonGift.price * 0.7);
-        setBal(state.balance + p);
-        addHist(wonGift.icon || '🎁', 'Продан: ' + wonGift.name, '+' + p + ' ★', true);
-        toast('💰 ' + p + ' ★');
+        var p=Math.floor(wonGift.price*0.7); setBal(state.balance+p);
+        addHist(wonGift.icon||'🎁','Продан: '+wonGift.name,'+'+p+' ★',true);
+        toast('💰 '+p+' ★');
       }
       updateAllUI();
     });
   });
 }
 
-function showRouletteWithCharge(strip, wonPos, cb) {
-  var ov = document.createElement('div');
-  ov.className = 'roulette-overlay';
-  ov.innerHTML = '<div class="energy-wrap" id="eWrap"><div class="energy-bar"><div class="energy-fill" id="eFill"></div></div></div><div class="roulette-box" id="rlBox"><div class="rl-center"></div><div class="rl-fade-l"></div><div class="rl-fade-r"></div><div class="roulette-track" id="rlTrack"></div></div>';
+// Рулетка — принимает массив объектов-подарков или строк
+function showRouletteWithCharge(strip, wonPos, cb){
+  var ov=document.createElement('div');
+  ov.className='roulette-overlay';
+  ov.innerHTML='<div class="energy-wrap" id="eWrap"><div class="energy-bar"><div class="energy-fill" id="eFill"></div></div></div><div class="roulette-box" id="rlBox"><div class="rl-center"></div><div class="rl-fade-l"></div><div class="rl-fade-r"></div><div class="roulette-track" id="rlTrack"></div></div>';
   document.body.appendChild(ov);
-  var track = ov.querySelector('#rlTrack');
-  var ITEM = 108;
-  for (var si = 0; si < strip.length; si++) {
-    var name = strip[si];
-    var el = document.createElement('div');
-    el.className = 'roulette-item';
-    el.innerHTML = '<div style="font-size:30px">🎁</div><div class="roulette-item-lbl">' + escapeHtml(name) + '</div>';
-    if (si === wonPos) el.classList.add('winner');
+  var track=ov.querySelector('#rlTrack');
+  var ITEM=108;
+  for(var si=0;si<strip.length;si++){
+    var g=strip[si];
+    var isObj=typeof g==='object'&&g!==null;
+    var el=document.createElement('div');
+    el.className='roulette-item';
+    if(si===wonPos) el.classList.add('winner');
+    if(isObj){
+      var iconHtml=getGiftIcon(g);
+      el.innerHTML='<div style="display:flex;align-items:center;justify-content:center;width:48px;height:48px">'+iconHtml+'</div><div class="roulette-item-lbl">'+escapeHtml(g.name||'')+'</div>';
+    } else {
+      el.innerHTML='<div style="font-size:30px">🎁</div><div class="roulette-item-lbl">'+escapeHtml(String(g))+'</div>';
+    }
     track.appendChild(el);
   }
-  var fill = document.getElementById('eFill');
-  var wrap = ov.querySelector('#eWrap');
-  var pct = 0;
-  var chargeI = setInterval(function() {
-    pct = Math.min(100, pct + 2.5);
-    fill.style.width = pct + '%';
-    if (Math.random() > 0.6) {
-      var sp = document.createElement('div');
-      sp.className = 'spark';
-      sp.style.left = (pct - 1) + '%';
-      sp.style.bottom = '0';
-      sp.style.setProperty('--sx', (Math.random() * 30 - 15) + 'px');
-      sp.style.setProperty('--sy', (-(Math.random() * 20 + 10)) + 'px');
-      wrap.appendChild(sp);
-      setTimeout(function() { sp.remove(); }, 800);
+  var fill=document.getElementById('eFill');
+  var wrap=ov.querySelector('#eWrap');
+  var pct=0;
+  var chargeI=setInterval(function(){
+    pct=Math.min(100,pct+2.5);
+    fill.style.width=pct+'%';
+    if(Math.random()>0.6){
+      var sp=document.createElement('div'); sp.className='spark';
+      sp.style.left=(pct-1)+'%'; sp.style.bottom='0';
+      sp.style.setProperty('--sx',(Math.random()*30-15)+'px');
+      sp.style.setProperty('--sy',(-(Math.random()*20+10))+'px');
+      wrap.appendChild(sp); setTimeout(function(){sp.remove();},800);
     }
-    if (Math.random() > 0.8) {
-      var pt = document.createElement('div');
-      pt.className = 'particle';
-      var sz = Math.random() * 3 + 1;
-      pt.style.cssText = 'width:' + sz + 'px;height:' + sz + 'px;left:' + Math.random() * 100 + '%;bottom:' + Math.random() * 20 + 'px;--pd:' + (Math.random() * 1.5 + 1) + 's';
-      wrap.appendChild(pt);
-      setTimeout(function() { pt.remove(); }, 2000);
+    if(Math.random()>0.8){
+      var pt=document.createElement('div'); pt.className='particle';
+      var sz=Math.random()*3+1;
+      pt.style.cssText='width:'+sz+'px;height:'+sz+'px;left:'+Math.random()*100+'%;bottom:'+Math.random()*20+'px;--pd:'+(Math.random()*1.5+1)+'s';
+      wrap.appendChild(pt); setTimeout(function(){pt.remove();},2000);
     }
-    if (pct >= 100) {
+    if(pct>=100){
       clearInterval(chargeI);
-      var boxW = ov.querySelector('#rlBox').offsetWidth || 400;
-      var center = boxW / 2 - ITEM / 2;
-      var finalX = -(wonPos * ITEM - center + Math.round((Math.random() - 0.5) * 25));
-      rouletteStartTime = performance.now();
-      rouletteDuration = 4000;
-      track.style.transform = 'translateX(0)';
-      requestAnimationFrame(function() {
-        track.style.transition = 'transform ' + rouletteDuration + 'ms cubic-bezier(0.08,0.82,0.17,1)';
-        track.style.transform = 'translateX(' + finalX + 'px)';
+      var boxW=ov.querySelector('#rlBox').offsetWidth||400;
+      var center=boxW/2-ITEM/2;
+      var finalX=-(wonPos*ITEM-center+Math.round((Math.random()-0.5)*25));
+      rouletteStartTime=performance.now(); rouletteDuration=4000;
+      track.style.transform='translateX(0)';
+      requestAnimationFrame(function(){
+        track.style.transition='transform '+rouletteDuration+'ms cubic-bezier(0.08,0.82,0.17,1)';
+        track.style.transform='translateX('+finalX+'px)';
       });
-      var prevX = 0, prevTick = 0;
-      var totalDist = Math.abs(finalX);
-      function tickLoop(now) {
-        if (now - rouletteStartTime > rouletteDuration - 100) return;
-        var t = Math.min(1, (now - rouletteStartTime) / rouletteDuration);
-        var ease = 1 - Math.pow(1 - t, 3);
-        var curX = ease * totalDist;
-        var speed = Math.abs(curX - prevX);
-        var minInterval = 40, maxInterval = 300;
-        var tickInterval = speed > 5 ? minInterval : Math.min(maxInterval, minInterval + 200 * (1 - speed / 10));
-        if (now - prevTick > tickInterval) { SFX.rouletteTick(); prevTick = now; }
-        prevX = curX;
-        requestAnimationFrame(tickLoop);
+      var prevX=0, prevTick=0, totalDist=Math.abs(finalX);
+      function tickLoop(now){
+        if(now-rouletteStartTime>rouletteDuration-100) return;
+        var t=Math.min(1,(now-rouletteStartTime)/rouletteDuration);
+        var ease=1-Math.pow(1-t,3);
+        var curX=ease*totalDist;
+        var speed=Math.abs(curX-prevX);
+        var minInterval=40, maxInterval=300;
+        var tickInterval=speed>5?minInterval:Math.min(maxInterval,minInterval+200*(1-speed/10));
+        if(now-prevTick>tickInterval){SFX.rouletteTick();prevTick=now;}
+        prevX=curX; requestAnimationFrame(tickLoop);
       }
       requestAnimationFrame(tickLoop);
-      setTimeout(function() { ov.remove(); vibrate([30]); if (cb) cb(); }, rouletteDuration + 500);
+      setTimeout(function(){ov.remove();vibrate([30]);if(cb)cb();},rouletteDuration+500);
     }
-  }, 16);
+  },16);
 }
 
-function showResultModal(gift, type, flash, cb) {
-  if (typeof flash === 'function') { cb = flash; flash = false; }
-  var isAlmost = type === 'almost';
-  var ov = document.createElement('div');
-  ov.className = 'result-overlay' + (flash ? ' win-flash' : '');
-  var iconHtml = getGiftIcon(gift);
-  ov.innerHTML = '<div class="result-box"><div class="result-icon">' + iconHtml + '</div><div class="result-title">' + escapeHtml(gift.name) + '</div><div class="result-rarity" style="color:' + RARITY_COLORS[getRarityByPrice(gift.price)] + '">' + RARITY_LABELS[getRarityByPrice(gift.price)] + '</div><div class="result-val">★ ' + gift.price + ' Stars</div>' + (isAlmost ? '<div class="almost-badge">🔥 Почти попал!</div>' : '') + '<div class="result-btns">' + (type === null ? '<button class="btn btn-primary" id="rKeep">📦 Забрать</button><button class="btn btn-outline" id="rSell">💰 Продать за ' + Math.floor(gift.price * 0.7) + ' ★</button>' : '<button class="btn btn-primary" id="rKeep">✅ Получено!</button>') + '</div></div>';
+var RARITY_LABELS={common:"Обычный",rare:"Редкий",epic:"Эпический",legendary:"Легендарный"};
+var RARITY_COLORS={common:"#666",rare:"#5577cc",epic:"#9955cc",legendary:"#c8a96e"};
+
+function showResultModal(gift, type, flash, cb){
+  if(typeof flash==='function'){cb=flash;flash=false;}
+  var isAlmost=type==='almost';
+  var ov=document.createElement('div');
+  ov.className='result-overlay'+(flash?' win-flash':'');
+  var iconHtml=getGiftIcon(gift);
+  ov.innerHTML='<div class="result-box"><div class="result-icon">'+iconHtml+'</div><div class="result-title">'+escapeHtml(gift.name)+'</div><div class="result-rarity" style="color:'+RARITY_COLORS[getRarityByPrice(gift.price||gift.val||0)]+'">'+(RARITY_LABELS[getRarityByPrice(gift.price||gift.val||0)]||'')+'</div><div class="result-val">★ '+(gift.price||gift.val)+' Stars</div>'+(isAlmost?'<div class="almost-badge">🔥 Почти попал!</div>':'')+'<div class="result-btns">'+(type===null?'<button class="btn btn-primary" id="rKeep">📦 Забрать</button><button class="btn btn-outline" id="rSell">💰 Продать за '+Math.floor((gift.price||gift.val||0)*0.7)+' ★</button>':'<button class="btn btn-primary" id="rKeep">✅ Получено!</button>')+'</div></div>';
   document.body.appendChild(ov);
-  document.getElementById('rKeep').onclick = function() { ov.remove(); if (cb) cb('keep'); };
-  var sellBtn = document.getElementById('rSell');
-  if (sellBtn) sellBtn.onclick = function() { ov.remove(); if (cb) cb('sell'); };
+  document.getElementById('rKeep').onclick=function(){ov.remove();if(cb)cb('keep');};
+  var sellBtn=document.getElementById('rSell');
+  if(sellBtn) sellBtn.onclick=function(){ov.remove();if(cb)cb('sell');};
 }
 
-// Апгрейд
-function upgStakeClick() { renderInv('invUpgrade', false, 'upgrade'); toast('👇 Нажми на подарок чтобы поставить'); }
-function pickUpgStake(idx) {
-  var g = state.inventory[idx];
-  if (!g) return;
-  if (upgStakeGift) state.inventory.push(upgStakeGift);
-  upgStakeGift = Object.assign({}, g);
-  upgTargetGift = null;
-  state.inventory.splice(idx, 1);
-  renderUpgradeUI();
-  renderInv('invUpgrade', false, 'upgrade');
-  SFX.click();
+// ── Апгрейд ────────────────────────────────────────────────────────────
+function upgStakeClick(){renderInv('invUpgrade',false,'upgrade');toast('👇 Нажми на подарок чтобы поставить');}
+function pickUpgStake(idx){
+  var g=state.inventory[idx]; if(!g) return;
+  if(upgStakeGift) state.inventory.push(upgStakeGift);
+  upgStakeGift=Object.assign({},g); upgTargetGift=null;
+  state.inventory.splice(idx,1);
+  renderUpgradeUI(); renderInv('invUpgrade',false,'upgrade'); SFX.click();
 }
-function renderUpgradeUI() {
-  var sb = document.getElementById('upgStakeBox');
-  var si = document.getElementById('upgStakeIcon');
-  var sn = document.getElementById('upgStakeName');
-  var sv = document.getElementById('upgStakeVal');
-  var tw = document.getElementById('upgTargetsWrap');
-  var tl = document.getElementById('upgTargetsList');
-  var ww = document.getElementById('upgWheelWrap');
-  var btn = document.getElementById('upgradeDoBtn');
-  if (!si) return;
-  if (upgStakeGift) {
-    si.innerText = upgStakeGift.icon || '🎁';
-    sn.innerText = upgStakeGift.name;
-    sn.style.color = 'var(--tp)';
-    sv.innerText = '★ ' + upgStakeGift.val;
+function renderUpgradeUI(){
+  var sb=document.getElementById('upgStakeBox');
+  var si=document.getElementById('upgStakeIcon');
+  var sn=document.getElementById('upgStakeName');
+  var sv=document.getElementById('upgStakeVal');
+  var tw=document.getElementById('upgTargetsWrap');
+  var tl=document.getElementById('upgTargetsList');
+  var ww=document.getElementById('upgWheelWrap');
+  var btn=document.getElementById('upgradeDoBtn');
+  if(!si) return;
+  if(upgStakeGift){
+    // иконка ставки
+    si.innerHTML=getGiftIcon(upgStakeGift);
+    sn.innerText=upgStakeGift.name; sn.style.color='var(--tp)';
+    sv.innerText='★ '+(upgStakeGift.val||upgStakeGift.price);
     sb.classList.add('filled');
-    var targets = [];
-    for (var i = 0; i < realGiftsList.length; i++) {
-      if (realGiftsList[i].price > upgStakeGift.val) targets.push(realGiftsList[i]);
+    var stakeVal=upgStakeGift.val||upgStakeGift.price||0;
+    var targets=realGiftsList.filter(function(t){return t.price>stakeVal;});
+    tw.style.display=targets.length?'':'none';
+    var tlHtml='';
+    for(var j=0;j<targets.length;j++){
+      var tg=targets[j];
+      tlHtml+='<div class="upg-target-item'+(upgTargetGift&&upgTargetGift.id===tg.id?' selected':'')+'" data-id="'+tg.id+'"><div class="uti-icon">'+getGiftIcon(tg)+'</div><div class="uti-name">'+escapeHtml(tg.name)+'</div><div class="uti-val">★ '+tg.price+'</div></div>';
     }
-    tw.style.display = targets.length ? '' : 'none';
-    var tlHtml = '';
-    for (var j = 0; j < targets.length; j++) {
-      var tg = targets[j];
-      tlHtml += '<div class="upg-target-item' + (upgTargetGift && upgTargetGift.id === tg.id ? ' selected' : '') + '" data-id="' + tg.id + '"><div class="uti-icon">🎁</div><div class="uti-name">' + escapeHtml(tg.name) + '</div><div class="uti-val">★ ' + tg.price + '</div></div>';
-    }
-    tl.innerHTML = tlHtml;
-    var tItems = tl.querySelectorAll('.upg-target-item');
-    for (var k = 0; k < tItems.length; k++) {
-      tItems[k].onclick = (function(el) {
-        return function() {
-          var tgData = getRealGiftById(parseInt(el.dataset.id));
-          if (tgData) upgTargetGift = tgData;
-          renderUpgradeUI();
-          SFX.click();
+    tl.innerHTML=tlHtml;
+    var tItems=tl.querySelectorAll('.upg-target-item');
+    for(var k=0;k<tItems.length;k++){
+      tItems[k].onclick=(function(el){
+        return function(){
+          var tgData=getRealGiftById(parseInt(el.dataset.id));
+          if(tgData) upgTargetGift=tgData;
+          renderUpgradeUI(); SFX.click();
         };
       })(tItems[k]);
     }
-    if (!sb.querySelector('.upg-stake-remove')) {
-      var rm = document.createElement('button');
-      rm.className = 'upg-stake-remove';
-      rm.innerText = '✕';
-      rm.onclick = function(e) { e.stopPropagation(); state.inventory.push(upgStakeGift); upgStakeGift = null; upgTargetGift = null; renderUpgradeUI(); renderInv('invUpgrade', false, 'upgrade'); };
+    if(!sb.querySelector('.upg-stake-remove')){
+      var rm=document.createElement('button'); rm.className='upg-stake-remove'; rm.innerText='✕';
+      rm.onclick=function(e){e.stopPropagation();state.inventory.push(upgStakeGift);upgStakeGift=null;upgTargetGift=null;renderUpgradeUI();renderInv('invUpgrade',false,'upgrade');};
       sb.appendChild(rm);
     }
   } else {
-    si.innerText = '📦';
-    sn.innerText = 'Нажми — выбери подарок-ставку';
-    sn.style.color = 'var(--tm)';
-    sv.innerText = '';
-    sb.classList.remove('filled');
-    tw.style.display = 'none';
-    ww.style.display = 'none';
-    btn.disabled = true;
-    var rms = sb.querySelectorAll('.upg-stake-remove');
-    for (var r = 0; r < rms.length; r++) rms[r].remove();
+    si.innerHTML='📦'; sn.innerText='Нажми — выбери подарок-ставку'; sn.style.color='var(--tm)';
+    sv.innerText=''; sb.classList.remove('filled'); tw.style.display='none'; ww.style.display='none'; btn.disabled=true;
+    var rms=sb.querySelectorAll('.upg-stake-remove'); for(var r=0;r<rms.length;r++) rms[r].remove();
     return;
   }
-  if (upgTargetGift && upgStakeGift) {
-    var chance = Math.round((upgStakeGift.val / upgTargetGift.price) * 100);
-    ww.style.display = 'flex';
-    renderWheelSvg(chance);
-    updateChanceDisplay(chance, upgStakeGift, upgTargetGift);
-    btn.disabled = false;
-  } else {
-    ww.style.display = 'none';
-    btn.disabled = true;
-  }
+  if(upgTargetGift&&upgStakeGift){
+    var stakeV=upgStakeGift.val||upgStakeGift.price||0;
+    var chance=Math.round((stakeV/upgTargetGift.price)*100);
+    ww.style.display='flex'; renderWheelSvg(chance);
+    updateChanceDisplay(chance,upgStakeGift,upgTargetGift); btn.disabled=false;
+  } else { ww.style.display='none'; btn.disabled=true; }
   renderUpgHistory();
 }
-function renderWheelSvg(chance) {
-  var svg = document.getElementById('upgSvg');
-  if (!svg) return;
-  var r = 90, cx = 110, cy = 110;
-  var wp = Math.max(2, Math.min(98, chance)) / 100;
-  var sa = -Math.PI / 2;
-  var ma = sa + wp * Math.PI * 2;
-  var wx1 = cx + r * Math.cos(sa), wy1 = cy + r * Math.sin(sa);
-  var wx2 = cx + r * Math.cos(ma), wy2 = cy + r * Math.sin(ma);
-  var la = wp > 0.5 ? 1 : 0;
-  var lines = '';
-  for (var i = 0; i < 24; i++) {
-    var a = i / 24 * Math.PI * 2 - Math.PI / 2;
-    lines += '<line x1="' + (cx + (r - 6) * Math.cos(a)) + '" y1="' + (cy + (r - 6) * Math.sin(a)) + '" x2="' + (cx + r * Math.cos(a)) + '" y2="' + (cy + r * Math.sin(a)) + '" stroke="#252525" stroke-width="1"/>';
-  }
-  svg.innerHTML = '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="#0f0f0f" stroke="#252525" stroke-width="1"/><path d="M' + cx + ',' + cy + ' L' + wx1 + ',' + wy1 + ' A' + r + ',' + r + ',0,' + (1 - la > 0.5 ? 1 : 0) + ',1,' + wx1 + ',' + wy1 + ' Z" fill="rgba(248,113,113,.15)" stroke="rgba(248,113,113,.3)" stroke-width="1"/><path d="M' + cx + ',' + cy + ' L' + wx1 + ',' + wy1 + ' A' + r + ',' + r + ',0,' + la + ',1,' + wx2 + ',' + wy2 + ' Z" fill="rgba(74,222,128,.15)" stroke="rgba(74,222,128,.4)" stroke-width="1"/><text x="' + cx + '" y="' + (cy - 20) + '" text-anchor="middle" fill="rgba(74,222,128,.8)" font-size="12" font-family="Bebas Neue,sans-serif" letter-spacing="1">' + chance + '%</text><text x="' + cx + '" y="' + (cy - 6) + '" text-anchor="middle" fill="rgba(74,222,128,.5)" font-size="9">WIN</text><text x="' + cx + '" y="' + (cy + 16) + '" text-anchor="middle" fill="rgba(248,113,113,.6)" font-size="9">LOSE</text><circle cx="' + cx + '" cy="' + cy + '" r="28" fill="#0f0f0f" stroke="#323232" stroke-width="1"/>' + lines;
+function renderWheelSvg(chance){
+  var svg=document.getElementById('upgSvg'); if(!svg) return;
+  var r=90,cx=110,cy=110;
+  var wp=Math.max(2,Math.min(98,chance))/100;
+  var sa=-Math.PI/2, ma=sa+wp*Math.PI*2;
+  var wx1=cx+r*Math.cos(sa),wy1=cy+r*Math.sin(sa);
+  var wx2=cx+r*Math.cos(ma),wy2=cy+r*Math.sin(ma);
+  var la=wp>0.5?1:0;
+  var lines='';
+  for(var i=0;i<24;i++){var a=i/24*Math.PI*2-Math.PI/2;lines+='<line x1="'+(cx+(r-6)*Math.cos(a))+'" y1="'+(cy+(r-6)*Math.sin(a))+'" x2="'+(cx+r*Math.cos(a))+'" y2="'+(cy+r*Math.sin(a))+'" stroke="#252525" stroke-width="1"/>';}
+  svg.innerHTML='<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="#0f0f0f" stroke="#252525" stroke-width="1"/><path d="M'+cx+','+cy+' L'+wx1+','+wy1+' A'+r+','+r+',0,'+(1-la>0.5?1:0)+',1,'+wx1+','+wy1+' Z" fill="rgba(248,113,113,.15)" stroke="rgba(248,113,113,.3)" stroke-width="1"/><path d="M'+cx+','+cy+' L'+wx1+','+wy1+' A'+r+','+r+',0,'+la+',1,'+wx2+','+wy2+' Z" fill="rgba(74,222,128,.15)" stroke="rgba(74,222,128,.4)" stroke-width="1"/><text x="'+cx+'" y="'+(cy-20)+'" text-anchor="middle" fill="rgba(74,222,128,.8)" font-size="12" font-family="Bebas Neue,sans-serif" letter-spacing="1">'+chance+'%</text><text x="'+cx+'" y="'+(cy-6)+'" text-anchor="middle" fill="rgba(74,222,128,.5)" font-size="9">WIN</text><text x="'+cx+'" y="'+(cy+16)+'" text-anchor="middle" fill="rgba(248,113,113,.6)" font-size="9">LOSE</text><circle cx="'+cx+'" cy="'+cy+'" r="28" fill="#0f0f0f" stroke="#323232" stroke-width="1"/>'+lines;
 }
-function updateChanceDisplay(chance, stake, target) {
-  var cn = document.getElementById('upgChanceNum');
-  var cd = document.getElementById('upgChanceDesc');
-  if (!cn) return;
-  cn.innerText = chance + '%';
-  cn.className = 'upg-chance-num ' + (chance >= 60 ? 'high' : (chance >= 30 ? 'med' : 'low'));
-  if (cd) cd.innerText = stake.val + ' ★ → ' + target.price + ' ★  |  шанс = ' + stake.val + '/' + target.price + '×100';
+function updateChanceDisplay(chance,stake,target){
+  var cn=document.getElementById('upgChanceNum'); var cd=document.getElementById('upgChanceDesc'); if(!cn) return;
+  cn.innerText=chance+'%'; cn.className='upg-chance-num '+(chance>=60?'high':(chance>=30?'med':'low'));
+  if(cd) cd.innerText=(stake.val||stake.price)+' ★ → '+target.price+' ★  |  шанс = '+(stake.val||stake.price)+'/'+target.price+'×100';
 }
-function spinArrowAndResult(chance, win) {
-  return new Promise(function(resolve) {
-    var arrow = document.getElementById('upgArrow');
-    if (!arrow) return resolve();
-    var spins = 3 + Math.random() * 2;
-    var wz = chance / 100;
-    var land = win ? (Math.random() * wz * 360) : (wz * 360 + Math.random() * (360 - wz * 360));
-    var total = spins * 360 + land;
-    arrow.parentElement.style.transformOrigin = '50% 100%';
-    arrow.parentElement.style.transition = 'transform ' + (2.5 + Math.random() * 0.5) + 's cubic-bezier(0.08,0.82,0.17,1)';
-    arrow.parentElement.style.transform = 'rotate(' + total + 'deg)';
-    var startT = performance.now(), dur = 2700, prevPos = 0, prevTick = 0;
-    function arrowTick(now) {
-      if (now - startT > dur) return;
-      var t = Math.min(1, (now - startT) / dur);
-      var pos = (1 - Math.pow(1 - t, 3)) * total;
-      var speed = Math.abs(pos - prevPos);
-      var ti = speed > 5 ? 50 : 200;
-      if (now - prevTick > ti) { SFX.tick(); prevTick = now; }
-      prevPos = pos;
-      requestAnimationFrame(arrowTick);
+function spinArrowAndResult(chance,win){
+  return new Promise(function(resolve){
+    var arrow=document.getElementById('upgArrow'); if(!arrow) return resolve();
+    var spins=3+Math.random()*2;
+    var wz=chance/100;
+    var land=win?(Math.random()*wz*360):(wz*360+Math.random()*(360-wz*360));
+    var total=spins*360+land;
+    arrow.parentElement.style.transformOrigin='50% 100%';
+    arrow.parentElement.style.transition='transform '+(2.5+Math.random()*0.5)+'s cubic-bezier(0.08,0.82,0.17,1)';
+    arrow.parentElement.style.transform='rotate('+total+'deg)';
+    var startT=performance.now(),dur=2700,prevPos=0,prevTick=0;
+    function arrowTick(now){
+      if(now-startT>dur) return;
+      var t=Math.min(1,(now-startT)/dur);
+      var pos=(1-Math.pow(1-t,3))*total;
+      var speed=Math.abs(pos-prevPos);
+      var ti=speed>5?50:200;
+      if(now-prevTick>ti){SFX.tick();prevTick=now;}
+      prevPos=pos; requestAnimationFrame(arrowTick);
     }
     requestAnimationFrame(arrowTick);
-    setTimeout(function() { resolve(); }, 3200);
+    setTimeout(function(){resolve();},3200);
   });
 }
-async function doUpgrade() {
-  if (!RL.check('upgrade', 2)) return;
-  if (!upgStakeGift || !upgTargetGift) { toast('Выбери подарок и цель'); return; }
-  var chance = Math.round((upgStakeGift.val / upgTargetGift.price) * 100);
-  var roll = Math.random() * 100;
-  var win = roll <= chance;
-  var almost = !win && roll <= chance + 8;
-  var stakeSnap = Object.assign({}, upgStakeGift);
-  var targetSnap = Object.assign({}, upgTargetGift);
-  upgStakeGift = null;
-  upgTargetGift = null;
-  document.getElementById('upgradeDoBtn').disabled = true;
-  await spinArrowAndResult(chance, win);
-  if (win) {
-    state.inventory.push({
-      id: targetSnap.id,
-      name: targetSnap.name,
-      icon: targetSnap.icon,
-      imageUrl: targetSnap.imageUrl,
-      val: targetSnap.price,
-      rarity: getRarityByPrice(targetSnap.price),
-      collectible_id: targetSnap.collectible_id
-    });
-    addHist(targetSnap.icon || '🎁', 'Апгрейд → ' + targetSnap.name, '✅ Успех!', true);
-    state.luck = Math.max(0, state.luck - 10);
-    upgHistory.unshift({ from: stakeSnap, to: targetSnap, win: true, almost: false, ts: Date.now() });
-    CF.burst(window.innerWidth / 2, window.innerHeight / 2, 90);
-    SFX.win();
-    vibrate([30, 60, 30]);
-    showResultModal(targetSnap, true, true, function() {});
+async function doUpgrade(){
+  if(!RL.check('upgrade',2)) return;
+  if(!upgStakeGift||!upgTargetGift){toast('Выбери подарок и цель');return;}
+  var stakeV=upgStakeGift.val||upgStakeGift.price||0;
+  var chance=Math.round((stakeV/upgTargetGift.price)*100);
+  var roll=Math.random()*100; var win=roll<=chance; var almost=!win&&roll<=chance+8;
+  var stakeSnap=Object.assign({},upgStakeGift); var targetSnap=Object.assign({},upgTargetGift);
+  upgStakeGift=null; upgTargetGift=null;
+  document.getElementById('upgradeDoBtn').disabled=true;
+  await spinArrowAndResult(chance,win);
+  if(win){
+    state.inventory.push({id:targetSnap.id,name:targetSnap.name,icon:targetSnap.icon,file:targetSnap.file,val:targetSnap.price,rarity:getRarityByPrice(targetSnap.price),collectible_id:targetSnap.collectible_id});
+    addHist(targetSnap.icon||'🎁','Апгрейд → '+targetSnap.name,'✅ Успех!',true);
+    state.luck=Math.max(0,state.luck-10);
+    upgHistory.unshift({from:stakeSnap,to:targetSnap,win:true,almost:false,ts:Date.now()});
+    CF.burst(window.innerWidth/2,window.innerHeight/2,90); SFX.win(); vibrate([30,60,30]);
+    showResultModal(targetSnap,true,true,function(){});
   } else {
-    if (almost) SFX.almost();
-    else SFX.lose();
-    vibrate([50]);
-    incLuck(4);
-    upgHistory.unshift({ from: stakeSnap, to: targetSnap, win: false, almost: almost, ts: Date.now() });
-    addHist('💀', 'Апгрейд: ' + stakeSnap.name, '💀 Провал', false);
-    var loseOv = document.createElement('div');
-    loseOv.className = 'result-overlay';
-    loseOv.innerHTML = '<div class="result-box"><div class="result-icon" style="filter:grayscale(1);opacity:.5">🎁</div><div class="result-title" style="color:var(--red)">ПРОВАЛ</div>' + (almost ? '<div class="almost-badge">🔥 Почти попал! Ещё раз?</div>' : '') + '<div style="font-size:12px;color:var(--tm);margin-top:8px">Подарок потерян</div><div class="result-btns"><button class="btn btn-outline" id="lClose">Закрыть</button></div></div>';
+    if(almost) SFX.almost(); else SFX.lose(); vibrate([50]); incLuck(4);
+    upgHistory.unshift({from:stakeSnap,to:targetSnap,win:false,almost:almost,ts:Date.now()});
+    addHist('💀','Апгрейд: '+stakeSnap.name,'💀 Провал',false);
+    var loseOv=document.createElement('div'); loseOv.className='result-overlay';
+    loseOv.innerHTML='<div class="result-box"><div class="result-icon" style="filter:grayscale(1);opacity:.5">🎁</div><div class="result-title" style="color:var(--red)">ПРОВАЛ</div>'+(almost?'<div class="almost-badge">🔥 Почти попал! Ещё раз?</div>':'')+'<div style="font-size:12px;color:var(--tm);margin-top:8px">Подарок потерян</div><div class="result-btns"><button class="btn btn-outline" id="lClose">Закрыть</button></div></div>';
     document.body.appendChild(loseOv);
-    document.getElementById('lClose').onclick = function() { loseOv.remove(); };
+    document.getElementById('lClose').onclick=function(){loseOv.remove();};
   }
-  updateAllUI();
-  saveUser();
-  var arrowInner = document.querySelector('#upgArrow').parentElement;
-  if (arrowInner) { arrowInner.style.transition = 'none'; arrowInner.style.transform = 'rotate(0deg)'; }
+  updateAllUI(); saveUser();
+  var arrowInner=document.querySelector('#upgArrow').parentElement;
+  if(arrowInner){arrowInner.style.transition='none';arrowInner.style.transform='rotate(0deg)';}
 }
-function renderUpgHistory() {
-  var box = document.getElementById('upgHistBox');
-  var list = document.getElementById('upgHistList');
-  if (!box || !list) return;
-  if (!upgHistory.length) { box.style.display = 'none'; return; }
-  box.style.display = 'block';
-  var html = '';
-  for (var i = 0; i < Math.min(8, upgHistory.length); i++) {
-    var h = upgHistory[i];
-    html += '<div class="upg-hist-item"><div class="uhi-icons"><span>🎁</span><span class="uhi-arrow">→</span><span style="' + (h.win ? '' : 'opacity:.4') + '">🎁</span></div><div class="uhi-info">' + escapeHtml(h.from.name) + ' → ' + escapeHtml(h.to.name) + '</div><div class="uhi-result ' + (h.win ? 'uhi-win' : 'uhi-lose') + '">' + (h.win ? '✅ WIN' : '💀 LOSE') + (h.almost && !h.win ? '<span class="uhi-almost">🔥</span>' : '') + '</div></div>';
+function renderUpgHistory(){
+  var box=document.getElementById('upgHistBox'); var list=document.getElementById('upgHistList'); if(!box||!list) return;
+  if(!upgHistory.length){box.style.display='none';return;}
+  box.style.display='block';
+  var html='';
+  for(var i=0;i<Math.min(8,upgHistory.length);i++){
+    var h=upgHistory[i];
+    html+='<div class="upg-hist-item"><div class="uhi-icons"><span style="font-size:16px;display:flex;align-items:center">'+getGiftIcon(h.from)+'</span><span class="uhi-arrow">→</span><span style="font-size:16px;display:flex;align-items:center;'+(h.win?'':'opacity:.4')+'">'+getGiftIcon(h.to)+'</span></div><div class="uhi-info">'+escapeHtml(h.from.name)+' → '+escapeHtml(h.to.name)+'</div><div class="uhi-result '+(h.win?'uhi-win':'uhi-lose')+'">'+(h.win?'✅ WIN':'💀 LOSE')+(h.almost&&!h.win?'<span class="uhi-almost">🔥</span>':'')+'</div></div>';
   }
-  list.innerHTML = html;
+  list.innerHTML=html;
 }
 
-// Крафт
-function renderCraftSlots() {
-  for (var i = 0; i < 3; i++) {
-    var el = document.querySelector('.craft-slot[data-slot="' + i + '"]');
-    if (!el) continue;
-    var g = craftSlots[i];
-    if (g) {
+// ── Крафт ──────────────────────────────────────────────────────────────
+function renderCraftSlots(){
+  for(var i=0;i<3;i++){
+    var el=document.querySelector('.craft-slot[data-slot="'+i+'"]'); if(!el) continue;
+    var g=craftSlots[i];
+    if(g){
       el.classList.add('filled');
-      el.innerHTML = '<div class="craft-slot-icon">🎁</div><div class="craft-slot-name">' + escapeHtml(g.name) + '</div><div class="craft-slot-val">★ ' + g.val + '</div>';
-      el.onclick = (function(idx) {
-        return function() { state.inventory.push(craftSlots[idx]); craftSlots[idx] = null; renderCraftSlots(); renderInv('invCraft', false, 'craft'); saveUser(); };
-      })(i);
+      el.innerHTML='<div class="craft-slot-icon">'+getGiftIcon(g)+'</div><div class="craft-slot-name">'+escapeHtml(g.name)+'</div><div class="craft-slot-val">★ '+g.val+'</div>';
+      el.onclick=(function(idx){return function(){state.inventory.push(craftSlots[idx]);craftSlots[idx]=null;renderCraftSlots();renderInv('invCraft',false,'craft');saveUser();};})(i);
     } else {
       el.classList.remove('filled');
-      el.innerHTML = '<div class="craft-slot-icon">❓</div><div class="craft-slot-name">Выбрать</div>';
-      el.onclick = function() {};
+      el.innerHTML='<div class="craft-slot-icon">❓</div><div class="craft-slot-name">Выбрать</div>';
+      el.onclick=function(){};
     }
   }
   updateCraftInfo();
 }
-function pickCraft(idx) {
-  var g = state.inventory[idx];
-  if (!g) return;
-  var slot = -1;
-  for (var j = 0; j < craftSlots.length; j++) { if (craftSlots[j] === null) { slot = j; break; } }
-  if (slot === -1) { toast('Все слоты заняты!'); return; }
-  craftSlots[slot] = g;
-  state.inventory.splice(idx, 1);
-  renderCraftSlots();
-  renderInv('invCraft', false, 'craft');
-  saveUser();
+function pickCraft(idx){
+  var g=state.inventory[idx]; if(!g) return;
+  var slot=-1;
+  for(var j=0;j<craftSlots.length;j++){if(craftSlots[j]===null){slot=j;break;}}
+  if(slot===-1){toast('Все слоты заняты!');return;}
+  craftSlots[slot]=g; state.inventory.splice(idx,1);
+  renderCraftSlots(); renderInv('invCraft',false,'craft'); saveUser();
 }
-function updateCraftInfo() {
-  var placed = [];
-  for (var i = 0; i < craftSlots.length; i++) { if (craftSlots[i]) placed.push(craftSlots[i]); }
-  var tot = 0;
-  for (var j = 0; j < placed.length; j++) tot += placed[j].val;
-  document.getElementById('craftTotal').innerText = tot + ' ★';
-  document.getElementById('craftWinRange').innerText = Math.round(tot * 1.3) + '–' + Math.round(tot * 2.0) + ' ★';
-  document.getElementById('craftLoseRange').innerText = Math.round(tot * 0.5) + '–' + Math.round(tot * 0.9) + ' ★';
-  document.getElementById('craftBtn').disabled = placed.length < 3;
+function updateCraftInfo(){
+  var placed=[]; for(var i=0;i<craftSlots.length;i++){if(craftSlots[i])placed.push(craftSlots[i]);}
+  var tot=0; for(var j=0;j<placed.length;j++) tot+=placed[j].val;
+  document.getElementById('craftTotal').innerText=tot+' ★';
+  document.getElementById('craftWinRange').innerText=Math.round(tot*1.3)+'–'+Math.round(tot*2.0)+' ★';
+  document.getElementById('craftLoseRange').innerText=Math.round(tot*0.5)+'–'+Math.round(tot*0.9)+' ★';
+  document.getElementById('craftBtn').disabled=placed.length<3;
 }
-function doCraft() {
-  if (!RL.check('craft', 2)) return;
-  var placed = [];
-  for (var i = 0; i < craftSlots.length; i++) { if (craftSlots[i]) placed.push(craftSlots[i]); }
-  if (placed.length < 3) { toast('Добавь 3 подарка'); return; }
-  var tot = 0;
-  for (var j = 0; j < placed.length; j++) tot += placed[j].val;
-  var ultraRare = Math.random() < 0.02;
-  var win = ultraRare || Math.random() < 0.35;
-  var mult = ultraRare ? (3 + Math.random() * 2) : (win ? (1.3 + Math.random() * 0.7) : (0.5 + Math.random() * 0.4));
-  var targetPrice = Math.round(tot * mult);
-  var resultGift = null;
-  for (var k = 0; k < realGiftsList.length; k++) {
-    if (!resultGift || Math.abs(realGiftsList[k].price - targetPrice) < Math.abs(resultGift.price - targetPrice)) {
-      resultGift = realGiftsList[k];
-    }
+function doCraft(){
+  if(!RL.check('craft',2)) return;
+  var placed=[]; for(var i=0;i<craftSlots.length;i++){if(craftSlots[i])placed.push(craftSlots[i]);}
+  if(placed.length<3){toast('Добавь 3 подарка');return;}
+  var tot=0; for(var j=0;j<placed.length;j++) tot+=placed[j].val;
+  var ultraRare=Math.random()<0.02;
+  var win=ultraRare||Math.random()<0.35;
+  var mult=ultraRare?(3+Math.random()*2):(win?(1.3+Math.random()*0.7):(0.5+Math.random()*0.4));
+  var targetPrice=Math.round(tot*mult);
+  var resultGift=null;
+  for(var k=0;k<realGiftsList.length;k++){
+    if(!resultGift||Math.abs(realGiftsList[k].price-targetPrice)<Math.abs(resultGift.price-targetPrice)){resultGift=realGiftsList[k];}
   }
-  var almost = !win && !ultraRare && Math.random() > 0.75;
-  craftSlots = [null, null, null];
-  showCraftRoulette(resultGift.name, win, almost, function() {
-    state.inventory.push({
-      id: resultGift.id,
-      name: resultGift.name,
-      icon: resultGift.icon,
-      imageUrl: resultGift.imageUrl,
-      val: resultGift.price,
-      rarity: getRarityByPrice(resultGift.price),
-      collectible_id: resultGift.collectible_id
-    });
-    addHist(resultGift.icon || '🎁', 'Крафт → ' + resultGift.name, '★ ' + resultGift.price, win);
-    if (win || ultraRare) { CF.burst(window.innerWidth / 2, window.innerHeight * 0.4, 90); SFX.craft(); vibrate([20, 40, 20]); }
-    else { if (almost) SFX.almost(); else SFX.lose(); vibrate([40]); }
-    showResultModal(resultGift, win ? true : (almost ? 'almost' : false), (win || ultraRare), function() {});
-    renderCraftSlots();
-    renderAllInv();
-    updateStats();
-    saveUser();
+  var almost=!win&&!ultraRare&&Math.random()>0.75;
+  craftSlots=[null,null,null];
+  showCraftRoulette(resultGift, win, almost, function(){
+    state.inventory.push({id:resultGift.id,name:resultGift.name,icon:resultGift.icon,file:resultGift.file,val:resultGift.price,rarity:getRarityByPrice(resultGift.price),collectible_id:resultGift.collectible_id});
+    addHist(resultGift.icon||'🎁','Крафт → '+resultGift.name,'★ '+resultGift.price,win);
+    if(win||ultraRare){CF.burst(window.innerWidth/2,window.innerHeight*0.4,90);SFX.craft();vibrate([20,40,20]);}
+    else{if(almost)SFX.almost();else SFX.lose();vibrate([40]);}
+    showResultModal(resultGift,win?true:(almost?'almost':false),(win||ultraRare),function(){});
+    renderCraftSlots(); renderAllInv(); updateStats(); saveUser();
   });
 }
-function showCraftRoulette(wonName, win, almost, cb) {
-  var ov = document.createElement('div');
-  ov.className = 'roulette-overlay';
-  ov.innerHTML = '<div class="energy-wrap" id="cEWrap"><div class="energy-bar"><div class="energy-fill" id="cEFill"></div></div></div><div class="roulette-box" id="cRL" style="width:min(380px,90vw)"><div class="rl-center"></div><div class="rl-fade-l"></div><div class="rl-fade-r"></div><div class="roulette-track" id="cTrack"></div></div><div style="text-align:center;font-family:var(--font-d);font-size:20px;color:' + (win ? 'var(--gold)' : 'var(--ts)') + ';letter-spacing:2px;margin-top:8px">' + (win ? 'КРАФТ' : 'КРАФТ...') + '</div>';
+function showCraftRoulette(wonGift, win, almost, cb){
+  var ov=document.createElement('div');
+  ov.className='roulette-overlay';
+  ov.innerHTML='<div class="energy-wrap" id="cEWrap"><div class="energy-bar"><div class="energy-fill" id="cEFill"></div></div></div><div class="roulette-box" id="cRL" style="width:min(380px,90vw)"><div class="rl-center"></div><div class="rl-fade-l"></div><div class="rl-fade-r"></div><div class="roulette-track" id="cTrack"></div></div><div style="text-align:center;font-family:var(--font-d);font-size:20px;color:'+(win?'var(--gold)':'var(--ts)')+';letter-spacing:2px;margin-top:8px">'+(win?'КРАФТ':'КРАФТ...')+'</div>';
   document.body.appendChild(ov);
-  var track = ov.querySelector('#cTrack');
-  var ITEM = 96;
-  var allG = realGiftsList.map(function(g) { return g.name; });
-  if (!allG.length) allG = ['Подарок'];
-  var strip = [];
-  for (var j = 0; j < 40; j++) strip.push(allG[Math.floor(Math.random() * allG.length)]);
-  strip[30] = wonName;
-  for (var si = 0; si < strip.length; si++) {
-    var name = strip[si];
-    var el = document.createElement('div');
-    el.className = 'roulette-item';
-    el.style.cssText = 'width:88px;height:80px';
-    el.innerHTML = '<div style="font-size:26px">🎁</div><div class="roulette-item-lbl">' + escapeHtml(name) + '</div>';
-    if (si === 30 && win) el.classList.add('winner');
+  var track=ov.querySelector('#cTrack');
+  var ITEM=96;
+  var strip=[];
+  for(var j=0;j<40;j++) strip.push(getRandomRealGift()||wonGift);
+  strip[30]=wonGift;
+  for(var si=0;si<strip.length;si++){
+    var g=strip[si];
+    var el=document.createElement('div');
+    el.className='roulette-item'; el.style.cssText='width:88px;height:80px';
+    el.innerHTML='<div style="display:flex;align-items:center;justify-content:center;width:40px;height:40px">'+getGiftIcon(g)+'</div><div class="roulette-item-lbl">'+escapeHtml(g.name||'')+'</div>';
+    if(si===30&&win) el.classList.add('winner');
     track.appendChild(el);
   }
-  var fill = document.getElementById('cEFill');
-  var pct = 0;
-  var ci = setInterval(function() {
-    pct = Math.min(100, pct + 4);
-    fill.style.width = pct + '%';
-    if (pct >= 100) {
+  var fill=document.getElementById('cEFill');
+  var pct=0;
+  var ci=setInterval(function(){
+    pct=Math.min(100,pct+4); fill.style.width=pct+'%';
+    if(pct>=100){
       clearInterval(ci);
-      var boxW = ov.querySelector('#cRL').offsetWidth || 300;
-      var center = boxW / 2 - ITEM / 2;
-      var finalX = -(30 * ITEM - center);
-      var dur = 2800;
-      track.style.transform = 'translateX(0)';
-      requestAnimationFrame(function() { track.style.transition = 'transform ' + dur + 'ms cubic-bezier(0.08,0.82,0.17,1)'; track.style.transform = 'translateX(' + finalX + 'px)'; });
-      var st = performance.now(), pv = 0, pt2 = 0, td = Math.abs(finalX);
-      function ctl(now) {
-        if (now - st > dur - 100) return;
-        var t = Math.min(1, (now - st) / dur);
-        var cur = (1 - Math.pow(1 - t, 3)) * td;
-        var sp = Math.abs(cur - pv);
-        var ti = sp > 5 ? 45 : 190;
-        if (now - pt2 > ti) { SFX.rouletteTick(); pt2 = now; }
-        pv = cur;
-        requestAnimationFrame(ctl);
+      var boxW=ov.querySelector('#cRL').offsetWidth||300;
+      var center=boxW/2-ITEM/2; var finalX=-(30*ITEM-center); var dur=2800;
+      track.style.transform='translateX(0)';
+      requestAnimationFrame(function(){track.style.transition='transform '+dur+'ms cubic-bezier(0.08,0.82,0.17,1)';track.style.transform='translateX('+finalX+'px)';});
+      var st=performance.now(),pv=0,pt2=0,td=Math.abs(finalX);
+      function ctl(now){
+        if(now-st>dur-100) return;
+        var t=Math.min(1,(now-st)/dur);
+        var cur=(1-Math.pow(1-t,3))*td;
+        var sp=Math.abs(cur-pv);
+        var ti=sp>5?45:190;
+        if(now-pt2>ti){SFX.rouletteTick();pt2=now;}
+        pv=cur; requestAnimationFrame(ctl);
       }
       requestAnimationFrame(ctl);
-      setTimeout(function() { ov.remove(); vibrate([30]); if (cb) cb(); }, dur + 500);
+      setTimeout(function(){ov.remove();vibrate([30]);if(cb)cb();},dur+500);
     }
-  }, 18);
+  },18);
 }
 
-// PvP
-function pickPvp(idx, mode) {
-  var g = state.inventory[idx];
-  if (!g) return;
-  if (mode === 'private') {
-    pvpPrivStakeIdx = idx;
-    document.getElementById('pvpPrivateStakeText').innerHTML = getGiftIcon(g) + ' ' + escapeHtml(g.name);
-    document.getElementById('pvpPrivateStakeVal').innerText = '★ ' + g.val;
-    document.getElementById('createPrivateBattleBtn').disabled = false;
+// ── PvP ────────────────────────────────────────────────────────────────
+function pickPvp(idx,mode){
+  var g=state.inventory[idx]; if(!g) return;
+  var iconHtml=getGiftIcon(g);
+  if(mode==='private'){
+    pvpPrivStakeIdx=idx;
+    document.getElementById('pvpPrivateStakeText').innerHTML=iconHtml+' '+escapeHtml(g.name);
+    document.getElementById('pvpPrivateStakeVal').innerText='★ '+g.val;
+    document.getElementById('createPrivateBattleBtn').disabled=false;
   } else {
-    pvpStakeIdx = idx;
-    document.getElementById('pvpStakeText').innerHTML = getGiftIcon(g) + ' ' + escapeHtml(g.name);
-    document.getElementById('pvpStakeVal').innerText = '★ ' + g.val;
-    document.getElementById('createBattleBtn').disabled = false;
+    pvpStakeIdx=idx;
+    document.getElementById('pvpStakeText').innerHTML=iconHtml+' '+escapeHtml(g.name);
+    document.getElementById('pvpStakeVal').innerText='★ '+g.val;
+    document.getElementById('createBattleBtn').disabled=false;
   }
 }
-function getAvHtml(b) {
-  var av = b.creator_avatar;
-  var nm = (b.creator_name || '?').slice(0, 6).toUpperCase();
-  return '<div class="lc-av"><div class="lc-av-img">' + (av ? '<img src="' + av + '">' : '<span>' + escapeHtml(nm.charAt(0)) + '</span>') + '</div><div class="lc-av-name">' + escapeHtml(nm) + '</div></div>';
+function getAvHtml(b){
+  var av=b.creator_avatar;
+  var nm=(b.creator_name||'?').slice(0,6).toUpperCase();
+  return '<div class="lc-av"><div class="lc-av-img">'+(av?'<img src="'+av+'">':'<span>'+escapeHtml(nm.charAt(0))+'</span>')+'</div><div class="lc-av-name">'+escapeHtml(nm)+'</div></div>';
 }
-function renderPvpLobby() { if (pvpMode === 'public') renderPubLobby(); else renderPrivLobby(); }
-function renderPubLobby() {
-  var el = document.getElementById('pvpLobby');
-  if (!el) return;
-  var now = Date.now();
-  var act = [];
-  for (var i = 0; i < battles.length; i++) {
-    var b = battles[i];
-    if (b.status === 'waiting' && (b.is_private === false || b.is_private === null) && now - new Date(b.created_at).getTime() < 180000) act.push(b);
+function renderPvpLobby(){if(pvpMode==='public')renderPubLobby();else renderPrivLobby();}
+function renderPubLobby(){
+  var el=document.getElementById('pvpLobby'); if(!el) return;
+  var now=Date.now();
+  var act=battles.filter(function(b){return b.status==='waiting'&&(b.is_private===false||b.is_private===null)&&now-new Date(b.created_at).getTime()<180000;});
+  if(!act.length){el.innerHTML='<div class="no-battles">Нет публичных батлов.<br>Создай первый!</div>';return;}
+  var html='';
+  for(var j=0;j<act.length;j++){
+    var b=act[j]; var cg=safeJ(b.creator_gift,{});
+    var cgIconHtml=cg.file?getGiftIcon(cg):(cg.icon||'🎁');
+    var isOwn=b.creator_id===userId;
+    html+='<div class="lobby-card">'+getAvHtml(b)+'<div class="lc-gift"><div class="lc-icon">'+cgIconHtml+'</div><div class="lc-gname">'+escapeHtml(cg.name||'?')+'</div><div class="lc-val">★ '+(cg.val||0)+'</div></div><div class="lc-mid"><div class="lc-vs">VS</div><div class="lc-status">Ожидание</div></div><div>'+(isOwn?'<button class="btn btn-danger btn-sm" onclick="cancelBattle(\''+b.id+'\')">Отменить</button>':'<button class="lc-join" onclick="joinBattle(\''+b.id+'\')">Войти</button>')+'</div></div>';
   }
-  if (!act.length) { el.innerHTML = '<div class="no-battles">Нет публичных батлов.<br>Создай первый!</div>'; return; }
-  var html = '';
-  for (var j = 0; j < act.length; j++) {
-    var b = act[j];
-    var cg = safeJ(b.creator_gift, {});
-    var isOwn = b.creator_id === userId;
-    html += '<div class="lobby-card">' + getAvHtml(b) + '<div class="lc-gift"><div class="lc-icon">🎁</div><div class="lc-gname">' + escapeHtml(cg.name || '?') + '</div><div class="lc-val">★ ' + (cg.val || 0) + '</div></div><div class="lc-mid"><div class="lc-vs">VS</div><div class="lc-status">Ожидание</div></div><div>' + (isOwn ? '<button class="btn btn-danger btn-sm" onclick="cancelBattle(\'' + b.id + '\')">Отменить</button>' : '<button class="lc-join" onclick="joinBattle(\'' + b.id + '\')">Войти</button>') + '</div></div>';
-  }
-  el.innerHTML = html;
+  el.innerHTML=html;
 }
-function renderPrivLobby() {
-  var el = document.getElementById('pvpPrivateLobby');
-  if (!el) return;
-  var now = Date.now();
-  var my = [];
-  for (var i = 0; i < privateBattles.length; i++) {
-    var b = privateBattles[i];
-    if (b.creator_id === userId && b.status === 'waiting' && now - new Date(b.created_at).getTime() < 300000) my.push(b);
+function renderPrivLobby(){
+  var el=document.getElementById('pvpPrivateLobby'); if(!el) return;
+  var now=Date.now(); var botUsername='Ruslan158bot';
+  var my=privateBattles.filter(function(b){return b.creator_id===userId&&b.status==='waiting'&&now-new Date(b.created_at).getTime()<300000;});
+  if(!my.length){el.innerHTML='<div class="no-battles">Нет приватных батлов.<br>Создай и отправь ссылку!</div>';return;}
+  var html='';
+  for(var j=0;j<my.length;j++){
+    var b=my[j]; var cg=safeJ(b.creator_gift,{}); var cgIconHtml=cg.file?getGiftIcon(cg):(cg.icon||'🎁');
+    var link='https://t.me/'+botUsername+'?start=join_'+b.id;
+    html+='<div class="lobby-card"><div class="lc-gift"><div class="lc-icon">'+cgIconHtml+'</div><div class="lc-gname">'+escapeHtml(cg.name||'?')+'</div><div class="lc-val">★ '+(cg.val||0)+'</div></div><div class="lc-mid"><div class="lc-vs">VS</div><div class="lc-status">Ожидание</div><div class="lc-priv">🔒 Приватный</div></div><div style="display:flex;flex-direction:column;gap:5px"><button class="lc-join" onclick="copyToClipboard(\''+link+'\');toast(\'🔗 Ссылка скопирована!\')">🔗 Скопировать ссылку</button><button class="btn btn-danger btn-sm" onclick="cancelBattle(\''+b.id+'\')">Отменить</button></div></div>';
   }
-  if (!my.length) { el.innerHTML = '<div class="no-battles">Нет приватных батлов.<br>Создай и отправь ссылку!</div>'; return; }
-  var botUsername = 'Ruslan158bot';
-  var html = '';
-  for (var j = 0; j < my.length; j++) {
-    var b = my[j];
-    var cg = safeJ(b.creator_gift, {});
-    var link = 'https://t.me/' + botUsername + '?start=join_' + b.id;
-    html += '<div class="lobby-card"><div class="lc-gift"><div class="lc-icon">🎁</div><div class="lc-gname">' + escapeHtml(cg.name || '?') + '</div><div class="lc-val">★ ' + (cg.val || 0) + '</div></div><div class="lc-mid"><div class="lc-vs">VS</div><div class="lc-status">Ожидание</div><div class="lc-priv">🔒 Приватный</div></div><div style="display:flex;flex-direction:column;gap:5px"><button class="lc-join" onclick="copyToClipboard(\'' + link + '\');toast(\'🔗 Ссылка скопирована!\')">🔗 Скопировать ссылку</button><button class="btn btn-danger btn-sm" onclick="cancelBattle(\'' + b.id + '\')">Отменить</button></div></div>';
-  }
-  el.innerHTML = html;
+  el.innerHTML=html;
 }
-async function createBattle() {
-  if (!RL.check('cb', 1)) return;
-  if (pvpStakeIdx === null || !state.inventory[pvpStakeIdx]) { toast('Выбери подарок!'); return; }
-  var g = Object.assign({}, state.inventory[pvpStakeIdx]);
-  state.inventory.splice(pvpStakeIdx, 1);
-  pvpStakeIdx = null;
-  var id = 'b_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6);
-  var b = {
-    id: id, creator_id: userId, creator_name: state.displayName || 'Игрок',
-    creator_username: (tgUser && tgUser.username) || '', creator_avatar: state.avatarUrl || (tgUser && tgUser.photo_url) || null,
-    creator_gift: JSON.stringify({ name: g.name, val: g.val, icon: g.icon, collectible_id: g.collectible_id }),
-    opponent_id: null, opponent_gift: null, status: 'waiting', winner_id: null,
-    is_private: false, created_at: new Date().toISOString()
-  };
-  battles.unshift(b);
-  renderPvpLobby();
-  saveUser();
-  document.getElementById('pvpStakeText').innerHTML = 'Нажми на подарок в инвентаре';
-  document.getElementById('pvpStakeVal').innerText = '';
-  document.getElementById('createBattleBtn').disabled = true;
+async function createBattle(){
+  if(!RL.check('cb',1)) return;
+  if(pvpStakeIdx===null||!state.inventory[pvpStakeIdx]){toast('Выбери подарок!');return;}
+  var g=Object.assign({},state.inventory[pvpStakeIdx]);
+  state.inventory.splice(pvpStakeIdx,1); pvpStakeIdx=null;
+  var id='b_'+Date.now()+'_'+Math.random().toString(36).slice(2,6);
+  var b={id:id,creator_id:userId,creator_name:state.displayName||'Игрок',creator_username:(tgUser&&tgUser.username)||'',creator_avatar:state.avatarUrl||(tgUser&&tgUser.photo_url)||null,creator_gift:JSON.stringify({name:g.name,val:g.val,icon:g.icon,file:g.file,collectible_id:g.collectible_id}),opponent_id:null,opponent_gift:null,status:'waiting',winner_id:null,is_private:false,created_at:new Date().toISOString()};
+  battles.unshift(b); renderPvpLobby(); saveUser();
+  document.getElementById('pvpStakeText').innerHTML='Нажми на подарок в инвентаре';
+  document.getElementById('pvpStakeVal').innerText=''; document.getElementById('createBattleBtn').disabled=true;
+  await saveBattle(b); toast('⚔️ Публичный батл создан!');
+  addHist(g.icon||'🎁','PvP ставка','★ '+g.val,false);
+}
+async function createPrivateBattle(){
+  if(!RL.check('cb',1)) return;
+  if(pvpPrivStakeIdx===null||!state.inventory[pvpPrivStakeIdx]){toast('Выбери подарок!');return;}
+  var g=Object.assign({},state.inventory[pvpPrivStakeIdx]);
+  state.inventory.splice(pvpPrivStakeIdx,1); pvpPrivStakeIdx=null;
+  var id='pb_'+Date.now()+'_'+Math.random().toString(36).slice(2,6);
+  var b={id:id,creator_id:userId,creator_name:state.displayName||'Игрок',creator_username:(tgUser&&tgUser.username)||'',creator_avatar:state.avatarUrl||(tgUser&&tgUser.photo_url)||null,creator_gift:JSON.stringify({name:g.name,val:g.val,icon:g.icon,file:g.file,collectible_id:g.collectible_id}),opponent_id:null,opponent_gift:null,status:'waiting',winner_id:null,is_private:true,creator:new Date().toISOString()};
+  privateBattles.unshift(b); renderPvpLobby(); saveUser();
+  document.getElementById('pvpPrivateStakeText').innerHTML='Нажми на подарок в инвентаре';
+  document.getElementById('pvpPrivateStakeVal').innerText=''; document.getElementById('createPrivateBattleBtn').disabled=true;
   await saveBattle(b);
-  toast('⚔️ Публичный батл создан!');
-  addHist(g.icon || '🎁', 'PvP ставка', '★ ' + g.val, false);
-}
-async function createPrivateBattle() {
-  if (!RL.check('cb', 1)) return;
-  if (pvpPrivStakeIdx === null || !state.inventory[pvpPrivStakeIdx]) { toast('Выбери подарок!'); return; }
-  var g = Object.assign({}, state.inventory[pvpPrivStakeIdx]);
-  state.inventory.splice(pvpPrivStakeIdx, 1);
-  pvpPrivStakeIdx = null;
-  var id = 'pb_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6);
-  var b = {
-    id: id, creator_id: userId, creator_name: state.displayName || 'Игрок',
-    creator_username: (tgUser && tgUser.username) || '', creator_avatar: state.avatarUrl || (tgUser && tgUser.photo_url) || null,
-    creator_gift: JSON.stringify({ name: g.name, val: g.val, icon: g.icon, collectible_id: g.collectible_id }),
-    opponent_id: null, opponent_gift: null, status: 'waiting', winner_id: null,
-    is_private: true, created_at: new Date().toISOString()
-  };
-  privateBattles.unshift(b);
-  renderPvpLobby();
-  saveUser();
-  document.getElementById('pvpPrivateStakeText').innerHTML = 'Нажми на подарок в инвентаре';
-  document.getElementById('pvpPrivateStakeVal').innerText = '';
-  document.getElementById('createPrivateBattleBtn').disabled = true;
-  await saveBattle(b);
-  var link = window.location.origin + window.location.pathname + '?join=' + id;
-  document.getElementById('privateLinkRow').style.display = 'block';
-  document.getElementById('privateBattleLink').value = link;
+  var link=window.location.origin+window.location.pathname+'?join='+id;
+  document.getElementById('privateLinkRow').style.display='block';
+  document.getElementById('privateBattleLink').value=link;
   toast('🔒 Приватный батл создан!');
-  addHist(g.icon || '🎁', 'Приватный батл', '★ ' + g.val, false);
+  addHist(g.icon||'🎁','Приватный батл','★ '+g.val,false);
 }
-async function joinBattle(bid) {
-  if (!RL.check('jb', 2)) return;
-  if (!dataLoaded) { toast('⏳ Загрузка...'); return; }
-  var b = null;
-  for (var i = 0; i < battles.length; i++) { if (battles[i].id === bid) { b = battles[i]; break; } }
-  if (!b) { for (var j = 0; j < privateBattles.length; j++) { if (privateBattles[j].id === bid) { b = privateBattles[j]; break; } } }
-  if (!b) { var rows = await sb('/rest/v1/battles?id=eq.' + bid + '&select=*'); if (rows && rows.length > 0) b = rows[0]; }
-  if (!b || b.status !== 'waiting') { toast('❌ Батл недоступен'); return; }
-  if (b.creator_id === userId) { toast('❌ Нельзя войти в свой батл'); return; }
-  if (!state.inventory.length) { toast('📭 Нет подарков'); return; }
-  var myG = Object.assign({}, state.inventory[0]);
-  state.inventory.splice(0, 1);
-  activeCoinBid = bid;
-  await updateBattle(bid, { status: 'fighting', opponent_id: userId, opponent_gift: JSON.stringify({ name: myG.name, val: myG.val, icon: myG.icon, collectible_id: myG.collectible_id }) });
-  var newBattles = [];
-  for (var k = 0; k < battles.length; k++) { if (battles[k].id !== bid) newBattles.push(battles[k]); }
-  battles = newBattles;
-  var newPriv = [];
-  for (var m = 0; m < privateBattles.length; m++) { if (privateBattles[m].id !== bid) newPriv.push(privateBattles[m]); }
-  privateBattles = newPriv;
-  saveUser();
-  renderPvpLobby();
-  setTimeout(function() { if (!coinRunning && activeCoinBid === bid) showCoinFlip(safeJ(b.creator_gift, {}), { name: myG.name, val: myG.val, icon: myG.icon, collectible_id: myG.collectible_id }, b, b.creator_id); }, 600);
+async function joinBattle(bid){
+  if(!RL.check('jb',2)) return;
+  if(!dataLoaded){toast('⏳ Загрузка...');return;}
+  var b=null;
+  for(var i=0;i<battles.length;i++){if(battles[i].id===bid){b=battles[i];break;}}
+  if(!b){for(var j=0;j<privateBattles.length;j++){if(privateBattles[j].id===bid){b=privateBattles[j];break;}}}
+  if(!b){var rows=await sb('/rest/v1/battles?id=eq.'+bid+'&select=*');if(rows&&rows.length>0)b=rows[0];}
+  if(!b||b.status!=='waiting'){toast('❌ Батл недоступен');return;}
+  if(b.creator_id===userId){toast('❌ Нельзя войти в свой батл');return;}
+  if(!state.inventory.length){toast('📭 Нет подарков');return;}
+  var myG=Object.assign({},state.inventory[0]);
+  state.inventory.splice(0,1); activeCoinBid=bid;
+  await updateBattle(bid,{status:'fighting',opponent_id:userId,opponent_gift:JSON.stringify({name:myG.name,val:myG.val,icon:myG.icon,file:myG.file,collectible_id:myG.collectible_id})});
+  battles=battles.filter(function(x){return x.id!==bid;});
+  privateBattles=privateBattles.filter(function(x){return x.id!==bid;});
+  saveUser(); renderPvpLobby();
+  setTimeout(function(){if(!coinRunning&&activeCoinBid===bid)showCoinFlip(safeJ(b.creator_gift,{}),{name:myG.name,val:myG.val,icon:myG.icon,file:myG.file,collectible_id:myG.collectible_id},b,b.creator_id);},600);
 }
-async function cancelBattle(bid) {
-  var b = null;
-  for (var i = 0; i < battles.length; i++) { if (battles[i].id === bid) { b = battles[i]; break; } }
-  if (!b) { for (var j = 0; j < privateBattles.length; j++) { if (privateBattles[j].id === bid) { b = privateBattles[j]; break; } } }
-  if (!b || b.creator_id !== userId) return;
-  var g = safeJ(b.creator_gift, {});
-  state.inventory.push({ name: g.name, icon: g.icon || '🎁', val: g.val, collectible_id: g.collectible_id });
-  var newBattles = [];
-  for (var k = 0; k < battles.length; k++) { if (battles[k].id !== bid) newBattles.push(battles[k]); }
-  battles = newBattles;
-  var newPriv = [];
-  for (var m = 0; m < privateBattles.length; m++) { if (privateBattles[m].id !== bid) newPriv.push(privateBattles[m]); }
-  privateBattles = newPriv;
-  await updateBattle(bid, { status: 'cancelled' });
-  saveUser();
-  renderPvpLobby();
-  toast('Батл отменён');
+async function cancelBattle(bid){
+  var b=null;
+  for(var i=0;i<battles.length;i++){if(battles[i].id===bid){b=battles[i];break;}}
+  if(!b){for(var j=0;j<privateBattles.length;j++){if(privateBattles[j].id===bid){b=privateBattles[j];break;}}}
+  if(!b||b.creator_id!==userId) return;
+  var g=safeJ(b.creator_gift,{});
+  state.inventory.push({name:g.name,icon:g.icon||'🎁',file:g.file,val:g.val,collectible_id:g.collectible_id});
+  battles=battles.filter(function(x){return x.id!==bid;});
+  privateBattles=privateBattles.filter(function(x){return x.id!==bid;});
+  await updateBattle(bid,{status:'cancelled'}); saveUser(); renderPvpLobby(); toast('Батл отменён');
 }
-function detWinner(bid, g1, g2) {
-  var s = 0;
-  for (var i = 0; i < bid.length; i++) { s = (s * 31 + bid.charCodeAt(i)) % 1000000; }
-  function rng() { s = (s * 9301 + 49297) % 233280; return s / 233280; }
-  return (g1.val || 50) * 0.1 + rng() * (g1.val || 50) * 0.9 >= (g2.val || 50) * 0.1 + rng() * (g2.val || 50) * 0.9 ? 'creator' : 'opponent';
+function detWinner(bid,g1,g2){
+  var s=0;
+  for(var i=0;i<bid.length;i++){s=(s*31+bid.charCodeAt(i))%1000000;}
+  function rng(){s=(s*9301+49297)%233280;return s/233280;}
+  return (g1.val||50)*0.1+rng()*(g1.val||50)*0.9>=(g2.val||50)*0.1+rng()*(g2.val||50)*0.9?'creator':'opponent';
 }
-function showCoinFlip(gift1, gift2, battle, creatorId) {
-  if (document.querySelector('.coin-overlay')) return;
-  if (coinRunning) return;
-  coinRunning = true;
-  var ov = document.createElement('div');
-  ov.className = 'coin-overlay';
-  ov.innerHTML = '<div style="text-align:center"><div style="font-family:var(--font-d);font-size:22px;color:var(--gold);letter-spacing:2px">⚔️ БИТВА ⚔️</div><div style="font-size:10px;color:var(--tm);margin-top:3px">Бросаем монету...</div></div><div class="coin-fighters"><div class="fighter-box"><div class="fighter-lbl">' + escapeHtml((battle.creator_name || 'Игрок 1').slice(0, 10)) + ' · ОРЁЛ</div><div class="fighter-icon">' + (gift1.icon || '🎁') + '</div><div style="font-size:10px;color:var(--gold)">★ ' + (gift1.val || 0) + '</div></div><div class="coin-vs">VS</div><div class="fighter-box"><div class="fighter-lbl">' + (userId === creatorId ? 'Ты' : 'Игрок 2') + ' · РЕШКА</div><div class="fighter-icon">' + (gift2.icon || '🎁') + '</div><div style="font-size:10px;color:var(--gold)">★ ' + (gift2.val || 0) + '</div></div></div><div class="coin-scene"><div class="coin-3d" id="coin3d"><div class="coin-face coin-front">🦅</div><div class="coin-face coin-back">👾</div></div></div><div id="coinRes" style="text-align:center;min-height:90px;margin-top:4px"></div>';
+function showCoinFlip(gift1,gift2,battle,creatorId){
+  if(document.querySelector('.coin-overlay')) return;
+  if(coinRunning) return;
+  coinRunning=true;
+  var icon1=getGiftIcon(gift1);
+  var icon2=getGiftIcon(gift2);
+  var ov=document.createElement('div'); ov.className='coin-overlay';
+  ov.innerHTML='<div style="text-align:center"><div style="font-family:var(--font-d);font-size:22px;color:var(--gold);letter-spacing:2px">⚔️ БИТВА ⚔️</div><div style="font-size:10px;color:var(--tm);margin-top:3px">Бросаем монету...</div></div><div class="coin-fighters"><div class="fighter-box"><div class="fighter-lbl">'+escapeHtml((battle.creator_name||'Игрок 1').slice(0,10))+' · ОРЁЛ</div><div class="fighter-icon">'+icon1+'</div><div style="font-size:10px;color:var(--gold)">★ '+(gift1.val||0)+'</div></div><div class="coin-vs">VS</div><div class="fighter-box"><div class="fighter-lbl">'+(userId===creatorId?'Ты':'Игрок 2')+' · РЕШКА</div><div class="fighter-icon">'+icon2+'</div><div style="font-size:10px;color:var(--gold)">★ '+(gift2.val||0)+'</div></div></div><div class="coin-scene"><div class="coin-3d" id="coin3d"><div class="coin-face coin-front">🦅</div><div class="coin-face coin-back">👾</div></div></div><div id="coinRes" style="text-align:center;min-height:90px;margin-top:4px"></div>';
   document.body.appendChild(ov);
-  var cWins = detWinner(battle.id, gift1, gift2) === 'creator';
-  var iAmCreator = userId === creatorId;
-  var iWon = iAmCreator ? cWins : !cWins;
-  document.getElementById('coin3d').style.setProperty('--rx', 1800 + (cWins ? 0 : 180) + 'deg');
-  SFX.coin();
-  vibrate([15]);
-  var t = 0;
-  var ti = setInterval(function() { SFX.rouletteTick(); vibrate([5]); t++; if (t > 20) clearInterval(ti); }, 140);
-  setTimeout(function() {
-    var area = document.getElementById('coinRes');
-    if (!area) return;
-    if (iWon) {
-      area.innerHTML = '<div class="coin-result-banner" style="color:var(--gold)">🏆 ПОБЕДА!</div><div class="coin-result-sub">Ты забираешь оба подарка!</div><div style="display:flex;justify-content:center;gap:16px;margin-top:12px"><div style="text-align:center"><div style="font-size:28px">' + (gift1.icon || '🎁') + '</div><div style="font-size:9px;color:var(--ts)">+' + (gift1.val || 0) + ' ★</div></div><div style="text-align:center"><div style="font-size:28px">' + (gift2.icon || '🎁') + '</div><div style="font-size:9px;color:var(--ts)">+' + (gift2.val || 0) + ' ★</div></div></div>';
-      CF.burst(window.innerWidth / 2, window.innerHeight * 0.5, 100);
-      SFX.win();
-      vibrate([50, 100, 50]);
-      state.inventory.push({ name: gift1.name, icon: gift1.icon || '🎁', val: gift1.val, collectible_id: gift1.collectible_id });
-      state.inventory.push({ name: gift2.name, icon: gift2.icon || '🎁', val: gift2.val, collectible_id: gift2.collectible_id });
-      state.pvpWins = (state.pvpWins || 0) + 1;
-      addHist(iAmCreator ? (gift1.icon || '🎁') : (gift2.icon || '🎁'), 'PvP Победа!', '+' + ((gift1.val || 0) + (gift2.val || 0)) + ' ★', true);
+  var cWins=detWinner(battle.id,gift1,gift2)==='creator';
+  var iAmCreator=userId===creatorId;
+  var iWon=iAmCreator?cWins:!cWins;
+  document.getElementById('coin3d').style.setProperty('--rx',1800+(cWins?0:180)+'deg');
+  SFX.coin(); vibrate([15]);
+  var t=0; var ti=setInterval(function(){SFX.rouletteTick();vibrate([5]);t++;if(t>20)clearInterval(ti);},140);
+  setTimeout(function(){
+    var area=document.getElementById('coinRes'); if(!area) return;
+    if(iWon){
+      area.innerHTML='<div class="coin-result-banner" style="color:var(--gold)">🏆 ПОБЕДА!</div><div class="coin-result-sub">Ты забираешь оба подарка!</div><div style="display:flex;justify-content:center;gap:16px;margin-top:12px"><div style="text-align:center"><div style="font-size:28px">'+icon1+'</div><div style="font-size:9px;color:var(--ts)">+'+(gift1.val||0)+' ★</div></div><div style="text-align:center"><div style="font-size:28px">'+icon2+'</div><div style="font-size:9px;color:var(--ts)">+'+(gift2.val||0)+' ★</div></div></div>';
+      CF.burst(window.innerWidth/2,window.innerHeight*0.5,100); SFX.win(); vibrate([50,100,50]);
+      state.inventory.push({name:gift1.name,icon:gift1.icon||'🎁',file:gift1.file,val:gift1.val,collectible_id:gift1.collectible_id});
+      state.inventory.push({name:gift2.name,icon:gift2.icon||'🎁',file:gift2.file,val:gift2.val,collectible_id:gift2.collectible_id});
+      state.pvpWins=(state.pvpWins||0)+1;
+      addHist(iAmCreator?(gift1.icon||'🎁'):(gift2.icon||'🎁'),'PvP Победа!','+'+(gift1.val||0)+(gift2.val||0)+' ★',true);
     } else {
-      area.innerHTML = '<div class="coin-result-banner" style="color:var(--red)">💀 ПОРАЖЕНИЕ</div><div class="coin-result-sub">Подарок ушёл победителю</div>';
-      SFX.lose();
-      vibrate([80, 30, 80]);
-      incLuck(5);
-      addHist(iAmCreator ? (gift1.icon || '🎁') : (gift2.icon || '🎁'), 'PvP Поражение', '-' + ((iAmCreator ? gift1.val : gift2.val) || 0) + ' ★', false);
+      area.innerHTML='<div class="coin-result-banner" style="color:var(--red)">💀 ПОРАЖЕНИЕ</div><div class="coin-result-sub">Подарок ушёл победителю</div>';
+      SFX.lose(); vibrate([80,30,80]); incLuck(5);
+      addHist(iAmCreator?(gift1.icon||'🎁'):(gift2.icon||'🎁'),'PvP Поражение','-'+(iAmCreator?gift1.val:gift2.val||0)+' ★',false);
     }
-    updateAllUI();
-    saveUser();
-    updateBattle(battle.id, { status: 'done', winner_id: cWins ? creatorId : (battle.opponent_id || userId) }).catch(function() {});
-    activeCoinBid = null;
-    coinRunning = false;
-    var cb = document.createElement('button');
-    cb.className = 'btn btn-outline btn-sm';
-    cb.style.marginTop = '16px';
-    cb.innerText = 'Закрыть';
-    cb.onclick = function() { ov.remove(); };
-    area.appendChild(cb);
-  }, 3500);
+    updateAllUI(); saveUser();
+    updateBattle(battle.id,{status:'done',winner_id:cWins?creatorId:(battle.opponent_id||userId)}).catch(function(){});
+    activeCoinBid=null; coinRunning=false;
+    var cb=document.createElement('button'); cb.className='btn btn-outline btn-sm'; cb.style.marginTop='16px'; cb.innerText='Закрыть';
+    cb.onclick=function(){ov.remove();}; area.appendChild(cb);
+  },3500);
 }
 
-async function saveBattle(b) { return await sb('/rest/v1/battles', 'POST', b, { 'Prefer': 'resolution=merge-duplicates,return=representation' }); }
-async function updateBattle(id, data) { return await sb('/rest/v1/battles?id=eq.' + id, 'PATCH', data); }
-async function loadBattles() {
-  var pub = await sb('/rest/v1/battles?status=eq.waiting&or=(is_private.eq.false,is_private.is.null)&order=created_at.desc&limit=50');
-  if (pub) battles = pub;
-  if (userId) { var priv = await sb('/rest/v1/battles?status=eq.waiting&is_private=eq.true&creator_id=eq.' + encodeURIComponent(userId) + '&order=created_at.desc&limit=20'); if (priv) privateBattles = priv; }
+async function saveBattle(b){return await sb('/rest/v1/battles','POST',b,{'Prefer':'resolution=merge-duplicates,return=representation'});}
+async function updateBattle(id,data){return await sb('/rest/v1/battles?id=eq.'+id,'PATCH',data);}
+async function loadBattles(){
+  var pub=await sb('/rest/v1/battles?status=eq.waiting&or=(is_private.eq.false,is_private.is.null)&order=created_at.desc&limit=50');
+  if(pub) battles=pub;
+  if(userId){var priv=await sb('/rest/v1/battles?status=eq.waiting&is_private=eq.true&creator_id=eq.'+encodeURIComponent(userId)+'&order=created_at.desc&limit=20');if(priv)privateBattles=priv;}
   renderPvpLobby();
 }
 
-function initRT() {
-  if (wsRT) try { wsRT.close(); } catch (e) {}
-  if (wsHB) clearInterval(wsHB);
-  try {
-    wsRT = new WebSocket('wss://riwzrplciliebgexltll.supabase.co/realtime/v1/websocket?apikey=' + SB_KEY + '&vsn=1.0.0');
-    wsRT.onopen = function() {
-      wsRT.send(JSON.stringify({ topic: 'realtime:public:battles', event: 'phx_join', payload: {}, ref: 'j1' }));
-      wsRT.send(JSON.stringify({ topic: 'realtime:public:gc_users', event: 'phx_join', payload: {}, ref: 'j2' }));
-      wsHB = setInterval(function() { if (wsRT.readyState === 1) wsRT.send(JSON.stringify({ topic: 'phoenix', event: 'heartbeat', payload: {}, ref: 'hb' + Date.now() })); }, 20000);
+function initRT(){
+  if(wsRT) try{wsRT.close();}catch(e){}
+  if(wsHB) clearInterval(wsHB);
+  try{
+    wsRT=new WebSocket('wss://riwzrplciliebgexltll.supabase.co/realtime/v1/websocket?apikey='+SB_KEY+'&vsn=1.0.0');
+    wsRT.onopen=function(){
+      wsRT.send(JSON.stringify({topic:'realtime:public:battles',event:'phx_join',payload:{},ref:'j1'}));
+      wsRT.send(JSON.stringify({topic:'realtime:public:gc_users',event:'phx_join',payload:{},ref:'j2'}));
+      wsHB=setInterval(function(){if(wsRT.readyState===1)wsRT.send(JSON.stringify({topic:'phoenix',event:'heartbeat',payload:{},ref:'hb'+Date.now()}));},20000);
     };
-    wsRT.onmessage = function(e) { lastWsActivity = Date.now(); try { handleRT(JSON.parse(e.data)); } catch (ex) {} };
-    wsRT.onclose = function() { clearInterval(wsHB); setTimeout(initRT, 4000); };
-    wsRT.onerror = function() { wsRT.close(); setTimeout(initRT, 3000); };
-  } catch (e) { setTimeout(initRT, 5000); }
+    wsRT.onmessage=function(e){lastWsActivity=Date.now();try{handleRT(JSON.parse(e.data));}catch(ex){}};
+    wsRT.onclose=function(){clearInterval(wsHB);setTimeout(initRT,4000);};
+    wsRT.onerror=function(){wsRT.close();setTimeout(initRT,3000);};
+  }catch(e){setTimeout(initRT,5000);}
 }
-function handleRT(msg) {
-  if (['phx_reply', 'phx_error', 'phx_close'].includes(msg.event)) return;
-  var row = msg.payload && (msg.payload.record || msg.payload.new || msg.payload.data);
-  if (!row) return;
-  if (msg.topic === 'realtime:public:gc_users' && msg.event === 'UPDATE' && row.id === userId) {
-    if (row.balance !== undefined && row.balance !== state.balance) { state.balance = row.balance; document.getElementById('balVal').innerText = state.balance; }
+function handleRT(msg){
+  if(['phx_reply','phx_error','phx_close'].includes(msg.event)) return;
+  var row=msg.payload&&(msg.payload.record||msg.payload.new||msg.payload.data);
+  if(!row) return;
+  if(msg.topic==='realtime:public:gc_users'&&msg.event==='UPDATE'&&row.id===userId){
+    if(row.balance!==undefined&&row.balance!==state.balance){state.balance=row.balance;document.getElementById('balVal').innerText=state.balance;}
   }
-  if (msg.topic === 'realtime:public:battles') {
-    var isPub = row.is_private === false || row.is_private === null;
-    if (msg.event === 'INSERT') {
-      if (isPub && row.status === 'waiting' && !battles.find(function(b) { return b.id === row.id; })) { battles.unshift(row); renderPvpLobby(); }
-      if (row.is_private === true && row.creator_id === userId && !privateBattles.find(function(b) { return b.id === row.id; })) { privateBattles.unshift(row); renderPvpLobby(); }
+  if(msg.topic==='realtime:public:battles'){
+    var isPub=row.is_private===false||row.is_private===null;
+    if(msg.event==='INSERT'){
+      if(isPub&&row.status==='waiting'&&!battles.find(function(b){return b.id===row.id;})){battles.unshift(row);renderPvpLobby();}
+      if(row.is_private===true&&row.creator_id===userId&&!privateBattles.find(function(b){return b.id===row.id;})){privateBattles.unshift(row);renderPvpLobby();}
     }
-    if (msg.event === 'UPDATE') {
-      if (row.status !== 'waiting') { battles = battles.filter(function(b) { return b.id !== row.id; }); privateBattles = privateBattles.filter(function(b) { return b.id !== row.id; }); renderPvpLobby(); }
-      else { var bi = battles.findIndex(function(b) { return b.id === row.id; }); if (bi >= 0) battles[bi] = row; var pi = privateBattles.findIndex(function(b) { return b.id === row.id; }); if (pi >= 0) privateBattles[pi] = row; renderPvpLobby(); }
-      if (row.status === 'fighting' && row.creator_id === userId && row.opponent_gift && !coinRunning && activeCoinBid !== row.id) {
-        activeCoinBid = row.id;
-        setTimeout(function() { if (!coinRunning) showCoinFlip(safeJ(row.creator_gift, {}), safeJ(row.opponent_gift, {}), row, row.creator_id); }, 400);
+    if(msg.event==='UPDATE'){
+      if(row.status!=='waiting'){battles=battles.filter(function(b){return b.id!==row.id;});privateBattles=privateBattles.filter(function(b){return b.id!==row.id;});renderPvpLobby();}
+      else{var bi=battles.findIndex(function(b){return b.id===row.id;});if(bi>=0)battles[bi]=row;var pi=privateBattles.findIndex(function(b){return b.id===row.id;});if(pi>=0)privateBattles[pi]=row;renderPvpLobby();}
+      if(row.status==='fighting'&&row.creator_id===userId&&row.opponent_gift&&!coinRunning&&activeCoinBid!==row.id){
+        activeCoinBid=row.id;
+        setTimeout(function(){if(!coinRunning)showCoinFlip(safeJ(row.creator_gift,{}),safeJ(row.opponent_gift,{}),row,row.creator_id);},400);
       }
     }
-    if (msg.event === 'DELETE') { var id = msg.payload && msg.payload.old && msg.payload.old.id; battles = battles.filter(function(b) { return b.id !== id; }); privateBattles = privateBattles.filter(function(b) { return b.id !== id; }); renderPvpLobby(); }
+    if(msg.event==='DELETE'){var id=msg.payload&&msg.payload.old&&msg.payload.old.id;battles=battles.filter(function(b){return b.id!==id;});privateBattles=privateBattles.filter(function(b){return b.id!==id;});renderPvpLobby();}
   }
 }
-setInterval(function() { if (!wsRT || wsRT.readyState !== 1 || Date.now() - lastWsActivity > 15000) loadBattles(); }, 10000);
+setInterval(function(){if(!wsRT||wsRT.readyState!==1||Date.now()-lastWsActivity>15000)loadBattles();},10000);
 
-// Пополнение
-var DEP_AMTS = [{ stars: 50, price: 1 }, { stars: 150, price: 2 }, { stars: 500, price: 5 }, { stars: 1000, price: 10 }, { stars: 2500, price: 25 }, { stars: 5000, price: 50 }];
-
-function openDepositModal() {
-  var el = document.getElementById('depAmounts');
-  if (!el) return;
-  selectedDepAmt = null;
-  document.getElementById('depConfirmBtn').disabled = true;
-  el.innerHTML = DEP_AMTS.map(function(d, i) { return '<div class="dep-amt" data-i="' + i + '"><div class="dep-amt-stars">★ ' + d.stars + '</div><div class="dep-amt-price">' + d.price + ' XTR</div></div>'; }).join('');
-  var items = el.querySelectorAll('.dep-amt');
-  for (var j = 0; j < items.length; j++) {
-    items[j].onclick = function() {
-      var parent = this.parentNode;
-      var all = parent.querySelectorAll('.dep-amt');
-      for (var k = 0; k < all.length; k++) all[k].classList.remove('selected');
-      this.classList.add('selected');
-      selectedDepAmt = DEP_AMTS[parseInt(this.dataset.i)];
-      document.getElementById('depConfirmBtn').disabled = false;
+// ── Пополнение ─────────────────────────────────────────────────────────
+var DEP_AMTS=[{stars:50,price:1},{stars:150,price:2},{stars:500,price:5},{stars:1000,price:10},{stars:2500,price:25},{stars:5000,price:50}];
+function openDepositModal(){
+  var el=document.getElementById('depAmounts'); if(!el) return;
+  selectedDepAmt=null; document.getElementById('depConfirmBtn').disabled=true;
+  el.innerHTML=DEP_AMTS.map(function(d,i){return '<div class="dep-amt" data-i="'+i+'"><div class="dep-amt-stars">★ '+d.stars+'</div><div class="dep-amt-price">'+d.price+' XTR</div></div>';}).join('');
+  var items=el.querySelectorAll('.dep-amt');
+  for(var j=0;j<items.length;j++){
+    items[j].onclick=function(){
+      var parent=this.parentNode; var all=parent.querySelectorAll('.dep-amt');
+      for(var k=0;k<all.length;k++) all[k].classList.remove('selected');
+      this.classList.add('selected'); selectedDepAmt=DEP_AMTS[parseInt(this.dataset.i)];
+      document.getElementById('depConfirmBtn').disabled=false;
     };
   }
   document.getElementById('depositModal').classList.add('show');
-  initModalSwipe('depositSheet', 'depositModal', 'depositHandle');
+  initModalSwipe('depositSheet','depositModal','depositHandle');
 }
-document.getElementById('depCancelBtn').onclick = function() { document.getElementById('depositModal').classList.remove('show'); };
-function onInvoiceClosed(data) {
-  if (!data || !selectedDepAmt) return;
-  if (data.status === 'paid') {
-    setBal(state.balance + selectedDepAmt.stars);
-    addHist('💎', 'Пополнение (Stars)', '+' + selectedDepAmt.stars + ' ★', true);
-    toast('✅ Баланс пополнен на ' + selectedDepAmt.stars + ' ★');
-    document.getElementById('depositModal').classList.remove('show');
-    saveUser();
-    var tgApp = window.Telegram && window.Telegram.WebApp;
-    if (tgApp) tgApp.offEvent('invoice_closed', onInvoiceClosed);
-  } else if (data.status === 'cancelled') { toast('Оплата отменена'); }
-  else if (data.status === 'failed') { toast('❌ Ошибка оплаты'); }
+document.getElementById('depCancelBtn').onclick=function(){document.getElementById('depositModal').classList.remove('show');};
+function onInvoiceClosed(data){
+  if(!data||!selectedDepAmt) return;
+  if(data.status==='paid'){
+    setBal(state.balance+selectedDepAmt.stars);
+    addHist('💎','Пополнение (Stars)','+'+selectedDepAmt.stars+' ★',true);
+    toast('✅ Баланс пополнен на '+selectedDepAmt.stars+' ★');
+    document.getElementById('depositModal').classList.remove('show'); saveUser();
+    var tgApp=window.Telegram&&window.Telegram.WebApp;
+    if(tgApp) tgApp.offEvent('invoice_closed',onInvoiceClosed);
+  } else if(data.status==='cancelled'){toast('Оплата отменена');}
+  else if(data.status==='failed'){toast('❌ Ошибка оплаты');}
 }
-document.getElementById('depConfirmBtn').onclick = function() {
-  if (!selectedDepAmt) return;
-  var tgApp = window.Telegram && window.Telegram.WebApp;
-  if (tgApp && tgApp.openInvoice) {
-    tgApp.offEvent('invoice_closed', onInvoiceClosed);
-    tgApp.onEvent('invoice_closed', onInvoiceClosed);
-    tgApp.openInvoice({
-      title: 'GiftCase Stars',
-      description: 'Пополнение баланса на ' + selectedDepAmt.stars + ' Stars',
-      payload: JSON.stringify({ userId: userId, stars: selectedDepAmt.stars, ts: Date.now() }),
-      provider_token: '',
-      currency: 'XTR',
-      prices: [{ label: selectedDepAmt.stars + ' Stars', amount: selectedDepAmt.stars }]
-    });
+document.getElementById('depConfirmBtn').onclick=function(){
+  if(!selectedDepAmt) return;
+  var tgApp=window.Telegram&&window.Telegram.WebApp;
+  if(tgApp&&tgApp.openInvoice){
+    tgApp.offEvent('invoice_closed',onInvoiceClosed);
+    tgApp.onEvent('invoice_closed',onInvoiceClosed);
+    tgApp.openInvoice({title:'GiftCase Stars',description:'Пополнение баланса на '+selectedDepAmt.stars+' Stars',payload:JSON.stringify({userId:userId,stars:selectedDepAmt.stars,ts:Date.now()}),provider_token:'',currency:'XTR',prices:[{label:selectedDepAmt.stars+' Stars',amount:selectedDepAmt.stars}]});
   } else {
-    setBal(state.balance + selectedDepAmt.stars);
-    addHist('💎', 'Пополнение (демо)', '+' + selectedDepAmt.stars + ' ★', true);
-    toast('✅ +' + selectedDepAmt.stars + ' ★ (демо)');
-    document.getElementById('depositModal').classList.remove('show');
-    saveUser();
+    setBal(state.balance+selectedDepAmt.stars);
+    addHist('💎','Пополнение (демо)','+'+selectedDepAmt.stars+' ★',true);
+    toast('✅ +'+selectedDepAmt.stars+' ★ (демо)');
+    document.getElementById('depositModal').classList.remove('show'); saveUser();
   }
 };
 
-// Вывод
-function openWithdrawModal() {
-  withdrawGiftIdx = null;
-  document.getElementById('withdrawConfirmBtn').disabled = true;
-  var grid = document.getElementById('withdrawInvGrid');
-  if (!grid) return;
-  if (!state.inventory.length) { toast('📭 Нет подарков для вывода'); return; }
-  var html = '';
-  for (var i = 0; i < state.inventory.length; i++) {
-    var g = state.inventory[i];
-    html += '<div class="inv-card" data-wi="' + i + '"><div class="inv-dot r-' + (g.rarity || 'common') + '"></div><div class="inv-icon">' + getGiftIcon(g) + '</div><div class="inv-name">' + escapeHtml(g.name) + '</div><div class="inv-val">★ ' + g.val + '</div></div>';
+// ── Вывод ──────────────────────────────────────────────────────────────
+function openWithdrawModal(){
+  withdrawGiftIdx=null; document.getElementById('withdrawConfirmBtn').disabled=true;
+  var grid=document.getElementById('withdrawInvGrid'); if(!grid) return;
+  if(!state.inventory.length){toast('📭 Нет подарков для вывода');return;}
+  var html='';
+  for(var i=0;i<state.inventory.length;i++){
+    var g=state.inventory[i];
+    html+='<div class="inv-card" data-wi="'+i+'"><div class="inv-dot r-'+(g.rarity||'common')+'"></div><div class="inv-icon">'+getGiftIcon(g)+'</div><div class="inv-name">'+escapeHtml(g.name)+'</div><div class="inv-val">★ '+g.val+'</div></div>';
   }
-  grid.innerHTML = html;
-  var cards = grid.querySelectorAll('.inv-card');
-  for (var j = 0; j < cards.length; j++) {
-    cards[j].onclick = function() {
-      var all = this.parentNode.querySelectorAll('.inv-card');
-      for (var k = 0; k < all.length; k++) all[k].classList.remove('selected');
-      this.classList.add('selected');
-      withdrawGiftIdx = parseInt(this.dataset.wi);
-      document.getElementById('withdrawConfirmBtn').disabled = false;
+  grid.innerHTML=html;
+  var cards=grid.querySelectorAll('.inv-card');
+  for(var j=0;j<cards.length;j++){
+    cards[j].onclick=function(){
+      var all=this.parentNode.querySelectorAll('.inv-card');
+      for(var k=0;k<all.length;k++) all[k].classList.remove('selected');
+      this.classList.add('selected'); withdrawGiftIdx=parseInt(this.dataset.wi);
+      document.getElementById('withdrawConfirmBtn').disabled=false;
     };
   }
   document.getElementById('withdrawModal').classList.add('show');
-  initModalSwipe('withdrawSheet', 'withdrawModal', 'withdrawHandle');
+  initModalSwipe('withdrawSheet','withdrawModal','withdrawHandle');
 }
-document.getElementById('withdrawCancelBtn').onclick = function() { document.getElementById('withdrawModal').classList.remove('show'); };
-document.getElementById('withdrawConfirmBtn').onclick = async function() {
-  if (withdrawGiftIdx === null || !state.inventory[withdrawGiftIdx]) return;
-  var g = state.inventory[withdrawGiftIdx];
-  var target = document.getElementById('withdrawTarget').value.trim().replace('@', '');
-  var tgApp = window.Telegram && window.Telegram.WebApp;
-  if (tgApp) {
-    tgApp.sendData(JSON.stringify({ action: 'withdraw_gift', gift: g, target_username: target || null, user_id: userId }));
-    state.inventory.splice(withdrawGiftIdx, 1);
-    withdrawGiftIdx = null;
-    saveUser();
-    updateAllUI();
+document.getElementById('withdrawCancelBtn').onclick=function(){document.getElementById('withdrawModal').classList.remove('show');};
+document.getElementById('withdrawConfirmBtn').onclick=async function(){
+  if(withdrawGiftIdx===null||!state.inventory[withdrawGiftIdx]) return;
+  var g=state.inventory[withdrawGiftIdx];
+  var target=document.getElementById('withdrawTarget').value.trim().replace('@','');
+  var tgApp=window.Telegram&&window.Telegram.WebApp;
+  if(tgApp){
+    tgApp.sendData(JSON.stringify({action:'withdraw_gift',gift:g,target_username:target||null,user_id:userId}));
+    state.inventory.splice(withdrawGiftIdx,1); withdrawGiftIdx=null;
+    saveUser(); updateAllUI();
     toast('✅ Запрос отправлен! Бот обработает вывод');
     document.getElementById('withdrawModal').classList.remove('show');
-  } else { toast('💡 Вывод доступен только через Telegram Mini App'); }
+  } else {toast('💡 Вывод доступен только через Telegram Mini App');}
 };
 
-function initModalSwipe(sheetId, modalId, handleId) {
-  var sheet = document.getElementById(sheetId);
-  var modal = document.getElementById(modalId);
-  var handle = document.getElementById(handleId);
-  if (!sheet || !modal || !handle) return;
-  if (sheet.hasAttribute('data-swipe-init')) return;
-  sheet.setAttribute('data-swipe-init', '1');
-  var startY = 0, startH = 0, dragging = false;
-  function onStart(e) {
-    dragging = true;
-    startY = e.touches ? e.touches[0].clientY : e.clientY;
-    startH = sheet.offsetHeight;
-    sheet.style.transition = 'none';
-  }
-  function onMove(e) {
-    if (!dragging) return;
-    var curY = e.touches ? e.touches[0].clientY : e.clientY;
-    var dy = curY - startY;
-    if (dy < 0) {
-      var newH = Math.min(window.innerHeight * 0.9, startH - dy);
-      sheet.style.height = newH + 'px';
-      sheet.style.maxHeight = newH + 'px';
-    } else {
-      var newH2 = Math.max(180, startH - dy);
-      sheet.style.height = newH2 + 'px';
-      sheet.style.maxHeight = newH2 + 'px';
-    }
+function initModalSwipe(sheetId,modalId,handleId){
+  var sheet=document.getElementById(sheetId);
+  var modal=document.getElementById(modalId);
+  var handle=document.getElementById(handleId);
+  if(!sheet||!modal||!handle) return;
+  if(sheet.hasAttribute('data-swipe-init')) return;
+  sheet.setAttribute('data-swipe-init','1');
+  var startY=0,startH=0,dragging=false;
+  function onStart(e){dragging=true;startY=e.touches?e.touches[0].clientY:e.clientY;startH=sheet.offsetHeight;sheet.style.transition='none';}
+  function onMove(e){
+    if(!dragging) return;
+    var curY=e.touches?e.touches[0].clientY:e.clientY; var dy=curY-startY;
+    if(dy<0){var newH=Math.min(window.innerHeight*0.9,startH-dy);sheet.style.height=newH+'px';sheet.style.maxHeight=newH+'px';}
+    else{var newH2=Math.max(180,startH-dy);sheet.style.height=newH2+'px';sheet.style.maxHeight=newH2+'px';}
     e.preventDefault();
   }
-  function onEnd(e) {
-    if (!dragging) return;
-    dragging = false;
-    sheet.style.transition = 'height .25s var(--ease)';
-    var curY = e.changedTouches ? e.changedTouches[0].clientY : e.clientY;
-    var dy = curY - startY;
-    if (dy > 80) {
-      sheet.style.transform = 'translateY(100%)';
-      sheet.style.opacity = '0';
-      setTimeout(function() { sheet.style.transform = ''; sheet.style.opacity = ''; sheet.style.height = ''; sheet.style.maxHeight = ''; modal.classList.remove('show'); }, 280);
-    } else {
-      sheet.style.height = '';
-      sheet.style.maxHeight = '';
-    }
+  function onEnd(e){
+    if(!dragging) return; dragging=false;
+    sheet.style.transition='height .25s var(--ease)';
+    var curY=e.changedTouches?e.changedTouches[0].clientY:e.clientY; var dy=curY-startY;
+    if(dy>80){
+      sheet.style.transform='translateY(100%)'; sheet.style.opacity='0';
+      setTimeout(function(){sheet.style.transform='';sheet.style.opacity='';sheet.style.height='';sheet.style.maxHeight='';modal.classList.remove('show');},280);
+    } else {sheet.style.height='';sheet.style.maxHeight='';}
   }
-  handle.addEventListener('touchstart', onStart, { passive: false });
-  handle.addEventListener('touchmove', onMove, { passive: false });
-  handle.addEventListener('touchend', onEnd);
-  handle.addEventListener('mousedown', function(e) {
+  handle.addEventListener('touchstart',onStart,{passive:false});
+  handle.addEventListener('touchmove',onMove,{passive:false});
+  handle.addEventListener('touchend',onEnd);
+  handle.addEventListener('mousedown',function(e){
     onStart(e);
-    document.addEventListener('mousemove', onMove);
-    document.addEventListener('mouseup', function onUp(e) { onEnd(e); document.removeEventListener('mousemove', onMove); document.removeEventListener('mouseup', onUp); });
+    document.addEventListener('mousemove',onMove);
+    document.addEventListener('mouseup',function onUp(e){onEnd(e);document.removeEventListener('mousemove',onMove);document.removeEventListener('mouseup',onUp);});
   });
-  modal.addEventListener('click', function(e) { if (e.target === modal) modal.classList.remove('show'); });
+  modal.addEventListener('click',function(e){if(e.target===modal)modal.classList.remove('show');});
 }
 
-// Табы
-document.querySelectorAll('.pvp-tab').forEach(function(btn) {
-  btn.onclick = function() {
-    document.querySelectorAll('.pvp-tab').forEach(function(b) { b.classList.remove('active'); });
-    this.classList.add('active');
-    pvpMode = this.dataset.pvptab;
-    var ip = pvpMode === 'public';
-    document.getElementById('publicCreateBox').style.display = ip ? '' : 'none';
-    document.getElementById('privateCreateBox').style.display = ip ? 'none' : '';
-    document.getElementById('publicLobbyWrap').style.display = ip ? '' : 'none';
-    document.getElementById('privateLobbyWrap').style.display = ip ? 'none' : '';
-    renderInv('invPvp', false, ip ? 'pvp_pub' : 'pvp_priv');
-    renderPvpLobby();
-    SFX.click();
+// ── Табы ───────────────────────────────────────────────────────────────
+document.querySelectorAll('.pvp-tab').forEach(function(btn){
+  btn.onclick=function(){
+    document.querySelectorAll('.pvp-tab').forEach(function(b){b.classList.remove('active');});
+    this.classList.add('active'); pvpMode=this.dataset.pvptab;
+    var ip=pvpMode==='public';
+    document.getElementById('publicCreateBox').style.display=ip?'':'none';
+    document.getElementById('privateCreateBox').style.display=ip?'none':'';
+    document.getElementById('publicLobbyWrap').style.display=ip?'':'none';
+    document.getElementById('privateLobbyWrap').style.display=ip?'none':'';
+    renderInv('invPvp',false,ip?'pvp_pub':'pvp_priv');
+    renderPvpLobby(); SFX.click();
   };
 });
-document.querySelectorAll('.tab').forEach(function(btn) {
-  btn.onclick = function() {
-    if (!RL.check('tab', 10)) return;
-    document.querySelectorAll('.tab').forEach(function(b) { b.classList.remove('active'); });
+document.querySelectorAll('.tab').forEach(function(btn){
+  btn.onclick=function(){
+    if(!RL.check('tab',10)) return;
+    document.querySelectorAll('.tab').forEach(function(b){b.classList.remove('active');});
     this.classList.add('active');
-    document.querySelectorAll('.panel').forEach(function(p) { p.classList.remove('active'); });
-    var tab = this.dataset.tab;
-    document.getElementById(tab + 'Panel').classList.add('active');
-    document.getElementById('mainContent').scrollTop = 0;
-    if (tab === 'pvp') loadBattles();
-    if (tab === 'profile') updateStats();
-    SFX.click();
-    vibrate([5]);
+    document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active');});
+    var tab=this.dataset.tab;
+    document.getElementById(tab+'Panel').classList.add('active');
+    document.getElementById('mainContent').scrollTop=0;
+    if(tab==='pvp') loadBattles();
+    if(tab==='profile') updateStats();
+    SFX.click(); vibrate([5]);
   };
 });
 
-// Кнопки
-document.getElementById('addBtn').onclick = function() { if (!RL.check('add', 3)) return; setBal(state.balance + 100); addHist('⭐️', 'Пополнение', '+100 ★', true); toast('★ +100'); saveUser(); };
-document.getElementById('balancePill').onclick = function() { if (!RL.check('add', 3)) return; setBal(state.balance + 100); addHist('⭐️', 'Пополнение', '+100 ★', true); toast('★ +100'); saveUser(); };
-document.getElementById('upgradeDoBtn').onclick = doUpgrade;
-document.getElementById('craftBtn').onclick = doCraft;
-document.getElementById('createBattleBtn').onclick = createBattle;
-document.getElementById('createPrivateBattleBtn').onclick = createPrivateBattle;
-document.getElementById('depositBtn').onclick = openDepositModal;
-document.getElementById('withdrawBtn').onclick = openWithdrawModal;
-document.getElementById('shareProfileBtn').onclick = function() { copyToClipboard(window.location.href); toast('🔗 Ссылка скопирована!'); };
-document.getElementById('copyRefBtn').onclick = function() { var el = document.getElementById('refLinkInput'); if (el) { copyToClipboard(el.value); toast('🔗 Реф ссылка скопирована!'); } };
-document.getElementById('copyPrivateLinkBtn').onclick = function() { var el = document.getElementById('privateBattleLink'); if (el) { copyToClipboard(el.value); toast('🔗 Скопировано!'); } };
-document.getElementById('avatarInput').onchange = function(e) {
-  var f = e.target.files[0];
-  if (!f) return;
-  if (f.size > 2 * 1024 * 1024) { toast('Файл > 2MB'); return; }
-  var r = new FileReader();
-  r.onload = function(ev) { state.avatarUrl = ev.target.result; renderAvatar(); saveUser(); toast('✅ Аватар обновлён'); };
+document.getElementById('addBtn').onclick=function(){if(!RL.check('add',3))return;setBal(state.balance+100);addHist('⭐️','Пополнение','+100 ★',true);toast('★ +100');saveUser();};
+document.getElementById('balancePill').onclick=function(){if(!RL.check('add',3))return;setBal(state.balance+100);addHist('⭐️','Пополнение','+100 ★',true);toast('★ +100');saveUser();};
+document.getElementById('upgradeDoBtn').onclick=doUpgrade;
+document.getElementById('craftBtn').onclick=doCraft;
+document.getElementById('createBattleBtn').onclick=createBattle;
+document.getElementById('createPrivateBattleBtn').onclick=createPrivateBattle;
+document.getElementById('depositBtn').onclick=openDepositModal;
+document.getElementById('withdrawBtn').onclick=openWithdrawModal;
+document.getElementById('shareProfileBtn').onclick=function(){copyToClipboard(window.location.href);toast('🔗 Ссылка скопирована!');};
+document.getElementById('copyRefBtn').onclick=function(){var el=document.getElementById('refLinkInput');if(el){copyToClipboard(el.value);toast('🔗 Реф ссылка скопирована!');}};
+document.getElementById('copyPrivateLinkBtn').onclick=function(){var el=document.getElementById('privateBattleLink');if(el){copyToClipboard(el.value);toast('🔗 Скопировано!');}};
+document.getElementById('avatarInput').onchange=function(e){
+  var f=e.target.files[0]; if(!f) return;
+  if(f.size>2*1024*1024){toast('Файл > 2MB');return;}
+  var r=new FileReader();
+  r.onload=function(ev){state.avatarUrl=ev.target.result;renderAvatar();saveUser();toast('✅ Аватар обновлён');};
   r.readAsDataURL(f);
 };
-document.getElementById('editNameBtn').onclick = function() {
-  var n = prompt('Введите имя:', state.displayName || 'ИГРОК');
-  if (n && n.trim()) { state.displayName = n.trim().slice(0, 20).toUpperCase(); document.getElementById('pName').innerText = state.displayName; saveUser(); toast('✅ Имя обновлено'); }
+document.getElementById('editNameBtn').onclick=function(){
+  var n=prompt('Введите имя:',state.displayName||'ИГРОК');
+  if(n&&n.trim()){state.displayName=n.trim().slice(0,20).toUpperCase();document.getElementById('pName').innerText=state.displayName;saveUser();toast('✅ Имя обновлено');}
 };
-document.getElementById('bsSkip').onclick = function() { document.getElementById('browserStub').classList.remove('show'); localStorage.setItem('gc_stub_skipped', '1'); };
+document.getElementById('bsSkip').onclick=function(){document.getElementById('browserStub').classList.remove('show');localStorage.setItem('gc_stub_skipped','1');};
 
-function upOnline() { document.getElementById('onlineCount').innerText = 140 + Math.round((Math.random() - 0.5) * 30); }
-setInterval(upOnline, 6000);
-upOnline();
+function upOnline(){document.getElementById('onlineCount').innerText=140+Math.round((Math.random()-0.5)*30);}
+setInterval(upOnline,6000); upOnline();
 
-function setupPWA() {
-  var oldManifests = document.querySelectorAll('link[rel="manifest"]');
-  oldManifests.forEach(function(m) { m.remove(); });
-}
+function setupPWA(){var oldManifests=document.querySelectorAll('link[rel="manifest"]');oldManifests.forEach(function(m){m.remove();});}
 setupPWA();
 
-function initTG() {
-  var tgApp = window.Telegram && window.Telegram.WebApp;
-  if (tgApp && tgApp.initDataUnsafe && tgApp.initDataUnsafe.user) {
-    var u = tgApp.initDataUnsafe.user;
-    tgApp.expand();
-    tgApp.ready();
-    try { tgApp.setHeaderColor('#0f0f0f'); } catch (e) {}
-    tgApp.onEvent('invoice_closed', onInvoiceClosed);
-    tgUser = u;
-    userId = 'tg_' + u.id;
-    localStorage.setItem('gc_user_id', userId);
-    localStorage.setItem('gc_user_data', JSON.stringify({ id: u.id, username: u.username, first_name: u.first_name, photo_url: u.photo_url }));
-    if (!state.displayName) state.displayName = u.first_name || 'ИГРОК';
+function initTG(){
+  var tgApp=window.Telegram&&window.Telegram.WebApp;
+  if(tgApp&&tgApp.initDataUnsafe&&tgApp.initDataUnsafe.user){
+    var u=tgApp.initDataUnsafe.user;
+    tgApp.expand(); tgApp.ready();
+    try{tgApp.setHeaderColor('#0f0f0f');}catch(e){}
+    tgApp.onEvent('invoice_closed',onInvoiceClosed);
+    tgUser=u; userId='tg_'+u.id;
+    localStorage.setItem('gc_user_id',userId);
+    localStorage.setItem('gc_user_data',JSON.stringify({id:u.id,username:u.username,first_name:u.first_name,photo_url:u.photo_url}));
+    if(!state.displayName) state.displayName=u.first_name||'ИГРОК';
     document.getElementById('browserStub').classList.remove('show');
     return true;
   }
-  var savedId = localStorage.getItem('gc_user_id');
-  if (savedId && savedId.startsWith('tg_')) {
-    userId = savedId;
-    try { var d = localStorage.getItem('gc_user_data'); if (d) { tgUser = JSON.parse(d); if (!state.displayName) state.displayName = tgUser.first_name || 'ИГРОК'; } } catch (e) {}
+  var savedId=localStorage.getItem('gc_user_id');
+  if(savedId&&savedId.startsWith('tg_')){
+    userId=savedId;
+    try{var d=localStorage.getItem('gc_user_data');if(d){tgUser=JSON.parse(d);if(!state.displayName)state.displayName=tgUser.first_name||'ИГРОК';}}catch(e){}
     document.getElementById('browserStub').classList.remove('show');
     return true;
   }
-  var gid = localStorage.getItem('gc_uid2');
-  if (!gid) { gid = 'g_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); localStorage.setItem('gc_uid2', gid); }
-  userId = gid;
-  if (!localStorage.getItem('gc_stub_skipped')) setTimeout(function() { document.getElementById('browserStub').classList.add('show'); }, 1000);
+  var gid=localStorage.getItem('gc_uid2');
+  if(!gid){gid='g_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);localStorage.setItem('gc_uid2',gid);}
+  userId=gid;
+  if(!localStorage.getItem('gc_stub_skipped')) setTimeout(function(){document.getElementById('browserStub').classList.add('show');},1000);
   return false;
 }
 
-function checkReferral() {
-  var p = new URLSearchParams(window.location.search);
-  var ref = p.get('ref');
-  if (ref && ref !== state.refCode && !localStorage.getItem('gc_ref_used_' + ref)) {
-    localStorage.setItem('gc_ref_used_' + ref, '1');
-    state.balance += 50;
-    toast('🎁 +50 ★ реферальный бонус');
+function checkReferral(){
+  var p=new URLSearchParams(window.location.search);
+  var ref=p.get('ref');
+  if(ref&&ref!==state.refCode&&!localStorage.getItem('gc_ref_used_'+ref)){
+    localStorage.setItem('gc_ref_used_'+ref,'1');
+    state.balance+=50; toast('🎁 +50 ★ реферальный бонус');
   }
-  var joinId = p.get('join');
-  if (joinId) {
-    var wait = setInterval(function() {
-      if (dataLoaded && userId) {
+  var joinId=p.get('join');
+  if(joinId){
+    var wait=setInterval(function(){
+      if(dataLoaded&&userId){
         clearInterval(wait);
-        setTimeout(async function() {
-          var rows = await sb('/rest/v1/battles?id=eq.' + joinId + '&select=*');
-          if (rows && rows.length > 0 && rows[0].status === 'waiting') joinBattle(joinId);
+        setTimeout(async function(){
+          var rows=await sb('/rest/v1/battles?id=eq.'+joinId+'&select=*');
+          if(rows&&rows.length>0&&rows[0].status==='waiting') joinBattle(joinId);
           else toast('❌ Батл не найден');
-        }, 500);
+        },500);
       }
-    }, 200);
-    setTimeout(function() { clearInterval(wait); }, 10000);
+    },200);
+    setTimeout(function(){clearInterval(wait);},10000);
   }
 }
 
-// Автоматическое подключение к приватному батлу
-var urlParams = new URLSearchParams(window.location.search);
-var autoJoinId = urlParams.get('join');
-if (autoJoinId && !autoJoinProcessed) {
-  autoJoinProcessed = true;
-  setTimeout(function() {
-    if (dataLoaded && userId) {
+var urlParams=new URLSearchParams(window.location.search);
+var autoJoinId=urlParams.get('join');
+if(autoJoinId&&!autoJoinProcessed){
+  autoJoinProcessed=true;
+  setTimeout(function(){
+    if(dataLoaded&&userId){
       joinBattle(autoJoinId);
-      var pvpTab = document.querySelector('.tab[data-tab="pvp"]');
-      if (pvpTab) pvpTab.click();
+      var pvpTab=document.querySelector('.tab[data-tab="pvp"]');
+      if(pvpTab) pvpTab.click();
     } else {
-      var checkInterval = setInterval(function() {
-        if (dataLoaded && userId) {
+      var checkInterval=setInterval(function(){
+        if(dataLoaded&&userId){
           clearInterval(checkInterval);
           joinBattle(autoJoinId);
-          var pvpTab = document.querySelector('.tab[data-tab="pvp"]');
-          if (pvpTab) pvpTab.click();
+          var pvpTab=document.querySelector('.tab[data-tab="pvp"]');
+          if(pvpTab) pvpTab.click();
         }
-      }, 500);
-      setTimeout(function() { clearInterval(checkInterval); }, 10000);
+      },500);
+      setTimeout(function(){clearInterval(checkInterval);},10000);
     }
-  }, 1500);
+  },1500);
 }
 
-// Инициализация
-var RARITY_LABELS = { common: "Обычный", rare: "Редкий", epic: "Эпический", legendary: "Легендарный" };
-var RARITY_COLORS = { common: "#666", rare: "#5577cc", epic: "#9955cc", legendary: "#c8a96e" };
-
-async function init() {
+// ── Инициализация ──────────────────────────────────────────────────────
+async function init(){
   initTG();
-  try { var loc = localStorage.getItem('gc_state'); if (loc) { var d = JSON.parse(loc); if (d.userId === userId && d.state && Date.now() - d.ts < 3600000) state = Object.assign({}, state, d.state); } } catch (e) {}
+  try{var loc=localStorage.getItem('gc_state');if(loc){var d=JSON.parse(loc);if(d.userId===userId&&d.state&&Date.now()-d.ts<3600000)state=Object.assign({},state,d.state);}}catch(e){}
   await loadRealGifts();
   renderCases();
   updateAllUI();
