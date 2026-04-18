@@ -13,7 +13,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
-/* ВЕСЬ ТВОЙ CSS ОСТАЁТСЯ БЕЗ ИЗМЕНЕНИЙ */
+/* ВЕСЬ ТВОЙ CSS ОСТАЁТСЯ БЕЗ ИЗМЕНЕНИЙ - такой же как был */
 :root{
   --bg:#060606;--s1:#0f0f0f;--s2:#161616;--s3:#1e1e1e;--s4:#262626;
   --border:#252525;--borderL:#323232;
@@ -839,9 +839,6 @@ var autoJoinProcessed = false;
 var realGiftsList = [];
 var giftImagesCache = {};
 
-// Базовый URL для API получения изображений
-var BASE_IMAGE_URL = '/api/getGiftImage?id=';
-
 // Маппинг ID подарка к номеру файла
 var GIFT_ID_TO_FILE_NUMBER = {
   "5170145012310081615": 1,
@@ -951,7 +948,6 @@ async function loadRealGifts() {
         imageUrl: null,
         collectible_id: i
       });
-      console.log(`📦 Подарок #${i}: Astral Shard #${i} — ${price} ★`);
     }
     
     console.log('✅ Загружено подарков:', realGiftsList.length);
