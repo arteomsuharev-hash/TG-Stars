@@ -837,45 +837,191 @@ var autoJoinProcessed = false;
 var realGiftsList = [];
 var giftImagesCache = {};
 
-// Загрузка настоящих подарков Telegram
+// Загрузка подарков напрямую из Telegram API (ИСПРАВЛЕННАЯ)
+async function fetchGiftsFromTelegramAPI() {
+  try {
+    console.log('🔄 Прямой запрос к Telegram API getAvailableGifts...');
+    var response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getAvailableGifts`);
+    var data = await response.json();
+    
+    if (data.ok && data.result && data.result.gifts && data.result.gifts.length > 0) {
+      var gifts = [];
+      for (var i = 0; i < data.result.gifts.length; i++) {
+        var tgGift = data.result.gifts[i];
+        gifts.push({
+          id: tgGift.id,
+          name: tgGift.title || tgGift.name || "Подарок",
+          price: tgGift.star_count || 50,
+          icon: tgGift.sticker?.file_id || null,
+          imageUrl: null
+        });
+        console.log(`📦 Подарок: ${tgGift.title} — ${tgGift.star_count} ★`);
+      }
+      console.log('✅ Загружено через Telegram API (getAvailableGifts):', gifts.length);
+      return gifts;
+    }
+  } catch (e) {
+    console.warn('Ошибка getAvailableGifts:', e);
+  }
+  
+  // Пробуем альтернативный эндпоинт
+  try {
+    console.log('🔄 Пробуем getStarGifts...');
+    var response2 = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getStarGifts`);
+    var data2 = await response2.json();
+    if (data2.ok && data2.result && data2.result.gifts && data2.result.gifts.length > 0) {
+      var gifts2 = [];
+      for (var i = 0; i < data2.result.gifts.length; i++) {
+        var tgGift2 = data2.result.gifts[i];
+        gifts2.push({
+          id: tgGift2.id,
+          name: tgGift2.title || tgGift2.name || "Подарок",
+          price: tgGift2.star_count || 50,
+          icon: tgGift2.sticker?.file_id || null,
+          imageUrl: null
+        });
+        console.log(`📦 Подарок (StarGifts): ${tgGift2.title} — ${tgGift2.star_count} ★`);
+      }
+      console.log('✅ Загружено через Telegram API (getStarGifts):', gifts2.length);
+      return gifts2;
+    }
+  } catch (e) {
+    console.warn('Ошибка getStarGifts:', e);
+  }
+  
+  return null;
+}
+
+// Загрузка настоящих подарков Telegram (ИСПРАВЛЕННАЯ)
 async function loadRealGifts() {
   try {
+    console.log('🔄 Загрузка подарков...');
+    
+    // 1. Пробуем загрузить через свой API
     var response = await fetch(BOT_API_URL + '/api/getGifts');
     var data = await response.json();
-    if (data.success && data.gifts) {
-      realGiftsList = data.gifts;
-      console.log('✅ Загружено настоящих подарков Telegram:', realGiftsList.length);
+    
+    if (data.success && data.gifts && data.gifts.length > 0) {
+      realGiftsList = [];
+      for (var i = 0; i < data.gifts.length; i++) {
+        var gift = data.gifts[i];
+        realGiftsList.push({
+          id: gift.id,
+          name: gift.title || gift.name || "Подарок",
+          price: gift.star_count || gift.price || 50,
+          icon: gift.sticker?.file_id || gift.icon || null,
+          imageUrl: null
+        });
+        console.log(`📦 Свой API: ${realGiftsList[i].name} — ${realGiftsList[i].price} ★`);
+      }
+      console.log('✅ Загружено через свой API:', realGiftsList.length);
       
-      // Загружаем URL изображений для подарков
+      // Загружаем URL изображений
       for (var i = 0; i < realGiftsList.length; i++) {
         var gift = realGiftsList[i];
         if (gift.icon && gift.icon.startsWith('CAAC')) {
-          await loadGiftImageUrl(gift.icon, i);
+          loadGiftImageUrl(gift.icon, i);
         }
       }
+      updateAllUI();
       return true;
     }
+    
+    // 2. Если свой API не работает, пробуем напрямую через Telegram API
+    console.log('🔄 Свой API не ответил, пробуем Telegram API...');
+    var tgGifts = await fetchGiftsFromTelegramAPI();
+    if (tgGifts && tgGifts.length > 0) {
+      realGiftsList = tgGifts;
+      console.log('✅ Загружено через Telegram API:', realGiftsList.length);
+      
+      // Загружаем URL изображений
+      for (var i = 0; i < realGiftsList.length; i++) {
+        var gift = realGiftsList[i];
+        if (gift.icon && gift.icon.startsWith('CAAC')) {
+          loadGiftImageUrl(gift.icon, i);
+        }
+      }
+      updateAllUI();
+      return true;
+    }
+    
+    // 3. Если ничего не сработало - создаём тестовые подарки
+    console.warn('⚠️ Не удалось загрузить подарки, создаём тестовые');
+    createMockGifts();
+    return false;
+    
   } catch (error) {
     console.error('❌ Ошибка загрузки подарков:', error);
+    createMockGifts();
+    return false;
   }
-  return false;
 }
 
-// Загрузка URL изображения подарка по file_id
+// Создание тестовых подарков (если API не отвечает)
+function createMockGifts() {
+  realGiftsList = [
+    { id: 1, name: "Золотая Звезда", price: 50, icon: "⭐", imageUrl: null },
+    { id: 2, name: "Серебряный Кристалл", price: 100, icon: "💎", imageUrl: null },
+    { id: 3, name: "Бронзовый Сундук", price: 25, icon: "📦", imageUrl: null },
+    { id: 4, name: "Рубиновое Сердце", price: 200, icon: "❤️", imageUrl: null },
+    { id: 5, name: "Сапфир Удачи", price: 150, icon: "🔵", imageUrl: null },
+    { id: 6, name: "Изумрудный Ключ", price: 300, icon: "🟢", imageUrl: null },
+    { id: 7, name: "Алмазная Корона", price: 500, icon: "👑", imageUrl: null },
+    { id: 8, name: "Мифический Артефакт", price: 800, icon: "🏆", imageUrl: null },
+    { id: 9, name: "Лунный Амулет", price: 45, icon: "🌙", imageUrl: null },
+    { id: 10, name: "Солнечный Медальон", price: 85, icon: "☀️", imageUrl: null },
+    { id: 11, name: "Драконий Глаз", price: 250, icon: "🐉", imageUrl: null },
+    { id: 12, name: "Феникс Перо", price: 400, icon: "🔥", imageUrl: null },
+    { id: 13, name: "Ключ Бесконечности", price: 650, icon: "🔑", imageUrl: null },
+    { id: 14, name: "Космический Камень", price: 750, icon: "🌌", imageUrl: null },
+    { id: 15, name: "Сердце Дракона", price: 900, icon: "❤️‍🔥", imageUrl: null }
+  ];
+  console.log('✅ Созданы тестовые подарки (15 шт.)');
+  updateAllUI();
+}
+
+// Загрузка URL изображения подарка по file_id (с кешем, асинхронно)
+var imageLoadQueue = [];
+var isLoadingImages = false;
+
 async function loadGiftImageUrl(fileId, index) {
-  try {
-    var url = `https://api.telegram.org/bot${BOT_TOKEN}/getFile?file_id=${fileId}`;
-    var response = await fetch(url);
-    var data = await response.json();
-    if (data.ok && data.result.file_path) {
-      giftImagesCache[fileId] = `https://api.telegram.org/file/bot${BOT_TOKEN}/${data.result.file_path}`;
-      if (realGiftsList[index]) {
-        realGiftsList[index].imageUrl = giftImagesCache[fileId];
-      }
+  if (giftImagesCache[fileId]) {
+    if (realGiftsList[index]) {
+      realGiftsList[index].imageUrl = giftImagesCache[fileId];
+      updateAllUI();
     }
-  } catch (e) {
-    console.error('Ошибка загрузки изображения:', e);
+    return;
   }
+  imageLoadQueue.push({ fileId, index });
+  processImageQueue();
+}
+
+async function processImageQueue() {
+  if (isLoadingImages) return;
+  if (imageLoadQueue.length === 0) return;
+  isLoadingImages = true;
+  while (imageLoadQueue.length > 0) {
+    var task = imageLoadQueue.shift();
+    try {
+      var url = `https://api.telegram.org/bot${BOT_TOKEN}/getFile?file_id=${task.fileId}`;
+      var response = await fetch(url);
+      var data = await response.json();
+      if (data.ok && data.result.file_path) {
+        giftImagesCache[task.fileId] = `https://api.telegram.org/file/bot${BOT_TOKEN}/${data.result.file_path}`;
+        if (realGiftsList[task.index]) {
+          realGiftsList[task.index].imageUrl = giftImagesCache[task.fileId];
+          console.log(`🖼️ Загружена картинка для: ${realGiftsList[task.index].name}`);
+          updateAllUI();
+        }
+      } else {
+        console.warn(`⚠️ Не удалось получить картинку для file_id: ${task.fileId}`);
+      }
+    } catch (e) {
+      console.warn('Ошибка загрузки изображения:', e);
+    }
+    await new Promise(r => setTimeout(r, 100));
+  }
+  isLoadingImages = false;
 }
 
 // Получить URL иконки подарка
@@ -1242,7 +1388,7 @@ function renderAvatar() {
 function renderHist() {
   var el = document.getElementById('histBody');
   if (!el) return;
-  if (!state.history.length) { el.innerHTML = '<tr><td colspan="3" style="color:var(--tm);text-align:center;padding:14px;font-size:11px">Нет истории</td></tr>'; return; }
+  if (!state.history.length) { el.innerHTML = '<tr><td colspan="3" style="color:var(--tm);text-align:center;padding:14px;font-size:11px">Нет истории</td></table>'; return; }
   var html = '';
   for (var i = 0; i < Math.min(state.history.length, 25); i++) {
     var h = state.history[i];
