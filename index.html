@@ -9,6 +9,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="GiftCase">
 <title>GIFTCASE — Premium Cases</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🎁%3C/text%3E%3C/svg%3E">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
@@ -837,7 +838,7 @@ var autoJoinProcessed = false;
 var realGiftsList = [];
 var giftImagesCache = {};
 
-// Загрузка подарков напрямую из Telegram API (ИСПРАВЛЕННАЯ)
+// Загрузка подарков напрямую из Telegram API
 async function fetchGiftsFromTelegramAPI() {
   try {
     console.log('🔄 Прямой запрос к Telegram API getAvailableGifts...');
@@ -980,7 +981,7 @@ function createMockGifts() {
   updateAllUI();
 }
 
-// Загрузка URL изображения подарка по file_id (с кешем, асинхронно)
+// Загрузка URL изображения подарка по file_id (с кешем)
 var imageLoadQueue = [];
 var isLoadingImages = false;
 
@@ -1024,21 +1025,18 @@ async function processImageQueue() {
   isLoadingImages = false;
 }
 
-// Получить URL иконки подарка
 function getGiftIconUrl(gift) {
   if (gift.imageUrl) return gift.imageUrl;
   if (gift.icon && giftImagesCache[gift.icon]) return giftImagesCache[gift.icon];
   return null;
 }
 
-// Получить случайный настоящий подарок
 function getRandomRealGift() {
   if (!realGiftsList.length) return null;
   var randomIndex = Math.floor(Math.random() * realGiftsList.length);
   return Object.assign({}, realGiftsList[randomIndex]);
 }
 
-// Получить подарок по ID
 function getRealGiftById(id) {
   for (var i = 0; i < realGiftsList.length; i++) {
     if (realGiftsList[i].id == id) return Object.assign({}, realGiftsList[i]);
@@ -1046,7 +1044,6 @@ function getRealGiftById(id) {
   return null;
 }
 
-// Обновлённые кейсы с настоящими подарками
 var CASES = [
   {id:"starter", name:"СТАРТОВЫЙ", price:12, cls:"c-starter", emoji:"🎀"},
   {id:"common", name:"ОБЫЧНЫЙ", price:25, cls:"c-common", emoji:"📦"},
@@ -1056,10 +1053,8 @@ var CASES = [
   {id:"mythic", name:"МИФИЧЕСКИЙ", price:990, cls:"c-mythic", emoji:"💀"}
 ];
 
-// Функция для получения случайного подарка из кейса (имитация)
 function getRandomGiftFromCase(casePrice) {
   if (!realGiftsList.length) return null;
-  // Фильтруем подарки по цене (приблизительно)
   var minPrice = casePrice * 0.5;
   var maxPrice = casePrice * 2.5;
   var available = [];
@@ -1074,7 +1069,6 @@ function getRandomGiftFromCase(casePrice) {
   return Object.assign({}, available[randomIndex]);
 }
 
-// Функции для работы с инвентарём (обновлены для работы с настоящими подарками)
 function addGiftToInventory(gift) {
   state.inventory.push({
     id: gift.id,
@@ -1093,7 +1087,6 @@ function getRarityByPrice(price) {
   return 'legendary';
 }
 
-// Rate Limiter
 var RL = {
   _m: {},
   check: function(k, max) {
@@ -1113,7 +1106,6 @@ var RL = {
   }
 };
 
-// Звуки
 var SFX = {
   _c: null,
   _g: function() { if (!this._c) this._c = new (window.AudioContext || window.webkitAudioContext)(); return this._c; },
@@ -1133,31 +1125,17 @@ var SFX = {
     } catch (e) {}
   },
   click: function() { this._t(440, 0.08, 0.1); },
-  win: function() {
-    var s = this;
-    [523, 659, 784].forEach(function(f, i) { setTimeout(function() { s._t(f, 0.2, 0.12); }, i * 100); });
-  },
-  lose: function() {
-    var s = this;
-    [300, 250].forEach(function(f, i) { setTimeout(function() { s._t(f, 0.25, 0.1, 'sawtooth'); }, i * 150); });
-  },
-  rouletteTick: function() {
-    var freqs = [700, 800, 900, 1000, 1100];
-    var f = freqs[Math.floor(Math.random() * freqs.length)];
-    this._t(f, 0.04, 0.07, 'square');
-  },
+  win: function() { var s = this; [523, 659, 784].forEach(function(f, i) { setTimeout(function() { s._t(f, 0.2, 0.12); }, i * 100); }); },
+  lose: function() { var s = this; [300, 250].forEach(function(f, i) { setTimeout(function() { s._t(f, 0.25, 0.1, 'sawtooth'); }, i * 150); }); },
+  rouletteTick: function() { var freqs = [700, 800, 900, 1000, 1100]; var f = freqs[Math.floor(Math.random() * freqs.length)]; this._t(f, 0.04, 0.07, 'square'); },
   coin: function() { this._t(600, 0.1, 0.1, 'triangle'); },
-  craft: function() {
-    var s = this;
-    [523, 659, 784, 1047].forEach(function(f, i) { setTimeout(function() { s._t(f, 0.15, 0.1); }, i * 80); });
-  },
+  craft: function() { var s = this; [523, 659, 784, 1047].forEach(function(f, i) { setTimeout(function() { s._t(f, 0.15, 0.1); }, i * 80); }); },
   almost: function() { this._t(900, 0.05, 0.06); setTimeout(function() { SFX._t(800, 0.05, 0.06); }, 80); },
   tick: function() { this._t(1200, 0.03, 0.08, 'square'); }
 };
 
 function vibrate(p) { try { navigator.vibrate && navigator.vibrate(p); } catch (e) {} }
 
-// Конфетти
 var CF = (function() {
   var _cv = null, _cx = null, _ps = [], _af = null;
   function _init() { if (!_cv) { _cv = document.getElementById('cfv'); if (_cv) _cx = _cv.getContext('2d'); } }
@@ -1214,7 +1192,6 @@ function escapeHtml(s) { if (!s) return ''; return s.replace(/[&<>]/g, function(
 
 function copyToClipboard(text) { try { navigator.clipboard.writeText(text); } catch (e) { var t = document.createElement('textarea'); t.value = text; document.body.appendChild(t); t.select(); document.execCommand('copy'); t.remove(); } }
 
-// Supabase функции
 async function sb(path, method, body, h) {
   method = method || 'GET';
   h = h || {};
@@ -1281,7 +1258,6 @@ async function saveUser(now) {
 
 function safeJ(v, d) { try { return typeof v === 'string' ? JSON.parse(v) : (v ?? d); } catch (e) { return Array.isArray(d) ? [] : d; } }
 
-// Функции для работы с инвентарём и UI
 function setBal(v) {
   var p = state.balance;
   state.balance = Math.max(0, Math.floor(v));
@@ -1388,11 +1364,11 @@ function renderAvatar() {
 function renderHist() {
   var el = document.getElementById('histBody');
   if (!el) return;
-  if (!state.history.length) { el.innerHTML = '<tr><td colspan="3" style="color:var(--tm);text-align:center;padding:14px;font-size:11px">Нет истории</td></table>'; return; }
+  if (!state.history.length) { el.innerHTML = '<tr><td colspan="3" style="color:var(--tm);text-align:center;padding:14px;font-size:11px">Нет истории</td></tr>'; return; }
   var html = '';
   for (var i = 0; i < Math.min(state.history.length, 25); i++) {
     var h = state.history[i];
-    html += '<tr><td style="font-size:15px">' + escapeHtml(h.icon) + '</td><td>' + escapeHtml(h.action) + '</td><td class="' + (h.pos ? 'hist-pos' : 'hist-neg') + '">' + escapeHtml(h.result) + '</td></tr>';
+    html += '<tr><td style="font-size:15px">' + escapeHtml(h.icon) + '<tr><td>' + escapeHtml(h.action) + '</td><td class="' + (h.pos ? 'hist-pos' : 'hist-neg') + '">' + escapeHtml(h.result) + '</td></tr>';
   }
   el.innerHTML = html;
 }
@@ -1405,7 +1381,6 @@ function updateAllUI() {
   renderPvpLobby();
 }
 
-// Кейсы
 function renderCases() {
   var g = document.getElementById('casesGrid');
   if (!g) return;
@@ -1561,7 +1536,6 @@ function showResultModal(gift, type, flash, cb) {
   if (sellBtn) sellBtn.onclick = function() { ov.remove(); if (cb) cb('sell'); };
 }
 
-// Апгрейд
 function upgStakeClick() { renderInv('invUpgrade', false, 'upgrade'); toast('👇 Нажми на подарок чтобы поставить'); }
 function pickUpgStake(idx) {
   var g = state.inventory[idx];
@@ -1756,7 +1730,6 @@ function renderUpgHistory() {
   list.innerHTML = html;
 }
 
-// Крафт
 function renderCraftSlots() {
   for (var i = 0; i < 3; i++) {
     var el = document.querySelector('.craft-slot[data-slot="' + i + '"]');
@@ -1887,7 +1860,6 @@ function showCraftRoulette(wonName, win, almost, cb) {
   }, 18);
 }
 
-// PvP
 function pickPvp(idx, mode) {
   var g = state.inventory[idx];
   if (!g) return;
@@ -2146,7 +2118,6 @@ function handleRT(msg) {
 }
 setInterval(function() { if (!wsRT || wsRT.readyState !== 1 || Date.now() - lastWsActivity > 15000) loadBattles(); }, 10000);
 
-// Пополнение
 var DEP_AMTS = [{ stars: 50, price: 1 }, { stars: 150, price: 2 }, { stars: 500, price: 5 }, { stars: 1000, price: 10 }, { stars: 2500, price: 25 }, { stars: 5000, price: 50 }];
 
 function openDepositModal() {
@@ -2206,7 +2177,6 @@ document.getElementById('depConfirmBtn').onclick = function() {
   }
 };
 
-// Вывод
 function openWithdrawModal() {
   withdrawGiftIdx = null;
   document.getElementById('withdrawConfirmBtn').disabled = true;
@@ -2304,7 +2274,6 @@ function initModalSwipe(sheetId, modalId, handleId) {
   modal.addEventListener('click', function(e) { if (e.target === modal) modal.classList.remove('show'); });
 }
 
-// Табы
 document.querySelectorAll('.pvp-tab').forEach(function(btn) {
   btn.onclick = function() {
     document.querySelectorAll('.pvp-tab').forEach(function(b) { b.classList.remove('active'); });
@@ -2336,7 +2305,6 @@ document.querySelectorAll('.tab').forEach(function(btn) {
   };
 });
 
-// Кнопки
 document.getElementById('addBtn').onclick = function() { if (!RL.check('add', 3)) return; setBal(state.balance + 100); addHist('⭐️', 'Пополнение', '+100 ★', true); toast('★ +100'); saveUser(); };
 document.getElementById('balancePill').onclick = function() { if (!RL.check('add', 3)) return; setBal(state.balance + 100); addHist('⭐️', 'Пополнение', '+100 ★', true); toast('★ +100'); saveUser(); };
 document.getElementById('upgradeDoBtn').onclick = doUpgrade;
@@ -2366,26 +2334,10 @@ function upOnline() { document.getElementById('onlineCount').innerText = 140 + M
 setInterval(upOnline, 6000);
 upOnline();
 
+// PWA полностью отключён - удаляем все манифесты
 function setupPWA() {
-  var m = { name: "GiftCase", short_name: "GiftCase", start_url: window.location.pathname, display: "standalone", background_color: "#060606", theme_color: "#060606", icons: [{ src: "https://fav.farm/🎁", sizes: "192x192", type: "image/png" }] };
-  var b = new Blob([JSON.stringify(m)], { type: 'application/manifest+json' });
-  var l = document.createElement('link');
-  l.rel = 'manifest';
-  l.href = URL.createObjectURL(b);
-  document.head.appendChild(l);
-  var dp = null;
-  window.addEventListener('beforeinstallprompt', function(e) {
-    e.preventDefault();
-    dp = e;
-    setTimeout(function() {
-      var ban = document.createElement('div');
-      ban.className = 'install-banner';
-      ban.innerHTML = '<div class="ib-icon">🎁</div><div class="ib-text"><div class="ib-title">Добавить на экран</div><div class="ib-sub">Быстрый доступ к GiftCase</div></div><button class="ib-btn" id="ib">Добавить</button><button class="ib-close" id="ibc">✕</button>';
-      document.body.appendChild(ban);
-      document.getElementById('ib').onclick = async function() { dp.prompt(); await dp.userChoice; ban.remove(); dp = null; };
-      document.getElementById('ibc').onclick = function() { ban.remove(); };
-    }, 5000);
-  });
+  var oldManifests = document.querySelectorAll('link[rel="manifest"]');
+  oldManifests.forEach(function(m) { m.remove(); });
 }
 setupPWA();
 
@@ -2443,7 +2395,6 @@ function checkReferral() {
   }
 }
 
-// Автоматическое подключение к приватному батлу
 var urlParams = new URLSearchParams(window.location.search);
 var autoJoinId = urlParams.get('join');
 if (autoJoinId && !autoJoinProcessed) {
@@ -2467,7 +2418,6 @@ if (autoJoinId && !autoJoinProcessed) {
   }, 1500);
 }
 
-// Инициализация
 var RARITY_LABELS = { common: "Обычный", rare: "Редкий", epic: "Эпический", legendary: "Легендарный" };
 var RARITY_COLORS = { common: "#666", rare: "#5577cc", epic: "#9955cc", legendary: "#c8a96e" };
 
