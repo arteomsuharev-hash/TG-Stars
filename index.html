@@ -839,10 +839,10 @@ var autoJoinProcessed = false;
 var realGiftsList = [];
 var giftImagesCache = {};
 
-// ИЗМЕНЕНИЕ 1: Базовый URL для PNG картинок
+// Базовый URL для PNG картинок
 var BASE_IMAGE_URL = '/gifts/';
 
-// ИЗМЕНЕНИЕ 2: Реальные названия подарков (ID → название)
+// Реальные названия подарков (ID → название)
 var REAL_GIFT_NAMES = {
   "5170145012310081615": "Звездная пыль",
   "5170233102089322756": "Лунный свет",
@@ -857,7 +857,7 @@ var REAL_GIFT_NAMES = {
   "6028601630662853006": "Радужный бриз"
 };
 
-// ИЗМЕНЕНИЕ 3: Функция getGiftNameByPrice
+// Функция getGiftNameByPrice
 function getGiftNameByPrice(price) {
   var names = {
     15: "Маленькая Звезда",
@@ -873,7 +873,7 @@ function getGiftNameByPrice(price) {
   return names[price] || `Подарок ${price}★`;
 }
 
-// ИЗМЕНЕНИЕ 4: Функция getEmojiByPrice
+// Функция getEmojiByPrice
 function getEmojiByPrice(price) {
   if (price <= 20) return "⭐";
   if (price <= 40) return "✨";
@@ -883,15 +883,37 @@ function getEmojiByPrice(price) {
   return "🏆";
 }
 
-// ИЗМЕНЕНИЕ 5: Функция getGiftIcon
+// ========== НОВАЯ ФУНКЦИЯ getGiftIcon ==========
 function getGiftIcon(gift) {
-  if (gift.imageUrl) {
-    return '<img src="' + gift.imageUrl + '" style="width:32px;height:32px;object-fit:contain" onerror="this.style.display=\'none\';this.parentElement.innerHTML=\'' + (gift.icon || '🎁') + '\'">';
+  var fileNumber = gift.collectible_id || getGiftIndexById(gift.id);
+  if (fileNumber && fileNumber >= 1 && fileNumber <= 100) {
+    var imageUrl = '/gifts/gift_' + fileNumber + '.png';
+    return '<img src="' + imageUrl + '" style="width:32px;height:32px;object-fit:contain" onerror="this.style.display=\'none\';this.parentElement.innerHTML=\'' + (gift.icon || '🎁') + '\'">';
   }
   return gift.icon || '🎁';
 }
 
-// ИЗМЕНЕНИЕ 6: Загрузка подарков (новая версия)
+// ========== НОВАЯ ФУНКЦИЯ getGiftIndexById ==========
+function getGiftIndexById(giftId) {
+  var ids = [
+    "5170145012310081615",
+    "5170233102089322756",
+    "5170250947678437525",
+    "5168103777563050263",
+    "5170144170496491616",
+    "5170314324215857265",
+    "5170564780938756245",
+    "5168043875654172773",
+    "5170690322832818290",
+    "5170521118301225164",
+    "6028601630662853006"
+  ];
+  var index = ids.indexOf(giftId) + 1;
+  return index > 0 ? index : null;
+}
+// ========== КОНЕЦ НОВЫХ ФУНКЦИЙ ==========
+
+// Загрузка подарков
 async function loadRealGifts() {
   try {
     console.log('🔄 Загрузка подарков через бота...');
@@ -922,7 +944,8 @@ async function loadRealGifts() {
           name: realName,
           price: gift.price || 50,
           icon: getEmojiByPrice(gift.price),
-          imageUrl: imageUrl
+          imageUrl: imageUrl,
+          collectible_id: i + 1
         });
         console.log(`📦 Подарок: ${realGiftsList[i].name} — ${realGiftsList[i].price} ★ — PNG: ${imageUrl}`);
       }
@@ -943,21 +966,21 @@ async function loadRealGifts() {
 // Создание тестовых подарков (если API не отвечает) - с эмодзи
 function createMockGifts() {
   realGiftsList = [
-    { id: 1, name: "Золотая Звезда", price: 50, icon: "⭐", imageUrl: null },
-    { id: 2, name: "Серебряный Кристалл", price: 100, icon: "💎", imageUrl: null },
-    { id: 3, name: "Бронзовый Сундук", price: 25, icon: "📦", imageUrl: null },
-    { id: 4, name: "Рубиновое Сердце", price: 200, icon: "❤️", imageUrl: null },
-    { id: 5, name: "Сапфир Удачи", price: 150, icon: "🔵", imageUrl: null },
-    { id: 6, name: "Изумрудный Ключ", price: 300, icon: "🟢", imageUrl: null },
-    { id: 7, name: "Алмазная Корона", price: 500, icon: "👑", imageUrl: null },
-    { id: 8, name: "Мифический Артефакт", price: 800, icon: "🏆", imageUrl: null },
-    { id: 9, name: "Лунный Амулет", price: 45, icon: "🌙", imageUrl: null },
-    { id: 10, name: "Солнечный Медальон", price: 85, icon: "☀️", imageUrl: null },
-    { id: 11, name: "Драконий Глаз", price: 250, icon: "🐉", imageUrl: null },
-    { id: 12, name: "Феникс Перо", price: 400, icon: "🔥", imageUrl: null },
-    { id: 13, name: "Ключ Бесконечности", price: 650, icon: "🔑", imageUrl: null },
-    { id: 14, name: "Космический Камень", price: 750, icon: "🌌", imageUrl: null },
-    { id: 15, name: "Сердце Дракона", price: 900, icon: "❤️‍🔥", imageUrl: null }
+    { id: 1, name: "Золотая Звезда", price: 50, icon: "⭐", imageUrl: null, collectible_id: 1 },
+    { id: 2, name: "Серебряный Кристалл", price: 100, icon: "💎", imageUrl: null, collectible_id: 2 },
+    { id: 3, name: "Бронзовый Сундук", price: 25, icon: "📦", imageUrl: null, collectible_id: 3 },
+    { id: 4, name: "Рубиновое Сердце", price: 200, icon: "❤️", imageUrl: null, collectible_id: 4 },
+    { id: 5, name: "Сапфир Удачи", price: 150, icon: "🔵", imageUrl: null, collectible_id: 5 },
+    { id: 6, name: "Изумрудный Ключ", price: 300, icon: "🟢", imageUrl: null, collectible_id: 6 },
+    { id: 7, name: "Алмазная Корона", price: 500, icon: "👑", imageUrl: null, collectible_id: 7 },
+    { id: 8, name: "Мифический Артефакт", price: 800, icon: "🏆", imageUrl: null, collectible_id: 8 },
+    { id: 9, name: "Лунный Амулет", price: 45, icon: "🌙", imageUrl: null, collectible_id: 9 },
+    { id: 10, name: "Солнечный Медальон", price: 85, icon: "☀️", imageUrl: null, collectible_id: 10 },
+    { id: 11, name: "Драконий Глаз", price: 250, icon: "🐉", imageUrl: null, collectible_id: 11 },
+    { id: 12, name: "Феникс Перо", price: 400, icon: "🔥", imageUrl: null, collectible_id: 12 },
+    { id: 13, name: "Ключ Бесконечности", price: 650, icon: "🔑", imageUrl: null, collectible_id: 13 },
+    { id: 14, name: "Космический Камень", price: 750, icon: "🌌", imageUrl: null, collectible_id: 14 },
+    { id: 15, name: "Сердце Дракона", price: 900, icon: "❤️‍🔥", imageUrl: null, collectible_id: 15 }
   ];
   console.log('✅ Созданы тестовые подарки (15 шт.)');
   updateAllUI();
@@ -1021,7 +1044,8 @@ function addGiftToInventory(gift) {
     icon: gift.icon,
     imageUrl: gift.imageUrl,
     val: gift.price,
-    rarity: getRarityByPrice(gift.price)
+    rarity: getRarityByPrice(gift.price),
+    collectible_id: gift.collectible_id
   });
 }
 
@@ -1239,7 +1263,7 @@ function incLuck(n) { state.luck = Math.min(200, state.luck + (n || 1)); updateL
 function updateLuckBar() { var p = Math.min(100, state.luck / 2); document.getElementById('luckFill').style.width = p + '%'; document.getElementById('luckPct').innerText = Math.round(p) + '%'; }
 function addHist(icon, action, result, pos) { state.history.unshift({ icon: icon, action: action, result: result, pos: pos, ts: Date.now() }); if (state.history.length > 60) state.history = state.history.slice(0, 60); }
 
-// ИЗМЕНЕНИЕ 7: renderInv с использованием getGiftIcon
+// ОБНОВЛЁННАЯ ФУНКЦИЯ renderInv с использованием getGiftIcon
 function renderInv(cid, withSell, mode) {
   var el = document.getElementById(cid);
   if (!el) return;
@@ -1402,7 +1426,8 @@ function openCase(c) {
           icon: wonGift.icon,
           imageUrl: wonGift.imageUrl,
           val: wonGift.price,
-          rarity: getRarityByPrice(wonGift.price)
+          rarity: getRarityByPrice(wonGift.price),
+          collectible_id: wonGift.collectible_id
         });
         addHist(wonGift.icon || '🎁', 'Кейс: ' + c.name, '+' + wonGift.name, true);
         toast('📦 ' + wonGift.name);
@@ -1655,7 +1680,8 @@ async function doUpgrade() {
       icon: targetSnap.icon,
       imageUrl: targetSnap.imageUrl,
       val: targetSnap.price,
-      rarity: getRarityByPrice(targetSnap.price)
+      rarity: getRarityByPrice(targetSnap.price),
+      collectible_id: targetSnap.collectible_id
     });
     addHist(targetSnap.icon || '🎁', 'Апгрейд → ' + targetSnap.name, '✅ Успех!', true);
     state.luck = Math.max(0, state.luck - 10);
@@ -1764,7 +1790,8 @@ function doCraft() {
       icon: resultGift.icon,
       imageUrl: resultGift.imageUrl,
       val: resultGift.price,
-      rarity: getRarityByPrice(resultGift.price)
+      rarity: getRarityByPrice(resultGift.price),
+      collectible_id: resultGift.collectible_id
     });
     addHist(resultGift.icon || '🎁', 'Крафт → ' + resultGift.name, '★ ' + resultGift.price, win);
     if (win || ultraRare) { CF.burst(window.innerWidth / 2, window.innerHeight * 0.4, 90); SFX.craft(); vibrate([20, 40, 20]); }
