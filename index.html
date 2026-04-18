@@ -856,28 +856,14 @@ var GIFT_ID_TO_FILE_NUMBER = {
 
 // ========== ИСПРАВЛЕННАЯ ФУНКЦИЯ getGiftIcon ==========
 function getGiftIcon(gift) {
-  // Определяем номер файла для изображения
-  var fileNumber = null;
-  
-  // Если есть collectible_id (1-100)
-  if (gift.collectible_id && gift.collectible_id >= 1 && gift.collectible_id <= 100) {
-    fileNumber = gift.collectible_id;
+  var fileNumber = gift.collectible_id;
+  if (fileNumber && fileNumber >= 1 && fileNumber <= 100) {
+    // Прямая ссылка на файл в папке /gifts
+    var imageUrl = '/gifts/' + fileNumber + '.png';
+    return '<img src="' + imageUrl + '" style="width:32px;height:32px;object-fit:contain" onerror="this.style.display=\'none\';this.parentElement.innerHTML=\'' + (gift.icon || '🎁') + '\'">';
   }
-  // Если ID подарка есть в маппинге
-  else if (gift.id && GIFT_ID_TO_FILE_NUMBER[gift.id]) {
-    fileNumber = GIFT_ID_TO_FILE_NUMBER[gift.id];
-  }
-  // Если ID это число от 1 до 100
-  else if (typeof gift.id === 'number' && gift.id >= 1 && gift.id <= 100) {
-    fileNumber = gift.id;
-  }
-  // Ищем индекс подарка в realGiftsList
-  else if (realGiftsList.length > 0) {
-    var index = realGiftsList.findIndex(function(g) { return g.id == gift.id; });
-    if (index !== -1) {
-      fileNumber = index + 1;
-    }
-  }
+  return gift.icon || '🎁';
+}
   
   // Загружаем изображение через API эндпоинт
   if (fileNumber && fileNumber >= 1 && fileNumber <= 100) {
