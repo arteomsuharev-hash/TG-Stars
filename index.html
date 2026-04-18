@@ -838,93 +838,31 @@ var autoJoinProcessed = false;
 var realGiftsList = [];
 var giftImagesCache = {};
 
-// Загрузка подарков напрямую из Telegram API (ИСПРАВЛЕННАЯ)
-async function fetchGiftsFromTelegramAPI() {
-  try {
-    console.log('🔄 Прямой запрос к Telegram API getAvailableGifts...');
-    var response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getAvailableGifts`);
-    var data = await response.json();
-    
-    if (data.ok && data.result && data.result.gifts && data.result.gifts.length > 0) {
-      var gifts = [];
-      for (var i = 0; i < data.result.gifts.length; i++) {
-        var tgGift = data.result.gifts[i];
-        // Пробуем разные варианты получения названия
-        var giftName = tgGift.title || tgGift.name || tgGift.gift_title || null;
-        
-        gifts.push({
-          id: tgGift.id,
-          name: giftName || `Подарок ${i+1}`,
-          price: tgGift.star_count || tgGift.price || 50,
-          icon: tgGift.sticker?.file_id || null,
-          imageUrl: null
-        });
-        console.log(`📦 Подарок: ${gifts[i].name} — ${gifts[i].price} ★ (id: ${tgGift.id})`);
-      }
-      console.log('✅ Загружено через Telegram API (getAvailableGifts):', gifts.length);
-      return gifts;
-    } else {
-      console.log('⚠️ getAvailableGifts не вернул подарки:', data);
-    }
-  } catch (e) {
-    console.warn('Ошибка getAvailableGifts:', e);
-  }
-  
-  // Пробуем альтернативный эндпоинт
-  try {
-    console.log('🔄 Пробуем getStarGifts...');
-    var response2 = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getStarGifts`);
-    var data2 = await response2.json();
-    if (data2.ok && data2.result && data2.result.gifts && data2.result.gifts.length > 0) {
-      var gifts2 = [];
-      for (var i = 0; i < data2.result.gifts.length; i++) {
-        var tgGift2 = data2.result.gifts[i];
-        var giftName2 = tgGift2.title || tgGift2.name || tgGift2.gift_title || `Подарок ${i+1}`;
-        gifts2.push({
-          id: tgGift2.id,
-          name: giftName2,
-          price: tgGift2.star_count || tgGift2.price || 50,
-          icon: tgGift2.sticker?.file_id || null,
-          imageUrl: null
-        });
-        console.log(`📦 Подарок (StarGifts): ${gifts2[i].name} — ${gifts2[i].price} ★`);
-      }
-      console.log('✅ Загружено через Telegram API (getStarGifts):', gifts2.length);
-      return gifts2;
-    } else {
-      console.log('⚠️ getStarGifts не вернул подарки:', data2);
-    }
-  } catch (e) {
-    console.warn('Ошибка getStarGifts:', e);
-  }
-  
-  return null;
-}
-
-// Загрузка настоящих подарков Telegram (ИСПРАВЛЕННАЯ)
+// Загрузка настоящих подарков Telegram (ИСПРАВЛЕННАЯ - через бота)
 async function loadRealGifts() {
   try {
-    console.log('🔄 Загрузка подарков...');
+    console.log('🔄 Загрузка подарков через бота...');
     
-    // 1. Пробуем загрузить через свой API
+    // Загружаем через твоего бота (эндпоинт /api/getGifts)
     var response = await fetch(BOT_API_URL + '/api/getGifts');
     var data = await response.json();
+    
+    console.log('📦 Ответ от бота:', data);
     
     if (data.success && data.gifts && data.gifts.length > 0) {
       realGiftsList = [];
       for (var i = 0; i < data.gifts.length; i++) {
         var gift = data.gifts[i];
-        var giftName = gift.title || gift.name || gift.gift_title || gift.display_name || `Подарок ${i+1}`;
         realGiftsList.push({
           id: gift.id,
-          name: giftName,
-          price: gift.star_count || gift.price || 50,
-          icon: gift.sticker?.file_id || gift.icon || null,
+          name: gift.name || `Подарок ${i+1}`,  // ← название из поля name
+          price: gift.price || 50,
+          icon: gift.icon || null,  // ← file_id стикера
           imageUrl: null
         });
-        console.log(`📦 Свой API: ${realGiftsList[i].name} — ${realGiftsList[i].price} ★`);
+        console.log(`📦 Подарок: ${realGiftsList[i].name} — ${realGiftsList[i].price} ★`);
       }
-      console.log('✅ Загружено через свой API:', realGiftsList.length);
+      console.log('✅ Загружено через бота:', realGiftsList.length);
       
       // Загружаем URL изображений
       for (var i = 0; i < realGiftsList.length; i++) {
@@ -935,36 +873,51 @@ async function loadRealGifts() {
       }
       updateAllUI();
       return true;
+    } else {
+      console.warn('⚠️ Бот не вернул подарки, пробуем прямой запрос...');
     }
-    
-    // 2. Если свой API не работает, пробуем напрямую через Telegram API
-    console.log('🔄 Свой API не ответил или нет подарков, пробуем Telegram API...');
-    var tgGifts = await fetchGiftsFromTelegramAPI();
-    if (tgGifts && tgGifts.length > 0) {
-      realGiftsList = tgGifts;
-      console.log('✅ Загружено через Telegram API:', realGiftsList.length);
-      
-      // Загружаем URL изображений
-      for (var i = 0; i < realGiftsList.length; i++) {
-        var gift = realGiftsList[i];
-        if (gift.icon && gift.icon.startsWith('CAAC')) {
-          loadGiftImageUrl(gift.icon, i);
-        }
-      }
-      updateAllUI();
-      return true;
-    }
-    
-    // 3. Если ничего не сработало - создаём тестовые подарки
-    console.warn('⚠️ Не удалось загрузить подарки, создаём тестовые');
-    createMockGifts();
-    return false;
-    
   } catch (error) {
-    console.error('❌ Ошибка загрузки подарков:', error);
-    createMockGifts();
-    return false;
+    console.error('❌ Ошибка загрузки через бота:', error);
   }
+  
+  // Fallback: пробуем прямой запрос к Telegram API
+  try {
+    console.log('🔄 Пробуем прямой запрос к Telegram API...');
+    var response2 = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getAvailableGifts`);
+    var data2 = await response2.json();
+    
+    if (data2.ok && data2.result && data2.result.gifts && data2.result.gifts.length > 0) {
+      realGiftsList = [];
+      for (var i = 0; i < data2.result.gifts.length; i++) {
+        var gift = data2.result.gifts[i];
+        realGiftsList.push({
+          id: gift.id,
+          name: gift.title || `Подарок ${i+1}`,
+          price: gift.star_count || 50,
+          icon: gift.sticker?.file_id || null,
+          imageUrl: null
+        });
+        console.log(`📦 Прямой API: ${realGiftsList[i].name} — ${realGiftsList[i].price} ★`);
+      }
+      console.log('✅ Загружено через прямой API:', realGiftsList.length);
+      
+      for (var i = 0; i < realGiftsList.length; i++) {
+        var gift = realGiftsList[i];
+        if (gift.icon && gift.icon.startsWith('CAAC')) {
+          loadGiftImageUrl(gift.icon, i);
+        }
+      }
+      updateAllUI();
+      return true;
+    }
+  } catch (e) {
+    console.warn('Ошибка прямого запроса:', e);
+  }
+  
+  // Если ничего не сработало - тестовые подарки
+  console.warn('⚠️ Не удалось загрузить подарки, создаём тестовые');
+  createMockGifts();
+  return false;
 }
 
 // Создание тестовых подарков (если API не отвечает)
@@ -990,14 +943,13 @@ function createMockGifts() {
   updateAllUI();
 }
 
-// Загрузка URL изображения подарка по file_id (ИСПРАВЛЕННАЯ)
+// Загрузка URL изображения подарка по file_id
 var imageLoadQueue = [];
 var isLoadingImages = false;
 
 async function loadGiftImageUrl(fileId, index) {
   if (!fileId) return;
   
-  // Проверяем кеш
   if (giftImagesCache[fileId]) {
     if (realGiftsList[index]) {
       realGiftsList[index].imageUrl = giftImagesCache[fileId];
@@ -1006,7 +958,6 @@ async function loadGiftImageUrl(fileId, index) {
     return;
   }
   
-  // Добавляем в очередь
   imageLoadQueue.push({ fileId, index });
   processImageQueue();
 }
@@ -1019,28 +970,25 @@ async function processImageQueue() {
   while (imageLoadQueue.length > 0) {
     var task = imageLoadQueue.shift();
     try {
-      // Получаем путь к файлу
       var url = `https://api.telegram.org/bot${BOT_TOKEN}/getFile?file_id=${task.fileId}`;
       var response = await fetch(url);
       var data = await response.json();
       
       if (data.ok && data.result && data.result.file_path) {
-        // Формируем полный URL для загрузки изображения
         var imageUrl = `https://api.telegram.org/file/bot${BOT_TOKEN}/${data.result.file_path}`;
         giftImagesCache[task.fileId] = imageUrl;
         
         if (realGiftsList[task.index]) {
           realGiftsList[task.index].imageUrl = imageUrl;
-          console.log(`🖼️ Загружена картинка для: ${realGiftsList[task.index].name} — ${imageUrl}`);
+          console.log(`🖼️ Загружена картинка для: ${realGiftsList[task.index].name}`);
           updateAllUI();
         }
       } else {
-        console.warn(`⚠️ Не удалось получить путь для file_id: ${task.fileId}`);
+        console.warn(`⚠️ Не удалось получить картинку для file_id: ${task.fileId}`);
       }
     } catch (e) {
       console.warn('Ошибка загрузки изображения:', e);
     }
-    // Небольшая задержка между запросами
     await new Promise(r => setTimeout(r, 150));
   }
   isLoadingImages = false;
