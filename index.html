@@ -883,35 +883,60 @@ function getEmojiByPrice(price) {
   return "🏆";
 }
 
-// ========== НОВАЯ ФУНКЦИЯ getGiftIcon ==========
+// ========== ИСПРАВЛЕННАЯ ФУНКЦИЯ getGiftIcon ==========
 function getGiftIcon(gift) {
-  var fileNumber = gift.collectible_id || getGiftIndexById(gift.id);
+  // Определяем номер файла для изображения
+  var fileNumber = null;
+  
+  // Если есть collectible_id (1-100)
+  if (gift.collectible_id && gift.collectible_id >= 1 && gift.collectible_id <= 100) {
+    fileNumber = gift.collectible_id;
+  }
+  // Если ID подарка есть в маппинге
+  else if (gift.id && GIFT_ID_TO_FILE_NUMBER && GIFT_ID_TO_FILE_NUMBER[gift.id]) {
+    fileNumber = GIFT_ID_TO_FILE_NUMBER[gift.id];
+  }
+  // Если ID это число от 1 до 100
+  else if (typeof gift.id === 'number' && gift.id >= 1 && gift.id <= 100) {
+    fileNumber = gift.id;
+  }
+  // Ищем индекс подарка в realGiftsList
+  else if (realGiftsList.length > 0) {
+    var index = realGiftsList.findIndex(function(g) { return g.id == gift.id; });
+    if (index !== -1) {
+      fileNumber = index + 1;
+    }
+  }
+  
+  // Загружаем изображение по пути /gifts/НОМЕР.png
   if (fileNumber && fileNumber >= 1 && fileNumber <= 100) {
-    var imageUrl = '/gifts/gift_' + fileNumber + '.png';
+    var imageUrl = '/gifts/' + fileNumber + '.png';
     return '<img src="' + imageUrl + '" style="width:32px;height:32px;object-fit:contain" onerror="this.style.display=\'none\';this.parentElement.innerHTML=\'' + (gift.icon || '🎁') + '\'">';
   }
+  
+  // Если ничего не подошло - показываем эмодзи
   return gift.icon || '🎁';
 }
 
-// ========== НОВАЯ ФУНКЦИЯ getGiftIndexById ==========
+// ========== МАППИНГ ID ПОДАРКОВ К НОМЕРАМ ФАЙЛОВ ==========
+var GIFT_ID_TO_FILE_NUMBER = {
+  "5170145012310081615": 1,
+  "5170233102089322756": 2,
+  "5170250947678437525": 3,
+  "5168103777563050263": 4,
+  "5170144170496491616": 5,
+  "5170314324215857265": 6,
+  "5170564780938756245": 7,
+  "5168043875654172773": 8,
+  "5170690322832818290": 9,
+  "5170521118301225164": 10,
+  "6028601630662853006": 11
+};
+
+// Функция getGiftIndexById
 function getGiftIndexById(giftId) {
-  var ids = [
-    "5170145012310081615",
-    "5170233102089322756",
-    "5170250947678437525",
-    "5168103777563050263",
-    "5170144170496491616",
-    "5170314324215857265",
-    "5170564780938756245",
-    "5168043875654172773",
-    "5170690322832818290",
-    "5170521118301225164",
-    "6028601630662853006"
-  ];
-  var index = ids.indexOf(giftId) + 1;
-  return index > 0 ? index : null;
+  return GIFT_ID_TO_FILE_NUMBER[giftId] || null;
 }
-// ========== КОНЕЦ НОВЫХ ФУНКЦИЙ ==========
 
 // Загрузка подарков
 async function loadRealGifts() {
@@ -937,7 +962,9 @@ async function loadRealGifts() {
           }
         }
         
-        var imageUrl = BASE_IMAGE_URL + giftId + '.png';
+        // Определяем номер файла для изображения
+        var fileNumber = GIFT_ID_TO_FILE_NUMBER[giftId] || (i + 1);
+        var imageUrl = '/gifts/' + fileNumber + '.png';
         
         realGiftsList.push({
           id: gift.id,
@@ -945,9 +972,9 @@ async function loadRealGifts() {
           price: gift.price || 50,
           icon: getEmojiByPrice(gift.price),
           imageUrl: imageUrl,
-          collectible_id: i + 1
+          collectible_id: fileNumber
         });
-        console.log(`📦 Подарок: ${realGiftsList[i].name} — ${realGiftsList[i].price} ★ — PNG: ${imageUrl}`);
+        console.log(`📦 Подарок #${fileNumber}: ${realGiftsList[i].name} — ${realGiftsList[i].price} ★ — ${imageUrl}`);
       }
       console.log('✅ Загружено через бота:', realGiftsList.length);
       updateAllUI();
@@ -963,26 +990,27 @@ async function loadRealGifts() {
   return false;
 }
 
-// Создание тестовых подарков (если API не отвечает) - с эмодзи
+// Создание тестовых подарков (если API не отвечает)
 function createMockGifts() {
-  realGiftsList = [
-    { id: 1, name: "Золотая Звезда", price: 50, icon: "⭐", imageUrl: null, collectible_id: 1 },
-    { id: 2, name: "Серебряный Кристалл", price: 100, icon: "💎", imageUrl: null, collectible_id: 2 },
-    { id: 3, name: "Бронзовый Сундук", price: 25, icon: "📦", imageUrl: null, collectible_id: 3 },
-    { id: 4, name: "Рубиновое Сердце", price: 200, icon: "❤️", imageUrl: null, collectible_id: 4 },
-    { id: 5, name: "Сапфир Удачи", price: 150, icon: "🔵", imageUrl: null, collectible_id: 5 },
-    { id: 6, name: "Изумрудный Ключ", price: 300, icon: "🟢", imageUrl: null, collectible_id: 6 },
-    { id: 7, name: "Алмазная Корона", price: 500, icon: "👑", imageUrl: null, collectible_id: 7 },
-    { id: 8, name: "Мифический Артефакт", price: 800, icon: "🏆", imageUrl: null, collectible_id: 8 },
-    { id: 9, name: "Лунный Амулет", price: 45, icon: "🌙", imageUrl: null, collectible_id: 9 },
-    { id: 10, name: "Солнечный Медальон", price: 85, icon: "☀️", imageUrl: null, collectible_id: 10 },
-    { id: 11, name: "Драконий Глаз", price: 250, icon: "🐉", imageUrl: null, collectible_id: 11 },
-    { id: 12, name: "Феникс Перо", price: 400, icon: "🔥", imageUrl: null, collectible_id: 12 },
-    { id: 13, name: "Ключ Бесконечности", price: 650, icon: "🔑", imageUrl: null, collectible_id: 13 },
-    { id: 14, name: "Космический Камень", price: 750, icon: "🌌", imageUrl: null, collectible_id: 14 },
-    { id: 15, name: "Сердце Дракона", price: 900, icon: "❤️‍🔥", imageUrl: null, collectible_id: 15 }
-  ];
-  console.log('✅ Созданы тестовые подарки (15 шт.)');
+  realGiftsList = [];
+  for (var i = 1; i <= 100; i++) {
+    var price;
+    if (i <= 20) price = 15;
+    else if (i <= 40) price = 25;
+    else if (i <= 60) price = 50;
+    else if (i <= 80) price = 100;
+    else price = 150 + Math.floor((i - 80) / 5) * 50;
+    
+    realGiftsList.push({
+      id: i,
+      name: getGiftNameByPrice(price) + " " + i,
+      price: price,
+      icon: getEmojiByPrice(price),
+      imageUrl: '/gifts/' + i + '.png',
+      collectible_id: i
+    });
+  }
+  console.log('✅ Создано 100 тестовых подарков с путями /gifts/1.png ... /gifts/100.png');
   updateAllUI();
 }
 
@@ -1018,10 +1046,9 @@ var CASES = [
   {id:"mythic", name:"МИФИЧЕСКИЙ", price:990, cls:"c-mythic", emoji:"💀"}
 ];
 
-// Функция для получения случайного подарка из кейса (имитация)
+// Функция для получения случайного подарка из кейса
 function getRandomGiftFromCase(casePrice) {
   if (!realGiftsList.length) return null;
-  // Фильтруем подарки по цене (приблизительно)
   var minPrice = casePrice * 0.5;
   var maxPrice = casePrice * 2.5;
   var available = [];
@@ -1036,7 +1063,7 @@ function getRandomGiftFromCase(casePrice) {
   return Object.assign({}, available[randomIndex]);
 }
 
-// Функции для работы с инвентарём (обновлены для работы с настоящими подарками)
+// Функции для работы с инвентарём
 function addGiftToInventory(gift) {
   state.inventory.push({
     id: gift.id,
@@ -1518,7 +1545,7 @@ function showResultModal(gift, type, flash, cb) {
   var isAlmost = type === 'almost';
   var ov = document.createElement('div');
   ov.className = 'result-overlay' + (flash ? ' win-flash' : '');
-  var iconHtml = gift.imageUrl ? '<img src="' + gift.imageUrl + '" style="width:90px;height:90px;object-fit:contain">' : (gift.icon || '🎁');
+  var iconHtml = getGiftIcon(gift);
   ov.innerHTML = '<div class="result-box"><div class="result-icon">' + iconHtml + '</div><div class="result-title">' + escapeHtml(gift.name) + '</div><div class="result-rarity" style="color:' + RARITY_COLORS[getRarityByPrice(gift.price)] + '">' + RARITY_LABELS[getRarityByPrice(gift.price)] + '</div><div class="result-val">★ ' + gift.price + ' Stars</div>' + (isAlmost ? '<div class="almost-badge">🔥 Почти попал!</div>' : '') + '<div class="result-btns">' + (type === null ? '<button class="btn btn-primary" id="rKeep">📦 Забрать</button><button class="btn btn-outline" id="rSell">💰 Продать за ' + Math.floor(gift.price * 0.7) + ' ★</button>' : '<button class="btn btn-primary" id="rKeep">✅ Получено!</button>') + '</div></div>';
   document.body.appendChild(ov);
   document.getElementById('rKeep').onclick = function() { ov.remove(); if (cb) cb('keep'); };
@@ -1860,12 +1887,12 @@ function pickPvp(idx, mode) {
   if (!g) return;
   if (mode === 'private') {
     pvpPrivStakeIdx = idx;
-    document.getElementById('pvpPrivateStakeText').innerHTML = (g.icon || '🎁') + ' ' + escapeHtml(g.name);
+    document.getElementById('pvpPrivateStakeText').innerHTML = getGiftIcon(g) + ' ' + escapeHtml(g.name);
     document.getElementById('pvpPrivateStakeVal').innerText = '★ ' + g.val;
     document.getElementById('createPrivateBattleBtn').disabled = false;
   } else {
     pvpStakeIdx = idx;
-    document.getElementById('pvpStakeText').innerHTML = (g.icon || '🎁') + ' ' + escapeHtml(g.name);
+    document.getElementById('pvpStakeText').innerHTML = getGiftIcon(g) + ' ' + escapeHtml(g.name);
     document.getElementById('pvpStakeVal').innerText = '★ ' + g.val;
     document.getElementById('createBattleBtn').disabled = false;
   }
@@ -1925,7 +1952,7 @@ async function createBattle() {
   var b = {
     id: id, creator_id: userId, creator_name: state.displayName || 'Игрок',
     creator_username: (tgUser && tgUser.username) || '', creator_avatar: state.avatarUrl || (tgUser && tgUser.photo_url) || null,
-    creator_gift: JSON.stringify({ name: g.name, val: g.val, icon: g.icon }),
+    creator_gift: JSON.stringify({ name: g.name, val: g.val, icon: g.icon, collectible_id: g.collectible_id }),
     opponent_id: null, opponent_gift: null, status: 'waiting', winner_id: null,
     is_private: false, created_at: new Date().toISOString()
   };
@@ -1949,7 +1976,7 @@ async function createPrivateBattle() {
   var b = {
     id: id, creator_id: userId, creator_name: state.displayName || 'Игрок',
     creator_username: (tgUser && tgUser.username) || '', creator_avatar: state.avatarUrl || (tgUser && tgUser.photo_url) || null,
-    creator_gift: JSON.stringify({ name: g.name, val: g.val, icon: g.icon }),
+    creator_gift: JSON.stringify({ name: g.name, val: g.val, icon: g.icon, collectible_id: g.collectible_id }),
     opponent_id: null, opponent_gift: null, status: 'waiting', winner_id: null,
     is_private: true, created_at: new Date().toISOString()
   };
@@ -1979,7 +2006,7 @@ async function joinBattle(bid) {
   var myG = Object.assign({}, state.inventory[0]);
   state.inventory.splice(0, 1);
   activeCoinBid = bid;
-  await updateBattle(bid, { status: 'fighting', opponent_id: userId, opponent_gift: JSON.stringify({ name: myG.name, val: myG.val, icon: myG.icon }) });
+  await updateBattle(bid, { status: 'fighting', opponent_id: userId, opponent_gift: JSON.stringify({ name: myG.name, val: myG.val, icon: myG.icon, collectible_id: myG.collectible_id }) });
   var newBattles = [];
   for (var k = 0; k < battles.length; k++) { if (battles[k].id !== bid) newBattles.push(battles[k]); }
   battles = newBattles;
@@ -1988,7 +2015,7 @@ async function joinBattle(bid) {
   privateBattles = newPriv;
   saveUser();
   renderPvpLobby();
-  setTimeout(function() { if (!coinRunning && activeCoinBid === bid) showCoinFlip(safeJ(b.creator_gift, {}), { name: myG.name, val: myG.val, icon: myG.icon }, b, b.creator_id); }, 600);
+  setTimeout(function() { if (!coinRunning && activeCoinBid === bid) showCoinFlip(safeJ(b.creator_gift, {}), { name: myG.name, val: myG.val, icon: myG.icon, collectible_id: myG.collectible_id }, b, b.creator_id); }, 600);
 }
 async function cancelBattle(bid) {
   var b = null;
@@ -1996,7 +2023,7 @@ async function cancelBattle(bid) {
   if (!b) { for (var j = 0; j < privateBattles.length; j++) { if (privateBattles[j].id === bid) { b = privateBattles[j]; break; } } }
   if (!b || b.creator_id !== userId) return;
   var g = safeJ(b.creator_gift, {});
-  state.inventory.push({ name: g.name, icon: g.icon || '🎁', val: g.val });
+  state.inventory.push({ name: g.name, icon: g.icon || '🎁', val: g.val, collectible_id: g.collectible_id });
   var newBattles = [];
   for (var k = 0; k < battles.length; k++) { if (battles[k].id !== bid) newBattles.push(battles[k]); }
   battles = newBattles;
@@ -2038,8 +2065,8 @@ function showCoinFlip(gift1, gift2, battle, creatorId) {
       CF.burst(window.innerWidth / 2, window.innerHeight * 0.5, 100);
       SFX.win();
       vibrate([50, 100, 50]);
-      state.inventory.push({ name: gift1.name, icon: gift1.icon || '🎁', val: gift1.val });
-      state.inventory.push({ name: gift2.name, icon: gift2.icon || '🎁', val: gift2.val });
+      state.inventory.push({ name: gift1.name, icon: gift1.icon || '🎁', val: gift1.val, collectible_id: gift1.collectible_id });
+      state.inventory.push({ name: gift2.name, icon: gift2.icon || '🎁', val: gift2.val, collectible_id: gift2.collectible_id });
       state.pvpWins = (state.pvpWins || 0) + 1;
       addHist(iAmCreator ? (gift1.icon || '🎁') : (gift2.icon || '🎁'), 'PvP Победа!', '+' + ((gift1.val || 0) + (gift2.val || 0)) + ' ★', true);
     } else {
@@ -2183,7 +2210,7 @@ function openWithdrawModal() {
   var html = '';
   for (var i = 0; i < state.inventory.length; i++) {
     var g = state.inventory[i];
-    html += '<div class="inv-card" data-wi="' + i + '"><div class="inv-dot r-' + (g.rarity || 'common') + '"></div><div class="inv-icon">' + (g.icon || '🎁') + '</div><div class="inv-name">' + escapeHtml(g.name) + '</div><div class="inv-val">★ ' + g.val + '</div></div>';
+    html += '<div class="inv-card" data-wi="' + i + '"><div class="inv-dot r-' + (g.rarity || 'common') + '"></div><div class="inv-icon">' + getGiftIcon(g) + '</div><div class="inv-name">' + escapeHtml(g.name) + '</div><div class="inv-val">★ ' + g.val + '</div></div>';
   }
   grid.innerHTML = html;
   var cards = grid.querySelectorAll('.inv-card');
@@ -2333,7 +2360,6 @@ function upOnline() { document.getElementById('onlineCount').innerText = 140 + M
 setInterval(upOnline, 6000);
 upOnline();
 
-// PWA полностью отключён - удаляем все манифесты
 function setupPWA() {
   var oldManifests = document.querySelectorAll('link[rel="manifest"]');
   oldManifests.forEach(function(m) { m.remove(); });
