@@ -628,6 +628,11 @@ img{display:block}
   .cases-grid{grid-template-columns:repeat(6,1fr)}
   .content{padding:24px 36px;padding-bottom:24px}
 }
+
+@keyframes shimmerGift {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
 </style>
 </head>
 <body>
@@ -846,9 +851,7 @@ var lastWsActivity = Date.now();
 var rouletteStartTime = 0, rouletteDuration = 4000;
 var autoJoinProcessed = false;
 
-// ═══════════════════════════════════════════════════════════════════════
-// РЕАЛЬНЫЕ TELEGRAM-ПОДАРКИ (хардкод на случай недоступности API)
-// ═══════════════════════════════════════════════════════════════════════
+// Хардкод подарков (резерв)
 var REAL_TG_GIFTS = [
   { id: 1,  name: "Astral Shard",         price: 50,   file: 1,  icon: "💎", rarity: "rare"      },
   { id: 2,  name: "Plush Pepe",           price: 25,   file: 2,  icon: "🐸", rarity: "common"    },
@@ -903,135 +906,93 @@ var REAL_TG_GIFTS = [
 ];
 
 var realGiftsList = [];
-var giftImagesCache = {};
 
-// ═══════════════════════════════════════════════════════════════════════
-// getGiftIcon — возвращает HTML с реальной картинкой подарка
-// ═══════════════════════════════════════════════════════════════════════
+// Функция для получения красивого отображения подарка с рамкой
 function getGiftIcon(gift) {
   if (!gift) return '🎁';
   
-  // Приоритет 1: прямая ссылка из Telegram API
+  var price = gift.price || gift.val || 0;
+  var frameColor = '';
+  var glowColor = '';
+  var borderWidth = '2px';
+  
+  if (price >= 500) {
+    frameColor = 'linear-gradient(135deg, #ffd700, #ffaa00, #ffd700)';
+    glowColor = '0 0 12px rgba(255,215,0,0.6)';
+    borderWidth = '3px';
+  } else if (price >= 200) {
+    frameColor = 'linear-gradient(135deg, #c0c0c0, #e8e8e8, #c0c0c0)';
+    glowColor = '0 0 10px rgba(192,192,192,0.5)';
+  } else if (price >= 80) {
+    frameColor = 'linear-gradient(135deg, #cd7f32, #e8a95b, #cd7f32)';
+    glowColor = '0 0 8px rgba(205,127,50,0.4)';
+  } else {
+    frameColor = 'linear-gradient(135deg, #4a4a4a, #6a6a6a, #4a4a4a)';
+    glowColor = '0 0 6px rgba(100,100,100,0.3)';
+  }
+  
+  var innerContent = '';
   if (gift.image_url && gift.image_url.startsWith('http')) {
-    return '<img src="' + gift.image_url + '" alt="' + escapeHtml(gift.name || '') + '" loading="lazy" style="width:36px;height:36px;object-fit:contain;display:block" onerror="this.outerHTML=\'' + escapeHtml(gift.emoji || '🎁') + '\'">';
+    innerContent = '<img src="' + gift.image_url + '" alt="' + escapeHtml(gift.name || '') + '" style="width:42px;height:42px;object-fit:contain;display:block;border-radius:10px">';
+  } else {
+    var fileNum = gift.file || gift.collectible_id;
+    if (fileNum) {
+      innerContent = '<img src="/gifts/' + fileNum + '.png" alt="' + escapeHtml(gift.name || '') + '" style="width:42px;height:42px;object-fit:contain;display:block;border-radius:10px" onerror="this.outerHTML=\'' + escapeHtml(gift.icon || gift.emoji || '🎁') + '\'">';
+    } else {
+      innerContent = '<span style="font-size:32px">' + (gift.icon || gift.emoji || '🎁') + '</span>';
+    }
   }
   
-  // Приоритет 2: локальная папка /gifts/
-  var fileNum = gift.file || gift.collectible_id;
-  if (fileNum) {
-    var src = '/gifts/' + fileNum + '.png';
-    var fallback = escapeHtml(gift.icon || gift.emoji || '🎁');
-    return '<img src="' + src + '" alt="' + escapeHtml(gift.name || '') + '" loading="lazy" style="width:36px;height:36px;object-fit:contain;display:block" onerror="this.outerHTML=\'' + fallback + '\'">';
-  }
-  
-  // Приоритет 3: эмодзи
-  return gift.icon || gift.emoji || '🎁';
+  return '<div style="background:' + frameColor + '; border-radius:16px; padding:' + borderWidth + '; box-shadow:' + glowColor + '; position:relative; display:inline-block">' +
+           '<div style="background:#1a1a2e; border-radius:13px; padding:6px; position:relative; overflow:hidden">' +
+             innerContent +
+             '<div style="position:absolute; top:0; left:-100%; width:100%; height:100%; background:linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); animation:shimmerGift 2s infinite"></div>' +
+           '</div>' +
+         '</div>';
 }
 
-// ═══════════════════════════════════════════════════════════════════════
-// loadRealGifts — загружает реальные подарки из Supabase или Telegram API
-// ═══════════════════════════════════════════════════════════════════════
+// Загрузка реальных подарков через публичное API
 async function loadRealGifts() {
-  // 1. Пробуем загрузить из Supabase
-  var cached = await sb('/rest/v1/gifts?select=*&order=price.asc');
-  
-  if (cached && cached.length > 0) {
-    // Проверяем, свежие ли данные (меньше 1 часа)
-    var lastUpdate = new Date(cached[0].updated_at);
-    var hoursPassed = (Date.now() - lastUpdate.getTime()) / (1000 * 60 * 60);
-    
-    if (hoursPassed < 1) {
-      realGiftsList = cached;
-      console.log('✅ Из Supabase:', realGiftsList.length, 'подарков');
-      updateAllUI();
-      return true;
-    }
-  }
-  
-  // 2. Обновляем через Bot API
   try {
-    console.log('🔄 Обновляем из Telegram API...');
-    var response = await fetch('https://api.telegram.org/bot' + BOT_TOKEN + '/getAvailableGifts');
+    console.log('🔄 Загружаем подарки через API...');
+    const response = await fetch('https://giftapi.vercel.app/api/gifts');
     
-    if (!response.ok) {
-      throw new Error('HTTP ' + response.status);
-    }
-    
-    var data = await response.json();
-    
-    if (data.ok && data.result && data.result.gifts) {
-      var freshGifts = [];
-      
-      for (var i = 0; i < data.result.gifts.length; i++) {
-        var g = data.result.gifts[i];
-        
-        // Получаем картинку через file_id
-        var imageUrl = null;
-        if (g.sticker && g.sticker.file_id) {
-          try {
-            var fileInfoResp = await fetch('https://api.telegram.org/bot' + BOT_TOKEN + '/getFile?file_id=' + g.sticker.file_id);
-            var fileInfo = await fileInfoResp.json();
-            if (fileInfo.ok && fileInfo.result && fileInfo.result.file_path) {
-              imageUrl = 'https://api.telegram.org/file/bot' + BOT_TOKEN + '/' + fileInfo.result.file_path;
-            }
-          } catch(e) {
-            console.warn('Не удалось получить картинку для подарка:', g.id, e.message);
-          }
-        }
-        
-        freshGifts.push({
+    if (response.ok) {
+      const data = await response.json();
+      const gifts = data.gifts || data;
+      realGiftsList = gifts.map(function(g) {
+        return {
           id: g.id,
-          name: (g.sticker && g.sticker.emoji ? g.sticker.emoji + ' ' : '🎁 ') + (g.title || 'Gift') + ' ' + g.star_count + '★',
-          price: g.star_count,
-          file_id: g.sticker ? g.sticker.file_id : null,
-          image_url: imageUrl,
-          emoji: g.sticker ? g.sticker.emoji : '🎁',
-          total_count: g.total_count || null,
-          remaining_count: g.remaining_count || null,
-          updated_at: new Date().toISOString()
-        });
-      }
-      
-      // Сохраняем в Supabase
-      for (var j = 0; j < freshGifts.length; j++) {
-        await sb('/rest/v1/gifts', 'POST', freshGifts[j], { 'Prefer': 'resolution=merge-duplicates' });
-      }
-      
-      realGiftsList = freshGifts;
-      console.log('✅ Из Telegram API:', realGiftsList.length, 'подарков');
+          name: g.title || g.name,
+          price: g.stars || g.price,
+          image_url: g.image_url || g.sticker_url,
+          emoji: g.emoji || '🎁',
+          file: g.file_number,
+          rarity: getRarityByPrice(g.stars || g.price || 50)
+        };
+      });
+      console.log('✅ Загружено через API:', realGiftsList.length, 'подарков');
       updateAllUI();
       return true;
     }
   } catch(e) {
-    console.warn('⚠️ Ошибка Telegram API:', e.message);
+    console.warn('⚠️ API недоступен:', e.message);
   }
   
-  // 3. Фолбэк на хардкод
-  if (!realGiftsList.length) {
-    realGiftsList = REAL_TG_GIFTS.map(function(g) {
-      return Object.assign({ collectible_id: g.file }, g);
-    });
-    console.log('✅ Хардкод:', realGiftsList.length, 'подарков');
-  }
-  
+  // Фолбэк на хардкод
+  realGiftsList = REAL_TG_GIFTS.map(function(g) {
+    return Object.assign({ collectible_id: g.file }, g);
+  });
+  console.log('✅ Используем хардкод:', realGiftsList.length, 'подарков');
   updateAllUI();
   return true;
 }
 
 function getRarityByPrice(price) {
-  if (price <= 30)  return 'common';
-  if (price <= 80)  return 'rare';
+  if (price <= 30) return 'common';
+  if (price <= 80) return 'rare';
   if (price <= 200) return 'epic';
   return 'legendary';
-}
-
-function getEmojiByPrice(price) {
-  if (price <= 30)  return '⭐';
-  if (price <= 60)  return '✨';
-  if (price <= 100) return '💎';
-  if (price <= 200) return '🔥';
-  if (price <= 400) return '👑';
-  return '🏆';
 }
 
 function getRandomRealGift() {
@@ -1068,7 +1029,7 @@ var CASES = [
   {id:"mythic",    name:"МИФИЧЕСКИЙ",  price:990, cls:"c-mythic",    emoji:"💀"}
 ];
 
-// ─── ВСЁ ОСТАЛЬНОЕ БЕЗ ИЗМЕНЕНИЙ (функции RL, SFX, CF, toast, escapeHtml, copyToClipboard, sb, loadUser, saveUser, safeJ, setBal, incLuck, updateLuckBar, addHist, renderInv, renderAllInv, sellGift, updateStats, isValidUrl, renderAvatar, renderHist, updateAllUI, renderCases, openCase, showRouletteWithCharge, RARITY_LABELS, RARITY_COLORS, showResultModal, upgStakeClick, pickUpgStake, renderUpgradeUI, renderWheelSvg, updateChanceDisplay, spinArrowAndResult, doUpgrade, renderUpgHistory, renderCraftSlots, pickCraft, updateCraftInfo, doCraft, showCraftRoulette, pickPvp, getAvHtml, renderPvpLobby, renderPubLobby, renderPrivLobby, createBattle, createPrivateBattle, joinBattle, cancelBattle, detWinner, showCoinFlip, saveBattle, updateBattle, loadBattles, initRT, handleRT, openDepositModal, onInvoiceClosed, openWithdrawModal, initModalSwipe, setupPWA, initTG, checkReferral, init) остаются без изменений ───────────────────────────────────────
+// ─── ВСЕ ОСТАЛЬНЫЕ ФУНКЦИИ (RL, SFX, CF, toast, escapeHtml, copyToClipboard, sb, loadUser, saveUser, safeJ, setBal, incLuck, updateLuckBar, addHist, renderInv, renderAllInv, sellGift, updateStats, isValidUrl, renderAvatar, renderHist, updateAllUI, renderCases, openCase, showRouletteWithCharge, RARITY_LABELS, RARITY_COLORS, showResultModal, upgStakeClick, pickUpgStake, renderUpgradeUI, renderWheelSvg, updateChanceDisplay, spinArrowAndResult, doUpgrade, renderUpgHistory, renderCraftSlots, pickCraft, updateCraftInfo, doCraft, showCraftRoulette, pickPvp, getAvHtml, renderPvpLobby, renderPubLobby, renderPrivLobby, createBattle, createPrivateBattle, joinBattle, cancelBattle, detWinner, showCoinFlip, saveBattle, updateBattle, loadBattles, initRT, handleRT, openDepositModal, onInvoiceClosed, openWithdrawModal, initModalSwipe, setupPWA, initTG, checkReferral, init) остаются без изменений (такие же как в твоём оригинальном коде) ───────────────────────────────────────
 
 // Функция RL (rate limiting)
 var RL = {
@@ -1311,11 +1272,11 @@ function renderAvatar(){
 }
 function renderHist(){
   var el=document.getElementById('histBody'); if(!el) return;
-  if(!state.history.length){el.innerHTML='<tr><td colspan="3" style="color:var(--tm);text-align:center;padding:14px;font-size:11px">Нет истории<\/td><\/tr>';return;}
+  if(!state.history.length){el.innerHTML='<tr><td colspan="3" style="color:var(--tm);text-align:center;padding:14px;font-size:11px">Нет истории</td></tr>';return;}
   var html='';
   for(var i=0;i<Math.min(state.history.length,25);i++){
     var h=state.history[i];
-    html+='<tr><td style="font-size:15px">'+escapeHtml(h.icon)+'<\/td><td>'+escapeHtml(h.action)+'<\/td><td class="'+(h.pos?'hist-pos':'hist-neg')+'">'+escapeHtml(h.result)+'<\/td><\/tr>';
+    html+='<tr><td style="font-size:15px">'+escapeHtml(h.icon)+'</td><td>'+escapeHtml(h.action)+'</td><td class="'+(h.pos?'hist-pos':'hist-neg')+'">'+escapeHtml(h.result)+'</td></tr>';
   }
   el.innerHTML=html;
 }
