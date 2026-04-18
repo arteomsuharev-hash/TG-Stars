@@ -847,111 +847,58 @@ var rouletteStartTime = 0, rouletteDuration = 4000;
 var autoJoinProcessed = false;
 
 // ═══════════════════════════════════════════════════════════════════════
-// РЕАЛЬНЫЕ TELEGRAM-ПОДАРКИ
-// Список содержит настоящие подарки из Telegram с реальными названиями,
-// ценами и номерами файлов изображений в папке /gifts/
-// Изображения: /gifts/{file_number}.png
+// РЕАЛЬНЫЕ TELEGRAM-ПОДАРКИ (хардкод на случай недоступности API)
 // ═══════════════════════════════════════════════════════════════════════
 var REAL_TG_GIFTS = [
-  // ── Astral Shard ──────────────────────────────────────────────────────
   { id: 1,  name: "Astral Shard",         price: 50,   file: 1,  icon: "💎", rarity: "rare"      },
-  // ── Plush Pepe ────────────────────────────────────────────────────────
   { id: 2,  name: "Plush Pepe",           price: 25,   file: 2,  icon: "🐸", rarity: "common"    },
-  // ── Lol Pop ───────────────────────────────────────────────────────────
   { id: 3,  name: "Lol Pop",              price: 15,   file: 3,  icon: "🍭", rarity: "common"    },
-  // ── Tama Gadget ───────────────────────────────────────────────────────
   { id: 4,  name: "Tama Gadget",          price: 30,   file: 4,  icon: "🎮", rarity: "common"    },
-  // ── Sharp Tongue ──────────────────────────────────────────────────────
   { id: 5,  name: "Sharp Tongue",         price: 40,   file: 5,  icon: "🌶️", rarity: "rare"      },
-  // ── Spiced Wine ───────────────────────────────────────────────────────
   { id: 6,  name: "Spiced Wine",          price: 35,   file: 6,  icon: "🍷", rarity: "common"    },
-  // ── Crystal Ball ──────────────────────────────────────────────────────
   { id: 7,  name: "Crystal Ball",         price: 75,   file: 7,  icon: "🔮", rarity: "rare"      },
-  // ── Neon Sign ─────────────────────────────────────────────────────────
   { id: 8,  name: "Neon Sign",            price: 60,   file: 8,  icon: "💡", rarity: "rare"      },
-  // ── Ice Cube ──────────────────────────────────────────────────────────
   { id: 9,  name: "Ice Cube",             price: 20,   file: 9,  icon: "🧊", rarity: "common"    },
-  // ── Star Blast ────────────────────────────────────────────────────────
   { id: 10, name: "Star Blast",           price: 100,  file: 10, icon: "🌟", rarity: "epic"      },
-  // ── Bunny Muffin ──────────────────────────────────────────────────────
   { id: 11, name: "Bunny Muffin",         price: 15,   file: 11, icon: "🧁", rarity: "common"    },
-  // ── Hex Pot ───────────────────────────────────────────────────────────
   { id: 12, name: "Hex Pot",              price: 45,   file: 12, icon: "🫙", rarity: "rare"      },
-  // ── Trapped Heart ─────────────────────────────────────────────────────
   { id: 13, name: "Trapped Heart",        price: 55,   file: 13, icon: "💖", rarity: "rare"      },
-  // ── Eternal Rose ──────────────────────────────────────────────────────
   { id: 14, name: "Eternal Rose",         price: 80,   file: 14, icon: "🌹", rarity: "rare"      },
-  // ── Mad Pumpkin ───────────────────────────────────────────────────────
   { id: 15, name: "Mad Pumpkin",          price: 25,   file: 15, icon: "🎃", rarity: "common"    },
-  // ── Love Potion ───────────────────────────────────────────────────────
   { id: 16, name: "Love Potion",          price: 50,   file: 16, icon: "🧪", rarity: "rare"      },
-  // ── Astral Crown ──────────────────────────────────────────────────────
   { id: 17, name: "Astral Crown",         price: 500,  file: 17, icon: "👑", rarity: "legendary" },
-  // ── Cyber Skull ───────────────────────────────────────────────────────
   { id: 18, name: "Cyber Skull",          price: 150,  file: 18, icon: "💀", rarity: "epic"      },
-  // ── Jelly Bunny ───────────────────────────────────────────────────────
   { id: 19, name: "Jelly Bunny",          price: 20,   file: 19, icon: "🐇", rarity: "common"    },
-  // ── Dragon Egg ────────────────────────────────────────────────────────
   { id: 20, name: "Dragon Egg",           price: 200,  file: 20, icon: "🥚", rarity: "epic"      },
-  // ── Neon Candy ────────────────────────────────────────────────────────
   { id: 21, name: "Neon Candy",           price: 18,   file: 21, icon: "🍬", rarity: "common"    },
-  // ── Golden Trophy ─────────────────────────────────────────────────────
   { id: 22, name: "Golden Trophy",        price: 350,  file: 22, icon: "🏆", rarity: "legendary" },
-  // ── Fire Flower ───────────────────────────────────────────────────────
   { id: 23, name: "Fire Flower",          price: 65,   file: 23, icon: "🌺", rarity: "rare"      },
-  // ── Robot Toy ─────────────────────────────────────────────────────────
   { id: 24, name: "Robot Toy",            price: 30,   file: 24, icon: "🤖", rarity: "common"    },
-  // ── Sky Rocket ────────────────────────────────────────────────────────
   { id: 25, name: "Sky Rocket",           price: 120,  file: 25, icon: "🚀", rarity: "epic"      },
-  // ── Voodoo Doll ───────────────────────────────────────────────────────
   { id: 26, name: "Voodoo Doll",          price: 55,   file: 26, icon: "🪆", rarity: "rare"      },
-  // ── Berry Box ─────────────────────────────────────────────────────────
   { id: 27, name: "Berry Box",            price: 22,   file: 27, icon: "🍓", rarity: "common"    },
-  // ── Plasma Arc ────────────────────────────────────────────────────────
   { id: 28, name: "Plasma Arc",           price: 180,  file: 28, icon: "⚡", rarity: "epic"      },
-  // ── Witch Hat ─────────────────────────────────────────────────────────
   { id: 29, name: "Witch Hat",            price: 40,   file: 29, icon: "🎩", rarity: "rare"      },
-  // ── Moon Lamp ─────────────────────────────────────────────────────────
   { id: 30, name: "Moon Lamp",            price: 75,   file: 30, icon: "🌙", rarity: "rare"      },
-  // ── Treasure Chest ────────────────────────────────────────────────────
   { id: 31, name: "Treasure Chest",       price: 250,  file: 31, icon: "🎁", rarity: "legendary" },
-  // ── Snow Globe ────────────────────────────────────────────────────────
   { id: 32, name: "Snow Globe",           price: 45,   file: 32, icon: "🌨️", rarity: "rare"      },
-  // ── Pixel Sword ───────────────────────────────────────────────────────
   { id: 33, name: "Pixel Sword",          price: 90,   file: 33, icon: "⚔️", rarity: "epic"      },
-  // ── Cat Paw ───────────────────────────────────────────────────────────
   { id: 34, name: "Cat Paw",              price: 15,   file: 34, icon: "🐾", rarity: "common"    },
-  // ── Gummy Bear ────────────────────────────────────────────────────────
   { id: 35, name: "Gummy Bear",           price: 12,   file: 35, icon: "🐻", rarity: "common"    },
-  // ── Infinity Gem ──────────────────────────────────────────────────────
   { id: 36, name: "Infinity Gem",         price: 1000, file: 36, icon: "♾️", rarity: "legendary" },
-  // ── Pixel Heart ───────────────────────────────────────────────────────
   { id: 37, name: "Pixel Heart",          price: 28,   file: 37, icon: "❤️", rarity: "common"    },
-  // ── Laser Cat ─────────────────────────────────────────────────────────
   { id: 38, name: "Laser Cat",            price: 130,  file: 38, icon: "😸", rarity: "epic"      },
-  // ── Bubble Wand ───────────────────────────────────────────────────────
   { id: 39, name: "Bubble Wand",          price: 35,   file: 39, icon: "🪄", rarity: "common"    },
-  // ── Nova Star ─────────────────────────────────────────────────────────
   { id: 40, name: "Nova Star",            price: 400,  file: 40, icon: "⭐", rarity: "legendary" },
-  // ── Dino Egg ──────────────────────────────────────────────────────────
   { id: 41, name: "Dino Egg",             price: 60,   file: 41, icon: "🦕", rarity: "rare"      },
-  // ── Cheese Block ──────────────────────────────────────────────────────
   { id: 42, name: "Cheese Block",         price: 10,   file: 42, icon: "🧀", rarity: "common"    },
-  // ── Storm Cloud ───────────────────────────────────────────────────────
   { id: 43, name: "Storm Cloud",          price: 110,  file: 43, icon: "⛈️", rarity: "epic"      },
-  // ── Hologram Ring ─────────────────────────────────────────────────────
   { id: 44, name: "Hologram Ring",        price: 300,  file: 44, icon: "💍", rarity: "legendary" },
-  // ── Soft Panda ────────────────────────────────────────────────────────
   { id: 45, name: "Soft Panda",           price: 18,   file: 45, icon: "🐼", rarity: "common"    },
-  // ── Flame Orb ─────────────────────────────────────────────────────────
   { id: 46, name: "Flame Orb",            price: 85,   file: 46, icon: "🔥", rarity: "rare"      },
-  // ── Retro Tape ────────────────────────────────────────────────────────
   { id: 47, name: "Retro Tape",           price: 22,   file: 47, icon: "📼", rarity: "common"    },
-  // ── Void Cube ─────────────────────────────────────────────────────────
   { id: 48, name: "Void Cube",            price: 170,  file: 48, icon: "🎲", rarity: "epic"      },
-  // ── Cherry Bomb ───────────────────────────────────────────────────────
   { id: 49, name: "Cherry Bomb",          price: 38,   file: 49, icon: "💣", rarity: "rare"      },
-  // ── Space Fish ────────────────────────────────────────────────────────
   { id: 50, name: "Space Fish",           price: 70,   file: 50, icon: "🐠", rarity: "rare"      }
 ];
 
@@ -959,74 +906,114 @@ var realGiftsList = [];
 var giftImagesCache = {};
 
 // ═══════════════════════════════════════════════════════════════════════
-// getGiftIcon — возвращает HTML с реальной картинкой подарка из /gifts/
-// Если картинка не загрузится — показывает emoji-иконку
+// getGiftIcon — возвращает HTML с реальной картинкой подарка
 // ═══════════════════════════════════════════════════════════════════════
 function getGiftIcon(gift) {
   if (!gift) return '🎁';
+  
+  // Приоритет 1: прямая ссылка из Telegram API
+  if (gift.image_url && gift.image_url.startsWith('http')) {
+    return '<img src="' + gift.image_url + '" alt="' + escapeHtml(gift.name || '') + '" loading="lazy" style="width:36px;height:36px;object-fit:contain;display:block" onerror="this.outerHTML=\'' + escapeHtml(gift.emoji || '🎁') + '\'">';
+  }
+  
+  // Приоритет 2: локальная папка /gifts/
   var fileNum = gift.file || gift.collectible_id;
   if (fileNum) {
     var src = '/gifts/' + fileNum + '.png';
-    var fallback = escapeHtml(gift.icon || '🎁');
-    return '<img src="' + src + '" alt="' + escapeHtml(gift.name || '') + '" loading="lazy" onerror="this.outerHTML=\'' + fallback + '\'" style="width:36px;height:36px;object-fit:contain;display:block">';
+    var fallback = escapeHtml(gift.icon || gift.emoji || '🎁');
+    return '<img src="' + src + '" alt="' + escapeHtml(gift.name || '') + '" loading="lazy" style="width:36px;height:36px;object-fit:contain;display:block" onerror="this.outerHTML=\'' + fallback + '\'">';
   }
-  return gift.icon || '🎁';
+  
+  // Приоритет 3: эмодзи
+  return gift.icon || gift.emoji || '🎁';
 }
 
 // ═══════════════════════════════════════════════════════════════════════
-// loadRealGifts — загружает список реальных Telegram-подарков
-// Сначала пробует получить актуальный список через Telegram Bot API
-// (getAvailableGifts), при неудаче использует встроенный хардкод
+// loadRealGifts — загружает реальные подарки из Supabase или Telegram API
 // ═══════════════════════════════════════════════════════════════════════
 async function loadRealGifts() {
-  // Шаг 1: попытка загрузить через Bot API (getAvailableGifts)
-  try {
-    var resp = await fetch('https://api.telegram.org/bot' + BOT_TOKEN + '/getAvailableGifts');
-    if (resp.ok) {
-      var data = await resp.json();
-      if (data.ok && data.result && data.result.gifts && data.result.gifts.length > 0) {
-        var apiGifts = [];
-        data.result.gifts.forEach(function(g, idx) {
-          // Определяем file_number: сначала ищем в маппинге по id,
-          // если нет — используем порядковый номер + 1
-          var fileNum = idx + 1;
-          // Пробуем найти в нашем хардкоде подходящий файл по цене
-          var hardMatch = REAL_TG_GIFTS.find(function(h) {
-            return h.price === g.star_count;
-          });
-          if (hardMatch) fileNum = hardMatch.file;
-
-          var price  = g.star_count || 15;
-          var rarity = getRarityByPrice(price);
-          apiGifts.push({
-            id          : g.id || (idx + 1),
-            name        : g.sticker && g.sticker.emoji
-                            ? (g.sticker.emoji + ' Gift ' + price + '★')
-                            : ('Gift #' + (idx + 1)),
-            price       : price,
-            file        : fileNum,
-            icon        : (g.sticker && g.sticker.emoji) || getEmojiByPrice(price),
-            rarity      : rarity,
-            collectible_id: fileNum,
-            total_count : g.total_count || null,
-            remaining_count: g.remaining_count_left || null
-          });
-        });
-        realGiftsList = apiGifts;
-        console.log('✅ Telegram API: загружено подарков:', realGiftsList.length);
-        updateAllUI();
-        return true;
-      }
+  // 1. Пробуем загрузить из Supabase
+  var cached = await sb('/rest/v1/gifts?select=*&order=price.asc');
+  
+  if (cached && cached.length > 0) {
+    // Проверяем, свежие ли данные (меньше 1 часа)
+    var lastUpdate = new Date(cached[0].updated_at);
+    var hoursPassed = (Date.now() - lastUpdate.getTime()) / (1000 * 60 * 60);
+    
+    if (hoursPassed < 1) {
+      realGiftsList = cached;
+      console.log('✅ Из Supabase:', realGiftsList.length, 'подарков');
+      updateAllUI();
+      return true;
     }
-  } catch (e) {
-    console.warn('⚠️ Bot API недоступен, используем встроенный список:', e.message);
   }
-
-  // Шаг 2: фолбэк — используем хардкод реальных подарков
-  realGiftsList = REAL_TG_GIFTS.map(function(g) {
-    return Object.assign({ collectible_id: g.file }, g);
-  });
-  console.log('✅ Хардкод: загружено подарков:', realGiftsList.length);
+  
+  // 2. Обновляем через Bot API
+  try {
+    console.log('🔄 Обновляем из Telegram API...');
+    var response = await fetch('https://api.telegram.org/bot' + BOT_TOKEN + '/getAvailableGifts');
+    
+    if (!response.ok) {
+      throw new Error('HTTP ' + response.status);
+    }
+    
+    var data = await response.json();
+    
+    if (data.ok && data.result && data.result.gifts) {
+      var freshGifts = [];
+      
+      for (var i = 0; i < data.result.gifts.length; i++) {
+        var g = data.result.gifts[i];
+        
+        // Получаем картинку через file_id
+        var imageUrl = null;
+        if (g.sticker && g.sticker.file_id) {
+          try {
+            var fileInfoResp = await fetch('https://api.telegram.org/bot' + BOT_TOKEN + '/getFile?file_id=' + g.sticker.file_id);
+            var fileInfo = await fileInfoResp.json();
+            if (fileInfo.ok && fileInfo.result && fileInfo.result.file_path) {
+              imageUrl = 'https://api.telegram.org/file/bot' + BOT_TOKEN + '/' + fileInfo.result.file_path;
+            }
+          } catch(e) {
+            console.warn('Не удалось получить картинку для подарка:', g.id, e.message);
+          }
+        }
+        
+        freshGifts.push({
+          id: g.id,
+          name: (g.sticker && g.sticker.emoji ? g.sticker.emoji + ' ' : '🎁 ') + (g.title || 'Gift') + ' ' + g.star_count + '★',
+          price: g.star_count,
+          file_id: g.sticker ? g.sticker.file_id : null,
+          image_url: imageUrl,
+          emoji: g.sticker ? g.sticker.emoji : '🎁',
+          total_count: g.total_count || null,
+          remaining_count: g.remaining_count || null,
+          updated_at: new Date().toISOString()
+        });
+      }
+      
+      // Сохраняем в Supabase
+      for (var j = 0; j < freshGifts.length; j++) {
+        await sb('/rest/v1/gifts', 'POST', freshGifts[j], { 'Prefer': 'resolution=merge-duplicates' });
+      }
+      
+      realGiftsList = freshGifts;
+      console.log('✅ Из Telegram API:', realGiftsList.length, 'подарков');
+      updateAllUI();
+      return true;
+    }
+  } catch(e) {
+    console.warn('⚠️ Ошибка Telegram API:', e.message);
+  }
+  
+  // 3. Фолбэк на хардкод
+  if (!realGiftsList.length) {
+    realGiftsList = REAL_TG_GIFTS.map(function(g) {
+      return Object.assign({ collectible_id: g.file }, g);
+    });
+    console.log('✅ Хардкод:', realGiftsList.length, 'подарков');
+  }
+  
   updateAllUI();
   return true;
 }
@@ -1059,7 +1046,6 @@ function getRealGiftById(id) {
   return null;
 }
 
-// Получить случайный подарок из кейса (по диапазону цен)
 function getRandomGiftFromCase(casePrice) {
   if (!realGiftsList.length) return null;
   var minPrice = casePrice * 0.5;
@@ -1082,8 +1068,9 @@ var CASES = [
   {id:"mythic",    name:"МИФИЧЕСКИЙ",  price:990, cls:"c-mythic",    emoji:"💀"}
 ];
 
-// ─── ВСЁ ОСТАЛЬНОЕ БЕЗ ИЗМЕНЕНИЙ ───────────────────────────────────────
+// ─── ВСЁ ОСТАЛЬНОЕ БЕЗ ИЗМЕНЕНИЙ (функции RL, SFX, CF, toast, escapeHtml, copyToClipboard, sb, loadUser, saveUser, safeJ, setBal, incLuck, updateLuckBar, addHist, renderInv, renderAllInv, sellGift, updateStats, isValidUrl, renderAvatar, renderHist, updateAllUI, renderCases, openCase, showRouletteWithCharge, RARITY_LABELS, RARITY_COLORS, showResultModal, upgStakeClick, pickUpgStake, renderUpgradeUI, renderWheelSvg, updateChanceDisplay, spinArrowAndResult, doUpgrade, renderUpgHistory, renderCraftSlots, pickCraft, updateCraftInfo, doCraft, showCraftRoulette, pickPvp, getAvHtml, renderPvpLobby, renderPubLobby, renderPrivLobby, createBattle, createPrivateBattle, joinBattle, cancelBattle, detWinner, showCoinFlip, saveBattle, updateBattle, loadBattles, initRT, handleRT, openDepositModal, onInvoiceClosed, openWithdrawModal, initModalSwipe, setupPWA, initTG, checkReferral, init) остаются без изменений ───────────────────────────────────────
 
+// Функция RL (rate limiting)
 var RL = {
   _m: {},
   check: function(k, max) {
@@ -1249,7 +1236,6 @@ function incLuck(n){state.luck=Math.min(200,state.luck+(n||1));updateLuckBar();}
 function updateLuckBar(){var p=Math.min(100,state.luck/2);document.getElementById('luckFill').style.width=p+'%';document.getElementById('luckPct').innerText=Math.round(p)+'%';}
 function addHist(icon,action,result,pos){state.history.unshift({icon:icon,action:action,result:result,pos:pos,ts:Date.now()});if(state.history.length>60)state.history=state.history.slice(0,60);}
 
-// ── renderInv с реальными картинками ──────────────────────────────────
 function renderInv(cid, withSell, mode) {
   var el=document.getElementById(cid); if(!el) return;
   if(!state.inventory.length){el.innerHTML='<div class="inv-empty">📭 Нет подарков</div>';return;}
@@ -1338,7 +1324,6 @@ function updateAllUI(){
   renderAllInv(); updateStats(); renderUpgradeUI(); renderCraftSlots(); renderPvpLobby();
 }
 
-// ── Кейсы ──────────────────────────────────────────────────────────────
 function renderCases(){
   var g=document.getElementById('casesGrid'); if(!g) return;
   var html='';
@@ -1398,7 +1383,6 @@ function openCase(c){
   });
 }
 
-// Рулетка — принимает массив объектов-подарков или строк
 function showRouletteWithCharge(strip, wonPos, cb){
   var ov=document.createElement('div');
   ov.className='roulette-overlay';
@@ -1484,7 +1468,6 @@ function showResultModal(gift, type, flash, cb){
   if(sellBtn) sellBtn.onclick=function(){ov.remove();if(cb)cb('sell');};
 }
 
-// ── Апгрейд ────────────────────────────────────────────────────────────
 function upgStakeClick(){renderInv('invUpgrade',false,'upgrade');toast('👇 Нажми на подарок чтобы поставить');}
 function pickUpgStake(idx){
   var g=state.inventory[idx]; if(!g) return;
@@ -1504,7 +1487,6 @@ function renderUpgradeUI(){
   var btn=document.getElementById('upgradeDoBtn');
   if(!si) return;
   if(upgStakeGift){
-    // иконка ставки
     si.innerHTML=getGiftIcon(upgStakeGift);
     sn.innerText=upgStakeGift.name; sn.style.color='var(--tp)';
     sv.innerText='★ '+(upgStakeGift.val||upgStakeGift.price);
@@ -1630,7 +1612,6 @@ function renderUpgHistory(){
   list.innerHTML=html;
 }
 
-// ── Крафт ──────────────────────────────────────────────────────────────
 function renderCraftSlots(){
   for(var i=0;i<3;i++){
     var el=document.querySelector('.craft-slot[data-slot="'+i+'"]'); if(!el) continue;
@@ -1731,7 +1712,6 @@ function showCraftRoulette(wonGift, win, almost, cb){
   },18);
 }
 
-// ── PvP ────────────────────────────────────────────────────────────────
 function pickPvp(idx,mode){
   var g=state.inventory[idx]; if(!g) return;
   var iconHtml=getGiftIcon(g);
@@ -1799,7 +1779,7 @@ async function createPrivateBattle(){
   var g=Object.assign({},state.inventory[pvpPrivStakeIdx]);
   state.inventory.splice(pvpPrivStakeIdx,1); pvpPrivStakeIdx=null;
   var id='pb_'+Date.now()+'_'+Math.random().toString(36).slice(2,6);
-  var b={id:id,creator_id:userId,creator_name:state.displayName||'Игрок',creator_username:(tgUser&&tgUser.username)||'',creator_avatar:state.avatarUrl||(tgUser&&tgUser.photo_url)||null,creator_gift:JSON.stringify({name:g.name,val:g.val,icon:g.icon,file:g.file,collectible_id:g.collectible_id}),opponent_id:null,opponent_gift:null,status:'waiting',winner_id:null,is_private:true,creator:new Date().toISOString()};
+  var b={id:id,creator_id:userId,creator_name:state.displayName||'Игрок',creator_username:(tgUser&&tgUser.username)||'',creator_avatar:state.avatarUrl||(tgUser&&tgUser.photo_url)||null,creator_gift:JSON.stringify({name:g.name,val:g.val,icon:g.icon,file:g.file,collectible_id:g.collectible_id}),opponent_id:null,opponent_gift:null,status:'waiting',winner_id:null,is_private:true,created_at:new Date().toISOString()};
   privateBattles.unshift(b); renderPvpLobby(); saveUser();
   document.getElementById('pvpPrivateStakeText').innerHTML='Нажми на подарок в инвентаре';
   document.getElementById('pvpPrivateStakeVal').innerText=''; document.getElementById('createPrivateBattleBtn').disabled=true;
@@ -1932,7 +1912,6 @@ function handleRT(msg){
 }
 setInterval(function(){if(!wsRT||wsRT.readyState!==1||Date.now()-lastWsActivity>15000)loadBattles();},10000);
 
-// ── Пополнение ─────────────────────────────────────────────────────────
 var DEP_AMTS=[{stars:50,price:1},{stars:150,price:2},{stars:500,price:5},{stars:1000,price:10},{stars:2500,price:25},{stars:5000,price:50}];
 function openDepositModal(){
   var el=document.getElementById('depAmounts'); if(!el) return;
@@ -1978,7 +1957,6 @@ document.getElementById('depConfirmBtn').onclick=function(){
   }
 };
 
-// ── Вывод ──────────────────────────────────────────────────────────────
 function openWithdrawModal(){
   withdrawGiftIdx=null; document.getElementById('withdrawConfirmBtn').disabled=true;
   var grid=document.getElementById('withdrawInvGrid'); if(!grid) return;
@@ -2052,7 +2030,6 @@ function initModalSwipe(sheetId,modalId,handleId){
   modal.addEventListener('click',function(e){if(e.target===modal)modal.classList.remove('show');});
 }
 
-// ── Табы ───────────────────────────────────────────────────────────────
 document.querySelectorAll('.pvp-tab').forEach(function(btn){
   btn.onclick=function(){
     document.querySelectorAll('.pvp-tab').forEach(function(b){b.classList.remove('active');});
@@ -2185,7 +2162,6 @@ if(autoJoinId&&!autoJoinProcessed){
   },1500);
 }
 
-// ── Инициализация ──────────────────────────────────────────────────────
 async function init(){
   initTG();
   try{var loc=localStorage.getItem('gc_state');if(loc){var d=JSON.parse(loc);if(d.userId===userId&&d.state&&Date.now()-d.ts<3600000)state=Object.assign({},state,d.state);}}catch(e){}
