@@ -1,6 +1,7 @@
 {
   "name": "giftcase-api",
   "version": "1.0.0",
+  "type": "module",
   "dependencies": {
     "telegram": "^2.0.0"
   }
