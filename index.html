@@ -827,7 +827,7 @@ img{display:block}
 <script>
 // Конфигурация
 var SB_URL = 'https://riwzrplciliebgexltll.supabase.co';
-var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJpd3pycGxjaWxpZWJnZXhsdGxsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyNjM5MjEsImV4cCI6MjA5MTgzOTkyMX0.jrrI78rQ-3VARU0I1eazM6iKHbSJLpcK5HCjJ4VRxnQ';
+var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJpd3pycGxjaWxpZWJnZXhsdGxsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyNjM5MjEsImV4cCI6MjA5MTgzOTkyMX0.jrrI78rQ-3VARU0I1eazM6iKHbSJLpcK5HCJj4VRxnQ';
 var BOT_TOKEN = '8209263425:AAFZQzJCzLmnV044UPaCWJWJZ3ZQw24H85k';
 var BOT_API_URL = 'https://tg-bot-final.vercel.app';
 
@@ -854,7 +854,6 @@ var autoJoinProcessed = false;
 // Хардкод подарков (резерв)
 // Функция генерации 1500+ подарков с реальными ценами
 function generateExtendedGiftList() {
-  // РЕАЛЬНЫЕ цены из Telegram
   const REAL_PRICES = {
     common: [10, 12, 15, 18, 20, 22, 25, 28, 30, 35, 38, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 100],
     rare: [75, 80, 85, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200],
@@ -862,7 +861,6 @@ function generateExtendedGiftList() {
     legendary: [400, 450, 500, 550, 600, 700, 800, 900, 1000, 1200, 1500, 2000, 2500, 3000, 4000, 5000]
   };
   
-  // Базовые реальные подарки (50 штук)
   const baseGifts = [
     { id: 1,  name: "Astral Shard",         price: 50,   file: 1,  icon: "💎", rarity: "rare"      },
     { id: 2,  name: "Plush Pepe",           price: 25,   file: 2,  icon: "🐸", rarity: "common"    },
@@ -917,22 +915,16 @@ function generateExtendedGiftList() {
   ];
   
   const allGifts = [...baseGifts];
-  
-  // Все возможные реальные цены из Telegram
   const allRealPrices = [...REAL_PRICES.common, ...REAL_PRICES.rare, ...REAL_PRICES.epic, ...REAL_PRICES.legendary];
-  
-  // Уникальные комбинации для эксклюзивных подарков
   const prefixes = ['🌟', '💎', '👑', '🔥', '💀', '🐉', '🦄', '⚡', '🌈', '⭐', '🌙', '🔮', '🎭', '🏆', '🎖️'];
   const suffixes = ['Legacy', 'Unique', 'Exclusive', 'Limited', 'Mythic', 'Prismatic', 'Shadow', 'Divine', 'Inferno', 'Frost', 'Thunder', 'Void', 'Cosmic', 'Eternal', 'Ancient'];
   
   let nextId = 100;
   const targetCount = 1500;
   
-  // Генерируем эксклюзивные подарки с реальными ценами
   for (let p = 0; p < prefixes.length && allGifts.length < targetCount; p++) {
     for (let s = 0; s < suffixes.length && allGifts.length < targetCount; s++) {
       const randomPrice = allRealPrices[Math.floor(Math.random() * allRealPrices.length)];
-      
       let rarity;
       if (randomPrice <= 100) rarity = 'common';
       else if (randomPrice <= 200) rarity = 'rare';
@@ -956,10 +948,10 @@ function generateExtendedGiftList() {
   return allGifts;
 }
 
-// Хардкод подарков (резерв) — ТЕПЕРЬ 1500+ ПОДАРКОВ
 var REAL_TG_GIFTS = generateExtendedGiftList();
 var realGiftsList = [];
 
+// НОВАЯ ВЕРСИЯ getGiftIcon — с поддержкой реальных картинок из Telegram
 function getGiftIcon(gift) {
   if (!gift) return '🎁';
   
@@ -983,22 +975,31 @@ function getGiftIcon(gift) {
     glowColor = '0 0 6px rgba(100,100,100,0.3)';
   }
   
-  // Просто показываем эмодзи вместо картинок
-  var innerContent = '<span style="font-size:32px">' + (gift.icon || gift.emoji || '🎁') + '</span>';
+  // Если есть sticker_file_id — показываем реальную картинку через Telegram Bot API
+  if (gift.sticker_file_id) {
+    const imageUrl = `https://api.telegram.org/bot${BOT_TOKEN}/getFile?file_id=${gift.sticker_file_id}`;
+    return `<div style="background:${frameColor}; border-radius:16px; padding:${borderWidth}; box-shadow:${glowColor}; position:relative; display:inline-block">
+              <div style="background:#1a1a2e; border-radius:13px; padding:6px; position:relative; overflow:hidden">
+                <img src="${imageUrl}" alt="${escapeHtml(gift.name)}" style="width:42px;height:42px;object-fit:contain;display:block;border-radius:10px" onerror="this.outerHTML='<span style=\'font-size:32px\'>${escapeHtml(gift.emoji || '🎁')}</span>'">
+                <div style="position:absolute; top:0; left:-100%; width:100%; height:100%; background:linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); animation:shimmerGift 2s infinite"></div>
+              </div>
+            </div>`;
+  }
   
+  // Если нет картинки — показываем эмодзи
+  var emoji = gift.icon || gift.emoji || '🎁';
   return '<div style="background:' + frameColor + '; border-radius:16px; padding:' + borderWidth + '; box-shadow:' + glowColor + '; position:relative; display:inline-block">' +
            '<div style="background:#1a1a2e; border-radius:13px; padding:6px; position:relative; overflow:hidden">' +
-             innerContent +
+             '<span style="font-size:32px; display:block; text-align:center">' + emoji + '</span>' +
              '<div style="position:absolute; top:0; left:-100%; width:100%; height:100%; background:linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); animation:shimmerGift 2s infinite"></div>' +
            '</div>' +
          '</div>';
 }
-// Загрузка подарков через MTProto API (твой новый сервер)
+
+// НОВАЯ ВЕРСИЯ loadRealGifts — сохраняем sticker_file_id
 async function loadRealGifts() {
   try {
     console.log('🔄 Загружаем подарки через MTProto API...');
-    
-    // Запрос к твоему API на Vercel
     const response = await fetch('/api/gifts');
     const data = await response.json();
     
@@ -1007,7 +1008,7 @@ async function loadRealGifts() {
         id: g.id,
         name: g.name,
         price: g.price,
-        file: g.id,
+        sticker_file_id: g.sticker_file_id,
         icon: '🎁',
         emoji: '🎁',
         rarity: getRarityByPrice(g.price),
@@ -1024,7 +1025,6 @@ async function loadRealGifts() {
   } catch(e) {
     console.warn('⚠️ MTProto API ошибка:', e.message);
     
-    // Фолбэк на хардкод (1500+ подарков)
     if (!realGiftsList.length) {
       realGiftsList = REAL_TG_GIFTS;
       console.log('✅ Используем хардкод:', realGiftsList.length, 'подарков');
@@ -1034,6 +1034,7 @@ async function loadRealGifts() {
     return false;
   }
 }
+
 function getRarityByPrice(price) {
   if (price <= 30) return 'common';
   if (price <= 80) return 'rare';
@@ -1074,8 +1075,6 @@ var CASES = [
   {id:"legendary", name:"ЛЕГЕНДАРНЫЙ", price:490, cls:"c-legendary", emoji:"👑"},
   {id:"mythic",    name:"МИФИЧЕСКИЙ",  price:990, cls:"c-mythic",    emoji:"💀"}
 ];
-
-// ─── ВСЕ ОСТАЛЬНЫЕ ФУНКЦИИ (RL, SFX, CF, toast, escapeHtml, copyToClipboard, sb, loadUser, saveUser, safeJ, setBal, incLuck, updateLuckBar, addHist, renderInv, renderAllInv, sellGift, updateStats, isValidUrl, renderAvatar, renderHist, updateAllUI, renderCases, openCase, showRouletteWithCharge, RARITY_LABELS, RARITY_COLORS, showResultModal, upgStakeClick, pickUpgStake, renderUpgradeUI, renderWheelSvg, updateChanceDisplay, spinArrowAndResult, doUpgrade, renderUpgHistory, renderCraftSlots, pickCraft, updateCraftInfo, doCraft, showCraftRoulette, pickPvp, getAvHtml, renderPvpLobby, renderPubLobby, renderPrivLobby, createBattle, createPrivateBattle, joinBattle, cancelBattle, detWinner, showCoinFlip, saveBattle, updateBattle, loadBattles, initRT, handleRT, openDepositModal, onInvoiceClosed, openWithdrawModal, initModalSwipe, setupPWA, initTG, checkReferral, init) остаются без изменений (такие же как в твоём оригинальном коде) ───────────────────────────────────────
 
 // Функция RL (rate limiting)
 var RL = {
@@ -1376,7 +1375,8 @@ function openCase(c){
         state.inventory.push({
           id:wonGift.id, name:wonGift.name, icon:wonGift.icon,
           file:wonGift.file, val:wonGift.price,
-          rarity:getRarityByPrice(wonGift.price), collectible_id:wonGift.collectible_id
+          rarity:getRarityByPrice(wonGift.price), collectible_id:wonGift.collectible_id,
+          sticker_file_id: wonGift.sticker_file_id
         });
         addHist(wonGift.icon||'🎁','Кейс: '+c.name,'+'+wonGift.name,true);
         toast('📦 '+wonGift.name);
@@ -1588,7 +1588,7 @@ async function doUpgrade(){
   document.getElementById('upgradeDoBtn').disabled=true;
   await spinArrowAndResult(chance,win);
   if(win){
-    state.inventory.push({id:targetSnap.id,name:targetSnap.name,icon:targetSnap.icon,file:targetSnap.file,val:targetSnap.price,rarity:getRarityByPrice(targetSnap.price),collectible_id:targetSnap.collectible_id});
+    state.inventory.push({id:targetSnap.id,name:targetSnap.name,icon:targetSnap.icon,file:targetSnap.file,val:targetSnap.price,rarity:getRarityByPrice(targetSnap.price),collectible_id:targetSnap.collectible_id, sticker_file_id: targetSnap.sticker_file_id});
     addHist(targetSnap.icon||'🎁','Апгрейд → '+targetSnap.name,'✅ Успех!',true);
     state.luck=Math.max(0,state.luck-10);
     upgHistory.unshift({from:stakeSnap,to:targetSnap,win:true,almost:false,ts:Date.now()});
@@ -1667,7 +1667,7 @@ function doCraft(){
   var almost=!win&&!ultraRare&&Math.random()>0.75;
   craftSlots=[null,null,null];
   showCraftRoulette(resultGift, win, almost, function(){
-    state.inventory.push({id:resultGift.id,name:resultGift.name,icon:resultGift.icon,file:resultGift.file,val:resultGift.price,rarity:getRarityByPrice(resultGift.price),collectible_id:resultGift.collectible_id});
+    state.inventory.push({id:resultGift.id,name:resultGift.name,icon:resultGift.icon,file:resultGift.file,val:resultGift.price,rarity:getRarityByPrice(resultGift.price),collectible_id:resultGift.collectible_id, sticker_file_id: resultGift.sticker_file_id});
     addHist(resultGift.icon||'🎁','Крафт → '+resultGift.name,'★ '+resultGift.price,win);
     if(win||ultraRare){CF.burst(window.innerWidth/2,window.innerHeight*0.4,90);SFX.craft();vibrate([20,40,20]);}
     else{if(almost)SFX.almost();else SFX.lose();vibrate([40]);}
@@ -1773,7 +1773,7 @@ async function createBattle(){
   var g=Object.assign({},state.inventory[pvpStakeIdx]);
   state.inventory.splice(pvpStakeIdx,1); pvpStakeIdx=null;
   var id='b_'+Date.now()+'_'+Math.random().toString(36).slice(2,6);
-  var b={id:id,creator_id:userId,creator_name:state.displayName||'Игрок',creator_username:(tgUser&&tgUser.username)||'',creator_avatar:state.avatarUrl||(tgUser&&tgUser.photo_url)||null,creator_gift:JSON.stringify({name:g.name,val:g.val,icon:g.icon,file:g.file,collectible_id:g.collectible_id}),opponent_id:null,opponent_gift:null,status:'waiting',winner_id:null,is_private:false,created_at:new Date().toISOString()};
+  var b={id:id,creator_id:userId,creator_name:state.displayName||'Игрок',creator_username:(tgUser&&tgUser.username)||'',creator_avatar:state.avatarUrl||(tgUser&&tgUser.photo_url)||null,creator_gift:JSON.stringify({name:g.name,val:g.val,icon:g.icon,file:g.file,collectible_id:g.collectible_id, sticker_file_id: g.sticker_file_id}),opponent_id:null,opponent_gift:null,status:'waiting',winner_id:null,is_private:false,created_at:new Date().toISOString()};
   battles.unshift(b); renderPvpLobby(); saveUser();
   document.getElementById('pvpStakeText').innerHTML='Нажми на подарок в инвентаре';
   document.getElementById('pvpStakeVal').innerText=''; document.getElementById('createBattleBtn').disabled=true;
@@ -1786,7 +1786,7 @@ async function createPrivateBattle(){
   var g=Object.assign({},state.inventory[pvpPrivStakeIdx]);
   state.inventory.splice(pvpPrivStakeIdx,1); pvpPrivStakeIdx=null;
   var id='pb_'+Date.now()+'_'+Math.random().toString(36).slice(2,6);
-  var b={id:id,creator_id:userId,creator_name:state.displayName||'Игрок',creator_username:(tgUser&&tgUser.username)||'',creator_avatar:state.avatarUrl||(tgUser&&tgUser.photo_url)||null,creator_gift:JSON.stringify({name:g.name,val:g.val,icon:g.icon,file:g.file,collectible_id:g.collectible_id}),opponent_id:null,opponent_gift:null,status:'waiting',winner_id:null,is_private:true,created_at:new Date().toISOString()};
+  var b={id:id,creator_id:userId,creator_name:state.displayName||'Игрок',creator_username:(tgUser&&tgUser.username)||'',creator_avatar:state.avatarUrl||(tgUser&&tgUser.photo_url)||null,creator_gift:JSON.stringify({name:g.name,val:g.val,icon:g.icon,file:g.file,collectible_id:g.collectible_id, sticker_file_id: g.sticker_file_id}),opponent_id:null,opponent_gift:null,status:'waiting',winner_id:null,is_private:true,created_at:new Date().toISOString()};
   privateBattles.unshift(b); renderPvpLobby(); saveUser();
   document.getElementById('pvpPrivateStakeText').innerHTML='Нажми на подарок в инвентаре';
   document.getElementById('pvpPrivateStakeVal').innerText=''; document.getElementById('createPrivateBattleBtn').disabled=true;
@@ -1809,7 +1809,7 @@ async function joinBattle(bid){
   if(!state.inventory.length){toast('📭 Нет подарков');return;}
   var myG=Object.assign({},state.inventory[0]);
   state.inventory.splice(0,1); activeCoinBid=bid;
-  await updateBattle(bid,{status:'fighting',opponent_id:userId,opponent_gift:JSON.stringify({name:myG.name,val:myG.val,icon:myG.icon,file:myG.file,collectible_id:myG.collectible_id})});
+  await updateBattle(bid,{status:'fighting',opponent_id:userId,opponent_gift:JSON.stringify({name:myG.name,val:myG.val,icon:myG.icon,file:myG.file,collectible_id:myG.collectible_id, sticker_file_id: myG.sticker_file_id})});
   battles=battles.filter(function(x){return x.id!==bid;});
   privateBattles=privateBattles.filter(function(x){return x.id!==bid;});
   saveUser(); renderPvpLobby();
@@ -1821,7 +1821,7 @@ async function cancelBattle(bid){
   if(!b){for(var j=0;j<privateBattles.length;j++){if(privateBattles[j].id===bid){b=privateBattles[j];break;}}}
   if(!b||b.creator_id!==userId) return;
   var g=safeJ(b.creator_gift,{});
-  state.inventory.push({name:g.name,icon:g.icon||'🎁',file:g.file,val:g.val,collectible_id:g.collectible_id});
+  state.inventory.push({name:g.name,icon:g.icon||'🎁',file:g.file,val:g.val,collectible_id:g.collectible_id, sticker_file_id: g.sticker_file_id});
   battles=battles.filter(function(x){return x.id!==bid;});
   privateBattles=privateBattles.filter(function(x){return x.id!==bid;});
   await updateBattle(bid,{status:'cancelled'}); saveUser(); renderPvpLobby(); toast('Батл отменён');
@@ -1852,8 +1852,8 @@ function showCoinFlip(gift1,gift2,battle,creatorId){
     if(iWon){
       area.innerHTML='<div class="coin-result-banner" style="color:var(--gold)">🏆 ПОБЕДА!</div><div class="coin-result-sub">Ты забираешь оба подарка!</div><div style="display:flex;justify-content:center;gap:16px;margin-top:12px"><div style="text-align:center"><div style="font-size:28px">'+icon1+'</div><div style="font-size:9px;color:var(--ts)">+'+(gift1.val||0)+' ★</div></div><div style="text-align:center"><div style="font-size:28px">'+icon2+'</div><div style="font-size:9px;color:var(--ts)">+'+(gift2.val||0)+' ★</div></div></div>';
       CF.burst(window.innerWidth/2,window.innerHeight*0.5,100); SFX.win(); vibrate([50,100,50]);
-      state.inventory.push({name:gift1.name,icon:gift1.icon||'🎁',file:gift1.file,val:gift1.val,collectible_id:gift1.collectible_id});
-      state.inventory.push({name:gift2.name,icon:gift2.icon||'🎁',file:gift2.file,val:gift2.val,collectible_id:gift2.collectible_id});
+      state.inventory.push({name:gift1.name,icon:gift1.icon||'🎁',file:gift1.file,val:gift1.val,collectible_id:gift1.collectible_id, sticker_file_id: gift1.sticker_file_id});
+      state.inventory.push({name:gift2.name,icon:gift2.icon||'🎁',file:gift2.file,val:gift2.val,collectible_id:gift2.collectible_id, sticker_file_id: gift2.sticker_file_id});
       state.pvpWins=(state.pvpWins||0)+1;
       addHist(iAmCreator?(gift1.icon||'🎁'):(gift2.icon||'🎁'),'PvP Победа!','+'+(gift1.val||0)+(gift2.val||0)+' ★',true);
     } else {
