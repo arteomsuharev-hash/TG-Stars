@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "api/gifts.js": {
+      "runtime": "nodejs20.x"
+    }
+  }
+}
