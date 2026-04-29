@@ -1004,43 +1004,47 @@ function getGiftIcon(gift) {
          '</div>';
 }
 
-// Загрузка реальных подарков через публичное API
+// Загрузка подарков через MTProto API (твой новый сервер)
 async function loadRealGifts() {
   try {
-    console.log('🔄 Загружаем подарки через API...');
-    const response = await fetch('https://giftapi.vercel.app/api/gifts');
+    console.log('🔄 Загружаем подарки через MTProto API...');
     
-    if (response.ok) {
-      const data = await response.json();
-      const gifts = data.gifts || data;
-      realGiftsList = gifts.map(function(g) {
-        return {
-          id: g.id,
-          name: g.title || g.name,
-          price: g.stars || g.price,
-          image_url: g.image_url || g.sticker_url,
-          emoji: g.emoji || '🎁',
-          file: g.file_number,
-          rarity: getRarityByPrice(g.stars || g.price || 50)
-        };
-      });
-      console.log('✅ Загружено через API:', realGiftsList.length, 'подарков');
+    // Запрос к твоему API на Vercel
+    const response = await fetch('/api/gifts');
+    const data = await response.json();
+    
+    if (data.success && data.gifts) {
+      realGiftsList = data.gifts.map(g => ({
+        id: g.id,
+        name: g.name,
+        price: g.price,
+        file: g.id,
+        icon: '🎁',
+        emoji: '🎁',
+        rarity: getRarityByPrice(g.price),
+        is_unique: g.is_unique || false
+      }));
+      
+      console.log('✅ Загружено через MTProto:', realGiftsList.length, 'подарков');
       updateAllUI();
       return true;
+    } else {
+      throw new Error('API вернул ошибку');
     }
+    
   } catch(e) {
-    console.warn('⚠️ API недоступен:', e.message);
+    console.warn('⚠️ MTProto API ошибка:', e.message);
+    
+    // Фолбэк на хардкод (1500+ подарков)
+    if (!realGiftsList.length) {
+      realGiftsList = REAL_TG_GIFTS;
+      console.log('✅ Используем хардкод:', realGiftsList.length, 'подарков');
+    }
+    
+    updateAllUI();
+    return false;
   }
-  
-  // Фолбэк на хардкод
-  realGiftsList = REAL_TG_GIFTS.map(function(g) {
-    return Object.assign({ collectible_id: g.file }, g);
-  });
-  console.log('✅ Используем хардкод:', realGiftsList.length, 'подарков');
-  updateAllUI();
-  return true;
 }
-
 function getRarityByPrice(price) {
   if (price <= 30) return 'common';
   if (price <= 80) return 'rare';
