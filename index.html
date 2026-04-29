@@ -960,7 +960,6 @@ function generateExtendedGiftList() {
 var REAL_TG_GIFTS = generateExtendedGiftList();
 var realGiftsList = [];
 
-// Функция для получения красивого отображения подарка с рамкой
 function getGiftIcon(gift) {
   if (!gift) return '🎁';
   
@@ -984,17 +983,8 @@ function getGiftIcon(gift) {
     glowColor = '0 0 6px rgba(100,100,100,0.3)';
   }
   
-  var innerContent = '';
-  if (gift.image_url && gift.image_url.startsWith('http')) {
-    innerContent = '<img src="' + gift.image_url + '" alt="' + escapeHtml(gift.name || '') + '" style="width:42px;height:42px;object-fit:contain;display:block;border-radius:10px">';
-  } else {
-    var fileNum = gift.file || gift.collectible_id;
-    if (fileNum) {
-      innerContent = '<img src="/gifts/' + fileNum + '.png" alt="' + escapeHtml(gift.name || '') + '" style="width:42px;height:42px;object-fit:contain;display:block;border-radius:10px" onerror="this.outerHTML=\'' + escapeHtml(gift.icon || gift.emoji || '🎁') + '\'">';
-    } else {
-      innerContent = '<span style="font-size:32px">' + (gift.icon || gift.emoji || '🎁') + '</span>';
-    }
-  }
+  // Просто показываем эмодзи вместо картинок
+  var innerContent = '<span style="font-size:32px">' + (gift.icon || gift.emoji || '🎁') + '</span>';
   
   return '<div style="background:' + frameColor + '; border-radius:16px; padding:' + borderWidth + '; box-shadow:' + glowColor + '; position:relative; display:inline-block">' +
            '<div style="background:#1a1a2e; border-radius:13px; padding:6px; position:relative; overflow:hidden">' +
@@ -1003,7 +993,6 @@ function getGiftIcon(gift) {
            '</div>' +
          '</div>';
 }
-
 // Загрузка подарков через MTProto API (твой новый сервер)
 async function loadRealGifts() {
   try {
