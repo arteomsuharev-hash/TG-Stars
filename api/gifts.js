@@ -1,85 +1,37 @@
 import { Api, TelegramClient } from 'telegram';
 import { StringSession } from 'telegram/sessions/index.js';
 
-// ===== ЗАМЕНИ ЭТИ ТРИ СТРОЧКИ =====
-const apiId = 35428941;        // ЗАМЕНИ на свой НОВЫЙ api_id (который не публиковал)
-const apiHash = 'ba211e1b4b260186488fe154a6ed7585'; // ЗАМЕНИ на свой НОВЫЙ api_hash
-const PHONE_NUMBER = '+79941446614'; // ЗАМЕНИ на свой номер телефона с кодом страны
-// =================================
-
-// Сессия сохранится после первого входа (заменишь потом на реальную)
-let sessionString = '';
+const apiId = 35428941;
+const apiHash = 'ba211e1b4b260186488fe154a6ed7585';
+const PHONE_NUMBER = '+79941446614';
+const SESSION = '1AgAOMTQ5LjE1NC4xNjcuNDEBu6AFlypebj02yFbir2nbQx9l7eKvXQNHiy+oo6sUKgMyb5xrf3JCVTapyianLZznaD4AbOdvN6z/KZ1SBZgS6J9uNUcwRVyOGxE88ion68H/6nML47mHeciTSyfCYHrSs86a7f0iqKQH4trOEInEPET7se31VJmeE0D0nKQJTW1q9SKRye0352h5D8M1ti2Iu+lvKk+YaWkQ1l+wAAmCqpLeK09nmtf4e0M6EifvphCEOuEcLxxepRz+XjgBuU61ACdSDuX4cr/zRyt6H9Lpt2nAsu3sCZxp9x1USPnb2U4kT05X4cUTAPiCnXz9n4fYB7FxR6JrqID3va1G1NAtQrM='; // ВСТАВЬ СВОЮ ПОЛНУЮ СЕССИЮ СЮДА
 
 export default async function handler(req, res) {
-  // Разрешаем запросы с твоего сайта
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET');
   
   try {
-    console.log('🔄 Запуск MTProto клиента...');
-    
     const client = new TelegramClient(
-      new StringSession(sessionString),
+      new StringSession(SESSION),
       apiId,
       apiHash,
       { connectionRetries: 5 }
     );
     
-    // Запускаем авторизацию
-    await client.start({
-      phoneNumber: async () => PHONE_NUMBER,
-      password: async () => '',
-      phoneCode: async () => {
-        console.log('📱 Код подтверждения отправлен в Telegram');
-        return await askCode();
-      },
-      onError: (err) => console.log('Ошибка:', err)
-    });
+    await client.connect();
     
-    // Сохраняем сессию для следующих запусков
-    const newSession = client.session.save();
-    if (newSession && newSession !== sessionString) {
-      sessionString = newSession;
-      console.log('💾 Новая сессия:', sessionString.substring(0, 50) + '...');
-    }
-    
-    // Получаем список подарков
-    console.log('🎁 Запрашиваем список подарков...');
     const result = await client.invoke(new Api.payments.GetStarGifts({ hash: 0 }));
     
-    // Форматируем ответ
     const gifts = result.gifts.map(gift => ({
       id: gift.id,
       name: gift.title,
       price: gift.stars,
-      is_unique: !!(gift.attributes && gift.attributes.length),
-      total_count: gift.totalCount,
-      remaining_count: gift.remainingCount
+      is_unique: !!(gift.attributes?.length)
     }));
     
-    console.log(`✅ Успешно загружено ${gifts.length} подарков`);
-    res.json({ success: true, count: gifts.length, gifts: gifts });
+    res.json({ success: true, count: gifts.length, gifts });
     
   } catch (error) {
-    console.error('❌ Ошибка:', error.message);
-    res.status(500).json({ 
-      success: false, 
-      error: error.message,
-      hint: 'Проверь api_id, api_hash и номер телефона'
-    });
+    res.status(500).json({ success: false, error: error.message });
   }
-}
-
-// Функция для ввода кода подтверждения
-function askCode() {
-  const readline = require('readline').createInterface({
-    input: process.stdin,
-    output: process.stdout
-  });
-  return new Promise((resolve) => {
-    readline.question('Введите код из Telegram: ', (code) => {
-      readline.close();
-      resolve(code);
-    });
-  });
 }
