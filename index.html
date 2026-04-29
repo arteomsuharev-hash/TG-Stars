@@ -827,7 +827,7 @@ img{display:block}
 <script>
 // Конфигурация
 var SB_URL = 'https://riwzrplciliebgexltll.supabase.co';
-var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJpd3pycGxjaWxpZWJnZXhsdGxsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyNjM5MjEsImV4cCI6MjA5MTgzOTkyMX0.jrrI78rQ-3VARU0I1eazM6iKHbSJLpcK5HCjJ4VRxnQ;
+var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJpd3pycGxjaWxpZWJnZXhsdGxsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyNjM5MjEsImV4cCI6MjA5MTgzOTkyMX0.jrrI78rQ-3VARU0I1eazM6iKHbSJLpcK5HCJj4VRxnQ';
 var BOT_TOKEN = '8209263425:AAFZQzJCzLmnV044UPaCWJWJZ3ZQw24H85k';
 var BOT_API_URL = 'https://tg-bot-final.vercel.app';
 
@@ -1317,11 +1317,11 @@ function renderAvatar(){
 }
 function renderHist(){
   var el=document.getElementById('histBody'); if(!el) return;
-  if(!state.history.length){el.innerHTML='<tr><td colspan="3" style="color:var(--tm);text-align:center;padding:14px;font-size:11px">Нет истории</td></tr>';return;}
+  if(!state.history.length){el.innerHTML='<tr><td colspan="3" style="color:var(--tm);text-align:center;padding:14px;font-size:11px">Нет истории<\/td><\/tr>';return;}
   var html='';
   for(var i=0;i<Math.min(state.history.length,25);i++){
     var h=state.history[i];
-    html+='<tr><td style="font-size:15px">'+escapeHtml(h.icon)+'</td><td>'+escapeHtml(h.action)+'</td><td class="'+(h.pos?'hist-pos':'hist-neg')+'">'+escapeHtml(h.result)+'</td></tr>';
+    html+='<tr><td style="font-size:15px">'+escapeHtml(h.icon)+'<\/td><td>'+escapeHtml(h.action)+'<\/td><td class="'+(h.pos?'hist-pos':'hist-neg')+'">'+escapeHtml(h.result)+'<\/td><\/tr>';
   }
   el.innerHTML=html;
 }
