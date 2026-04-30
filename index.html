@@ -954,10 +954,10 @@ var realGiftsList = [];
 function getGiftIcon(gift) {
   if (!gift) return '🎁';
   
-  var price = gift.price || gift.val || 0;
-  var frameColor = '';
-  var glowColor = '';
-  var borderWidth = '2px';
+  const price = gift.price || gift.val || 0;
+  let frameColor = '';
+  let glowColor = '';
+  let borderWidth = '2px';
   
   if (price >= 500) {
     frameColor = 'linear-gradient(135deg, #ffd700, #ffaa00, #ffd700)';
@@ -974,7 +974,7 @@ function getGiftIcon(gift) {
     glowColor = '0 0 6px rgba(100,100,100,0.3)';
   }
   
-  // Если есть sticker_file_id — показываем реальную картинку
+  // Реальная картинка через прокси
   if (gift.sticker_file_id) {
     const imageUrl = `/api/image?file_id=${gift.sticker_file_id}`;
     return `<div style="background:${frameColor}; border-radius:16px; padding:${borderWidth}; box-shadow:${glowColor}; position:relative; display:inline-block">
@@ -985,14 +985,14 @@ function getGiftIcon(gift) {
             </div>`;
   }
   
-  // Если нет картинки — показываем эмодзи
-  var emoji = gift.icon || gift.emoji || '🎁';
-  return '<div style="background:' + frameColor + '; border-radius:16px; padding:' + borderWidth + '; box-shadow:' + glowColor + '; position:relative; display:inline-block">' +
-           '<div style="background:#1a1a2e; border-radius:13px; padding:6px; position:relative; overflow:hidden">' +
-             '<span style="font-size:32px; display:block; text-align:center">' + emoji + '</span>' +
-             '<div style="position:absolute; top:0; left:-100%; width:100%; height:100%; background:linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); animation:shimmerGift 2s infinite"></div>' +
-           '</div>' +
-         '</div>';
+  // Если нет картинки — эмодзи
+  const emoji = gift.icon || gift.emoji || '🎁';
+  return `<div style="background:${frameColor}; border-radius:16px; padding:${borderWidth}; box-shadow:${glowColor}; position:relative; display:inline-block">
+            <div style="background:#1a1a2e; border-radius:13px; padding:6px; position:relative; overflow:hidden">
+              <span style="font-size:32px; display:block; text-align:center">${emoji}</span>
+              <div style="position:absolute; top:0; left:-100%; width:100%; height:100%; background:linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); animation:shimmerGift 2s infinite"></div>
+            </div>
+          </div>`;
 }
 
 // НОВАЯ ВЕРСИЯ loadRealGifts — сохраняем sticker_file_id
