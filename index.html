@@ -955,20 +955,20 @@ async function getGiftIcon(gift) {
   if (!gift) return '🎁';
   
   try {
-    const response = await fetch('/api/gift-image', {
+    const response = await fetch('https://tg-stars-0ad4.onrender.com/api/gift-image', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         id: gift.id,
         price: gift.price,
-        name: gift.name
+        sticker: gift.sticker
       })
     });
     
     if (response.ok) {
       const blob = await response.blob();
       const url = URL.createObjectURL(blob);
-      return `<img src="${url}" style="width:64px;height:64px;border-radius:12px">`;
+      return `<img src="${url}" style="width:64px;height:64px;border-radius:12px;object-fit:contain">`;
     }
   } catch(e) {
     console.warn('Image failed:', e);
