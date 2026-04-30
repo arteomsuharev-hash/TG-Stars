@@ -1223,7 +1223,7 @@ async function renderInv(cid, withSell, mode) {
   var html = '';
   for (var i = 0; i < state.inventory.length; i++) {
     var g = state.inventory[i];
-    var iconHtml = await getGiftIcon(g);
+    var iconHtml = await getGiftIcon(g);  // <--- Ждём результат!
     html += '<div class="inv-card" data-gi="' + i + '" data-mode="' + (mode || '') + '">' +
               '<div class="inv-dot r-' + (g.rarity || 'common') + '"></div>' +
               '<div class="inv-icon">' + iconHtml + '</div>' +
