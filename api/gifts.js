@@ -1,5 +1,6 @@
 import { Api, TelegramClient } from 'telegram';
 import { StringSession } from 'telegram/sessions/index.js';
+import { FileId } from 'tg-file-decoder';
 
 const apiId = 35428941;
 const apiHash = 'ba211e1b4b260186488fe154a6ed7585';
@@ -19,41 +20,32 @@ export default async function handler(req, res) {
     await client.connect();
     const result = await client.invoke(new Api.payments.GetStarGifts({ hash: 0 }));
     
-    // Для каждого подарка получаем реальный file_id через getDocument
-    const gifts = [];
-    for (const gift of result.gifts) {
+    const gifts = await Promise.all(result.gifts.map(async (g) => {
       let realFileId = null;
       
-      if (gift.sticker) {
+      if (g.sticker && g.sticker.id && g.sticker.accessHash) {
         try {
-          // Получаем информацию о стикере через getDocument
-          const document = await client.invoke(new Api.upload.GetFile({
-            location: new Api.InputDocumentFileLocation({
-              id: gift.sticker.id,
-              accessHash: gift.sticker.accessHash,
-              thumbSize: '',
-              version: gift.sticker.version
-            }),
-            limit: 32,
-            offset: 0
-          }));
-          
-          // Формируем file_id в формате, понятном Bot API
-          if (document) {
-            realFileId = `${gift.sticker.id}_${gift.sticker.accessHash}`;
-          }
+          // Конвертируем MTProto ID в Bot API file_id
+          const fileId = new FileId({
+            type: 3, // STICKER тип
+            id: g.sticker.id,
+            accessHash: g.sticker.accessHash,
+            dcId: g.sticker.dcId || 2,
+            fileReference: g.sticker.fileReference || Buffer.alloc(0)
+          });
+          realFileId = fileId.getBotAPI();
         } catch(e) {
-          console.error(`Error getting file for gift ${gift.id}:`, e.message);
+          console.error(`Convert error for ${g.id}:`, e.message);
         }
       }
       
-      gifts.push({
-        id: gift.id.toString(),
-        name: gift.title,
-        price: gift.stars,
+      return {
+        id: g.id.toString(),
+        name: g.title,
+        price: g.stars,
         sticker_file_id: realFileId,
-      });
-    }
+      };
+    }));
     
     res.json({ success: true, gifts });
     
