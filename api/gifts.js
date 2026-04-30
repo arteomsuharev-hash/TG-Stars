@@ -20,11 +20,14 @@ export default async function handler(req, res) {
     const result = await client.invoke(new Api.payments.GetStarGifts({ hash: 0 }));
     
     const gifts = result.gifts.map(g => {
+      // Пробуем получить accessHash (он нужен для Bot API)
       let stickerFileId = null;
-      if (g.sticker) {
-        // Telegram Bot API работает с accessHash, а не с id
-        stickerFileId = g.sticker.accessHash ? String(g.sticker.accessHash) : (g.sticker.id ? String(g.sticker.id) : null);
+      if (g.sticker && g.sticker.accessHash) {
+        stickerFileId = String(g.sticker.accessHash);
+      } else if (g.sticker && g.sticker.id) {
+        stickerFileId = String(g.sticker.id);
       }
+      
       return {
         id: g.id.toString(),
         name: g.title,
@@ -32,6 +35,9 @@ export default async function handler(req, res) {
         sticker_file_id: stickerFileId,
       };
     });
+    
+    // Выводим в логи первые 3 file_id для диагностики
+    console.log('Sample sticker_file_id:', gifts.slice(0, 3).map(g => ({ name: g.name, id: g.sticker_file_id })));
     
     res.json({ success: true, gifts });
     
