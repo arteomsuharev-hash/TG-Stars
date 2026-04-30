@@ -951,54 +951,79 @@ function generateExtendedGiftList() {
 var REAL_TG_GIFTS = generateExtendedGiftList();
 var realGiftsList = [];
 
-async function getGiftIcon(gift) {
-  if (!gift) return '🎁';
-  
+// ─── КЭШ ИКОНОК ───────────────────────────────────────────────
+var iconCache = {};   // id → html-строка (уже готовая)
+var iconLoading = {}; // id → Promise (чтобы не дублировать запросы)
+
+// Синхронная версия — возвращает то что есть в кэше прямо сейчас
+function getGiftIcon(gift) {
+  if (!gift) return '<span style="font-size:32px">🎁</span>';
+  var key = gift.id || gift.name || 'unknown';
+  if (iconCache[key]) return iconCache[key];
+  // Если ещё не закэшировано — запускаем фоновую загрузку и возвращаем заглушку
+  prefetchGiftIcon(gift);
+  return '<span style="font-size:32px">' + (gift.icon || '🎁') + '</span>';
+}
+
+// Асинхронная загрузка в фон — сохраняет результат в кэш
+async function prefetchGiftIcon(gift) {
+  if (!gift) return;
+  var key = gift.id || gift.name || 'unknown';
+  if (iconCache[key] || iconLoading[key]) return;
+
+  iconLoading[key] = true;
   try {
-    const response = await fetch('https://tg-stars-0ad4.onrender.com/api/gift-image', {
+    var response = await fetch('https://tg-stars-0ad4.onrender.com/api/gift-image', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        id: gift.id,
-        price: gift.price,
-        name: gift.name
-      })
+      body: JSON.stringify({ id: gift.id, price: gift.price || gift.val, name: gift.name })
     });
-    
     if (response.ok) {
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
-      return `<img src="${url}" style="width:64px;height:64px;border-radius:12px;object-fit:contain">`;
+      var blob = await response.blob();
+      var url = URL.createObjectURL(blob);
+      iconCache[key] = '<img src="' + url + '" style="width:48px;height:48px;border-radius:10px;object-fit:contain">';
+    } else {
+      iconCache[key] = '<span style="font-size:32px">' + (gift.icon || '🎁') + '</span>';
     }
   } catch(e) {
-    console.warn('Image failed:', e);
+    iconCache[key] = '<span style="font-size:32px">' + (gift.icon || '🎁') + '</span>';
   }
-  
-  return '<span style="font-size:32px">🎁</span>';
+  delete iconLoading[key];
 }
-// НОВАЯ ВЕРСИЯ loadRealGifts — сохраняем sticker_file_id
+
+// Предзагрузка иконок
+async function prefetchAllIcons(gifts) {
+  var BATCH = 5;
+  for (var i = 0; i < gifts.length; i += BATCH) {
+    var batch = gifts.slice(i, i + BATCH);
+    await Promise.all(batch.map(function(g) { return prefetchGiftIcon(g); }));
+  }
+}
+
+// НОВАЯ ВЕРСИЯ loadRealGifts — сохраняем данные + предзагрузка иконок
 async function loadRealGifts() {
   try {
     console.log('🔄 Загружаем подарки с Render...');
-    const response = await fetch('https://tg-stars-0ad4.onrender.com/api/gifts');
-    const data = await response.json();
-    
+    var response = await fetch('https://tg-stars-0ad4.onrender.com/api/gifts');
+    var data = await response.json();
+
     if (data.success && data.gifts) {
-      realGiftsList = data.gifts.map(g => ({
-        id: g.id,
-        name: g.name,
-        price: g.price,
-      }));
-      
+      realGiftsList = data.gifts.map(function(g) {
+        return { id: g.id, name: g.name, price: g.price, icon: g.icon || '🎁' };
+      });
       console.log('✅ Загружено:', realGiftsList.length, 'подарков');
       updateAllUI();
+
+      prefetchAllIcons(realGiftsList.slice(0, 30)).then(function() {
+        updateAllUI();
+        prefetchAllIcons(realGiftsList.slice(30));
+      });
       return true;
     }
   } catch(e) {
     console.warn('API ошибка:', e);
   }
-  
-  // Фолбэк на хардкод
+
   realGiftsList = REAL_TG_GIFTS;
   updateAllUI();
   return false;
@@ -1211,19 +1236,19 @@ function incLuck(n){state.luck=Math.min(200,state.luck+(n||1));updateLuckBar();}
 function updateLuckBar(){var p=Math.min(100,state.luck/2);document.getElementById('luckFill').style.width=p+'%';document.getElementById('luckPct').innerText=Math.round(p)+'%';}
 function addHist(icon,action,result,pos){state.history.unshift({icon:icon,action:action,result:result,pos:pos,ts:Date.now()});if(state.history.length>60)state.history=state.history.slice(0,60);}
 
-async function renderInv(cid, withSell, mode) {
+function renderInv(cid, withSell, mode) {
   var el = document.getElementById(cid);
   if (!el) return;
-  
+
   if (!state.inventory.length) {
     el.innerHTML = '<div class="inv-empty">📭 Нет подарков</div>';
     return;
   }
-  
+
   var html = '';
   for (var i = 0; i < state.inventory.length; i++) {
     var g = state.inventory[i];
-    var iconHtml = await getGiftIcon(g);  // <--- Ждём результат!
+    var iconHtml = getGiftIcon(g);  // синхронно! без await
     html += '<div class="inv-card" data-gi="' + i + '" data-mode="' + (mode || '') + '">' +
               '<div class="inv-dot r-' + (g.rarity || 'common') + '"></div>' +
               '<div class="inv-icon">' + iconHtml + '</div>' +
@@ -1233,7 +1258,18 @@ async function renderInv(cid, withSell, mode) {
             '</div>';
   }
   el.innerHTML = html;
-  
+
+  // После рендера — подгружаем иконки инвентаря и обновляем карточки
+  state.inventory.forEach(function(g, idx) {
+    var key = g.id || g.name || 'unknown';
+    if (!iconCache[key]) {
+      prefetchGiftIcon(g).then(function() {
+        var card = el.querySelector('[data-gi="' + idx + '"] .inv-icon');
+        if (card) card.innerHTML = getGiftIcon(g);
+      });
+    }
+  });
+
   if (withSell) {
     var chips = el.querySelectorAll('.sell-chip');
     for (var j = 0; j < chips.length; j++) {
@@ -1243,7 +1279,7 @@ async function renderInv(cid, withSell, mode) {
       };
     }
   }
-  
+
   var cards = el.querySelectorAll('.inv-card');
   for (var k = 0; k < cards.length; k++) {
     cards[k].onclick = (function(card) {
@@ -1260,12 +1296,12 @@ async function renderInv(cid, withSell, mode) {
   }
 }
 
-async function renderAllInv() {
-  await renderInv('invCases');
-  await renderInv('invUpgrade', false, 'upgrade');
-  await renderInv('invCraft', false, 'craft');
-  await renderInv('invPvp', false, pvpMode === 'private' ? 'pvp_priv' : 'pvp_pub');
-  await renderInv('invProfile', true);
+function renderAllInv() {
+  renderInv('invCases');
+  renderInv('invUpgrade', false, 'upgrade');
+  renderInv('invCraft', false, 'craft');
+  renderInv('invPvp', false, pvpMode === 'private' ? 'pvp_priv' : 'pvp_pub');
+  renderInv('invProfile', true);
 }
 
 function sellGift(i){
@@ -1303,17 +1339,17 @@ function renderAvatar(){
 }
 function renderHist(){
   var el=document.getElementById('histBody'); if(!el) return;
-  if(!state.history.length){el.innerHTML='<tr><td colspan="3" style="color:var(--tm);text-align:center;padding:14px;font-size:11px">Нет истории<\/td><\/tr>';return;}
+  if(!state.history.length){el.innerHTML='</table><td colspan="3" style="color:var(--tm);text-align:center;padding:14px;font-size:11px">Нет истории</td></tr>';return;}
   var html='';
   for(var i=0;i<Math.min(state.history.length,25);i++){
     var h=state.history[i];
-    html+='<tr><td style="font-size:15px">'+escapeHtml(h.icon)+'<\/td><td>'+escapeHtml(h.action)+'<\/td><td class="'+(h.pos?'hist-pos':'hist-neg')+'">'+escapeHtml(h.result)+'<\/td><\/tr>';
+    html+='<tr><td style="font-size:15px">'+escapeHtml(h.icon)+'</td><td>'+escapeHtml(h.action)+'</td><td class="'+(h.pos?'hist-pos':'hist-neg')+'">'+escapeHtml(h.result)+'</td></tr>';
   }
   el.innerHTML=html;
 }
-async function updateAllUI() {
+function updateAllUI() {
   document.getElementById('balVal').innerText = state.balance;
-  await renderAllInv();
+  renderAllInv();
   updateStats();
   renderUpgradeUI();
   renderCraftSlots();
@@ -2164,9 +2200,9 @@ async function init(){
   try{var loc=localStorage.getItem('gc_state');if(loc){var d=JSON.parse(loc);if(d.userId===userId&&d.state&&Date.now()-d.ts<3600000)state=Object.assign({},state,d.state);}}catch(e){}
   await loadRealGifts();
   renderCases();
-  await updateAllUI();
+  updateAllUI();
   await loadUser();
-  await updateAllUI();
+  updateAllUI();
   loadBattles();
   initRT();
   checkReferral();
