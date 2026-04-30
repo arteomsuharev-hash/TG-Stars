@@ -952,8 +952,11 @@ var REAL_TG_GIFTS = generateExtendedGiftList();
 var realGiftsList = [];
 
 function getGiftIcon(gift) {
+function getGiftIcon(gift) {
+  console.log('Gift name:', gift.name, 'Price:', gift.price);
   if (!gift) return '🎁';
-  
+  // ... остальной код
+}   
   var price = gift.price || gift.val || 0;
   var name = gift.name || '';
   var frameColor = '';
