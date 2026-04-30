@@ -1,5 +1,6 @@
 import { Api, TelegramClient } from 'telegram';
 import { StringSession } from 'telegram/sessions/index.js';
+import { FileId } from 'tg-file-decoder';
 
 const apiId = 35428941;
 const apiHash = 'ba211e1b4b260186488fe154a6ed7585';
@@ -19,27 +20,40 @@ export default async function handler(req, res) {
     await client.connect();
     const result = await client.invoke(new Api.payments.GetStarGifts({ hash: 0 }));
     
-    const gifts = result.gifts.map(g => {
-      // Формируем прямую ссылку на картинку через Telegram CDN
-      let imageUrl = null;
-      if (g.sticker && g.sticker.id && g.sticker.accessHash) {
-        // Прямая ссылка на файл через CDN Telegram
-        const dcId = g.sticker.dcId || 2;
-        imageUrl = `https://cdn${dcId}.telesco.pe/file/sticker_${g.sticker.id}_${g.sticker.accessHash}.webp`;
+    const gifts = [];
+    for (const gift of result.gifts) {
+      let botApiFileId = null;
+      
+      if (gift.sticker && gift.sticker.id && gift.sticker.accessHash) {
+        try {
+          // Конвертируем через библиотеку
+          const fileId = new FileId({
+            type: 3, // STICKER тип
+            id: gift.sticker.id,
+            accessHash: gift.sticker.accessHash,
+            dcId: gift.sticker.dcId || 2,
+            fileReference: gift.sticker.fileReference || Buffer.alloc(0),
+            version: gift.sticker.version || 1
+          });
+          botApiFileId = fileId.getBotAPI();
+        } catch(e) {
+          console.error(`Convert error for gift ${gift.id}:`, e.message);
+        }
       }
       
-      return {
-        id: g.id.toString(),
-        name: g.title,
-        price: g.stars,
-        image_url: imageUrl,
-      };
-    });
+      gifts.push({
+        id: gift.id.toString(),
+        name: gift.title,
+        price: gift.stars,
+        sticker_file_id: botApiFileId,
+      });
+    }
     
+    console.log(`✅ Total: ${gifts.length}, with images: ${gifts.filter(g => g.sticker_file_id).length}`);
     res.json({ success: true, gifts });
     
   } catch (error) {
-    console.error(error);
-    res.json({ success: false, error: error.message });
+    console.error('API Error:', error);
+    res.status(500).json({ success: false, error: error.message });
   }
 }
