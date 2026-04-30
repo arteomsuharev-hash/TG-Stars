@@ -1,33 +1,32 @@
 export default async function handler(req, res) {
   const { file_id } = req.query;
-  
+  const BOT_TOKEN = '8209263425:AAFZQzJCzLmnV044UPaCWJWJZ3ZQw24H85k';
+
   if (!file_id) {
     return res.status(400).json({ error: 'Missing file_id' });
   }
-  
-  const BOT_TOKEN = '8209263425:AAFZQzJCzLmnV044UPaCWJWJZ3ZQw24H85k';
-  
+
   try {
-    // Получаем ссылку на файл через Bot API
-    const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getFile?file_id=${file_id}`);
-    const data = await response.json();
-    
-    if (!data.ok) {
-      console.error('Telegram error:', data);
-      return res.status(500).json({ error: 'Telegram API error', details: data });
+    // Запрос к Telegram за ссылкой на файл
+    const tgRes = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getFile?file_id=${file_id}`);
+    const tgData = await tgRes.json();
+
+    if (!tgData.ok) {
+      console.error('Telegram getFile error:', tgData);
+      return res.status(500).json({ error: 'Invalid file_id' });
     }
-    
+
     // Получаем и возвращаем картинку
-    const imageUrl = `https://api.telegram.org/file/bot${BOT_TOKEN}/${data.result.file_path}`;
-    const image = await fetch(imageUrl);
-    const buffer = await image.arrayBuffer();
-    
-    res.setHeader('Content-Type', 'image/png');
+    const imgUrl = `https://api.telegram.org/file/bot${BOT_TOKEN}/${tgData.result.file_path}`;
+    const imgRes = await fetch(imgUrl);
+    const buffer = await imgRes.arrayBuffer();
+
+    res.setHeader('Content-Type', 'image/webp');
     res.setHeader('Cache-Control', 'public, max-age=86400');
-    res.send(Buffer.from(buffer));
-    
-  } catch (error) {
-    console.error('Proxy error:', error);
-    res.status(500).json({ error: error.message });
+    res.status(200).send(Buffer.from(buffer));
+
+  } catch (err) {
+    console.error('Proxy error:', err);
+    res.status(500).json({ error: err.message });
   }
 }
