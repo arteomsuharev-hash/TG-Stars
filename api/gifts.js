@@ -1,14 +1,14 @@
+// api/gifts.js - ТЕСТОВАЯ ВЕРСИЯ ДЛЯ ДИАГНОСТИКИ
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  
   try {
-    // Просто проверяем, что сервер жив
-    res.json({ 
-      success: true, 
-      message: 'API работает',
-      time: Date.now()
+    // Возвращаем простое сообщение
+    res.json({
+      success: true,
+      message: 'API is alive!',
+      timestamp: Date.now()
     });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ success: false, error: error.message });
   }
 }
