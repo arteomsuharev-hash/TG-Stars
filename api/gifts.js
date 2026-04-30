@@ -5,17 +5,30 @@ const apiId = 35428941;
 const apiHash = 'ba211e1b4b260186488fe154a6ed7585';
 const SESSION = '1AgAOMTQ5LjE1NC4xNjcuNDEBu6AFlypebj02yFbir2nbQx9l7eKvXQNHiy+oo6sUKgMyb5xrf3JCVTapyianLZznaD4AbOdvN6z/KZ1SBZgS6J9uNUcwRVyOGxE88ion68H/6nML47mHeciTSyfCYHrSs86a7f0iqKQH4trOEInEPET7se31VJmeE0D0nKQJTW1q9SKRye0352h5D8M1ti2Iu+lvKk+YaWkQ1l+wAAmCqpLeK09nmtf4e0M6EifvphCEOuEcLxxepRz+XjgBuU61ACdSDuX4cr/zRyt6H9Lpt2nAsu3sCZxp9x1USPnb2U4kT05X4cUTAPiCnXz9n4fYB7FxR6JrqID3va1G1NAtQrM=';
 
-// Правильная конвертация MTProto ID в Bot API file_id
+// Преобразование отрицательных чисел в беззнаковые
+function toUnsigned(value) {
+  if (typeof value === 'bigint') {
+    if (value < 0) {
+      return value + 0x10000000000000000n;
+    }
+    return value;
+  }
+  const num = Number(value);
+  if (num < 0) {
+    return BigInt(num >>> 0);
+  }
+  return BigInt(num);
+}
+
+// Функция для конвертации MTProto ID в Bot API file_id
 function convertToBotApiFileId(sticker) {
   if (!sticker || !sticker.id || !sticker.accessHash) return null;
   
   try {
-    // Создаём буфер правильной структуры
-    // Формат: version(4) + dc_id(4) + id(8) + access_hash(8) + type(4) + ...
     const buffer = Buffer.alloc(4 + 4 + 8 + 8 + 4 + 8);
     let offset = 0;
     
-    // Version (4 байта, обычно 0)
+    // Version (4 байта)
     buffer.writeUInt32LE(0, offset);
     offset += 4;
     
@@ -23,12 +36,14 @@ function convertToBotApiFileId(sticker) {
     buffer.writeUInt32LE(sticker.dcId || 2, offset);
     offset += 4;
     
-    // ID (8 байт)
-    buffer.writeBigUInt64LE(BigInt(sticker.id), offset);
+    // ID (8 байт) — преобразуем отрицательные числа
+    const idValue = toUnsigned(sticker.id);
+    buffer.writeBigUInt64LE(idValue, offset);
     offset += 8;
     
     // Access Hash (8 байт)
-    buffer.writeBigUInt64LE(BigInt(sticker.accessHash), offset);
+    const hashValue = toUnsigned(sticker.accessHash);
+    buffer.writeBigUInt64LE(hashValue, offset);
     offset += 8;
     
     // Тип (4 байта) — 3 = стикер
@@ -36,13 +51,12 @@ function convertToBotApiFileId(sticker) {
     offset += 4;
     
     // File reference (8 байт, пустой)
-    buffer.writeBigUInt64LE(BigInt(0), offset);
+    buffer.writeBigUInt64LE(0n, offset);
     
-    // Кодируем в base64 URL-safe
     return buffer.toString('base64');
     
   } catch(e) {
-    console.error('Convert error:', e.message);
+    console.error(`Convert error for ${sticker.id}:`, e.message);
     return null;
   }
 }
@@ -65,7 +79,11 @@ export default async function handler(req, res) {
       let botApiFileId = null;
       
       if (g.sticker) {
-        botApiFileId = convertToBotApiFileId(g.sticker);
+        botApiFileId = convertToBotApiFileId({
+          id: g.sticker.id,
+          accessHash: g.sticker.accessHash,
+          dcId: g.sticker.dcId,
+        });
       }
       
       return {
@@ -76,7 +94,8 @@ export default async function handler(req, res) {
       };
     });
     
-    console.log(`✅ Total: ${gifts.length}, with images: ${gifts.filter(g => g.sticker_file_id).length}`);
+    const withImages = gifts.filter(g => g.sticker_file_id).length;
+    console.log(`✅ Total: ${gifts.length}, with images: ${withImages}`);
     res.json({ success: true, gifts });
     
   } catch (error) {
