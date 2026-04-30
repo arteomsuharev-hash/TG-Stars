@@ -8,10 +8,9 @@ const SESSION = '1AgAOMTQ5LjE1NC4xNjcuNDEBu6AFlypebj02yFbir2nbQx9l7eKvXQNHiy+oo6
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET');
   
   try {
-    console.log('🔄 Connecting to Telegram...');
+    console.log('1. Starting...');
     
     const client = new TelegramClient(
       new StringSession(SESSION),
@@ -20,38 +19,18 @@ export default async function handler(req, res) {
       { connectionRetries: 5 }
     );
     
+    console.log('2. Client created, connecting...');
     await client.connect();
-    console.log('✅ Connected');
+    console.log('3. Connected!');
     
+    console.log('4. Fetching gifts...');
     const result = await client.invoke(new Api.payments.GetStarGifts({ hash: 0 }));
-    console.log('✅ Got gifts, count:', result.gifts.length);
+    console.log('5. Got gifts:', result.gifts.length);
     
-    // Упрощённое формирование ответа
-    const gifts = result.gifts.map(gift => {
-      // Пробуем получить sticker_file_id безопасно
-      let stickerFileId = null;
-      try {
-        if (gift.sticker && typeof gift.sticker === 'object') {
-          stickerFileId = gift.sticker.id || null;
-        }
-      } catch(e) {
-        console.warn('Error getting sticker for gift', gift.id);
-      }
-      
-      return {
-        id: String(gift.id),
-        name: gift.title || 'Unknown Gift',
-        price: gift.stars,
-        sticker_file_id: stickerFileId,
-        is_unique: !!(gift.attributes && gift.attributes.length)
-      };
-    });
-    
-    console.log(`✅ Sending ${gifts.length} gifts`);
-    res.json({ success: true, count: gifts.length, gifts });
+    res.json({ success: true, count: result.gifts.length });
     
   } catch (error) {
-    console.error('❌ API Error:', error.message);
+    console.error('Error:', error.message);
     res.status(500).json({ success: false, error: error.message });
   }
 }
