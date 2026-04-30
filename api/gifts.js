@@ -17,22 +17,19 @@ export default async function handler(req, res) {
     );
     
     await client.connect();
-    
     const result = await client.invoke(new Api.payments.GetStarGifts({ hash: 0 }));
     
     const gifts = result.gifts.map(g => {
-      // Получаем file_id стикера через Bot API
       let stickerFileId = null;
-      if (g.sticker && g.sticker.id) {
-        // Убираем лишние символы и оставляем только цифры
-        stickerFileId = String(g.sticker.id);
+      if (g.sticker) {
+        // Telegram Bot API работает с accessHash, а не с id
+        stickerFileId = g.sticker.accessHash ? String(g.sticker.accessHash) : (g.sticker.id ? String(g.sticker.id) : null);
       }
-      
       return {
         id: g.id.toString(),
         name: g.title,
         price: g.stars,
-        sticker_file_id: stickerFileId
+        sticker_file_id: stickerFileId,
       };
     });
     
