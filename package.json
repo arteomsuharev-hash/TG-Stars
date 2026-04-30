@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "type": "module",
   "dependencies": {
-    "telegram": "^2.0.0",
-    "tg-file-decoder": "^1.0.0"
+    "telegram": "^2.0.0"
   }
 }
