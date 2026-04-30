@@ -7,19 +7,26 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Просто проверяем, что Bot API отвечает
-    const url = `https://api.telegram.org/bot${BOT_TOKEN}/getFile?file_id=${file_id}`;
-    const response = await fetch(url);
-    const data = await response.json();
+    // Получаем ссылку на файл
+    const tgRes = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getFile?file_id=${file_id}`);
+    const tgData = await tgRes.json();
     
-    // Возвращаем ответ Telegram для диагностики
-    res.json({ 
-      success: data.ok, 
-      file_id: file_id,
-      telegram_response: data 
-    });
+    if (!tgData.ok) {
+      console.error('Telegram error for file_id:', file_id, tgData);
+      return res.status(500).json({ error: 'Invalid file_id', details: tgData });
+    }
     
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+    // Получаем картинку
+    const imgUrl = `https://api.telegram.org/file/bot${BOT_TOKEN}/${tgData.result.file_path}`;
+    const imgRes = await fetch(imgUrl);
+    const buffer = await imgRes.arrayBuffer();
+    
+    res.setHeader('Content-Type', 'image/webp');
+    res.setHeader('Cache-Control', 'public, max-age=86400');
+    res.status(200).send(Buffer.from(buffer));
+    
+  } catch (err) {
+    console.error('Proxy error:', err);
+    res.status(500).json({ error: err.message });
   }
 }
