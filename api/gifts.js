@@ -7,28 +7,12 @@ const SESSION = '1AgAOMTQ5LjE1NC4xNjcuNDEBu6AFlypebj02yFbir2nbQx9l7eKvXQNHiy+oo6
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  
   try {
-    const client = new TelegramClient(
-      new StringSession(SESSION),
-      apiId,
-      apiHash,
-      { connectionRetries: 3 }
-    );
-    
+    const client = new TelegramClient(new StringSession(SESSION), apiId, apiHash, { connectionRetries: 3 });
     await client.connect();
     const result = await client.invoke(new Api.payments.GetStarGifts({ hash: 0 }));
-    
-    const gifts = result.gifts.map(g => ({
-      id: g.id.toString(),
-      name: g.title,
-      price: g.stars,
-      icon: '🎁'
-    }));
-    
-    console.log(`✅ Загружено ${gifts.length} подарков из MTProto`);
+    const gifts = result.gifts.map(g => ({ id: g.id.toString(), name: g.title, price: g.stars, icon: '🎁' }));
     res.json({ success: true, gifts });
-    
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, error: error.message });
