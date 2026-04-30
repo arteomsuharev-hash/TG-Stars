@@ -7,23 +7,24 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Получаем ссылку на файл
-    const tgRes = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getFile?file_id=${file_id}`);
-    const tgData = await tgRes.json();
+    // Запрашиваем путь к файлу
+    const getFileUrl = `https://api.telegram.org/bot${BOT_TOKEN}/getFile?file_id=${file_id}`;
+    const fileRes = await fetch(getFileUrl);
+    const fileData = await fileRes.json();
     
-    if (!tgData.ok) {
-      console.error('Telegram error:', tgData);
-      return res.status(500).json({ error: 'Invalid file_id', details: tgData });
+    if (!fileData.ok) {
+      console.error('Telegram getFile error:', fileData);
+      return res.status(500).json({ error: 'Invalid file_id' });
     }
     
-    // Получаем картинку
-    const imgUrl = `https://api.telegram.org/file/bot${BOT_TOKEN}/${tgData.result.file_path}`;
-    const imgRes = await fetch(imgUrl);
-    const buffer = await imgRes.arrayBuffer();
+    // Скачиваем картинку
+    const imageUrl = `https://api.telegram.org/file/bot${BOT_TOKEN}/${fileData.result.file_path}`;
+    const imageRes = await fetch(imageUrl);
+    const imageBuffer = await imageRes.arrayBuffer();
     
     res.setHeader('Content-Type', 'image/webp');
     res.setHeader('Cache-Control', 'public, max-age=86400');
-    res.status(200).send(Buffer.from(buffer));
+    res.status(200).send(Buffer.from(imageBuffer));
     
   } catch (err) {
     console.error('Proxy error:', err);
