@@ -22,13 +22,41 @@ export default async function handler(req, res) {
     
     const result = await client.invoke(new Api.payments.GetStarGifts({ hash: 0 }));
     
-    const gifts = result.gifts.map(gift => ({
-      id: gift.id,
-      name: gift.title,
-      price: gift.stars,
-      sticker_file_id: gift.sticker?.id || null,
-      is_unique: !!(gift.attributes?.length)
-    }));
+    const gifts = result.gifts.map(gift => {
+      // Пытаемся получить правильный file_id стикера
+      let stickerFileId = null;
+      if (gift.sticker) {
+        // Вариант 1: используем accessHash (часто работает лучше)
+        if (gift.sticker.accessHash) {
+          stickerFileId = gift.sticker.accessHash;
+        }
+        // Вариант 2: используем id
+        else if (gift.sticker.id) {
+          stickerFileId = gift.sticker.id;
+        }
+        // Вариант 3: используем DC ID (редко, но бывает)
+        else if (gift.sticker.dcId) {
+          stickerFileId = gift.sticker.dcId;
+        }
+      }
+      
+      // Если не удалось получить file_id, возвращаем null
+      // В консоль выведем предупреждение
+      if (!stickerFileId) {
+        console.warn('No sticker_file_id for gift:', gift.id, gift.title);
+      }
+      
+      return {
+        id: gift.id,
+        name: gift.title,
+        price: gift.stars,
+        sticker_file_id: stickerFileId ? String(stickerFileId) : null,
+        is_unique: !!(gift.attributes?.length)
+      };
+    });
+    
+    console.log(`✅ Загружено ${gifts.length} подарков`);
+    console.log(`✅ Подарков с картинками: ${gifts.filter(g => g.sticker_file_id).length}`);
     
     res.json({ success: true, count: gifts.length, gifts });
     
