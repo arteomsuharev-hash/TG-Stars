@@ -9,6 +9,14 @@ const apiId = 35428941;
 const apiHash = 'ba211e1b4b260186488fe154a6ed7585';
 const SESSION = '1AgAOMTQ5LjE1NC4xNjcuNDEBu6AFlypebj02yFbir2nbQx9l7eKvXQNHiy+oo6sUKgMyb5xrf3JCVTapyianLZznaD4AbOdvN6z/KZ1SBZgS6J9uNUcwRVyOGxE88ion68H/6nML47mHeciTSyfCYHrSs86a7f0iqKQH4trOEInEPET7se31VJmeE0D0nKQJTW1q9SKRye0352h5D8M1ti2Iu+lvKk+YaWkQ1l+wAAmCqpLeK09nmtf4e0M6EifvphCEOuEcLxxepRz+XjgBuU61ACdSDuX4cr/zRyt6H9Lpt2nAsu3sCZxp9x1USPnb2U4kT05X4cUTAPiCnXz9n4fYB7FxR6JrqID3va1G1NAtQrM=';
 
+// Функция для установки CORS заголовков
+function setCorsHeaders(res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Access-Control-Max-Age', '86400');
+}
+
 // Скачивание стикера
 async function downloadSticker(sticker) {
   if (!sticker || !sticker.id) return null;
@@ -35,7 +43,7 @@ async function downloadSticker(sticker) {
   }
 }
 
-// Генерация картинки с рамкой
+// Генерация картинки
 async function generateGiftImage(stickerBuffer, price) {
   if (!stickerBuffer) return null;
   
@@ -58,7 +66,6 @@ async function generateGiftImage(stickerBuffer, price) {
   const imgSize = size - frameSize * 2;
   
   try {
-    // Конвертируем стикер в PNG
     let stickerPng = stickerBuffer;
     if (stickerBuffer.length > 0) {
       stickerPng = await sharp(stickerBuffer)
@@ -67,7 +74,6 @@ async function generateGiftImage(stickerBuffer, price) {
         .toBuffer();
     }
     
-    // Создаём фон с рамкой
     const frame = await sharp({
       create: {
         width: size,
@@ -103,7 +109,6 @@ async function generateGiftImage(stickerBuffer, price) {
     .png()
     .toBuffer();
     
-    // Накладываем стикер
     const result = await sharp(frame)
       .composite([
         {
@@ -123,16 +128,17 @@ async function generateGiftImage(stickerBuffer, price) {
 }
 
 const server = http.createServer(async (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  // Устанавливаем CORS заголовки для всех ответов
+  setCorsHeaders(res);
   
+  // Обработка preflight запросов
   if (req.method === 'OPTIONS') {
     res.writeHead(200);
     res.end();
     return;
   }
   
-  // GET /api/gifts — список подарков
+  // GET /api/gifts
   if (req.method === 'GET' && req.url === '/api/gifts') {
     try {
       const client = new TelegramClient(new StringSession(SESSION), apiId, apiHash, { connectionRetries: 3 });
@@ -160,7 +166,7 @@ const server = http.createServer(async (req, res) => {
     return;
   }
   
-  // POST /api/gift-image — генерация картинки
+  // POST /api/gift-image
   if (req.method === 'POST' && req.url === '/api/gift-image') {
     let body = '';
     req.on('data', chunk => body += chunk);
@@ -168,8 +174,18 @@ const server = http.createServer(async (req, res) => {
       try {
         const gift = JSON.parse(body);
         
+        // Если нет стикера — возвращаем эмодзи
         if (!gift.sticker || !gift.sticker.id) {
-          throw new Error('No sticker data');
+          const price = gift.price || 0;
+          let emoji = price >= 500 ? '💎' : (price >= 200 ? '✨' : (price >= 80 ? '⭐' : '🎁'));
+          let frameColor = price >= 500 ? '#ffd700' : (price >= 200 ? '#c0c0c0' : (price >= 80 ? '#cd7f32' : '#555'));
+          const svg = `<svg width="80" height="80" xmlns="http://www.w3.org/2000/svg">
+            <rect width="80" height="80" rx="16" fill="#1a1a2e" stroke="${frameColor}" stroke-width="3"/>
+            <text x="40" y="55" font-size="40" text-anchor="middle" fill="white">${emoji}</text>
+          </svg>`;
+          res.writeHead(200, { 'Content-Type': 'image/svg+xml' });
+          res.end(svg);
+          return;
         }
         
         const stickerBuffer = await downloadSticker(gift.sticker);
@@ -186,7 +202,6 @@ const server = http.createServer(async (req, res) => {
         res.end(imageBuffer);
       } catch (error) {
         console.error('Image error:', error);
-        // Fallback: возвращаем SVG с эмодзи
         const price = JSON.parse(body).price || 0;
         let emoji = price >= 500 ? '💎' : (price >= 200 ? '✨' : (price >= 80 ? '⭐' : '🎁'));
         let frameColor = price >= 500 ? '#ffd700' : (price >= 200 ? '#c0c0c0' : (price >= 80 ? '#cd7f32' : '#555'));
