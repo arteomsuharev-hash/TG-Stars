@@ -971,11 +971,13 @@ async function getGiftIcon(gift) {
       return `<img src="${url}" style="width:64px;height:64px;border-radius:12px;object-fit:contain">`;
     }
   } catch(e) {
-    console.warn('Image failed:', e);
+    console.warn('Image error:', e);
   }
   
   // fallback
-  return '<span style="font-size:32px">🎁</span>';
+  var price = gift.price || 0;
+  var emoji = price >= 500 ? '💎' : (price >= 200 ? '✨' : (price >= 80 ? '⭐' : '🎁'));
+  return `<span style="font-size:32px">${emoji}</span>`;
 }
 // НОВАЯ ВЕРСИЯ loadRealGifts — сохраняем sticker_file_id
 async function loadRealGifts() {
