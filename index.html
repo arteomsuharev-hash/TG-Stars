@@ -974,6 +974,17 @@ function getGiftIcon(gift) {
     glowColor = '0 0 6px rgba(100,100,100,0.3)';
   }
   
+  // Если есть картинка из публичного API — показываем её
+  if (gift.image_url) {
+    return `<div style="background:${frameColor}; border-radius:16px; padding:${borderWidth}; box-shadow:${glowColor}; position:relative; display:inline-block">
+              <div style="background:#1a1a2e; border-radius:13px; padding:6px; position:relative; overflow:hidden">
+                <img src="${gift.image_url}" alt="${escapeHtml(gift.name)}" style="width:42px;height:42px;object-fit:contain;display:block;border-radius:10px" onerror="this.outerHTML='<span style=\'font-size:32px\'>${escapeHtml(gift.icon || gift.emoji || '🎁')}</span>'">
+                <div style="position:absolute; top:0; left:-100%; width:100%; height:100%; background:linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); animation:shimmerGift 2s infinite"></div>
+              </div>
+            </div>`;
+  }
+  
+  // Если картинки нет — показываем эмодзи
   var emoji = gift.icon || gift.emoji || '🎁';
   return '<div style="background:' + frameColor + '; border-radius:16px; padding:' + borderWidth + '; box-shadow:' + glowColor + '; position:relative; display:inline-block">' +
            '<div style="background:#1a1a2e; border-radius:13px; padding:6px; position:relative; overflow:hidden">' +
