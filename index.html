@@ -954,21 +954,11 @@ var realGiftsList = [];
 function getGiftIcon(gift) {
   if (!gift) return '🎁';
   
-  var price = gift.price || gift.val || 0;
-  var frameColor = '';
-  var glowColor = '';
-  var borderWidth = '2px';
-  var emoji = '🎁';
-  
-  // Эмодзи в зависимости от цены
-  if (price >= 500) emoji = '💎';
-  else if (price >= 200) emoji = '✨';
-  else if (price >= 80) emoji = '⭐';
-  else if (price >= 50) emoji = '🌟';
-  else if (price >= 25) emoji = '🎁';
-  else emoji = '📦';
-  
-  // Рамка по цене
+  const price = gift.price || gift.val || 0;
+  let frameColor = '';
+  let glowColor = '';
+  let borderWidth = '2px';
+
   if (price >= 500) {
     frameColor = 'linear-gradient(135deg, #ffd700, #ffaa00, #ffd700)';
     glowColor = '0 0 12px rgba(255,215,0,0.6)';
@@ -983,13 +973,14 @@ function getGiftIcon(gift) {
     frameColor = 'linear-gradient(135deg, #4a4a4a, #6a6a6a, #4a4a4a)';
     glowColor = '0 0 6px rgba(100,100,100,0.3)';
   }
-  
-  return '<div style="background:' + frameColor + '; border-radius:16px; padding:' + borderWidth + '; box-shadow:' + glowColor + '; position:relative; display:inline-block">' +
-           '<div style="background:#1a1a2e; border-radius:13px; padding:6px; position:relative; overflow:hidden">' +
-             '<span style="font-size:32px; display:block; text-align:center">' + emoji + '</span>' +
-             '<div style="position:absolute; top:0; left:-100%; width:100%; height:100%; background:linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); animation:shimmerGift 2s infinite"></div>' +
-           '</div>' +
-         '</div>';
+
+  const emoji = gift.icon || gift.emoji || '🎁';
+
+  return `<div style="background:${frameColor}; border-radius:16px; padding:${borderWidth}; box-shadow:${glowColor}; display:inline-block">
+            <div style="background:#1a1a2e; border-radius:13px; padding:6px;">
+              <span style="font-size:32px">${emoji}</span>
+            </div>
+          </div>`;
 }
 // НОВАЯ ВЕРСИЯ loadRealGifts — сохраняем sticker_file_id
 async function loadRealGifts() {
