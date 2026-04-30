@@ -8,23 +8,26 @@ export default async function handler(req, res) {
   const BOT_TOKEN = '8209263425:AAFZQzJCzLmnV044UPaCWJWJZ3ZQw24H85k';
   
   try {
-    const fileInfo = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getFile?file_id=${file_id}`);
-    const fileData = await fileInfo.json();
+    // Получаем ссылку на файл через Bot API
+    const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getFile?file_id=${file_id}`);
+    const data = await response.json();
     
-    if (!fileData.ok) {
-      throw new Error('Telegram API error');
+    if (!data.ok) {
+      console.error('Telegram error:', data);
+      return res.status(500).json({ error: 'Telegram API error', details: data });
     }
     
-    const imageUrl = `https://api.telegram.org/file/bot${BOT_TOKEN}/${fileData.result.file_path}`;
+    // Получаем и возвращаем картинку
+    const imageUrl = `https://api.telegram.org/file/bot${BOT_TOKEN}/${data.result.file_path}`;
     const image = await fetch(imageUrl);
-    const imageBuffer = await image.arrayBuffer();
+    const buffer = await image.arrayBuffer();
     
-    res.setHeader('Content-Type', 'image/webp');
+    res.setHeader('Content-Type', 'image/png');
     res.setHeader('Cache-Control', 'public, max-age=86400');
-    res.send(Buffer.from(imageBuffer));
+    res.send(Buffer.from(buffer));
     
   } catch (error) {
-    console.error('Image proxy error:', error);
+    console.error('Proxy error:', error);
     res.status(500).json({ error: error.message });
   }
 }
