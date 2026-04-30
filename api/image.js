@@ -7,18 +7,17 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Проверяем, что file_id работает
-    const url = `https://api.telegram.org/bot${BOT_TOKEN}/getFile?file_id=${file_id}`;
-    const response = await fetch(url);
-    const data = await response.json();
+    // Получаем ссылку на файл
+    const tgRes = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getFile?file_id=${file_id}`);
+    const tgData = await tgRes.json();
     
-    if (!data.ok) {
-      console.error('Telegram error for file_id:', file_id.substring(0, 30) + '...', data);
-      return res.status(500).json({ error: 'Invalid file_id', details: data });
+    if (!tgData.ok) {
+      console.error('Telegram error:', tgData);
+      return res.status(500).json({ error: 'Invalid file_id', details: tgData });
     }
     
     // Получаем картинку
-    const imgUrl = `https://api.telegram.org/file/bot${BOT_TOKEN}/${data.result.file_path}`;
+    const imgUrl = `https://api.telegram.org/file/bot${BOT_TOKEN}/${tgData.result.file_path}`;
     const imgRes = await fetch(imgUrl);
     const buffer = await imgRes.arrayBuffer();
     
