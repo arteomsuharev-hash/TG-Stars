@@ -19,25 +19,41 @@ export default async function handler(req, res) {
     await client.connect();
     const result = await client.invoke(new Api.payments.GetStarGifts({ hash: 0 }));
     
-    const gifts = result.gifts.map(g => {
-      // Пробуем получить accessHash (он нужен для Bot API)
-      let stickerFileId = null;
-      if (g.sticker && g.sticker.accessHash) {
-        stickerFileId = String(g.sticker.accessHash);
-      } else if (g.sticker && g.sticker.id) {
-        stickerFileId = String(g.sticker.id);
+    // Для каждого подарка получаем реальный file_id через getDocument
+    const gifts = [];
+    for (const gift of result.gifts) {
+      let realFileId = null;
+      
+      if (gift.sticker) {
+        try {
+          // Получаем информацию о стикере через getDocument
+          const document = await client.invoke(new Api.upload.GetFile({
+            location: new Api.InputDocumentFileLocation({
+              id: gift.sticker.id,
+              accessHash: gift.sticker.accessHash,
+              thumbSize: '',
+              version: gift.sticker.version
+            }),
+            limit: 32,
+            offset: 0
+          }));
+          
+          // Формируем file_id в формате, понятном Bot API
+          if (document) {
+            realFileId = `${gift.sticker.id}_${gift.sticker.accessHash}`;
+          }
+        } catch(e) {
+          console.error(`Error getting file for gift ${gift.id}:`, e.message);
+        }
       }
       
-      return {
-        id: g.id.toString(),
-        name: g.title,
-        price: g.stars,
-        sticker_file_id: stickerFileId,
-      };
-    });
-    
-    // Выводим в логи первые 3 file_id для диагностики
-    console.log('Sample sticker_file_id:', gifts.slice(0, 3).map(g => ({ name: g.name, id: g.sticker_file_id })));
+      gifts.push({
+        id: gift.id.toString(),
+        name: gift.title,
+        price: gift.stars,
+        sticker_file_id: realFileId,
+      });
+    }
     
     res.json({ success: true, gifts });
     
