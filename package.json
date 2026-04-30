@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "type": "module",
   "dependencies": {
-    "telegram": "^2.0.0"
+    "telegram": "^2.26.0",
+    "sharp": "^0.33.0",
+    "@sparticuz/chromium": "^123.0.0",
+    "puppeteer-core": "^22.0.0"
   }
 }
