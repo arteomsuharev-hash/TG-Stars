@@ -958,42 +958,104 @@ function getGiftIcon(gift) {
   var name = gift.name || '';
   var emoji = '🎁';
   
-  // ===== ВЫБОР ЭМОДЗИ ПО НАЗВАНИЮ =====
-  if (name.includes('Crown') || name.includes('Корона')) emoji = '👑';
-  else if (name.includes('Dragon') || name.includes('Дракон')) emoji = '🐉';
-  else if (name.includes('Star') || name.includes('Звезда')) emoji = '⭐';
-  else if (name.includes('Heart') || name.includes('Сердце')) emoji = '❤️';
-  else if (name.includes('Rose') || name.includes('Роза')) emoji = '🌹';
-  else if (name.includes('Skull') || name.includes('Череп')) emoji = '💀';
-  else if (name.includes('Gem') || name.includes('Самоцвет')) emoji = '💎';
-  else if (name.includes('Crystal') || name.includes('Кристалл')) emoji = '🔮';
-  else if (name.includes('Potion') || name.includes('Зелье')) emoji = '🧪';
-  else if (name.includes('Egg') || name.includes('Яйцо')) emoji = '🥚';
-  else if (name.includes('Sword') || name.includes('Меч')) emoji = '⚔️';
-  else if (name.includes('Ring') || name.includes('Кольцо')) emoji = '💍';
-  else if (name.includes('Flower') || name.includes('Цветок')) emoji = '🌸';
-  else if (name.includes('Moon') || name.includes('Луна')) emoji = '🌙';
-  // ===== ВЫБОР ЭМОДЗИ ПО ЦЕНЕ =====
+  // ========== ВЫБОР ЭМОДЗИ ПО НАЗВАНИЮ ==========
+  var lowerName = name.toLowerCase();
+  
+  // Драгоценности и кристаллы
+  if (lowerName.includes('shard') || lowerName.includes('gem') || lowerName.includes('crystal') || lowerName.includes('infinity') || lowerName.includes('void') || lowerName.includes('diamond')) emoji = '💎';
+  // Короны и трофеи
+  else if (lowerName.includes('crown') || lowerName.includes('trophy') || lowerName.includes('chalice')) emoji = '👑';
+  // Драконы и мифические
+  else if (lowerName.includes('dragon') || lowerName.includes('phoenix') || lowerName.includes('unicorn') || lowerName.includes('griffin')) emoji = '🐉';
+  // Звёзды и космос
+  else if (lowerName.includes('star') || lowerName.includes('nova') || lowerName.includes('galaxy') || lowerName.includes('cosmic') || lowerName.includes('stardust')) emoji = '⭐';
+  // Сердца и любовь
+  else if (lowerName.includes('heart') || lowerName.includes('love') || lowerName.includes('rose') || lowerName.includes('eternal')) emoji = '❤️';
+  // Розы и цветы
+  else if (lowerName.includes('rose') || lowerName.includes('flower') || lowerName.includes('blossom') || lowerName.includes('lotus')) emoji = '🌹';
+  // Черепа и тьма
+  else if (lowerName.includes('skull') || lowerName.includes('void') || lowerName.includes('shadow') || lowerName.includes('dark')) emoji = '💀';
+  // Зелья и магия
+  else if (lowerName.includes('potion') || lowerName.includes('elixir') || lowerName.includes('magic') || lowerName.includes('spell') || lowerName.includes('hex')) emoji = '🧪';
+  // Яйца и драконы
+  else if (lowerName.includes('egg') || lowerName.includes('dino') || lowerName.includes('hatch')) emoji = '🥚';
+  // Мечи и оружие
+  else if (lowerName.includes('sword') || lowerName.includes('blade') || lowerName.includes('pixel sword')) emoji = '⚔️';
+  // Кольца и украшения
+  else if (lowerName.includes('ring') || lowerName.includes('band') || lowerName.includes('hologram')) emoji = '💍';
+  // Луна и ночь
+  else if (lowerName.includes('moon') || lowerName.includes('lunar') || lowerName.includes('night') || lowerName.includes('lamp')) emoji = '🌙';
+  // Огонь и плазма
+  else if (lowerName.includes('flame') || lowerName.includes('fire') || lowerName.includes('plasma') || lowerName.includes('arc')) emoji = '🔥';
+  // Животные
+  else if (lowerName.includes('pepe') || lowerName.includes('frog')) emoji = '🐸';
+  else if (lowerName.includes('bunny') || lowerName.includes('rabbit') || lowerName.includes('jelly')) emoji = '🐰';
+  else if (lowerName.includes('cat') || lowerName.includes('paw')) emoji = '🐱';
+  else if (lowerName.includes('panda') || lowerName.includes('bear')) emoji = '🐼';
+  else if (lowerName.includes('fish') || lowerName.includes('space fish')) emoji = '🐠';
+  else if (lowerName.includes('bird') || lowerName.includes('phoenix')) emoji = '🐦';
+  else if (lowerName.includes('fox')) emoji = '🦊';
+  // Еда
+  else if (lowerName.includes('pop') || lowerName.includes('lollipop')) emoji = '🍭';
+  else if (lowerName.includes('muffin') || lowerName.includes('cake')) emoji = '🧁';
+  else if (lowerName.includes('candy') || lowerName.includes('sweet')) emoji = '🍬';
+  else if (lowerName.includes('wine') || lowerName.includes('drink')) emoji = '🍷';
+  else if (lowerName.includes('cheese')) emoji = '🧀';
+  else if (lowerName.includes('berry') || lowerName.includes('fruit')) emoji = '🍓';
+  else if (lowerName.includes('pumpkin')) emoji = '🎃';
+  else if (lowerName.includes('gummy')) emoji = '🐻';
+  // Технологии
+  else if (lowerName.includes('robot') || lowerName.includes('cyber') || lowerName.includes('mech')) emoji = '🤖';
+  else if (lowerName.includes('rocket') || lowerName.includes('space')) emoji = '🚀';
+  else if (lowerName.includes('laser') || lowerName.includes('cyber')) emoji = '😸';
+  else if (lowerName.includes('tape') || lowerName.includes('retro')) emoji = '📼';
+  else if (lowerName.includes('gadget') || lowerName.includes('device')) emoji = '🎮';
+  // Магия и мистика
+  else if (lowerName.includes('crystal ball') || lowerName.includes('oracle')) emoji = '🔮';
+  else if (lowerName.includes('witch') || lowerName.includes('hat')) emoji = '🎩';
+  else if (lowerName.includes('voodoo') || lowerName.includes('doll')) emoji = '🪆';
+  else if (lowerName.includes('wand') || lowerName.includes('bubble')) emoji = '🪄';
+  // Погода и стихии
+  else if (lowerName.includes('storm') || lowerName.includes('cloud')) emoji = '⛈️';
+  else if (lowerName.includes('ice') || lowerName.includes('cube') || lowerName.includes('snow')) emoji = '🧊';
+  // Разное
+  else if (lowerName.includes('neon') || lowerName.includes('sign')) emoji = '💡';
+  else if (lowerName.includes('tongue') || lowerName.includes('sharp')) emoji = '🌶️';
+  else if (lowerName.includes('cherry') || lowerName.includes('bomb')) emoji = '💣';
+  else if (lowerName.includes('cube') || lowerName.includes('void')) emoji = '🎲';
+  else if (lowerName.includes('chest') || lowerName.includes('treasure')) emoji = '🎁';
+  else if (lowerName.includes('globe') || lowerName.includes('snow')) emoji = '🌨️';
+  
+  // ========== ВЫБОР ЭМОДЗИ ПО ЦЕНЕ (если не подобрали по названию) ==========
   else if (price >= 500) emoji = '💎';
   else if (price >= 200) emoji = '✨';
   else if (price >= 80) emoji = '⭐';
+  else if (price >= 50) emoji = '🌟';
+  else if (price >= 25) emoji = '🎁';
+  else emoji = '📦';
   
-  // ===== РАМКА В ЗАВИСИМОСТИ ОТ ЦЕНЫ =====
+  // ========== РАМКА В ЗАВИСИМОСТИ ОТ ЦЕНЫ ==========
   var frameColor = '';
   var borderWidth = '2px';
+  var glowColor = '';
+  
   if (price >= 500) {
     frameColor = 'linear-gradient(135deg, #ffd700, #ffaa00, #ffd700)';
+    glowColor = '0 0 12px rgba(255,215,0,0.6)';
     borderWidth = '3px';
   } else if (price >= 200) {
     frameColor = 'linear-gradient(135deg, #c0c0c0, #e8e8e8, #c0c0c0)';
+    glowColor = '0 0 10px rgba(192,192,192,0.5)';
   } else if (price >= 80) {
     frameColor = 'linear-gradient(135deg, #cd7f32, #e8a95b, #cd7f32)';
+    glowColor = '0 0 8px rgba(205,127,50,0.4)';
   } else {
     frameColor = 'linear-gradient(135deg, #4a4a4a, #6a6a6a, #4a4a4a)';
+    glowColor = '0 0 6px rgba(100,100,100,0.3)';
   }
   
   // ===== ОТРИСОВКА =====
-  return `<div style="background:${frameColor}; border-radius:16px; padding:${borderWidth}; display:inline-block; box-shadow:0 2px 8px rgba(0,0,0,0.3)">
+  return `<div style="background:${frameColor}; border-radius:16px; padding:${borderWidth}; box-shadow:${glowColor}; display:inline-block">
             <div style="background:#1a1a2e; border-radius:13px; padding:8px;">
               <span style="font-size:36px; display:block; text-align:center">${emoji}</span>
             </div>
