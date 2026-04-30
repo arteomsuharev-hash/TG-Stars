@@ -954,31 +954,48 @@ var realGiftsList = [];
 function getGiftIcon(gift) {
   if (!gift) return '🎁';
   
-  const price = gift.price || gift.val || 0;
-  let frameColor = '';
-  let glowColor = '';
-  let borderWidth = '2px';
-
+  var price = gift.price || gift.val || 0;
+  var name = gift.name || '';
+  var emoji = '🎁';
+  
+  // ===== ВЫБОР ЭМОДЗИ ПО НАЗВАНИЮ =====
+  if (name.includes('Crown') || name.includes('Корона')) emoji = '👑';
+  else if (name.includes('Dragon') || name.includes('Дракон')) emoji = '🐉';
+  else if (name.includes('Star') || name.includes('Звезда')) emoji = '⭐';
+  else if (name.includes('Heart') || name.includes('Сердце')) emoji = '❤️';
+  else if (name.includes('Rose') || name.includes('Роза')) emoji = '🌹';
+  else if (name.includes('Skull') || name.includes('Череп')) emoji = '💀';
+  else if (name.includes('Gem') || name.includes('Самоцвет')) emoji = '💎';
+  else if (name.includes('Crystal') || name.includes('Кристалл')) emoji = '🔮';
+  else if (name.includes('Potion') || name.includes('Зелье')) emoji = '🧪';
+  else if (name.includes('Egg') || name.includes('Яйцо')) emoji = '🥚';
+  else if (name.includes('Sword') || name.includes('Меч')) emoji = '⚔️';
+  else if (name.includes('Ring') || name.includes('Кольцо')) emoji = '💍';
+  else if (name.includes('Flower') || name.includes('Цветок')) emoji = '🌸';
+  else if (name.includes('Moon') || name.includes('Луна')) emoji = '🌙';
+  // ===== ВЫБОР ЭМОДЗИ ПО ЦЕНЕ =====
+  else if (price >= 500) emoji = '💎';
+  else if (price >= 200) emoji = '✨';
+  else if (price >= 80) emoji = '⭐';
+  
+  // ===== РАМКА В ЗАВИСИМОСТИ ОТ ЦЕНЫ =====
+  var frameColor = '';
+  var borderWidth = '2px';
   if (price >= 500) {
     frameColor = 'linear-gradient(135deg, #ffd700, #ffaa00, #ffd700)';
-    glowColor = '0 0 12px rgba(255,215,0,0.6)';
     borderWidth = '3px';
   } else if (price >= 200) {
     frameColor = 'linear-gradient(135deg, #c0c0c0, #e8e8e8, #c0c0c0)';
-    glowColor = '0 0 10px rgba(192,192,192,0.5)';
   } else if (price >= 80) {
     frameColor = 'linear-gradient(135deg, #cd7f32, #e8a95b, #cd7f32)';
-    glowColor = '0 0 8px rgba(205,127,50,0.4)';
   } else {
     frameColor = 'linear-gradient(135deg, #4a4a4a, #6a6a6a, #4a4a4a)';
-    glowColor = '0 0 6px rgba(100,100,100,0.3)';
   }
-
-  const emoji = gift.icon || gift.emoji || '🎁';
-
-  return `<div style="background:${frameColor}; border-radius:16px; padding:${borderWidth}; box-shadow:${glowColor}; display:inline-block">
-            <div style="background:#1a1a2e; border-radius:13px; padding:6px;">
-              <span style="font-size:32px">${emoji}</span>
+  
+  // ===== ОТРИСОВКА =====
+  return `<div style="background:${frameColor}; border-radius:16px; padding:${borderWidth}; display:inline-block; box-shadow:0 2px 8px rgba(0,0,0,0.3)">
+            <div style="background:#1a1a2e; border-radius:13px; padding:8px;">
+              <span style="font-size:36px; display:block; text-align:center">${emoji}</span>
             </div>
           </div>`;
 }
