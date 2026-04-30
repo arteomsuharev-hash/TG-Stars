@@ -974,7 +974,7 @@ function getGiftIcon(gift) {
     glowColor = '0 0 6px rgba(100,100,100,0.3)';
   }
   
-  // Прямая ссылка на картинку
+  // Реальная картинка из API
   if (gift.image_url) {
     return `<div style="background:${frameColor}; border-radius:16px; padding:${borderWidth}; box-shadow:${glowColor}; position:relative; display:inline-block">
               <div style="background:#1a1a2e; border-radius:13px; padding:6px; position:relative; overflow:hidden">
@@ -993,7 +993,6 @@ function getGiftIcon(gift) {
            '</div>' +
          '</div>';
 }
-
 // НОВАЯ ВЕРСИЯ loadRealGifts — сохраняем sticker_file_id
 async function loadRealGifts() {
   try {
