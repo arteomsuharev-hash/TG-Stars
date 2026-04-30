@@ -1211,44 +1211,61 @@ function incLuck(n){state.luck=Math.min(200,state.luck+(n||1));updateLuckBar();}
 function updateLuckBar(){var p=Math.min(100,state.luck/2);document.getElementById('luckFill').style.width=p+'%';document.getElementById('luckPct').innerText=Math.round(p)+'%';}
 function addHist(icon,action,result,pos){state.history.unshift({icon:icon,action:action,result:result,pos:pos,ts:Date.now()});if(state.history.length>60)state.history=state.history.slice(0,60);}
 
-function renderInv(cid, withSell, mode) {
-  var el=document.getElementById(cid); if(!el) return;
-  if(!state.inventory.length){el.innerHTML='<div class="inv-empty">📭 Нет подарков</div>';return;}
-  var html='';
-  for(var i=0;i<state.inventory.length;i++){
-    var g=state.inventory[i];
-    var iconHtml=getGiftIcon(g);
-    html+='<div class="inv-card" data-gi="'+i+'" data-mode="'+(mode||'')+'"><div class="inv-dot r-'+(g.rarity||'common')+'"></div><div class="inv-icon">'+iconHtml+'</div><div class="inv-name">'+escapeHtml(g.name)+'</div><div class="inv-val">★ '+g.val+'</div>';
-    if(withSell) html+='<button class="sell-chip" data-idx="'+i+'">Продать</button>';
-    html+='</div>';
+async function renderInv(cid, withSell, mode) {
+  var el = document.getElementById(cid);
+  if (!el) return;
+  
+  if (!state.inventory.length) {
+    el.innerHTML = '<div class="inv-empty">📭 Нет подарков</div>';
+    return;
   }
-  el.innerHTML=html;
-  if(withSell){
-    var chips=el.querySelectorAll('.sell-chip');
-    for(var j=0;j<chips.length;j++) chips[j].onclick=function(e){e.stopPropagation();sellGift(parseInt(this.dataset.idx));};
+  
+  var html = '';
+  for (var i = 0; i < state.inventory.length; i++) {
+    var g = state.inventory[i];
+    var iconHtml = await getGiftIcon(g);
+    html += '<div class="inv-card" data-gi="' + i + '" data-mode="' + (mode || '') + '">' +
+              '<div class="inv-dot r-' + (g.rarity || 'common') + '"></div>' +
+              '<div class="inv-icon">' + iconHtml + '</div>' +
+              '<div class="inv-name">' + escapeHtml(g.name) + '</div>' +
+              '<div class="inv-val">★ ' + g.val + '</div>' +
+              (withSell ? '<button class="sell-chip" data-idx="' + i + '">Продать</button>' : '') +
+            '</div>';
   }
-  var cards=el.querySelectorAll('.inv-card');
-  for(var k=0;k<cards.length;k++){
-    cards[k].onclick=(function(card){
-      return function(e){
-        if(e.target.classList.contains('sell-chip')) return;
-        var idx=parseInt(card.dataset.gi);
-        var m=card.dataset.mode;
-        if(m==='upgrade') pickUpgStake(idx);
-        else if(m==='craft') pickCraft(idx);
-        else if(m==='pvp_pub') pickPvp(idx,'public');
-        else if(m==='pvp_priv') pickPvp(idx,'private');
+  el.innerHTML = html;
+  
+  if (withSell) {
+    var chips = el.querySelectorAll('.sell-chip');
+    for (var j = 0; j < chips.length; j++) {
+      chips[j].onclick = function(e) {
+        e.stopPropagation();
+        sellGift(parseInt(this.dataset.idx));
+      };
+    }
+  }
+  
+  var cards = el.querySelectorAll('.inv-card');
+  for (var k = 0; k < cards.length; k++) {
+    cards[k].onclick = (function(card) {
+      return function(e) {
+        if (e.target.classList.contains('sell-chip')) return;
+        var idx = parseInt(card.dataset.gi);
+        var m = card.dataset.mode;
+        if (m === 'upgrade') pickUpgStake(idx);
+        else if (m === 'craft') pickCraft(idx);
+        else if (m === 'pvp_pub') pickPvp(idx, 'public');
+        else if (m === 'pvp_priv') pickPvp(idx, 'private');
       };
     })(cards[k]);
   }
 }
 
-function renderAllInv(){
-  renderInv('invCases');
-  renderInv('invUpgrade',false,'upgrade');
-  renderInv('invCraft',false,'craft');
-  renderInv('invPvp',false,pvpMode==='private'?'pvp_priv':'pvp_pub');
-  renderInv('invProfile',true);
+async function renderAllInv() {
+  await renderInv('invCases');
+  await renderInv('invUpgrade', false, 'upgrade');
+  await renderInv('invCraft', false, 'craft');
+  await renderInv('invPvp', false, pvpMode === 'private' ? 'pvp_priv' : 'pvp_pub');
+  await renderInv('invProfile', true);
 }
 
 function sellGift(i){
@@ -1294,9 +1311,13 @@ function renderHist(){
   }
   el.innerHTML=html;
 }
-function updateAllUI(){
-  document.getElementById('balVal').innerText=state.balance;
-  renderAllInv(); updateStats(); renderUpgradeUI(); renderCraftSlots(); renderPvpLobby();
+async function updateAllUI() {
+  document.getElementById('balVal').innerText = state.balance;
+  await renderAllInv();
+  updateStats();
+  renderUpgradeUI();
+  renderCraftSlots();
+  renderPvpLobby();
 }
 
 function renderCases(){
@@ -2143,9 +2164,9 @@ async function init(){
   try{var loc=localStorage.getItem('gc_state');if(loc){var d=JSON.parse(loc);if(d.userId===userId&&d.state&&Date.now()-d.ts<3600000)state=Object.assign({},state,d.state);}}catch(e){}
   await loadRealGifts();
   renderCases();
-  updateAllUI();
+  await updateAllUI();
   await loadUser();
-  updateAllUI();
+  await updateAllUI();
   loadBattles();
   initRT();
   checkReferral();
