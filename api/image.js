@@ -24,7 +24,7 @@ export default async function handler(req, res) {
     res.send(Buffer.from(imageBuffer));
     
   } catch (error) {
-    console.error('Proxy error:', error);
+    console.error('Image proxy error:', error);
     res.status(500).json({ error: error.message });
   }
 }
