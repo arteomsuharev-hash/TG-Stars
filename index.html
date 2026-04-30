@@ -961,7 +961,7 @@ async function getGiftIcon(gift) {
       body: JSON.stringify({
         id: gift.id,
         price: gift.price,
-        sticker: gift.sticker
+        name: gift.name
       })
     });
     
@@ -971,13 +971,10 @@ async function getGiftIcon(gift) {
       return `<img src="${url}" style="width:64px;height:64px;border-radius:12px;object-fit:contain">`;
     }
   } catch(e) {
-    console.warn('Image error:', e);
+    console.warn('Image failed:', e);
   }
   
-  // fallback
-  var price = gift.price || 0;
-  var emoji = price >= 500 ? '💎' : (price >= 200 ? '✨' : (price >= 80 ? '⭐' : '🎁'));
-  return `<span style="font-size:32px">${emoji}</span>`;
+  return '<span style="font-size:32px">🎁</span>';
 }
 // НОВАЯ ВЕРСИЯ loadRealGifts — сохраняем sticker_file_id
 async function loadRealGifts() {
