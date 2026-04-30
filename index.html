@@ -980,8 +980,8 @@ async function getGiftIcon(gift) {
 // НОВАЯ ВЕРСИЯ loadRealGifts — сохраняем sticker_file_id
 async function loadRealGifts() {
   try {
-    console.log('🔄 Загружаем подарки через MTProto API...');
-    const response = await fetch('/api/gifts');
+    console.log('🔄 Загружаем подарки с Render...');
+    const response = await fetch('https://tg-stars-0ad4.onrender.com/api/gifts');
     const data = await response.json();
     
     if (data.success && data.gifts) {
@@ -989,31 +989,21 @@ async function loadRealGifts() {
         id: g.id,
         name: g.name,
         price: g.price,
-        sticker_file_id: g.sticker_file_id,
-        icon: '🎁',
-        emoji: '🎁',
-        rarity: getRarityByPrice(g.price),
-        is_unique: g.is_unique || false
       }));
       
-      console.log('✅ Загружено через MTProto:', realGiftsList.length, 'подарков');
+      console.log('✅ Загружено:', realGiftsList.length, 'подарков');
       updateAllUI();
       return true;
-    } else {
-      throw new Error('API вернул ошибку');
     }
-    
   } catch(e) {
-    console.warn('⚠️ MTProto API ошибка:', e.message);
-    
-    if (!realGiftsList.length) {
-      realGiftsList = REAL_TG_GIFTS;
-      console.log('✅ Используем хардкод:', realGiftsList.length, 'подарков');
-    }
-    
-    updateAllUI();
-    return false;
+    console.warn('API ошибка:', e);
   }
+  
+  // Фолбэк на хардкод
+  realGiftsList = REAL_TG_GIFTS;
+  updateAllUI();
+  return false;
+}
 }
 
 function getRarityByPrice(price) {
