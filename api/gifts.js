@@ -20,13 +20,21 @@ export default async function handler(req, res) {
     
     const result = await client.invoke(new Api.payments.GetStarGifts({ hash: 0 }));
     
-    // Максимально простой ответ
-    const gifts = result.gifts.map(g => ({
-      id: g.id.toString(),
-      name: g.title,
-      price: g.stars,
-      sticker_file_id: null  // пока убираем картинки, сначала заставим работать API
-    }));
+    const gifts = result.gifts.map(g => {
+      // Получаем file_id стикера через Bot API
+      let stickerFileId = null;
+      if (g.sticker && g.sticker.id) {
+        // Убираем лишние символы и оставляем только цифры
+        stickerFileId = String(g.sticker.id);
+      }
+      
+      return {
+        id: g.id.toString(),
+        name: g.title,
+        price: g.stars,
+        sticker_file_id: stickerFileId
+      };
+    });
     
     res.json({ success: true, gifts });
     
