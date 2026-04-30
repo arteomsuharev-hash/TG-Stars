@@ -11,6 +11,8 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Methods', 'GET');
   
   try {
+    console.log('🔄 Connecting to Telegram...');
+    
     const client = new TelegramClient(
       new StringSession(SESSION),
       apiId,
@@ -19,49 +21,37 @@ export default async function handler(req, res) {
     );
     
     await client.connect();
+    console.log('✅ Connected');
     
     const result = await client.invoke(new Api.payments.GetStarGifts({ hash: 0 }));
+    console.log('✅ Got gifts, count:', result.gifts.length);
     
+    // Упрощённое формирование ответа
     const gifts = result.gifts.map(gift => {
-      // Пытаемся получить правильный file_id стикера
+      // Пробуем получить sticker_file_id безопасно
       let stickerFileId = null;
-      if (gift.sticker) {
-        // Вариант 1: используем accessHash (часто работает лучше)
-        if (gift.sticker.accessHash) {
-          stickerFileId = gift.sticker.accessHash;
+      try {
+        if (gift.sticker && typeof gift.sticker === 'object') {
+          stickerFileId = gift.sticker.id || null;
         }
-        // Вариант 2: используем id
-        else if (gift.sticker.id) {
-          stickerFileId = gift.sticker.id;
-        }
-        // Вариант 3: используем DC ID (редко, но бывает)
-        else if (gift.sticker.dcId) {
-          stickerFileId = gift.sticker.dcId;
-        }
-      }
-      
-      // Если не удалось получить file_id, возвращаем null
-      // В консоль выведем предупреждение
-      if (!stickerFileId) {
-        console.warn('No sticker_file_id for gift:', gift.id, gift.title);
+      } catch(e) {
+        console.warn('Error getting sticker for gift', gift.id);
       }
       
       return {
-        id: gift.id,
-        name: gift.title,
+        id: String(gift.id),
+        name: gift.title || 'Unknown Gift',
         price: gift.stars,
-        sticker_file_id: stickerFileId ? String(stickerFileId) : null,
-        is_unique: !!(gift.attributes?.length)
+        sticker_file_id: stickerFileId,
+        is_unique: !!(gift.attributes && gift.attributes.length)
       };
     });
     
-    console.log(`✅ Загружено ${gifts.length} подарков`);
-    console.log(`✅ Подарков с картинками: ${gifts.filter(g => g.sticker_file_id).length}`);
-    
+    console.log(`✅ Sending ${gifts.length} gifts`);
     res.json({ success: true, count: gifts.length, gifts });
     
   } catch (error) {
-    console.error('API Error:', error);
+    console.error('❌ API Error:', error.message);
     res.status(500).json({ success: false, error: error.message });
   }
 }
