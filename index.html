@@ -955,10 +955,68 @@ function getGiftIcon(gift) {
   if (!gift) return '🎁';
   
   var price = gift.price || gift.val || 0;
+  var name = gift.name || '';
   var frameColor = '';
   var glowColor = '';
   var borderWidth = '2px';
   
+  // Map точных соответствий эмодзи для подарков
+  var emojiMap = {
+    "Astral Shard": "💎",
+    "Plush Pepe": "🐸",
+    "Lol Pop": "🍭",
+    "Tama Gadget": "🎮",
+    "Sharp Tongue": "🌶️",
+    "Spiced Wine": "🍷",
+    "Crystal Ball": "🔮",
+    "Neon Sign": "💡",
+    "Ice Cube": "🧊",
+    "Star Blast": "🌟",
+    "Bunny Muffin": "🧁",
+    "Hex Pot": "🫙",
+    "Trapped Heart": "💖",
+    "Eternal Rose": "🌹",
+    "Mad Pumpkin": "🎃",
+    "Love Potion": "🧪",
+    "Astral Crown": "👑",
+    "Cyber Skull": "💀",
+    "Jelly Bunny": "🐇",
+    "Dragon Egg": "🥚",
+    "Neon Candy": "🍬",
+    "Golden Trophy": "🏆",
+    "Fire Flower": "🌺",
+    "Robot Toy": "🤖",
+    "Sky Rocket": "🚀",
+    "Voodoo Doll": "🪆",
+    "Berry Box": "🍓",
+    "Plasma Arc": "⚡",
+    "Witch Hat": "🎩",
+    "Moon Lamp": "🌙",
+    "Treasure Chest": "🎁",
+    "Snow Globe": "🌨️",
+    "Pixel Sword": "⚔️",
+    "Cat Paw": "🐾",
+    "Gummy Bear": "🐻",
+    "Infinity Gem": "♾️",
+    "Pixel Heart": "❤️",
+    "Laser Cat": "😸",
+    "Bubble Wand": "🪄",
+    "Nova Star": "⭐",
+    "Dino Egg": "🦕",
+    "Cheese Block": "🧀",
+    "Storm Cloud": "⛈️",
+    "Hologram Ring": "💍",
+    "Soft Panda": "🐼",
+    "Flame Orb": "🔥",
+    "Retro Tape": "📼",
+    "Void Cube": "🎲",
+    "Cherry Bomb": "💣",
+    "Space Fish": "🐠"
+  };
+  
+  var emoji = emojiMap[name] || '🎁';
+  
+  // Рамка по цене
   if (price >= 500) {
     frameColor = 'linear-gradient(135deg, #ffd700, #ffaa00, #ffd700)';
     glowColor = '0 0 12px rgba(255,215,0,0.6)';
@@ -974,7 +1032,6 @@ function getGiftIcon(gift) {
     glowColor = '0 0 6px rgba(100,100,100,0.3)';
   }
   
-  var emoji = gift.icon || gift.emoji || '🎁';
   return '<div style="background:' + frameColor + '; border-radius:16px; padding:' + borderWidth + '; box-shadow:' + glowColor + '; position:relative; display:inline-block">' +
            '<div style="background:#1a1a2e; border-radius:13px; padding:6px; position:relative; overflow:hidden">' +
              '<span style="font-size:32px; display:block; text-align:center">' + emoji + '</span>' +
