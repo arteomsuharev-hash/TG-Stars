@@ -19,12 +19,12 @@ export default async function handler(req, res) {
     await client.connect();
     const result = await client.invoke(new Api.payments.GetStarGifts({ hash: 0 }));
     
-    const gifts = result.gifts.map(g => ({
-      id: g.id.toString(),
-      name: g.title,
-      price: g.stars,
-      image_url: `/gifts/${g.id}.png`  // ← прямая ссылка на PNG по ID
-    }));
+    const gifts = result.gifts.map((g, index) => ({
+  id: g.id.toString(),
+  name: g.title,
+  price: g.stars,
+  image_url: `/gifts/${index + 1}.png`  // ← используем индекс массива (0 → 1.png)
+}));
     
     res.json({ success: true, gifts });
     
