@@ -10,7 +10,7 @@ export default async function handler(req, res) {
   
   try {
     // Gift Asset API — готовые картинки подарков
-    const response = await fetch('https://api.giftasset.io/v1/gifts');
+    const response = await fetch('https://gifts-api.deno.dev/gifts');
     const data = await response.json();
     
     if (!data.gifts) {
