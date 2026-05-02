@@ -959,34 +959,28 @@ var iconLoading = {}; // id → Promise (чтобы не дублировать 
 function getGiftIcon(gift) {
   if (!gift) return '🎁';
   
-  // Если есть ссылка на .tgs — показываем анимацию
-  if (gift.image_url && gift.image_url.includes('.tgs')) {
-    return `<lottie-player src="${gift.image_url}" style="width:64px;height:64px" autoplay loop></lottie-player>`;
+  // Показываем PNG
+  if (gift.image_url) {
+    return `<img src="${gift.image_url}" style="width:64px;height:64px;border-radius:12px;object-fit:contain" onerror="this.outerHTML='<span style=\'font-size:32px\'>🎁</span>'">`;
   }
   
-  // Запасной вариант — эмодзи по цене
+  // fallback эмодзи
   const price = gift.price || 0;
   let emoji = '🎁';
   let color = '#555';
-  let borderWidth = '2px';
-  
   if (price >= 500) {
     emoji = '💎';
     color = '#ffd700';
-    borderWidth = '3px';
   } else if (price >= 200) {
     emoji = '✨';
     color = '#c0c0c0';
   } else if (price >= 80) {
     emoji = '⭐';
     color = '#cd7f32';
-  } else if (price >= 50) {
-    emoji = '🌟';
-    color = '#777';
   }
   
-  return `<div style="border:${borderWidth} solid ${color}; border-radius:16px; padding:8px; background:#1a1a2e; display:inline-block; box-shadow:0 2px 8px rgba(0,0,0,0.3)">
-            <span style="font-size:32px; display:block; text-align:center">${emoji}</span>
+  return `<div style="border:2px solid ${color}; border-radius:16px; padding:8px; background:#1a1a2e; display:inline-block">
+            <span style="font-size:32px">${emoji}</span>
           </div>`;
 }
 async function loadRealGifts() {
