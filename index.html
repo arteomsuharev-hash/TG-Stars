@@ -955,75 +955,54 @@ var realGiftsList = [];
 var iconCache = {};   // id → html-строка (уже готовая)
 var iconLoading = {}; // id → Promise (чтобы не дублировать запросы)
 
-// Синхронная версия — возвращает то что есть в кэше прямо сейчас
 function getGiftIcon(gift) {
-  if (!gift) return '<span style="font-size:32px">🎁</span>';
-  var key = gift.id || gift.name || 'unknown';
-  if (iconCache[key]) return iconCache[key];
-  // Если ещё не закэшировано — запускаем фоновую загрузку и возвращаем заглушку
-  prefetchGiftIcon(gift);
-  return '<span style="font-size:32px">' + (gift.icon || '🎁') + '</span>';
-}
-
-// Асинхронная загрузка в фон — сохраняет результат в кэш
-async function prefetchGiftIcon(gift) {
-  if (!gift) return;
-  var key = gift.id || gift.name || 'unknown';
-  if (iconCache[key] || iconLoading[key]) return;
-
-  iconLoading[key] = true;
-  try {
-    var response = await fetch('https://tg-stars-0ad4.onrender.com/api/gift-image', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id: gift.id, price: gift.price || gift.val, name: gift.name })
-    });
-    if (response.ok) {
-      var blob = await response.blob();
-      var url = URL.createObjectURL(blob);
-      iconCache[key] = '<img src="' + url + '" style="width:48px;height:48px;border-radius:10px;object-fit:contain">';
-    } else {
-      iconCache[key] = '<span style="font-size:32px">' + (gift.icon || '🎁') + '</span>';
-    }
-  } catch(e) {
-    iconCache[key] = '<span style="font-size:32px">' + (gift.icon || '🎁') + '</span>';
+  if (!gift) return '🎁';
+  
+  // Если есть реальная картинка — показываем её
+  if (gift.image_url) {
+    return `<img src="${gift.image_url}" style="width:64px;height:64px;border-radius:12px;object-fit:contain" onerror="this.outerHTML='<span style=\'font-size:32px\'>🎁</span>'">`;
   }
-  delete iconLoading[key];
-}
-
-// Предзагрузка иконок
-async function prefetchAllIcons(gifts) {
-  var BATCH = 5;
-  for (var i = 0; i < gifts.length; i += BATCH) {
-    var batch = gifts.slice(i, i + BATCH);
-    await Promise.all(batch.map(function(g) { return prefetchGiftIcon(g); }));
+  
+  // Запасной вариант — эмодзи с рамкой по цене
+  const price = gift.price || 0;
+  let emoji = '🎁';
+  let color = '#555';
+  
+  if (price >= 500) {
+    emoji = '💎';
+    color = '#ffd700';
+  } else if (price >= 200) {
+    emoji = '✨';
+    color = '#c0c0c0';
+  } else if (price >= 80) {
+    emoji = '⭐';
+    color = '#cd7f32';
+  } else if (price >= 50) {
+    emoji = '🌟';
+    color = '#777';
   }
+  
+  return `<div style="border:2px solid ${color}; border-radius:16px; padding:8px; background:#1a1a2e; display:inline-block">
+            <span style="font-size:32px">${emoji}</span>
+          </div>`;
 }
-
-// НОВАЯ ВЕРСИЯ loadRealGifts — сохраняем данные + предзагрузка иконок
 async function loadRealGifts() {
   try {
-    console.log('🔄 Загружаем подарки с Render...');
-    var response = await fetch('https://tg-stars-0ad4.onrender.com/api/gifts');
-    var data = await response.json();
-
+    console.log('🔄 Загружаем подарки через Gift Asset API...');
+    const response = await fetch('/api/gifts');
+    const data = await response.json();
+    
     if (data.success && data.gifts) {
-      realGiftsList = data.gifts.map(function(g) {
-        return { id: g.id, name: g.name, price: g.price, icon: g.icon || '🎁' };
-      });
+      realGiftsList = data.gifts;
       console.log('✅ Загружено:', realGiftsList.length, 'подарков');
       updateAllUI();
-
-      prefetchAllIcons(realGiftsList.slice(0, 30)).then(function() {
-        updateAllUI();
-        prefetchAllIcons(realGiftsList.slice(30));
-      });
       return true;
     }
   } catch(e) {
     console.warn('API ошибка:', e);
   }
-
+  
+  // Фолбэк на хардкод
   realGiftsList = REAL_TG_GIFTS;
   updateAllUI();
   return false;
@@ -1239,16 +1218,16 @@ function addHist(icon,action,result,pos){state.history.unshift({icon:icon,action
 function renderInv(cid, withSell, mode) {
   var el = document.getElementById(cid);
   if (!el) return;
-
+  
   if (!state.inventory.length) {
     el.innerHTML = '<div class="inv-empty">📭 Нет подарков</div>';
     return;
   }
-
+  
   var html = '';
   for (var i = 0; i < state.inventory.length; i++) {
     var g = state.inventory[i];
-    var iconHtml = getGiftIcon(g);  // синхронно! без await
+    var iconHtml = getGiftIcon(g);  // синхронно!
     html += '<div class="inv-card" data-gi="' + i + '" data-mode="' + (mode || '') + '">' +
               '<div class="inv-dot r-' + (g.rarity || 'common') + '"></div>' +
               '<div class="inv-icon">' + iconHtml + '</div>' +
@@ -1258,18 +1237,8 @@ function renderInv(cid, withSell, mode) {
             '</div>';
   }
   el.innerHTML = html;
-
-  // После рендера — подгружаем иконки инвентаря и обновляем карточки
-  state.inventory.forEach(function(g, idx) {
-    var key = g.id || g.name || 'unknown';
-    if (!iconCache[key]) {
-      prefetchGiftIcon(g).then(function() {
-        var card = el.querySelector('[data-gi="' + idx + '"] .inv-icon');
-        if (card) card.innerHTML = getGiftIcon(g);
-      });
-    }
-  });
-
+  
+  // обработчики кликов (оставь как было)
   if (withSell) {
     var chips = el.querySelectorAll('.sell-chip');
     for (var j = 0; j < chips.length; j++) {
@@ -1279,7 +1248,7 @@ function renderInv(cid, withSell, mode) {
       };
     }
   }
-
+  
   var cards = el.querySelectorAll('.inv-card');
   for (var k = 0; k < cards.length; k++) {
     cards[k].onclick = (function(card) {
@@ -1295,7 +1264,6 @@ function renderInv(cid, withSell, mode) {
     })(cards[k]);
   }
 }
-
 function renderAllInv() {
   renderInv('invCases');
   renderInv('invUpgrade', false, 'upgrade');
