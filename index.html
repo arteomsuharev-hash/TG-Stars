@@ -13,75 +13,49 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
-/* ═══════════════════════════════════════════════════
-   DESIGN TOKENS — промт: глубокий чёрный + фиолетовый
-═══════════════════════════════════════════════════ */
 :root {
-  /* Фоны */
   --bg:       #07080C;
   --bg2:      #0A0B10;
   --s1:       #0D0E14;
   --s2:       #111219;
   --s3:       #161820;
   --s4:       #1C1E28;
-
-  /* Borders */
   --border:   rgba(255,255,255,0.06);
   --borderL:  rgba(255,255,255,0.10);
   --borderXL: rgba(255,255,255,0.16);
-
-  /* Текст */
   --tp:  #F0F0F8;
   --ts:  #888899;
   --tm:  #44445A;
   --white: #FFFFFF;
-
-  /* АКЦЕНТ: неоновый фиолетовый */
   --accent:      #6C5CE7;
   --accentL:     #8B7FF0;
   --accentGlow:  rgba(108,92,231,0.35);
   --accentFaint: rgba(108,92,231,0.08);
-
-  /* Синий — только для фоновых свечений */
   --bgBlue:  rgba(58,130,246,0.06);
-
-  /* Система редкости */
   --r-common:    #555566;
   --r-rare:      #4488CC;
   --r-epic:      #9955EE;
   --r-legendary: #C8A96E;
-
-  /* Стандарт */
   --green: #4ADE80;
   --red:   #F87171;
   --gold:  #C8A96E;
   --goldL: #E8C98E;
-
-  /* Glassmorphism */
   --glass-bg:     rgba(255,255,255,0.04);
   --glass-border: rgba(255,255,255,0.08);
   --glass-blur:   blur(20px);
-
-  /* Радиусы */
   --r-sm:   6px;
   --r-md:   14px;
   --r-lg:   20px;
   --r-xl:   28px;
   --r-full: 999px;
-
-  /* Шрифты */
   --font-d: 'Bebas Neue', sans-serif;
   --font-b: 'DM Sans', sans-serif;
-
-  /* Easing */
   --ease:   cubic-bezier(0.4,0,0.2,1);
   --spring: cubic-bezier(0.34,1.56,0.64,1);
   --snap:   cubic-bezier(0.16,1,0.3,1);
-
   --tab-h: 64px;
 }
 
-/* ═══════════════ RESET & BASE ═══════════════ */
 *,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
 html { height:100%; overflow:hidden; }
 body {
@@ -94,503 +68,251 @@ body {
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
 }
-
-/* Noise texture overlay */
 body::after {
   content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 9999;
-  opacity: .25;
+  position: fixed; inset: 0;
+  pointer-events: none; z-index: 9999; opacity: .25;
   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
 }
-
-/* Ambient background glow */
 body::before {
   content: '';
-  position: fixed;
-  top: -30%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 80vw;
-  height: 60vh;
+  position: fixed; top: -30%; left: 50%; transform: translateX(-50%);
+  width: 80vw; height: 60vh;
   background: radial-gradient(ellipse, rgba(108,92,231,0.06) 0%, transparent 70%);
-  pointer-events: none;
-  z-index: 0;
+  pointer-events: none; z-index: 0;
 }
-
 ::-webkit-scrollbar { width: 2px; height: 2px; }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 button { font-family: var(--font-b); cursor: pointer; border: none; background: none; color: inherit; }
 input,select,textarea { font-family: var(--font-b); }
 img { display: block; }
 
-/* ═══════════════ APP SHELL ═══════════════ */
+/* ── APP SHELL ── */
 .app {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  height: 100dvh;
-  overflow: hidden;
-  position: relative;
-  z-index: 1;
+  display: flex; flex-direction: column;
+  height: 100vh; height: 100dvh;
+  overflow: hidden; position: relative; z-index: 1;
 }
 
-/* ═══════════════ TOPBAR ═══════════════ */
+/* ── TOPBAR ── */
 .topbar {
-  flex-shrink: 0;
-  height: 54px;
+  flex-shrink: 0; height: 54px;
   background: rgba(7,8,12,0.85);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
   border-bottom: 1px solid var(--glass-border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 16px;
-  z-index: 100;
-  position: relative;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 16px; z-index: 100; position: relative;
 }
-
-.logo {
-  font-family: var(--font-d);
-  font-size: 24px;
-  letter-spacing: 3px;
-  color: var(--white);
-  display: flex;
-  align-items: center;
-  gap: 7px;
-}
-.logo-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 10px var(--accent);
-  animation: ldot 2s infinite;
-}
-@keyframes ldot {
-  0%,100% { opacity:1; box-shadow: 0 0 10px var(--accent), 0 0 20px var(--accentGlow); }
-  50%      { opacity:.3; box-shadow: none; }
-}
-
+.logo { font-family: var(--font-d); font-size: 24px; letter-spacing: 3px; color: var(--white); display: flex; align-items: center; gap: 7px; }
+.logo-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 10px var(--accent); animation: ldot 2s infinite; }
+@keyframes ldot { 0%,100% { opacity:1; box-shadow: 0 0 10px var(--accent), 0 0 20px var(--accentGlow); } 50% { opacity:.3; box-shadow: none; } }
 .topbar-right { display: flex; align-items: center; gap: 7px; }
-
 .balance-pill {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  backdrop-filter: var(--glass-blur);
-  padding: 5px 12px;
-  border-radius: var(--r-full);
-  cursor: pointer;
-  transition: border-color .2s, box-shadow .2s;
+  display: flex; align-items: center; gap: 5px;
+  background: var(--glass-bg); border: 1px solid var(--glass-border);
+  backdrop-filter: var(--glass-blur); padding: 5px 12px;
+  border-radius: var(--r-full); cursor: pointer; transition: border-color .2s, box-shadow .2s;
 }
-.balance-pill:hover {
-  border-color: var(--accent);
-  box-shadow: 0 0 12px var(--accentGlow);
-}
+.balance-pill:hover { border-color: var(--accent); box-shadow: 0 0 12px var(--accentGlow); }
 .balance-pill:active { transform: scale(.96); }
 .bal-star { color: var(--accent); font-size: 13px; }
-.bal-val {
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--white);
-  transition: color .3s;
-  font-variant-numeric: tabular-nums;
-}
+.bal-val { font-size: 16px; font-weight: 700; color: var(--white); transition: color .3s; font-variant-numeric: tabular-nums; }
 .bal-val.up { color: var(--green); }
 .bal-val.dn { color: var(--red); }
-
-.add-btn {
-  background: var(--accentFaint);
-  border: 1px solid rgba(108,92,231,0.3);
-  color: var(--accentL);
-  padding: 5px 11px;
-  border-radius: var(--r-full);
-  font-size: 11px;
-  font-weight: 600;
-  transition: all .2s;
-}
-.add-btn:hover {
-  background: var(--accent);
-  color: var(--white);
-  box-shadow: 0 0 14px var(--accentGlow);
-}
+.add-btn { background: var(--accentFaint); border: 1px solid rgba(108,92,231,0.3); color: var(--accentL); padding: 5px 11px; border-radius: var(--r-full); font-size: 11px; font-weight: 600; transition: all .2s; }
+.add-btn:hover { background: var(--accent); color: var(--white); box-shadow: 0 0 14px var(--accentGlow); }
 .add-btn:active { transform: scale(.95); }
-
 .online-badge { display: flex; align-items: center; gap: 4px; font-size: 10px; color: var(--tm); }
-.online-dot {
-  width: 5px; height: 5px; border-radius: 50%;
-  background: var(--green);
-  box-shadow: 0 0 6px var(--green);
-  animation: oglow 1.5s infinite;
-}
+.online-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--green); box-shadow: 0 0 6px var(--green); animation: oglow 1.5s infinite; }
 @keyframes oglow { 50% { opacity:.3; } }
 .sync-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--borderL); margin-left: 3px; transition: background .3s; }
 .sync-dot.ok  { background: var(--green); }
 .sync-dot.err { background: var(--red); }
 
-/* ═══════════════ CONTENT ═══════════════ */
+/* ── CONTENT ── */
 .content {
-  flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
+  flex: 1; overflow-y: auto; overflow-x: hidden;
   padding: 16px 14px calc(var(--tab-h) + env(safe-area-inset-bottom) + 12px);
-  -webkit-overflow-scrolling: touch;
-  position: relative;
-  z-index: 1;
+  -webkit-overflow-scrolling: touch; position: relative; z-index: 1;
 }
-
 .panel { display: none; }
-.panel.active {
-  display: block;
-  animation: panelIn .4s var(--ease);
-}
-@keyframes panelIn {
-  from { opacity:0; transform: translateY(20px); }
-  to   { opacity:1; transform: translateY(0); }
-}
+.panel.active { display: block; animation: panelIn .4s var(--ease); }
+@keyframes panelIn { from { opacity:0; transform: translateY(20px); } to { opacity:1; transform: translateY(0); } }
 
-/* ═══════════════ GLASS DOCK NAVIGATION ═══════════════
-   Промт: плавающий стеклянный dock, 5 вкладок,
-   blur + мягкое свечение, активная — фиолетовая
-═══════════════════════════════════════════════════ */
+/* ── TABS ── */
 .tabs {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  padding: 0 12px;
-  padding-bottom: env(safe-area-inset-bottom);
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 1000;
+  padding: 0 12px; padding-bottom: env(safe-area-inset-bottom);
   height: calc(var(--tab-h) + env(safe-area-inset-bottom));
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
+  display: flex; align-items: flex-start; justify-content: center;
 }
-
-/* Стеклянная подложка дока */
 .tabs-inner {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  max-width: 520px;
-  height: var(--tab-h);
+  display: flex; align-items: center;
+  width: 100%; max-width: 520px; height: var(--tab-h);
   background: rgba(13,14,20,0.75);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border: 1px solid var(--glass-border);
-  border-radius: 24px;
-  padding: 0 6px;
-  margin-top: 6px;
-  box-shadow:
-    0 -1px 0 rgba(255,255,255,0.04),
-    0 8px 32px rgba(0,0,0,0.6),
-    inset 0 1px 0 rgba(255,255,255,0.05);
-  position: relative;
-  overflow: hidden;
+  backdrop-filter: blur(24px) saturate(180%); -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid var(--glass-border); border-radius: 24px;
+  padding: 0 6px; margin-top: 6px;
+  box-shadow: 0 -1px 0 rgba(255,255,255,0.04), 0 8px 32px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05);
+  position: relative; overflow: hidden;
 }
-
-/* Внутренний акцент-свет */
 .tabs-inner::before {
-  content: '';
-  position: absolute;
-  bottom: -20px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60%;
-  height: 40px;
+  content: ''; position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%);
+  width: 60%; height: 40px;
   background: radial-gradient(ellipse, rgba(108,92,231,0.15), transparent 70%);
   pointer-events: none;
 }
-
-.tab {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 3px;
-  padding: 8px 4px;
-  color: var(--tm);
-  transition: color .25s var(--ease), transform .2s var(--spring);
-  position: relative;
-  background: none;
-  border: none;
-  border-radius: 18px;
-}
+.tab { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 8px 4px; color: var(--tm); transition: color .25s var(--ease), transform .2s var(--spring); position: relative; background: none; border: none; border-radius: 18px; }
 .tab:active { transform: scale(.88); }
-
-/* Активный индикатор */
 .tab.active { color: var(--accentL); }
-.tab.active::before {
-  content: '';
-  position: absolute;
-  inset: 4px;
-  background: var(--accentFaint);
-  border-radius: 14px;
-  border: 1px solid rgba(108,92,231,0.2);
-  z-index: -1;
-  animation: tabActivate .3s var(--spring);
-}
-@keyframes tabActivate {
-  from { opacity:0; transform: scale(.7); }
-  to   { opacity:1; transform: scale(1); }
-}
+.tab.active::before { content: ''; position: absolute; inset: 4px; background: var(--accentFaint); border-radius: 14px; border: 1px solid rgba(108,92,231,0.2); z-index: -1; animation: tabActivate .3s var(--spring); }
+@keyframes tabActivate { from { opacity:0; transform: scale(.7); } to { opacity:1; transform: scale(1); } }
+.tab-icon { font-size: 20px; line-height: 1; filter: drop-shadow(0 0 0 transparent); transition: filter .25s; }
+.tab.active .tab-icon { filter: drop-shadow(0 0 6px var(--accentGlow)); }
+.tab-lbl { font-size: 9px; font-weight: 600; letter-spacing: .5px; text-transform: uppercase; }
 
-.tab-icon {
-  font-size: 20px;
-  line-height: 1;
-  filter: drop-shadow(0 0 0 transparent);
-  transition: filter .25s;
-}
-.tab.active .tab-icon {
-  filter: drop-shadow(0 0 6px var(--accentGlow));
-}
-.tab-lbl {
-  font-size: 9px;
-  font-weight: 600;
-  letter-spacing: .5px;
-  text-transform: uppercase;
-}
+/* ── SECTION HEADERS ── */
+.sec-hdr { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 14px; }
+.sec-title { font-family: var(--font-d); font-size: 30px; letter-spacing: 2px; color: var(--white); text-shadow: 0 0 30px rgba(108,92,231,0.2); }
+.sec-sub { font-size: 10px; color: var(--tm); text-transform: uppercase; letter-spacing: .5px; }
 
-/* ═══════════════ SECTION HEADERS ═══════════════ */
-.sec-hdr {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  margin-bottom: 14px;
-}
-.sec-title {
-  font-family: var(--font-d);
-  font-size: 30px;
-  letter-spacing: 2px;
-  color: var(--white);
-  text-shadow: 0 0 30px rgba(108,92,231,0.2);
-}
-.sec-sub {
-  font-size: 10px;
-  color: var(--tm);
-  text-transform: uppercase;
-  letter-spacing: .5px;
-}
-
-/* ═══════════════ CASES GRID ═══════════════ */
-.cases-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 9px;
-}
-
-/* Промт: карточки с glassmorphism, редкость по цвету */
+/* ── CASES GRID ── */
+.cases-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; }
 .case-card {
-  border-radius: var(--r-lg);
-  overflow: hidden;
+  border-radius: var(--r-lg); overflow: hidden;
   transition: transform .22s var(--ease), box-shadow .22s var(--ease), border-color .22s;
-  cursor: pointer;
-  position: relative;
-  /* Стекло */
-  background: var(--glass-bg);
-  backdrop-filter: blur(10px);
+  cursor: pointer; position: relative;
+  background: var(--glass-bg); backdrop-filter: blur(10px);
   border: 1px solid var(--glass-border);
   animation: cardAppear .5s var(--ease) both;
 }
-.case-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.03), transparent 60%);
-  pointer-events: none;
-  z-index: 0;
-}
+.case-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.03), transparent 60%); pointer-events: none; z-index: 0; }
 .case-card:active { transform: scale(.96) !important; }
-
-/* Промт: hover — подъём + свечение */
 .case-card:hover { transform: translateY(-4px); }
-
 .case-card:nth-child(1) { animation-delay:.04s; }
 .case-card:nth-child(2) { animation-delay:.08s; }
 .case-card:nth-child(3) { animation-delay:.12s; }
 .case-card:nth-child(4) { animation-delay:.16s; }
 .case-card:nth-child(5) { animation-delay:.20s; }
 .case-card:nth-child(6) { animation-delay:.24s; }
-@keyframes cardAppear {
-  from { opacity:0; transform: translateY(20px); }
-  to   { opacity:1; transform: translateY(0); }
-}
-
-.case-visual {
-  height: 90px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;
-}
-.case-image {
-  width: 90px; height: 90px;
-  display: flex; align-items: center; justify-content: center;
-}
-.case-img {
-  max-width: 80%; max-height: 80%;
-  object-fit: contain;
-  filter: drop-shadow(0 4px 12px rgba(0,0,0,.6));
-  transition: transform .35s var(--spring);
-  position: relative; z-index: 1;
-}
-/* Промт: hover icon — scale + translateY */
+@keyframes cardAppear { from { opacity:0; transform: translateY(20px); } to { opacity:1; transform: translateY(0); } }
+.case-visual { height: 90px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+.case-image { width: 90px; height: 90px; display: flex; align-items: center; justify-content: center; }
+.case-img { max-width: 80%; max-height: 80%; object-fit: contain; filter: drop-shadow(0 4px 12px rgba(0,0,0,.6)); transition: transform .35s var(--spring); position: relative; z-index: 1; }
 .case-card:hover .case-img { transform: scale(1.12) translateY(-5px); }
-
-.case-emoji {
-  font-size: 40px;
-  position: relative;
-  z-index: 1;
-  filter: drop-shadow(0 4px 12px rgba(0,0,0,.8));
-  transition: transform .35s var(--spring);
-}
+.case-emoji { font-size: 40px; position: relative; z-index: 1; filter: drop-shadow(0 4px 12px rgba(0,0,0,.8)); transition: transform .35s var(--spring); }
 .case-card:hover .case-emoji { transform: scale(1.18) translateY(-4px); }
-
 .case-body { padding: 8px; position: relative; z-index: 1; }
-.case-name {
-  font-family: var(--font-d);
-  font-size: 13px;
-  letter-spacing: .8px;
-  color: var(--white);
-}
+.case-name { font-family: var(--font-d); font-size: 13px; letter-spacing: .8px; color: var(--white); }
 .case-price { font-size: 10px; font-weight: 700; color: var(--accent); margin-top: 2px; }
-
 .open-btn {
-  width: 100%;
-  padding: 7px;
-  border-radius: var(--r-full);
-  color: var(--white);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: .8px;
-  text-transform: uppercase;
-  transition: all .2s;
-  position: relative;
-  overflow: hidden;
-  border: 1px solid var(--glass-border);
-  cursor: pointer;
-  margin-top: 6px;
+  width: 100%; padding: 7px; border-radius: var(--r-full);
+  color: var(--white); font-size: 10px; font-weight: 700;
+  letter-spacing: .8px; text-transform: uppercase; transition: all .2s;
+  position: relative; overflow: hidden; border: 1px solid var(--glass-border);
+  cursor: pointer; margin-top: 6px;
 }
-.open-btn::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.10), transparent);
-  transform: translateX(-100%);
-  transition: transform .5s;
-}
+.open-btn::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.10), transparent); transform: translateX(-100%); transition: transform .5s; }
 .open-btn:hover::after { transform: translateX(100%); }
 .open-btn:active { transform: scale(.96); }
 
-/* Редкость кейсов */
-.c-starter {
-  border-color: rgba(136,136,136,0.35);
-  box-shadow: 0 4px 20px rgba(0,0,0,.5);
-}
+/* Rarity borders */
+.c-starter { border-color: rgba(136,136,136,0.35); box-shadow: 0 4px 20px rgba(0,0,0,.5); }
 .c-starter:hover { border-color: rgba(136,136,136,0.7); box-shadow: 0 8px 28px rgba(136,136,136,.15); }
 .c-starter .open-btn { background: rgba(136,136,136,.12); }
 .c-starter .open-btn:hover { background: rgba(136,136,136,.22); }
-
-.c-common {
-  border-color: rgba(74,222,128,0.3);
-  box-shadow: 0 4px 20px rgba(74,222,128,.05);
-}
+.c-common { border-color: rgba(74,222,128,0.3); box-shadow: 0 4px 20px rgba(74,222,128,.05); }
 .c-common:hover { border-color: rgba(74,222,128,0.65); box-shadow: 0 8px 28px rgba(74,222,128,.18); }
 .c-common .case-name { color: var(--green); }
 .c-common .open-btn { background: rgba(74,222,128,.10); }
 .c-common .open-btn:hover { background: rgba(74,222,128,.22); }
-
-.c-rare {
-  border-color: rgba(68,136,204,0.3);
-  box-shadow: 0 4px 20px rgba(68,136,204,.05);
-}
+.c-rare { border-color: rgba(68,136,204,0.3); box-shadow: 0 4px 20px rgba(68,136,204,.05); }
 .c-rare:hover { border-color: rgba(68,136,204,0.7); box-shadow: 0 8px 28px rgba(68,136,204,.2); }
 .c-rare .case-name { color: #5599DD; }
 .c-rare .open-btn { background: rgba(68,136,204,.10); }
 .c-rare .open-btn:hover { background: rgba(68,136,204,.22); }
-
-.c-epic {
-  border-color: rgba(108,92,231,0.4);
-  box-shadow: 0 4px 24px rgba(108,92,231,.10);
-}
+.c-epic { border-color: rgba(108,92,231,0.4); box-shadow: 0 4px 24px rgba(108,92,231,.10); }
 .c-epic:hover { border-color: rgba(108,92,231,0.8); box-shadow: 0 8px 32px rgba(108,92,231,.30); }
 .c-epic .case-name { color: var(--accentL); }
 .c-epic .open-btn { background: rgba(108,92,231,.12); }
 .c-epic .open-btn:hover { background: rgba(108,92,231,.25); }
-
-.c-legendary {
-  border-color: rgba(200,169,110,0.4);
-  box-shadow: 0 4px 24px rgba(200,169,110,.10);
-}
+.c-legendary { border-color: rgba(200,169,110,0.4); box-shadow: 0 4px 24px rgba(200,169,110,.10); }
 .c-legendary:hover { border-color: rgba(200,169,110,0.85); box-shadow: 0 8px 32px rgba(200,169,110,.28); }
 .c-legendary .case-name { color: var(--gold); }
 .c-legendary .case-img { filter: drop-shadow(0 0 10px rgba(200,169,110,.5)); }
 .c-legendary .open-btn { background: rgba(200,169,110,.12); }
 .c-legendary .open-btn:hover { background: rgba(200,169,110,.25); }
-
-.c-mythic {
-  border-color: rgba(239,68,68,0.45);
-  box-shadow: 0 4px 24px rgba(239,68,68,.12);
-}
+.c-mythic { border-color: rgba(239,68,68,0.45); box-shadow: 0 4px 24px rgba(239,68,68,.12); }
 .c-mythic:hover { border-color: rgba(239,68,68,0.85); box-shadow: 0 8px 32px rgba(239,68,68,.30); }
 .c-mythic .case-name { color: var(--red); }
 .c-mythic .case-img { filter: drop-shadow(0 0 14px rgba(239,68,68,.55)); }
 .c-mythic .open-btn { background: rgba(239,68,68,.12); }
 .c-mythic .open-btn:hover { background: rgba(239,68,68,.25); }
 
-/* ═══════════════ INVENTORY ═══════════════ */
-.inv-section {
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--r-lg);
-  padding: 14px;
-  margin-top: 14px;
-  backdrop-filter: blur(8px);
-}
-.inv-section h3 {
-  font-family: var(--font-d);
-  font-size: 18px;
-  letter-spacing: 1px;
-  margin-bottom: 10px;
-  color: var(--ts);
-}
-.inv-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
-  gap: 6px;
-  max-height: 200px;
-  overflow-y: auto;
-}
-.inv-card {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--r-md);
-  padding: 8px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 3px;
+/* ─────────────────────────────────────────────
+   GIFT IMAGE — ключевой компонент
+   Три состояния: skeleton → loaded / error
+───────────────────────────────────────────── */
+
+/* Skeleton (пока картинка грузится) */
+.gift-img-wrap {
   position: relative;
-  transition: all .2s var(--ease);
-  user-select: none;
-  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  width: 100%; height: 100%;
 }
-.inv-card:hover {
-  border-color: var(--accent);
-  background: var(--accentFaint);
-  transform: translateY(-2px) scale(1.03);
-  box-shadow: 0 4px 16px var(--accentGlow);
+.gift-img-skeleton {
+  position: absolute; inset: 8px;
+  border-radius: 10px;
+  background: linear-gradient(110deg, var(--s3) 30%, var(--s4) 50%, var(--s3) 70%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
 }
+@keyframes shimmer {
+  0%   { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+/* Реальная картинка подарка */
+.gift-real-img {
+  max-width: 80%; max-height: 80%;
+  object-fit: contain;
+  position: relative; z-index: 1;
+  opacity: 0;
+  transition: opacity .35s var(--ease), transform .35s var(--spring);
+  filter: drop-shadow(0 4px 14px rgba(0,0,0,.65));
+}
+.gift-real-img.loaded {
+  opacity: 1;
+  transform: none;
+}
+.gift-real-img.loading {
+  opacity: 0;
+  transform: scale(.8);
+}
+.case-card:hover .gift-real-img.loaded { transform: scale(1.12) translateY(-5px); }
+/* Эмодзи-фолбэк (если картинка не загрузилась) */
+.gift-fallback-emoji {
+  font-size: 38px;
+  position: relative; z-index: 1;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,.8));
+  transition: transform .35s var(--spring);
+  display: none;
+}
+.case-card:hover .gift-fallback-emoji { transform: scale(1.18) translateY(-4px); }
+
+/* ── INVENTORY ── */
+.inv-section { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--r-lg); padding: 14px; margin-top: 14px; backdrop-filter: blur(8px); }
+.inv-section h3 { font-family: var(--font-d); font-size: 18px; letter-spacing: 1px; margin-bottom: 10px; color: var(--ts); }
+.inv-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(88px, 1fr)); gap: 6px; max-height: 200px; overflow-y: auto; }
+.inv-card {
+  background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border);
+  border-radius: var(--r-md); padding: 8px;
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  position: relative; transition: all .2s var(--ease); user-select: none; cursor: pointer;
+}
+.inv-card:hover { border-color: var(--accent); background: var(--accentFaint); transform: translateY(-2px) scale(1.03); box-shadow: 0 4px 16px var(--accentGlow); }
 .inv-card:active { transform: scale(.94); }
 .inv-icon { font-size: 22px; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; }
-.inv-icon img { width: 36px; height: 36px; object-fit: contain; }
+.inv-icon img { width: 36px; height: 36px; object-fit: contain; border-radius: 6px; }
 .inv-name { font-size: 9px; font-weight: 600; color: var(--ts); text-align: center; line-height: 1.2; }
 .inv-val { font-size: 10px; font-weight: 700; color: var(--accent); }
 .inv-dot { position: absolute; top: 4px; right: 4px; width: 5px; height: 5px; border-radius: 50%; }
@@ -598,42 +320,13 @@ img { display: block; }
 .r-rare      { background: var(--r-rare); }
 .r-epic      { background: var(--r-epic); }
 .r-legendary { background: var(--r-legendary); box-shadow: 0 0 6px var(--r-legendary); }
-.sell-chip {
-  background: rgba(248,113,113,.08);
-  border: 1px solid rgba(248,113,113,.2);
-  color: var(--tm);
-  font-size: 8px;
-  font-weight: 600;
-  padding: 2px 7px;
-  border-radius: var(--r-full);
-  transition: all .15s;
-  margin-top: 2px;
-  cursor: pointer;
-}
+.sell-chip { background: rgba(248,113,113,.08); border: 1px solid rgba(248,113,113,.2); color: var(--tm); font-size: 8px; font-weight: 600; padding: 2px 7px; border-radius: var(--r-full); transition: all .15s; margin-top: 2px; cursor: pointer; }
 .sell-chip:hover { color: var(--red); border-color: var(--red); }
 .inv-empty { grid-column: 1/-1; text-align: center; color: var(--tm); padding: 20px; font-size: 12px; }
 
-/* ═══════════════ BUTTONS ═══════════════ */
-.btn {
-  width: 100%;
-  padding: 13px;
-  border-radius: var(--r-full);
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: .5px;
-  text-transform: uppercase;
-  transition: all .2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  cursor: pointer;
-}
-.btn-primary {
-  background: linear-gradient(135deg, var(--accent), var(--accentL));
-  color: var(--white);
-  box-shadow: 0 4px 20px var(--accentGlow);
-}
+/* ── BUTTONS ── */
+.btn { width: 100%; padding: 13px; border-radius: var(--r-full); font-size: 13px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; transition: all .2s; display: flex; align-items: center; justify-content: center; gap: 7px; cursor: pointer; }
+.btn-primary { background: linear-gradient(135deg, var(--accent), var(--accentL)); color: var(--white); box-shadow: 0 4px 20px var(--accentGlow); }
 .btn-primary:hover { filter: brightness(1.1); box-shadow: 0 6px 28px var(--accentGlow); }
 .btn-primary:active { transform: scale(.97); }
 .btn-primary:disabled { background: var(--s3); color: var(--tm); cursor: not-allowed; transform: none; box-shadow: none; }
@@ -645,364 +338,90 @@ img { display: block; }
 .btn-gold:hover { filter: brightness(1.1); }
 .btn-sm { padding: 8px 16px; font-size: 11px; width: auto; }
 
-/* ═══════════════ ROULETTE OVERLAY ═══════════════
-   Промт: встряска → ускорение → инерция → снап
-═══════════════════════════════════════════════ */
-.roulette-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(5,6,10,0.98);
-  z-index: 300;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
-}
-
-/* Shake анимация — встряска кейса перед открытием */
-@keyframes caseShake {
-  0%,100% { transform: translateX(0); }
-  15%      { transform: translateX(-8px) rotate(-2deg); }
-  30%      { transform: translateX(8px) rotate(2deg); }
-  45%      { transform: translateX(-6px) rotate(-1deg); }
-  60%      { transform: translateX(6px) rotate(1deg); }
-  75%      { transform: translateX(-3px); }
-  90%      { transform: translateX(3px); }
-}
-
-.case-shake {
-  animation: caseShake 0.5s ease-in-out;
-}
-
-/* Зарядная панель */
-.energy-wrap {
-  width: min(560px, 92vw);
-  position: relative;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: visible;
-}
-.energy-bar {
-  width: 100%;
-  height: 3px;
-  background: var(--s3);
-  border-radius: var(--r-full);
-  overflow: hidden;
-  position: relative;
-}
-.energy-fill {
-  height: 100%;
-  width: 0%;
-  border-radius: var(--r-full);
-  background: linear-gradient(90deg, var(--accent), var(--accentL), var(--white));
-  box-shadow: 0 0 12px var(--accent);
-  animation: ePulse .5s ease-in-out infinite alternate;
-}
-@keyframes ePulse {
-  from { box-shadow: 0 0 6px var(--accent); }
-  to   { box-shadow: 0 0 20px var(--accentL), 0 0 35px var(--accentGlow); }
-}
-.spark {
-  position: absolute;
-  width: 3px; height: 3px;
-  border-radius: 50%;
-  background: var(--accentL);
-  pointer-events: none;
-  animation: sparkUp .8s ease forwards;
-}
-@keyframes sparkUp {
-  0%   { opacity:1; transform: translate(0,0) scale(1); }
-  100% { opacity:0; transform: translate(var(--sx), var(--sy)) scale(0); }
-}
-.particle {
-  position: absolute;
-  border-radius: 50%;
-  background: var(--accent);
-  opacity: .5;
-  animation: particleFloat var(--pd, 2s) linear infinite;
-}
-@keyframes particleFloat {
-  0%   { transform: translateY(0) scale(1); opacity: .5; }
-  50%  { opacity: .2; }
-  100% { transform: translateY(-40px) scale(0); opacity: 0; }
-}
-
-/* Рулетка */
-.roulette-box {
-  position: relative;
-  overflow: hidden;
-  width: min(560px, 92vw);
-  height: 110px;
-  border-radius: var(--r-md);
-  border: 1px solid var(--borderL);
-  background: var(--s1);
-  box-shadow: 0 0 40px rgba(108,92,231,.10), inset 0 1px 0 rgba(255,255,255,.04);
-}
-.roulette-track {
-  display: flex;
-  align-items: center;
-  height: 100%;
-  position: absolute;
-  left: 0;
-  will-change: transform;
-}
-.roulette-item {
-  flex-shrink: 0;
-  width: 100px;
-  height: 96px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin: 0 4px;
-  border-radius: var(--r-md);
-  background: rgba(255,255,255,0.03);
-  border: 1px solid var(--glass-border);
-  font-size: 30px;
-  gap: 4px;
-  transition: border-color .2s, background .2s;
-}
-.roulette-item img { width: 48px; height: 48px; object-fit: contain; }
-.roulette-item-lbl {
-  font-size: 8px;
-  color: var(--tm);
-  text-align: center;
-  max-width: 90px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-/* Промт: winner item подсвечивается */
-.roulette-item.winner {
-  border-color: var(--accent);
-  background: var(--accentFaint);
-  box-shadow: 0 0 20px var(--accentGlow);
-}
-
-/* Центральная линия маркера */
-.rl-center {
-  position: absolute;
-  left: 50%;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  margin-left: -1px;
-  background: var(--accentL);
-  box-shadow: 0 0 12px var(--accent), 0 0 24px var(--accentGlow);
-  z-index: 2;
-}
-.rl-fade-l, .rl-fade-r {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 90px;
-  z-index: 1;
-}
+/* ── ROULETTE ── */
+.roulette-overlay { position: fixed; inset: 0; background: rgba(5,6,10,0.98); z-index: 300; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; }
+@keyframes caseShake { 0%,100% { transform: translateX(0); } 15% { transform: translateX(-8px) rotate(-2deg); } 30% { transform: translateX(8px) rotate(2deg); } 45% { transform: translateX(-6px) rotate(-1deg); } 60% { transform: translateX(6px) rotate(1deg); } 75% { transform: translateX(-3px); } 90% { transform: translateX(3px); } }
+.case-shake { animation: caseShake 0.5s ease-in-out; }
+.energy-wrap { width: min(560px, 92vw); position: relative; height: 36px; display: flex; align-items: center; justify-content: center; overflow: visible; }
+.energy-bar { width: 100%; height: 3px; background: var(--s3); border-radius: var(--r-full); overflow: hidden; position: relative; }
+.energy-fill { height: 100%; width: 0%; border-radius: var(--r-full); background: linear-gradient(90deg, var(--accent), var(--accentL), var(--white)); box-shadow: 0 0 12px var(--accent); animation: ePulse .5s ease-in-out infinite alternate; }
+@keyframes ePulse { from { box-shadow: 0 0 6px var(--accent); } to { box-shadow: 0 0 20px var(--accentL), 0 0 35px var(--accentGlow); } }
+.spark { position: absolute; width: 3px; height: 3px; border-radius: 50%; background: var(--accentL); pointer-events: none; animation: sparkUp .8s ease forwards; }
+@keyframes sparkUp { 0% { opacity:1; transform: translate(0,0) scale(1); } 100% { opacity:0; transform: translate(var(--sx), var(--sy)) scale(0); } }
+.particle { position: absolute; border-radius: 50%; background: var(--accent); opacity: .5; animation: particleFloat var(--pd, 2s) linear infinite; }
+@keyframes particleFloat { 0% { transform: translateY(0) scale(1); opacity: .5; } 50% { opacity: .2; } 100% { transform: translateY(-40px) scale(0); opacity: 0; } }
+.roulette-box { position: relative; overflow: hidden; width: min(560px, 92vw); height: 110px; border-radius: var(--r-md); border: 1px solid var(--borderL); background: var(--s1); box-shadow: 0 0 40px rgba(108,92,231,.10), inset 0 1px 0 rgba(255,255,255,.04); }
+.roulette-track { display: flex; align-items: center; height: 100%; position: absolute; left: 0; will-change: transform; }
+.roulette-item { flex-shrink: 0; width: 100px; height: 96px; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0 4px; border-radius: var(--r-md); background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); font-size: 30px; gap: 4px; transition: border-color .2s, background .2s; }
+.roulette-item .ri-img { width: 52px; height: 52px; object-fit: contain; border-radius: 8px; }
+.roulette-item-lbl { font-size: 8px; color: var(--tm); text-align: center; max-width: 90px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.roulette-item.winner { border-color: var(--accent); background: var(--accentFaint); box-shadow: 0 0 20px var(--accentGlow); }
+.rl-center { position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; margin-left: -1px; background: var(--accentL); box-shadow: 0 0 12px var(--accent), 0 0 24px var(--accentGlow); z-index: 2; }
+.rl-fade-l, .rl-fade-r { position: absolute; top: 0; bottom: 0; width: 90px; z-index: 1; }
 .rl-fade-l { left:0; background: linear-gradient(90deg, var(--s1), transparent); }
 .rl-fade-r { right:0; background: linear-gradient(-90deg, var(--s1), transparent); }
+.roulette-label { font-family: var(--font-d); font-size: 14px; letter-spacing: 3px; color: var(--tm); text-transform: uppercase; animation: labelPulse 1s ease-in-out infinite; }
+@keyframes labelPulse { 0%,100% { opacity: .4; } 50% { opacity: .9; } }
 
-/* Лейбл ожидания */
-.roulette-label {
-  font-family: var(--font-d);
-  font-size: 14px;
-  letter-spacing: 3px;
-  color: var(--tm);
-  text-transform: uppercase;
-  animation: labelPulse 1s ease-in-out infinite;
-}
-@keyframes labelPulse {
-  0%,100% { opacity: .4; }
-  50%      { opacity: .9; }
-}
-
-/* ═══════════════ RESULT OVERLAY ═══════════════ */
-.result-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(5,6,10,0.97);
-  z-index: 400;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  animation: fadeIn .25s;
-}
+/* ── RESULT OVERLAY ── */
+.result-overlay { position: fixed; inset: 0; background: rgba(5,6,10,0.97); z-index: 400; display: flex; align-items: center; justify-content: center; animation: fadeIn .25s; }
 @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-
-/* Промт: вспышка при legendary/epic */
 .result-overlay.win-flash { animation: fadeIn .25s, winFlash .7s .3s ease forwards; }
-@keyframes winFlash {
-  0%   { background: rgba(5,6,10,.97); }
-  30%  { background: rgba(108,92,231,.12); }
-  100% { background: rgba(5,6,10,.97); }
-}
-
-.result-box {
-  text-align: center;
-  padding: 38px 28px;
-  max-width: 320px;
-  width: 90%;
-  animation: popIn .5s var(--spring);
-}
-@keyframes popIn {
-  0%   { opacity:0; transform: scale(.25) rotate(-8deg); }
-  100% { opacity:1; transform: scale(1) rotate(0); }
-}
-.result-icon {
-  width: 96px;
-  height: 96px;
-  margin: 0 auto 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 80px;
-  position: relative;
-}
-.result-icon::after {
-  content: '';
-  position: absolute;
-  inset: -20px;
-  border-radius: 50%;
-  background: radial-gradient(circle, var(--accentGlow), transparent 70%);
-  animation: resultGlow 1.5s ease-in-out infinite alternate;
-}
-@keyframes resultGlow {
-  from { opacity: .4; transform: scale(.9); }
-  to   { opacity: .9; transform: scale(1.1); }
-}
-.result-icon img {
-  width: 90px; height: 90px;
-  object-fit: contain;
-  position: relative;
-  z-index: 1;
-}
-.result-title {
-  font-family: var(--font-d);
-  font-size: 36px;
-  letter-spacing: 2px;
-  color: var(--white);
-}
-.result-rarity {
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  margin-top: 4px;
-}
+@keyframes winFlash { 0% { background: rgba(5,6,10,.97); } 30% { background: rgba(108,92,231,.12); } 100% { background: rgba(5,6,10,.97); } }
+.result-box { text-align: center; padding: 38px 28px; max-width: 320px; width: 90%; animation: popIn .5s var(--spring); }
+@keyframes popIn { 0% { opacity:0; transform: scale(.25) rotate(-8deg); } 100% { opacity:1; transform: scale(1) rotate(0); } }
+.result-icon { width: 96px; height: 96px; margin: 0 auto 14px; display: flex; align-items: center; justify-content: center; font-size: 80px; position: relative; }
+.result-icon::after { content: ''; position: absolute; inset: -20px; border-radius: 50%; background: radial-gradient(circle, var(--accentGlow), transparent 70%); animation: resultGlow 1.5s ease-in-out infinite alternate; }
+@keyframes resultGlow { from { opacity: .4; transform: scale(.9); } to { opacity: .9; transform: scale(1.1); } }
+.result-icon img { width: 90px; height: 90px; object-fit: contain; position: relative; z-index: 1; border-radius: 12px; }
+.result-title { font-family: var(--font-d); font-size: 36px; letter-spacing: 2px; color: var(--white); }
+.result-rarity { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 4px; }
 .result-val { font-size: 13px; color: var(--ts); margin-top: 5px; }
 .result-btns { display: flex; flex-direction: column; gap: 8px; margin-top: 22px; }
-.almost-badge {
-  background: rgba(108,92,231,0.12);
-  border: 1px solid rgba(108,92,231,0.3);
-  border-radius: var(--r-full);
-  padding: 4px 14px;
-  font-size: 11px;
-  color: var(--accentL);
-  margin-top: 6px;
-  display: inline-block;
-  animation: almostPop .4s var(--spring);
-}
+.almost-badge { background: rgba(108,92,231,0.12); border: 1px solid rgba(108,92,231,0.3); border-radius: var(--r-full); padding: 4px 14px; font-size: 11px; color: var(--accentL); margin-top: 6px; display: inline-block; animation: almostPop .4s var(--spring); }
 @keyframes almostPop { from { opacity:0; transform: scale(.7); } to { opacity:1; transform: scale(1); } }
 
-/* ═══════════════ UPGRADE ═══════════════ */
+/* ── UPGRADE ── */
 .upg-layout { display: flex; flex-direction: column; gap: 12px; }
-.upg-stake-box {
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--r-lg);
-  padding: 14px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  cursor: pointer;
-  transition: all .2s;
-  backdrop-filter: blur(8px);
-}
+.upg-stake-box { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--r-lg); padding: 14px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: all .2s; backdrop-filter: blur(8px); }
 .upg-stake-box:hover { border-color: var(--accent); box-shadow: 0 0 16px var(--accentGlow); }
 .upg-stake-box.filled { border-color: rgba(108,92,231,.4); }
 .upg-stake-icon { font-size: 38px; min-width: 44px; text-align: center; display: flex; align-items: center; justify-content: center; }
-.upg-stake-icon img { width: 38px; height: 38px; object-fit: contain; }
+.upg-stake-icon img { width: 38px; height: 38px; object-fit: contain; border-radius: 8px; }
 .upg-stake-info { flex: 1; }
 .upg-stake-name { font-size: 13px; font-weight: 700; color: var(--tp); }
 .upg-stake-val { font-size: 11px; color: var(--accent); margin-top: 2px; }
 .upg-stake-hint { font-size: 11px; color: var(--tm); }
-.upg-stake-remove {
-  width: 24px; height: 24px; border-radius: 50%;
-  background: var(--s3); border: 1px solid var(--borderL);
-  color: var(--tm); font-size: 11px; flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center; transition: all .15s;
-}
+.upg-stake-remove { width: 24px; height: 24px; border-radius: 50%; background: var(--s3); border: 1px solid var(--borderL); color: var(--tm); font-size: 11px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all .15s; }
 .upg-stake-remove:hover { color: var(--red); border-color: var(--red); }
 .upg-targets { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--r-lg); padding: 12px; }
 .upg-targets-lbl { font-size: 10px; color: var(--tm); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
 .upg-targets-list { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
 .upg-targets-list::-webkit-scrollbar { display: none; }
-.upg-target-item {
-  flex-shrink: 0; width: 76px;
-  background: var(--glass-bg); border: 2px solid var(--glass-border);
-  border-radius: var(--r-md); padding: 7px;
-  display: flex; flex-direction: column; align-items: center; gap: 3px;
-  cursor: pointer; transition: all .18s;
-}
+.upg-target-item { flex-shrink: 0; width: 76px; background: var(--glass-bg); border: 2px solid var(--glass-border); border-radius: var(--r-md); padding: 7px; display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; transition: all .18s; }
 .upg-target-item:hover { border-color: rgba(108,92,231,.5); }
 .upg-target-item:active { transform: scale(.93); }
 .upg-target-item.selected { border-color: var(--accent); background: var(--accentFaint); }
 .uti-icon { font-size: 20px; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; }
-.uti-icon img { width: 26px; height: 26px; object-fit: contain; }
+.uti-icon img { width: 26px; height: 26px; object-fit: contain; border-radius: 6px; }
 .uti-name { font-size: 7px; color: var(--ts); text-align: center; line-height: 1.2; }
 .uti-val { font-size: 9px; font-weight: 700; color: var(--accent); }
 .upg-wheel-wrap { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 16px 0; }
 .upg-wheel-svg { position: relative; width: 220px; height: 220px; margin: 0 auto; }
 .upg-wheel-svg svg { width: 100%; height: 100%; display: block; }
-.upg-arrow-wrap {
-  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-  display: flex; align-items: center; justify-content: center; pointer-events: none;
-}
+.upg-arrow-wrap { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; pointer-events: none; }
 .upg-arrow-inner { position: relative; width: 0; height: 0; transform-origin: 50% 100%; }
-.upg-arrow {
-  position: absolute; bottom: 0; left: -3px;
-  width: 0; height: 0;
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-  border-bottom: 16px solid var(--accentL);
-  filter: drop-shadow(0 0 6px var(--accentGlow));
-}
-.upg-arrow::after {
-  content: '';
-  position: absolute; bottom: -16px; left: -2px;
-  width: 4px; height: 70px;
-  background: var(--accentL); border-radius: 2px;
-}
-.upg-arrow-center {
-  position: absolute; top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  width: 14px; height: 14px; border-radius: 50%;
-  background: var(--accentL);
-  box-shadow: 0 0 12px var(--accentGlow);
-  z-index: 2;
-}
+.upg-arrow { position: absolute; bottom: 0; left: -3px; width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-bottom: 16px solid var(--accentL); filter: drop-shadow(0 0 6px var(--accentGlow)); }
+.upg-arrow::after { content: ''; position: absolute; bottom: -16px; left: -2px; width: 4px; height: 70px; background: var(--accentL); border-radius: 2px; }
+.upg-arrow-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 14px; height: 14px; border-radius: 50%; background: var(--accentL); box-shadow: 0 0 12px var(--accentGlow); z-index: 2; }
 .upg-chance-display { text-align: center; }
-.upg-chance-num {
-  font-family: var(--font-d);
-  font-size: 52px;
-  line-height: 1;
-  color: var(--white);
-  transition: all .3s;
-}
+.upg-chance-num { font-family: var(--font-d); font-size: 52px; line-height: 1; color: var(--white); transition: all .3s; }
 .upg-chance-num.high { color: var(--green); text-shadow: 0 0 16px rgba(74,222,128,.4); }
 .upg-chance-num.med  { color: var(--gold); text-shadow: 0 0 16px rgba(200,169,110,.3); }
 .upg-chance-num.low  { color: var(--red); text-shadow: 0 0 16px rgba(248,113,113,.3); }
 .upg-chance-lbl { font-size: 10px; color: var(--tm); text-transform: uppercase; letter-spacing: 1.5px; margin-top: 4px; }
 .upg-chance-desc { font-size: 11px; color: var(--ts); margin-top: 4px; }
-.upg-history-box {
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--r-lg);
-  padding: 14px;
-  margin-top: 12px;
-}
+.upg-history-box { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--r-lg); padding: 14px; margin-top: 12px; }
 .upg-history-title { font-family: var(--font-d); font-size: 18px; letter-spacing: 1px; margin-bottom: 10px; color: var(--ts); }
 .upg-hist-item { display: flex; align-items: center; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--border); }
 .upg-hist-item:last-child { border: none; }
@@ -1014,26 +433,13 @@ img { display: block; }
 .uhi-lose { color: var(--red); }
 .uhi-almost { font-size: 9px; color: var(--accent); margin-left: 4px; }
 
-/* ═══════════════ CRAFT ═══════════════ */
+/* ── CRAFT ── */
 .craft-slots { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 10px; }
-.craft-slot {
-  background: var(--glass-bg);
-  border: 2px dashed var(--borderL);
-  border-radius: var(--r-lg);
-  padding: 12px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-  cursor: pointer;
-  transition: all .2s;
-  min-height: 92px;
-  justify-content: center;
-}
+.craft-slot { background: var(--glass-bg); border: 2px dashed var(--borderL); border-radius: var(--r-lg); padding: 12px; display: flex; flex-direction: column; align-items: center; gap: 5px; cursor: pointer; transition: all .2s; min-height: 92px; justify-content: center; }
 .craft-slot.filled { border-style: solid; border-color: rgba(108,92,231,.4); }
 .craft-slot:hover { border-color: var(--accent); box-shadow: 0 0 14px var(--accentGlow); }
 .craft-slot-icon { font-size: 26px; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; }
-.craft-slot-icon img { width: 32px; height: 32px; object-fit: contain; }
+.craft-slot-icon img { width: 32px; height: 32px; object-fit: contain; border-radius: 7px; }
 .craft-slot-name { font-size: 8px; color: var(--ts); text-align: center; line-height: 1.2; }
 .craft-slot-val { font-size: 9px; color: var(--accent); }
 .craft-info { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--r-lg); padding: 14px; margin: 8px 0; text-align: center; }
@@ -1050,77 +456,23 @@ img { display: block; }
 .co-range { font-size: 10px; color: var(--ts); margin-top: 3px; }
 .craft-arrow { text-align: center; font-size: 18px; color: var(--tm); margin: 4px 0; }
 
-/* ═══════════════ PvP ═══════════════ */
+/* ── PvP ── */
 .pvp-tabs { display: flex; gap: 6px; margin-bottom: 12px; }
-.pvp-tab {
-  padding: 7px 14px;
-  border-radius: var(--r-full);
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  color: var(--ts);
-  font-size: 11px;
-  font-weight: 600;
-  transition: all .2s;
-  cursor: pointer;
-}
-.pvp-tab.active {
-  background: var(--accentFaint);
-  border-color: rgba(108,92,231,.4);
-  color: var(--accentL);
-}
+.pvp-tab { padding: 7px 14px; border-radius: var(--r-full); background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--ts); font-size: 11px; font-weight: 600; transition: all .2s; cursor: pointer; }
+.pvp-tab.active { background: var(--accentFaint); border-color: rgba(108,92,231,.4); color: var(--accentL); }
 .pvp-tab:active { transform: scale(.95); }
-.battle-create-box {
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--r-lg);
-  padding: 14px;
-  margin-bottom: 12px;
-}
-.battle-stake-pick {
-  background: var(--s2);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--r-md);
-  padding: 10px;
-  margin: 8px 0;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 12px;
-  color: var(--ts);
-}
-.lobby-card {
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--r-lg);
-  padding: 12px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 8px;
-  transition: all .2s;
-  position: relative;
-  overflow: hidden;
-  backdrop-filter: blur(8px);
-}
-.lobby-card::before {
-  content: '';
-  position: absolute;
-  left: 0; top: 20%; bottom: 20%;
-  width: 2px;
-  background: linear-gradient(180deg, transparent, var(--accent), transparent);
-}
+.battle-create-box { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--r-lg); padding: 14px; margin-bottom: 12px; }
+.battle-stake-pick { background: var(--s2); border: 1px solid var(--glass-border); border-radius: var(--r-md); padding: 10px; margin: 8px 0; display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--ts); }
+.lobby-card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--r-lg); padding: 12px; display: flex; align-items: center; gap: 10px; margin-bottom: 8px; transition: all .2s; position: relative; overflow: hidden; backdrop-filter: blur(8px); }
+.lobby-card::before { content: ''; position: absolute; left: 0; top: 20%; bottom: 20%; width: 2px; background: linear-gradient(180deg, transparent, var(--accent), transparent); }
 .lobby-card:hover { border-color: rgba(108,92,231,.3); }
 .lc-av { display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 46px; }
-.lc-av-img {
-  width: 32px; height: 32px; border-radius: 50%;
-  background: var(--s3); border: 1px solid var(--borderL);
-  overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 14px;
-}
+.lc-av-img { width: 32px; height: 32px; border-radius: 50%; background: var(--s3); border: 1px solid var(--borderL); overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 14px; }
 .lc-av-img img { width: 100%; height: 100%; object-fit: cover; }
 .lc-av-name { font-size: 8px; color: var(--tm); text-align: center; max-width: 46px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .lc-gift { display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 54px; }
 .lc-icon { font-size: 28px; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; }
-.lc-icon img { width: 34px; height: 34px; object-fit: contain; }
+.lc-icon img { width: 34px; height: 34px; object-fit: contain; border-radius: 7px; }
 .lc-gname { font-size: 8px; color: var(--tm); text-align: center; }
 .lc-val { font-size: 10px; font-weight: 700; color: var(--accent); }
 .lc-mid { flex: 1; text-align: center; }
@@ -1128,18 +480,7 @@ img { display: block; }
 .lc-status { font-size: 9px; color: var(--green); display: flex; align-items: center; justify-content: center; gap: 3px; margin-top: 2px; }
 .lc-status::before { content: ''; width: 4px; height: 4px; border-radius: 50%; background: var(--green); animation: oglow 1.5s infinite; }
 .lc-priv { font-size: 8px; color: var(--accent); margin-top: 2px; }
-.lc-join {
-  padding: 7px 14px;
-  background: var(--accentFaint);
-  border: 1px solid rgba(108,92,231,.35);
-  border-radius: var(--r-full);
-  color: var(--accentL);
-  font-size: 10px;
-  font-weight: 700;
-  transition: all .2s;
-  white-space: nowrap;
-  cursor: pointer;
-}
+.lc-join { padding: 7px 14px; background: var(--accentFaint); border: 1px solid rgba(108,92,231,.35); border-radius: var(--r-full); color: var(--accentL); font-size: 10px; font-weight: 700; transition: all .2s; white-space: nowrap; cursor: pointer; }
 .lc-join:hover { background: var(--accent); color: var(--white); box-shadow: 0 0 14px var(--accentGlow); }
 .lc-join:active { transform: scale(.95); }
 .no-battles { color: var(--tm); text-align: center; padding: 30px 16px; font-size: 12px; }
@@ -1147,211 +488,72 @@ img { display: block; }
 .pvp-sec-title.pub { color: var(--ts); }
 .pvp-sec-title.priv { color: var(--accent); }
 
-/* ═══════════════ COIN FLIP ═══════════════ */
-.coin-overlay {
-  position: fixed; inset: 0;
-  background: rgba(5,6,10,.98);
-  z-index: 400;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center; gap: 16px;
-}
+/* ── COIN FLIP ── */
+.coin-overlay { position: fixed; inset: 0; background: rgba(5,6,10,.98); z-index: 400; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; }
 .coin-fighters { display: flex; align-items: center; gap: 24px; }
 .fighter-box { display: flex; flex-direction: column; align-items: center; gap: 5px; }
 .fighter-lbl { font-size: 10px; color: var(--tm); text-transform: uppercase; letter-spacing: 1px; }
 .fighter-icon { font-size: 52px; filter: drop-shadow(0 0 16px rgba(255,255,255,.1)); animation: fAppear .5s var(--spring); }
-.fighter-icon img { width: 52px; height: 52px; object-fit: contain; }
+.fighter-icon img { width: 52px; height: 52px; object-fit: contain; border-radius: 10px; }
 @keyframes fAppear { from { opacity:0; transform: scale(.5); } to { opacity:1; transform: scale(1); } }
 .coin-vs { font-family: var(--font-d); font-size: 40px; color: var(--tm); letter-spacing: 3px; animation: vsPop .6s .3s var(--spring) both; }
 @keyframes vsPop { 0% { opacity:0; transform: scale(.5); } 100% { opacity:1; transform: scale(1); } }
 .coin-scene { perspective: 500px; width: 100px; height: 100px; }
-.coin-3d {
-  width: 100px; height: 100px;
-  transform-style: preserve-3d;
-  position: relative;
-  animation: coinToss 3s cubic-bezier(.25,.46,.45,.94) forwards;
-}
-@keyframes coinToss {
-  0%   { transform: translateY(0) rotateX(0); }
-  15%  { transform: translateY(-90px) rotateX(180deg); }
-  35%  { transform: translateY(-70px) rotateX(540deg); }
-  60%  { transform: translateY(-30px) rotateX(1080deg); }
-  80%  { transform: translateY(-10px) rotateX(1440deg); }
-  100% { transform: translateY(0) rotateX(var(--rx, 1800deg)); }
-}
-.coin-face {
-  position: absolute; inset: 0; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 38px; border: 2px solid var(--borderL);
-  backface-visibility: hidden; -webkit-backface-visibility: hidden;
-}
+.coin-3d { width: 100px; height: 100px; transform-style: preserve-3d; position: relative; animation: coinToss 3s cubic-bezier(.25,.46,.45,.94) forwards; }
+@keyframes coinToss { 0% { transform: translateY(0) rotateX(0); } 15% { transform: translateY(-90px) rotateX(180deg); } 35% { transform: translateY(-70px) rotateX(540deg); } 60% { transform: translateY(-30px) rotateX(1080deg); } 80% { transform: translateY(-10px) rotateX(1440deg); } 100% { transform: translateY(0) rotateX(var(--rx, 1800deg)); } }
+.coin-face { position: absolute; inset: 0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 38px; border: 2px solid var(--borderL); backface-visibility: hidden; -webkit-backface-visibility: hidden; }
 .coin-front { background: radial-gradient(circle at 35% 35%, #3a2a5a, #1a1428); box-shadow: inset 0 2px 6px rgba(108,92,231,.2); }
 .coin-back  { background: radial-gradient(circle at 35% 35%, #1a1428, #0a0810); transform: rotateX(180deg); }
 .coin-result-banner { font-family: var(--font-d); font-size: 44px; letter-spacing: 2px; animation: popIn .5s var(--spring); }
 .coin-result-sub { font-size: 13px; color: var(--ts); margin-top: 4px; text-align: center; }
 
-/* ═══════════════ PROFILE ═══════════════ */
-.profile-hero {
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--r-lg);
-  padding: 18px;
-  margin-bottom: 12px;
-  position: relative;
-  overflow: hidden;
-  backdrop-filter: blur(12px);
-}
-.profile-hero::after {
-  content: '';
-  position: absolute;
-  top: -60px; right: -60px;
-  width: 200px; height: 200px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(108,92,231,.06), transparent 70%);
-  pointer-events: none;
-}
+/* ── PROFILE ── */
+.profile-hero { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--r-lg); padding: 18px; margin-bottom: 12px; position: relative; overflow: hidden; backdrop-filter: blur(12px); }
+.profile-hero::after { content: ''; position: absolute; top: -60px; right: -60px; width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(circle, rgba(108,92,231,.06), transparent 70%); pointer-events: none; }
 .avatar-wrap { position: relative; width: 60px; margin-bottom: 10px; }
-.avatar-img {
-  width: 60px; height: 60px; border-radius: 50%;
-  background: var(--s2);
-  border: 2px solid rgba(108,92,231,.4);
-  box-shadow: 0 0 16px var(--accentGlow);
-  overflow: hidden;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 26px; cursor: pointer; transition: all .2s;
-}
+.avatar-img { width: 60px; height: 60px; border-radius: 50%; background: var(--s2); border: 2px solid rgba(108,92,231,.4); box-shadow: 0 0 16px var(--accentGlow); overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 26px; cursor: pointer; transition: all .2s; }
 .avatar-img img { width: 100%; height: 100%; object-fit: cover; }
 .avatar-img:hover { border-color: var(--accentL); box-shadow: 0 0 24px var(--accentGlow); }
-.avatar-edit {
-  position: absolute; bottom: 0; right: -4px;
-  width: 20px; height: 20px; border-radius: 50%;
-  background: var(--accent);
-  border: 1px solid var(--accentL);
-  display: flex; align-items: center; justify-content: center; font-size: 9px; cursor: pointer;
-}
+.avatar-edit { position: absolute; bottom: 0; right: -4px; width: 20px; height: 20px; border-radius: 50%; background: var(--accent); border: 1px solid var(--accentL); display: flex; align-items: center; justify-content: center; font-size: 9px; cursor: pointer; }
 #avatarInput { display: none; }
 .pname { font-family: var(--font-d); font-size: 24px; letter-spacing: 1px; display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
 .pname-text { flex: 1; }
-.edit-nm-btn {
-  background: var(--accentFaint);
-  border: 1px solid rgba(108,92,231,.3);
-  color: var(--accent);
-  font-size: 9px;
-  padding: 3px 10px;
-  border-radius: var(--r-full);
-  cursor: pointer;
-  transition: all .2s;
-}
+.edit-nm-btn { background: var(--accentFaint); border: 1px solid rgba(108,92,231,.3); color: var(--accent); font-size: 9px; padding: 3px 10px; border-radius: var(--r-full); cursor: pointer; transition: all .2s; }
 .edit-nm-btn:hover { background: var(--accent); color: var(--white); }
 .pid { font-size: 10px; color: var(--tm); margin-top: 2px; }
 .luck-wrap { margin-top: 10px; }
 .luck-lbl { font-size: 10px; color: var(--tm); margin-bottom: 3px; display: flex; justify-content: space-between; }
 .luck-bar-bg { height: 3px; background: var(--s3); border-radius: var(--r-full); overflow: hidden; }
-.luck-bar-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--accent), var(--accentL));
-  border-radius: var(--r-full);
-  transition: width 1s var(--ease);
-  box-shadow: 0 0 6px var(--accentGlow);
-}
+.luck-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accentL)); border-radius: var(--r-full); transition: width 1s var(--ease); box-shadow: 0 0 6px var(--accentGlow); }
 .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 5px; margin-top: 10px; }
-.stat-box {
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--r-md);
-  padding: 9px;
-  text-align: center;
-  transition: all .2s;
-}
+.stat-box { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--r-md); padding: 9px; text-align: center; transition: all .2s; }
 .stat-box:hover { border-color: rgba(108,92,231,.3); box-shadow: 0 0 10px var(--accentGlow); }
 .stat-n { font-family: var(--font-d); font-size: 22px; color: var(--white); }
 .stat-l { font-size: 8px; color: var(--tm); text-transform: uppercase; }
 .p-actions { display: flex; gap: 7px; margin-top: 10px; flex-wrap: wrap; }
-.p-btn {
-  flex: 1; min-width: 70px;
-  padding: 9px;
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--r-full);
-  color: var(--tp);
-  font-size: 11px;
-  font-weight: 600;
-  transition: all .2s;
-  text-align: center;
-  cursor: pointer;
-}
+.p-btn { flex: 1; min-width: 70px; padding: 9px; background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--r-full); color: var(--tp); font-size: 11px; font-weight: 600; transition: all .2s; text-align: center; cursor: pointer; }
 .p-btn:hover { border-color: var(--accent); background: var(--accentFaint); color: var(--accentL); }
 
-/* ═══════════════ REFERRAL & DEPOSIT ═══════════════ */
-.ref-box {
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--r-lg);
-  padding: 14px;
-  margin-bottom: 12px;
-}
+/* ── REFERRAL & DEPOSIT ── */
+.ref-box { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--r-lg); padding: 14px; margin-bottom: 12px; }
 .ref-title { font-family: var(--font-d); font-size: 18px; letter-spacing: 1px; margin-bottom: 7px; }
 .ref-link-row { display: flex; gap: 7px; margin-top: 7px; }
-.ref-link-inp {
-  flex: 1;
-  background: var(--s2);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--r-full);
-  padding: 8px 12px;
-  color: var(--ts);
-  font-size: 11px;
-  outline: none;
-}
+.ref-link-inp { flex: 1; background: var(--s2); border: 1px solid var(--glass-border); border-radius: var(--r-full); padding: 8px 12px; color: var(--ts); font-size: 11px; outline: none; }
 .ref-stats { display: flex; gap: 7px; margin-top: 7px; }
-.ref-stat {
-  flex: 1;
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--r-md);
-  padding: 9px;
-  text-align: center;
-}
+.ref-stat { flex: 1; background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--r-md); padding: 9px; text-align: center; }
 .ref-stat-n { font-family: var(--font-d); font-size: 20px; color: var(--accent); }
 .ref-stat-l { font-size: 9px; color: var(--tm); }
 
-/* ═══════════════ DEPOSIT MODAL ═══════════════ */
+/* ── DEPOSIT MODAL ── */
 .deposit-amounts { display: flex; gap: 7px; flex-wrap: wrap; margin: 10px 0; }
-.dep-amt {
-  flex: 1; min-width: 60px;
-  padding: 8px;
-  background: var(--glass-bg);
-  border: 2px solid var(--glass-border);
-  border-radius: var(--r-md);
-  text-align: center;
-  cursor: pointer;
-  transition: all .2s;
-}
-.dep-amt:hover,
-.dep-amt.selected {
-  border-color: var(--accent);
-  background: var(--accentFaint);
-  box-shadow: 0 0 12px var(--accentGlow);
-}
+.dep-amt { flex: 1; min-width: 60px; padding: 8px; background: var(--glass-bg); border: 2px solid var(--glass-border); border-radius: var(--r-md); text-align: center; cursor: pointer; transition: all .2s; }
+.dep-amt:hover, .dep-amt.selected { border-color: var(--accent); background: var(--accentFaint); box-shadow: 0 0 12px var(--accentGlow); }
 .dep-amt-stars { font-family: var(--font-d); font-size: 18px; color: var(--accent); }
 .dep-amt-price { font-size: 9px; color: var(--tm); margin-top: 2px; }
-
-/* Поле кастомной суммы */
 .dep-custom-wrap { margin: 8px 0; }
 .dep-custom-wrap label { font-size: 11px; color: var(--tm); margin-bottom: 4px; display: block; }
-#dep-custom-input {
-  width: 100%;
-  background: var(--s2);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--r-full);
-  padding: 8px 14px;
-  color: var(--white);
-  font-size: 13px;
-  font-weight: 600;
-  outline: none;
-  transition: border-color .2s;
-}
+#dep-custom-input { width: 100%; background: var(--s2); border: 1px solid var(--glass-border); border-radius: var(--r-full); padding: 8px 14px; color: var(--white); font-size: 13px; font-weight: 600; outline: none; transition: border-color .2s; }
 #dep-custom-input:focus { border-color: var(--accent); }
-
-/* История */
 .hist-table { width: 100%; border-collapse: collapse; }
 .hist-table th { font-size: 9px; color: var(--tm); text-transform: uppercase; padding: 5px 7px; border-bottom: 1px solid var(--border); text-align: left; }
 .hist-table td { padding: 8px 7px; border-bottom: 1px solid var(--border); font-size: 11px; color: var(--ts); }
@@ -1359,181 +561,61 @@ img { display: block; }
 .hist-pos { color: var(--green); font-weight: 700; }
 .hist-neg { color: var(--red); font-weight: 700; }
 
-/* ═══════════════ TOAST ═══════════════ */
-.toast {
-  position: fixed;
-  bottom: calc(var(--tab-h) + env(safe-area-inset-bottom) + 14px);
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(13,14,20,0.92);
-  border: 1px solid rgba(108,92,231,.3);
-  backdrop-filter: blur(20px);
-  border-radius: var(--r-full);
-  padding: 9px 20px;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--white);
-  z-index: 999;
-  white-space: nowrap;
-  box-shadow: 0 4px 20px rgba(0,0,0,.5), 0 0 20px var(--accentGlow);
-  animation: toastIn .35s var(--spring), toastOut .3s 2.2s ease forwards;
-}
-@keyframes toastIn {
-  from { opacity:0; transform: translateX(-50%) translateY(16px) scale(.85); }
-  to   { opacity:1; transform: translateX(-50%) translateY(0) scale(1); }
-}
-@keyframes toastOut {
-  from { opacity:1; }
-  to   { opacity:0; transform: translateX(-50%) translateY(8px); }
-}
+/* ── TOAST ── */
+.toast { position: fixed; bottom: calc(var(--tab-h) + env(safe-area-inset-bottom) + 14px); left: 50%; transform: translateX(-50%); background: rgba(13,14,20,0.92); border: 1px solid rgba(108,92,231,.3); backdrop-filter: blur(20px); border-radius: var(--r-full); padding: 9px 20px; font-size: 12px; font-weight: 600; color: var(--white); z-index: 999; white-space: nowrap; box-shadow: 0 4px 20px rgba(0,0,0,.5), 0 0 20px var(--accentGlow); animation: toastIn .35s var(--spring), toastOut .3s 2.2s ease forwards; }
+@keyframes toastIn { from { opacity:0; transform: translateX(-50%) translateY(16px) scale(.85); } to { opacity:1; transform: translateX(-50%) translateY(0) scale(1); } }
+@keyframes toastOut { from { opacity:1; } to { opacity:0; transform: translateX(-50%) translateY(8px); } }
 
-/* Canvas confetti */
 #cfv { position: fixed; inset: 0; pointer-events: none; z-index: 800; }
-
-/* RL banner */
-.rl-banner {
-  position: fixed; top: 64px; left: 50%; transform: translateX(-50%);
-  background: rgba(42,10,10,.9);
-  border: 1px solid rgba(74,26,26,.8);
-  border-radius: var(--r-full);
-  padding: 6px 16px; font-size: 12px; color: var(--red);
-  z-index: 100; display: none; white-space: nowrap;
-  backdrop-filter: blur(12px);
-}
-
-/* Browser stub */
-.browser-stub {
-  position: fixed; inset: 0;
-  background: var(--bg);
-  z-index: 5000;
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  padding: 32px;
-  text-align: center;
-}
+.rl-banner { position: fixed; top: 64px; left: 50%; transform: translateX(-50%); background: rgba(42,10,10,.9); border: 1px solid rgba(74,26,26,.8); border-radius: var(--r-full); padding: 6px 16px; font-size: 12px; color: var(--red); z-index: 100; display: none; white-space: nowrap; backdrop-filter: blur(12px); }
+.browser-stub { position: fixed; inset: 0; background: var(--bg); z-index: 5000; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 16px; padding: 32px; text-align: center; }
 .browser-stub.show { display: flex; animation: fadeIn .3s; }
 .bs-icon { font-size: 64px; }
 .bs-title { font-family: var(--font-d); font-size: 32px; letter-spacing: 2px; color: var(--white); }
 .bs-sub { font-size: 14px; color: var(--ts); max-width: 280px; line-height: 1.6; }
-.bs-btn {
-  padding: 14px 28px;
-  background: linear-gradient(135deg, var(--accent), var(--accentL));
-  color: var(--white);
-  border-radius: var(--r-full);
-  font-size: 14px;
-  font-weight: 700;
-  text-decoration: none;
-  display: inline-block;
-  margin-top: 8px;
-  transition: all .2s;
-  box-shadow: 0 6px 24px var(--accentGlow);
-}
+.bs-btn { padding: 14px 28px; background: linear-gradient(135deg, var(--accent), var(--accentL)); color: var(--white); border-radius: var(--r-full); font-size: 14px; font-weight: 700; text-decoration: none; display: inline-block; margin-top: 8px; transition: all .2s; box-shadow: 0 6px 24px var(--accentGlow); }
 .bs-btn:hover { filter: brightness(1.1); }
 .bs-skip { margin-top: 12px; font-size: 12px; color: var(--tm); cursor: pointer; text-decoration: underline; }
 
-/* ═══════════════ MODAL SHEET ═══════════════ */
-.modal-ov {
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,.75);
-  backdrop-filter: blur(8px);
-  z-index: 600;
-  display: none;
-  align-items: flex-end;
-  justify-content: center;
-  touch-action: none;
-}
+/* ── MODAL SHEET ── */
+.modal-ov { position: fixed; inset: 0; background: rgba(0,0,0,.75); backdrop-filter: blur(8px); z-index: 600; display: none; align-items: flex-end; justify-content: center; touch-action: none; }
 .modal-ov.show { display: flex; animation: fadeIn .2s; }
-.modal-sheet {
-  background: rgba(13,14,20,0.95);
-  border: 1px solid var(--glass-border);
-  backdrop-filter: blur(24px);
-  border-top-left-radius: var(--r-xl);
-  border-top-right-radius: var(--r-xl);
-  padding: 20px 16px calc(20px + env(safe-area-inset-bottom));
-  width: 100%;
-  max-width: 540px;
-  animation: slideUp .35s var(--spring);
-  height: auto;
-  min-height: 260px;
-  max-height: 85vh;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-}
-.modal-handle {
-  width: 80px; height: 5px;
-  background: var(--borderL);
-  border-radius: 3px;
-  margin: 0 auto 20px;
-  cursor: ns-resize;
-  touch-action: none;
-  transition: background .15s;
-}
+.modal-sheet { background: rgba(13,14,20,0.95); border: 1px solid var(--glass-border); backdrop-filter: blur(24px); border-top-left-radius: var(--r-xl); border-top-right-radius: var(--r-xl); padding: 20px 16px calc(20px + env(safe-area-inset-bottom)); width: 100%; max-width: 540px; animation: slideUp .35s var(--spring); height: auto; min-height: 260px; max-height: 85vh; overflow-y: auto; overscroll-behavior: contain; }
+.modal-handle { width: 80px; height: 5px; background: var(--borderL); border-radius: 3px; margin: 0 auto 20px; cursor: ns-resize; touch-action: none; transition: background .15s; }
 .modal-handle:hover { background: var(--accent); }
 @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 .modal-title { font-family: var(--font-d); font-size: 24px; letter-spacing: 1px; margin-bottom: 14px; }
 
-/* ═══════════════ RESPONSIVE ═══════════════ */
-@media(max-width:359px) {
-  .cases-grid { grid-template-columns: repeat(2,1fr); gap: 7px; }
-  .case-visual { height: 80px; }
+/* ── GIFTS LOADING STATUS BAR ── */
+.gifts-status-bar {
+  background: var(--accentFaint);
+  border: 1px solid rgba(108,92,231,0.2);
+  border-radius: var(--r-md);
+  padding: 8px 12px;
+  font-size: 11px;
+  color: var(--accentL);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  animation: fadeIn .3s;
 }
-@media(min-width:600px) {
-  .cases-grid { grid-template-columns: repeat(3,1fr); gap: 10px; }
-  .case-visual { height: 110px; }
-  .content { padding-left: 20px; padding-right: 20px; }
-}
-@media(min-width:768px) {
-  .topbar { padding: 0 24px; }
-  .content { padding-left: 24px; padding-right: 24px; }
-  .case-visual { height: 120px; }
-  .case-name { font-size: 15px; }
-  .inv-grid { grid-template-columns: repeat(auto-fill, minmax(100px,1fr)); }
-  .tabs-inner { max-width: 420px; }
-}
-@media(min-width:1024px) {
-  .app { flex-direction: row; }
-  .tabs {
-    position: relative;
-    flex-direction: column;
-    width: 80px;
-    height: 100dvh;
-    border-top: none;
-    border-right: 1px solid var(--glass-border);
-    padding: 12px 6px;
-    padding-bottom: 0;
-    flex-shrink: 0;
-    align-items: stretch;
-    height: auto;
-  }
-  .tabs-inner {
-    flex-direction: column;
-    height: 100%;
-    width: 68px;
-    border-radius: 0 20px 20px 0;
-    padding: 8px 4px;
-    margin-top: 0;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 4px;
-  }
-  .content { padding-bottom: 20px; }
-  .cases-grid { grid-template-columns: repeat(3,1fr); gap: 14px; }
-  .case-visual { height: 130px; }
-}
-@media(min-width:1400px) {
-  .cases-grid { grid-template-columns: repeat(6,1fr); }
-  .content { padding: 24px 36px; padding-bottom: 24px; }
-}
+.gifts-status-bar.ok   { background: rgba(74,222,128,0.06); border-color: rgba(74,222,128,0.2); color: var(--green); }
+.gifts-status-bar.err  { background: rgba(248,113,113,0.06); border-color: rgba(248,113,113,0.2); color: var(--red); }
+.gifts-status-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; animation: oglow 1s infinite; }
+
+/* ── RESPONSIVE ── */
+@media(max-width:359px) { .cases-grid { grid-template-columns: repeat(2,1fr); gap: 7px; } .case-visual { height: 80px; } }
+@media(min-width:600px) { .cases-grid { grid-template-columns: repeat(3,1fr); gap: 10px; } .case-visual { height: 110px; } .content { padding-left: 20px; padding-right: 20px; } }
+@media(min-width:768px) { .topbar { padding: 0 24px; } .content { padding-left: 24px; padding-right: 24px; } .case-visual { height: 120px; } .case-name { font-size: 15px; } .inv-grid { grid-template-columns: repeat(auto-fill, minmax(100px,1fr)); } .tabs-inner { max-width: 420px; } }
+@media(min-width:1024px) { .app { flex-direction: row; } .tabs { position: relative; flex-direction: column; width: 80px; height: 100dvh; border-top: none; border-right: 1px solid var(--glass-border); padding: 12px 6px; padding-bottom: 0; flex-shrink: 0; align-items: stretch; height: auto; } .tabs-inner { flex-direction: column; height: 100%; width: 68px; border-radius: 0 20px 20px 0; padding: 8px 4px; margin-top: 0; align-items: center; justify-content: flex-start; gap: 4px; } .content { padding-bottom: 20px; } .cases-grid { grid-template-columns: repeat(3,1fr); gap: 14px; } .case-visual { height: 130px; } }
+@media(min-width:1400px) { .cases-grid { grid-template-columns: repeat(6,1fr); } .content { padding: 24px 36px; padding-bottom: 24px; } }
 </style>
 </head>
 <body>
 <canvas id="cfv"></canvas>
 <div class="rl-banner" id="rlBanner">⚠️ Слишком быстро, подождите</div>
 
-<!-- Browser stub -->
 <div class="browser-stub" id="browserStub">
   <div class="bs-icon">🎁</div>
   <div class="bs-title">GIFTCASE</div>
@@ -1542,7 +624,6 @@ img { display: block; }
   <span class="bs-skip" id="bsSkip">Продолжить как гость</span>
 </div>
 
-<!-- DEPOSIT MODAL -->
 <div class="modal-ov" id="depositModal">
   <div class="modal-sheet" id="depositSheet">
     <div class="modal-handle" id="depositHandle"></div>
@@ -1558,7 +639,6 @@ img { display: block; }
   </div>
 </div>
 
-<!-- WITHDRAW MODAL -->
 <div class="modal-ov" id="withdrawModal">
   <div class="modal-sheet" id="withdrawSheet">
     <div class="modal-handle" id="withdrawHandle"></div>
@@ -1572,9 +652,7 @@ img { display: block; }
   </div>
 </div>
 
-<!-- APP -->
 <div class="app" id="app">
-  <!-- Topbar -->
   <div class="topbar">
     <div class="logo">GIFTCASE<div class="logo-dot"></div></div>
     <div class="topbar-right">
@@ -1588,20 +666,18 @@ img { display: block; }
     </div>
   </div>
 
-  <!-- Content -->
   <div class="content" id="mainContent">
 
-    <!-- CASES PANEL -->
     <div class="panel active" id="casesPanel">
       <div class="sec-hdr">
         <div class="sec-title">КЕЙСЫ</div>
         <div class="sec-sub">открой и выиграй</div>
       </div>
+      <div id="giftsStatusBar"></div>
       <div class="cases-grid" id="casesGrid"></div>
       <div class="inv-section"><h3>МОИ ПОДАРКИ</h3><div class="inv-grid" id="invCases"></div></div>
     </div>
 
-    <!-- UPGRADE PANEL -->
     <div class="panel" id="upgradePanel">
       <div class="sec-hdr"><div class="sec-title">АПГРЕЙД</div><div class="sec-sub">ставка → цель → шанс</div></div>
       <div class="upg-layout">
@@ -1641,7 +717,6 @@ img { display: block; }
       <div class="inv-section" style="margin-top:14px"><h3>МОИ ПОДАРКИ</h3><div class="inv-grid" id="invUpgrade"></div></div>
     </div>
 
-    <!-- CRAFT PANEL -->
     <div class="panel" id="craftPanel">
       <div class="sec-hdr"><div class="sec-title">КРАФТ</div><div class="sec-sub">3 подарка → 1 случайный</div></div>
       <p style="font-size:11px;color:var(--tm);margin-bottom:10px">Нажми на 3 подарка в инвентаре. <strong style="color:var(--ts)">35% победа</strong> — получишь дороже. <strong style="color:var(--red)">65% проигрыш</strong> — получишь дешевле.</p>
@@ -1663,7 +738,6 @@ img { display: block; }
       <div class="inv-section" style="margin-top:14px"><h3>МОИ ПОДАРКИ</h3><div class="inv-grid" id="invCraft"></div></div>
     </div>
 
-    <!-- PVP PANEL -->
     <div class="panel" id="pvpPanel">
       <div class="sec-hdr"><div class="sec-title">PvP БАТЛЫ</div><div class="sec-sub">победитель забирает всё</div></div>
       <div class="pvp-tabs">
@@ -1689,7 +763,6 @@ img { display: block; }
       <div class="inv-section"><h3>МОИ ПОДАРКИ</h3><div class="inv-grid" id="invPvp"></div></div>
     </div>
 
-    <!-- PROFILE PANEL -->
     <div class="panel" id="profilePanel">
       <div class="profile-hero">
         <div class="avatar-wrap">
@@ -1731,9 +804,8 @@ img { display: block; }
       </div>
     </div>
 
-  </div><!-- /content -->
+  </div>
 
-  <!-- GLASS DOCK NAVIGATION -->
   <div class="tabs" id="tabsBar">
     <div class="tabs-inner">
       <button class="tab active" data-tab="cases"><span class="tab-icon">🎁</span><span class="tab-lbl">Кейсы</span></button>
@@ -1743,21 +815,19 @@ img { display: block; }
       <button class="tab" data-tab="profile"><span class="tab-icon">👤</span><span class="tab-lbl">Профиль</span></button>
     </div>
   </div>
-
-</div><!-- /app -->
+</div>
 
 <script>
-/* ════════════════════════════════════════════════════
+/* ════════════════════════════════════════
    КОНФИГУРАЦИЯ
-════════════════════════════════════════════════════ */
+════════════════════════════════════════ */
 var SB_URL     = 'https://riwzrplciliebgexltll.supabase.co';
 var SB_KEY     = 'sb_publishable_oVuIF8Tj8BThqD34bn6q_w_ROoPkJhZ';
 var BOT_TOKEN  = '8209263425:AAFZQzJCzLmnV044UPaCWJWJZ3ZQw24H85k';
-var BOT_API_URL = 'https://tg-bot-final.vercel.app';
 
-/* ════════════════════════════════════════════════════
+/* ════════════════════════════════════════
    ГЛОБАЛЬНОЕ СОСТОЯНИЕ
-════════════════════════════════════════════════════ */
+════════════════════════════════════════ */
 var userId = null, tgUser = null;
 var state = {
   balance: 250, inventory: [], casesOpened: 0, pvpWins: 0,
@@ -1777,9 +847,150 @@ var lastWsActivity = Date.now();
 var rouletteStartTime = 0, rouletteDuration = 4500;
 var autoJoinProcessed = false;
 
-/* ════════════════════════════════════════════════════
-   ГЕНЕРАЦИЯ ПОДАРКОВ
-════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════
+   ─── IMAGE SYSTEM ───────────────────────
+   Кеш изображений в памяти браузера.
+   Ключ: gift.id → ObjectURL или dataURL
+════════════════════════════════════════ */
+var IMG_CACHE = new Map();     // id → src string
+var IMG_ERR   = new Set();     // id → failed permanently
+var IMG_LOADING = new Set();   // id → in flight
+
+// Preload картинки и кешировать
+function preloadGiftImage(gift) {
+  if (!gift || !gift.id) return;
+  if (IMG_CACHE.has(String(gift.id))) return;
+  if (IMG_ERR.has(String(gift.id)))   return;
+  if (IMG_LOADING.has(String(gift.id))) return;
+  if (!gift.image_url) return;
+
+  IMG_LOADING.add(String(gift.id));
+
+  var img = new Image();
+  img.onload = function() {
+    IMG_LOADING.delete(String(gift.id));
+    IMG_CACHE.set(String(gift.id), gift.image_url);
+    // Обновляем все элементы на странице с этим gift.id
+    refreshGiftImgElements(String(gift.id), gift.image_url);
+  };
+  img.onerror = function() {
+    IMG_LOADING.delete(String(gift.id));
+    IMG_ERR.add(String(gift.id));
+    refreshGiftImgElements(String(gift.id), null);
+  };
+  img.src = gift.image_url;
+}
+
+// Обновляем DOM-элементы когда картинка загружена
+function refreshGiftImgElements(giftId, src) {
+  var els = document.querySelectorAll('[data-gift-img-id="' + giftId + '"]');
+  for (var i = 0; i < els.length; i++) {
+    applyGiftImageToEl(els[i], giftId, src);
+  }
+}
+
+function applyGiftImageToEl(container, giftId, src) {
+  var imgEl  = container.querySelector('.gift-real-img');
+  var skelEl = container.querySelector('.gift-img-skeleton');
+  var fbEl   = container.querySelector('.gift-fallback-emoji');
+  if (!imgEl) return;
+
+  if (src) {
+    imgEl.src = src;
+    imgEl.classList.remove('loading');
+    imgEl.classList.add('loaded');
+    if (skelEl) skelEl.style.display = 'none';
+    if (fbEl)   fbEl.style.display   = 'none';
+    imgEl.style.display = 'block';
+  } else {
+    // Показываем эмодзи-фолбэк
+    if (skelEl) skelEl.style.display = 'none';
+    imgEl.style.display = 'none';
+    if (fbEl) fbEl.style.display = 'block';
+  }
+}
+
+// Генерирует HTML для gift image (skeleton + реальная картинка + эмодзи фолбэк)
+function makeGiftImgHtml(gift, sizeClass) {
+  if (!gift) return '<span style="font-size:28px">🎁</span>';
+  var id     = String(gift.id || '');
+  var emoji  = escapeHtml(gift.icon || '🎁');
+  var cached = id ? IMG_CACHE.get(id) : null;
+  var failed = id ? IMG_ERR.has(id)   : false;
+  var imgSrc = cached || (gift.image_url && !failed ? gift.image_url : null);
+
+  // Если нет реального изображения — просто эмодзи
+  if (!gift.image_url && !cached) {
+    return '<span style="font-size:' + (sizeClass === 'sm' ? '22px' : '30px') + '">' + emoji + '</span>';
+  }
+
+  var sz   = sizeClass === 'sm' ? '36px' : sizeClass === 'md' ? '48px' : '72px';
+  var loaded = cached && !failed;
+
+  return '<div class="gift-img-wrap" data-gift-img-id="' + id + '">' +
+    (loaded ? '' : '<div class="gift-img-skeleton"></div>') +
+    '<img class="gift-real-img ' + (loaded ? 'loaded' : 'loading') + '"' +
+      ' src="' + (imgSrc || '') + '"' +
+      ' style="width:' + sz + ';height:' + sz + ';' + (loaded ? '' : 'display:none') + '"' +
+      ' draggable="false"' +
+      ' onerror="handleGiftImgError(this,\'' + escapeHtml(id) + '\')"' +
+      ' onload="handleGiftImgLoad(this)"' +
+    '>' +
+    '<span class="gift-fallback-emoji" style="font-size:' + (sizeClass === 'sm' ? '20px' : sizeClass === 'md' ? '26px' : '38px') + ';display:' + (failed || !imgSrc ? 'block' : 'none') + '">' + emoji + '</span>' +
+  '</div>';
+}
+
+// Обработчики для img тегов
+function handleGiftImgLoad(imgEl) {
+  imgEl.classList.remove('loading');
+  imgEl.classList.add('loaded');
+  imgEl.style.display = 'block';
+  var wrap = imgEl.closest('.gift-img-wrap');
+  if (wrap) {
+    var skel = wrap.querySelector('.gift-img-skeleton');
+    var fb   = wrap.querySelector('.gift-fallback-emoji');
+    if (skel) skel.style.display = 'none';
+    if (fb)   fb.style.display   = 'none';
+    // Кешируем
+    var gid = wrap.dataset.giftImgId;
+    if (gid && imgEl.src) IMG_CACHE.set(gid, imgEl.src);
+  }
+}
+
+function handleGiftImgError(imgEl, giftId) {
+  imgEl.style.display = 'none';
+  if (giftId) IMG_ERR.add(giftId);
+  var wrap = imgEl.closest('.gift-img-wrap');
+  if (wrap) {
+    var skel = wrap.querySelector('.gift-img-skeleton');
+    var fb   = wrap.querySelector('.gift-fallback-emoji');
+    if (skel) skel.style.display = 'none';
+    if (fb)   fb.style.display   = 'block';
+  }
+}
+
+/* ════════════════════════════════════════
+   getGiftIcon — центральная функция рендера
+   Заменяет старую getGiftIcon и везде используется
+════════════════════════════════════════ */
+function getGiftIcon(gift, size) {
+  if (!gift) return '🎁';
+  size = size || 'md'; // sm | md | lg
+  var px = size === 'sm' ? 22 : size === 'md' ? 38 : 72;
+
+  // Если есть image_url (реальное Telegram изображение)
+  if (gift.image_url || IMG_CACHE.has(String(gift.id || ''))) {
+    return makeGiftImgHtml(gift, size);
+  }
+
+  // Фолбэк — эмодзи
+  var emoji = gift.icon || '🎁';
+  return '<span style="font-size:' + px + 'px">' + escapeHtml(emoji) + '</span>';
+}
+
+/* ════════════════════════════════════════
+   ГЕНЕРАЦИЯ ПОДАРКОВ (fallback)
+════════════════════════════════════════ */
 function generateExtendedGiftList() {
   var REAL_PRICES = {
     common: [10,12,15,18,20,22,25,28,30,35,38,40,45,50,55,60,65,70,75,80,85,90,100],
@@ -1788,67 +999,67 @@ function generateExtendedGiftList() {
     legendary: [400,450,500,550,600,700,800,900,1000,1200,1500,2000,2500,3000,4000,5000]
   };
   var baseGifts = [
-    {id:1,  name:"Astral Shard",   price:50,  file:1,  icon:"💎", rarity:"rare"},
-    {id:2,  name:"Plush Pepe",     price:25,  file:2,  icon:"🐸", rarity:"common"},
-    {id:3,  name:"Lol Pop",        price:15,  file:3,  icon:"🍭", rarity:"common"},
-    {id:4,  name:"Tama Gadget",    price:30,  file:4,  icon:"🎮", rarity:"common"},
-    {id:5,  name:"Sharp Tongue",   price:40,  file:5,  icon:"🌶️", rarity:"rare"},
-    {id:6,  name:"Spiced Wine",    price:35,  file:6,  icon:"🍷", rarity:"common"},
-    {id:7,  name:"Crystal Ball",   price:75,  file:7,  icon:"🔮", rarity:"rare"},
-    {id:8,  name:"Neon Sign",      price:60,  file:8,  icon:"💡", rarity:"rare"},
-    {id:9,  name:"Ice Cube",       price:20,  file:9,  icon:"🧊", rarity:"common"},
-    {id:10, name:"Star Blast",     price:100, file:10, icon:"🌟", rarity:"epic"},
-    {id:11, name:"Bunny Muffin",   price:15,  file:11, icon:"🧁", rarity:"common"},
-    {id:12, name:"Hex Pot",        price:45,  file:12, icon:"🫙", rarity:"rare"},
-    {id:13, name:"Trapped Heart",  price:55,  file:13, icon:"💖", rarity:"rare"},
-    {id:14, name:"Eternal Rose",   price:80,  file:14, icon:"🌹", rarity:"rare"},
-    {id:15, name:"Mad Pumpkin",    price:25,  file:15, icon:"🎃", rarity:"common"},
-    {id:16, name:"Love Potion",    price:50,  file:16, icon:"🧪", rarity:"rare"},
-    {id:17, name:"Astral Crown",   price:500, file:17, icon:"👑", rarity:"legendary"},
-    {id:18, name:"Cyber Skull",    price:150, file:18, icon:"💀", rarity:"epic"},
-    {id:19, name:"Jelly Bunny",    price:20,  file:19, icon:"🐇", rarity:"common"},
-    {id:20, name:"Dragon Egg",     price:200, file:20, icon:"🥚", rarity:"epic"},
-    {id:21, name:"Neon Candy",     price:18,  file:21, icon:"🍬", rarity:"common"},
-    {id:22, name:"Golden Trophy",  price:350, file:22, icon:"🏆", rarity:"legendary"},
-    {id:23, name:"Fire Flower",    price:65,  file:23, icon:"🌺", rarity:"rare"},
-    {id:24, name:"Robot Toy",      price:30,  file:24, icon:"🤖", rarity:"common"},
-    {id:25, name:"Sky Rocket",     price:120, file:25, icon:"🚀", rarity:"epic"},
-    {id:26, name:"Voodoo Doll",    price:55,  file:26, icon:"🪆", rarity:"rare"},
-    {id:27, name:"Berry Box",      price:22,  file:27, icon:"🍓", rarity:"common"},
-    {id:28, name:"Plasma Arc",     price:180, file:28, icon:"⚡", rarity:"epic"},
-    {id:29, name:"Witch Hat",      price:40,  file:29, icon:"🎩", rarity:"rare"},
-    {id:30, name:"Moon Lamp",      price:75,  file:30, icon:"🌙", rarity:"rare"},
-    {id:31, name:"Treasure Chest", price:250, file:31, icon:"🎁", rarity:"legendary"},
-    {id:32, name:"Snow Globe",     price:45,  file:32, icon:"🌨️", rarity:"rare"},
-    {id:33, name:"Pixel Sword",    price:90,  file:33, icon:"⚔️", rarity:"epic"},
-    {id:34, name:"Cat Paw",        price:15,  file:34, icon:"🐾", rarity:"common"},
-    {id:35, name:"Gummy Bear",     price:12,  file:35, icon:"🐻", rarity:"common"},
-    {id:36, name:"Infinity Gem",   price:1000,file:36, icon:"♾️", rarity:"legendary"},
-    {id:37, name:"Pixel Heart",    price:28,  file:37, icon:"❤️", rarity:"common"},
-    {id:38, name:"Laser Cat",      price:130, file:38, icon:"😸", rarity:"epic"},
-    {id:39, name:"Bubble Wand",    price:35,  file:39, icon:"🪄", rarity:"common"},
-    {id:40, name:"Nova Star",      price:400, file:40, icon:"⭐", rarity:"legendary"},
-    {id:41, name:"Dino Egg",       price:60,  file:41, icon:"🦕", rarity:"rare"},
-    {id:42, name:"Cheese Block",   price:10,  file:42, icon:"🧀", rarity:"common"},
-    {id:43, name:"Storm Cloud",    price:110, file:43, icon:"⛈️", rarity:"epic"},
-    {id:44, name:"Hologram Ring",  price:300, file:44, icon:"💍", rarity:"legendary"},
-    {id:45, name:"Soft Panda",     price:18,  file:45, icon:"🐼", rarity:"common"},
-    {id:46, name:"Flame Orb",      price:85,  file:46, icon:"🔥", rarity:"rare"},
-    {id:47, name:"Retro Tape",     price:22,  file:47, icon:"📼", rarity:"common"},
-    {id:48, name:"Void Cube",      price:170, file:48, icon:"🎲", rarity:"epic"},
-    {id:49, name:"Cherry Bomb",    price:38,  file:49, icon:"💣", rarity:"rare"},
-    {id:50, name:"Space Fish",     price:70,  file:50, icon:"🐠", rarity:"rare"}
+    {id:1, name:"Astral Shard",  price:50,  icon:"💎", rarity:"rare"},
+    {id:2, name:"Plush Pepe",    price:25,  icon:"🐸", rarity:"common"},
+    {id:3, name:"Lol Pop",       price:15,  icon:"🍭", rarity:"common"},
+    {id:4, name:"Tama Gadget",   price:30,  icon:"🎮", rarity:"common"},
+    {id:5, name:"Sharp Tongue",  price:40,  icon:"🌶️", rarity:"rare"},
+    {id:6, name:"Spiced Wine",   price:35,  icon:"🍷", rarity:"common"},
+    {id:7, name:"Crystal Ball",  price:75,  icon:"🔮", rarity:"rare"},
+    {id:8, name:"Neon Sign",     price:60,  icon:"💡", rarity:"rare"},
+    {id:9, name:"Ice Cube",      price:20,  icon:"🧊", rarity:"common"},
+    {id:10,name:"Star Blast",    price:100, icon:"🌟", rarity:"epic"},
+    {id:11,name:"Bunny Muffin",  price:15,  icon:"🧁", rarity:"common"},
+    {id:12,name:"Hex Pot",       price:45,  icon:"🫙", rarity:"rare"},
+    {id:13,name:"Trapped Heart", price:55,  icon:"💖", rarity:"rare"},
+    {id:14,name:"Eternal Rose",  price:80,  icon:"🌹", rarity:"rare"},
+    {id:15,name:"Mad Pumpkin",   price:25,  icon:"🎃", rarity:"common"},
+    {id:16,name:"Love Potion",   price:50,  icon:"🧪", rarity:"rare"},
+    {id:17,name:"Astral Crown",  price:500, icon:"👑", rarity:"legendary"},
+    {id:18,name:"Cyber Skull",   price:150, icon:"💀", rarity:"epic"},
+    {id:19,name:"Jelly Bunny",   price:20,  icon:"🐇", rarity:"common"},
+    {id:20,name:"Dragon Egg",    price:200, icon:"🥚", rarity:"epic"},
+    {id:21,name:"Neon Candy",    price:18,  icon:"🍬", rarity:"common"},
+    {id:22,name:"Golden Trophy", price:350, icon:"🏆", rarity:"legendary"},
+    {id:23,name:"Fire Flower",   price:65,  icon:"🌺", rarity:"rare"},
+    {id:24,name:"Robot Toy",     price:30,  icon:"🤖", rarity:"common"},
+    {id:25,name:"Sky Rocket",    price:120, icon:"🚀", rarity:"epic"},
+    {id:26,name:"Voodoo Doll",   price:55,  icon:"🪆", rarity:"rare"},
+    {id:27,name:"Berry Box",     price:22,  icon:"🍓", rarity:"common"},
+    {id:28,name:"Plasma Arc",    price:180, icon:"⚡", rarity:"epic"},
+    {id:29,name:"Witch Hat",     price:40,  icon:"🎩", rarity:"rare"},
+    {id:30,name:"Moon Lamp",     price:75,  icon:"🌙", rarity:"rare"},
+    {id:31,name:"Treasure Chest",price:250, icon:"🎁", rarity:"legendary"},
+    {id:32,name:"Snow Globe",    price:45,  icon:"🌨️", rarity:"rare"},
+    {id:33,name:"Pixel Sword",   price:90,  icon:"⚔️", rarity:"epic"},
+    {id:34,name:"Cat Paw",       price:15,  icon:"🐾", rarity:"common"},
+    {id:35,name:"Gummy Bear",    price:12,  icon:"🐻", rarity:"common"},
+    {id:36,name:"Infinity Gem",  price:1000,icon:"♾️", rarity:"legendary"},
+    {id:37,name:"Pixel Heart",   price:28,  icon:"❤️", rarity:"common"},
+    {id:38,name:"Laser Cat",     price:130, icon:"😸", rarity:"epic"},
+    {id:39,name:"Bubble Wand",   price:35,  icon:"🪄", rarity:"common"},
+    {id:40,name:"Nova Star",     price:400, icon:"⭐", rarity:"legendary"},
+    {id:41,name:"Dino Egg",      price:60,  icon:"🦕", rarity:"rare"},
+    {id:42,name:"Cheese Block",  price:10,  icon:"🧀", rarity:"common"},
+    {id:43,name:"Storm Cloud",   price:110, icon:"⛈️", rarity:"epic"},
+    {id:44,name:"Hologram Ring", price:300, icon:"💍", rarity:"legendary"},
+    {id:45,name:"Soft Panda",    price:18,  icon:"🐼", rarity:"common"},
+    {id:46,name:"Flame Orb",     price:85,  icon:"🔥", rarity:"rare"},
+    {id:47,name:"Retro Tape",    price:22,  icon:"📼", rarity:"common"},
+    {id:48,name:"Void Cube",     price:170, icon:"🎲", rarity:"epic"},
+    {id:49,name:"Cherry Bomb",   price:38,  icon:"💣", rarity:"rare"},
+    {id:50,name:"Space Fish",    price:70,  icon:"🐠", rarity:"rare"}
   ];
   var allGifts = baseGifts.slice();
-  var allRealPrices = REAL_PRICES.common.concat(REAL_PRICES.rare, REAL_PRICES.epic, REAL_PRICES.legendary);
-  var prefixes = ['🌟','💎','👑','🔥','💀','🐉','🦄','⚡','🌈','⭐','🌙','🔮','🎭','🏆','🎖️'];
-  var suffixes = ['Legacy','Unique','Exclusive','Limited','Mythic','Prismatic','Shadow','Divine','Inferno','Frost','Thunder','Void','Cosmic','Eternal','Ancient'];
-  var nextId = 100;
-  for (var p = 0; p < prefixes.length && allGifts.length < 800; p++) {
-    for (var s2 = 0; s2 < suffixes.length && allGifts.length < 800; s2++) {
-      var rp = allRealPrices[Math.floor(Math.random() * allRealPrices.length)];
+  var allP = REAL_PRICES.common.concat(REAL_PRICES.rare, REAL_PRICES.epic, REAL_PRICES.legendary);
+  var pref = ['🌟','💎','👑','🔥','💀','🐉','🦄','⚡','🌈','⭐','🌙','🔮','🎭','🏆','🎖️'];
+  var suf  = ['Legacy','Unique','Exclusive','Limited','Mythic','Prismatic','Shadow','Divine','Inferno','Frost','Thunder','Void','Cosmic','Eternal','Ancient'];
+  var nid  = 100;
+  for (var p = 0; p < pref.length && allGifts.length < 800; p++) {
+    for (var s2 = 0; s2 < suf.length && allGifts.length < 800; s2++) {
+      var rp  = allP[Math.floor(Math.random() * allP.length)];
       var rar = rp <= 100 ? 'common' : rp <= 200 ? 'rare' : rp <= 450 ? 'epic' : 'legendary';
-      allGifts.push({id:nextId++, name:prefixes[p]+' '+suffixes[s2], price:rp, file:nextId, icon:prefixes[p], rarity:rar});
+      allGifts.push({id:nid++, name:pref[p]+' '+suf[s2], price:rp, icon:pref[p], rarity:rar});
     }
   }
   return allGifts;
@@ -1857,30 +1068,58 @@ function generateExtendedGiftList() {
 var REAL_TG_GIFTS = generateExtendedGiftList();
 var realGiftsList = [];
 
-/* ════════════════════════════════════════════════════
-   ИКОНКИ ПОДАРКОВ
-════════════════════════════════════════════════════ */
-function getGiftIcon(gift) {
-  if (!gift) return '🎁';
-  if (gift.image_url) {
-    return '<img src="'+gift.image_url+'" style="width:48px;height:48px;border-radius:10px;object-fit:contain" onerror="this.outerHTML=\'<span style=\\\'font-size:28px\\\'>🎁</span>\'">';
-  }
-  return '<span style="font-size:28px">'+(gift.icon||'🎁')+'</span>';
+/* ════════════════════════════════════════
+   ЗАГРУЗКА РЕАЛЬНЫХ ПОДАРКОВ
+════════════════════════════════════════ */
+function setGiftsStatusBar(state, text) {
+  var el = document.getElementById('giftsStatusBar');
+  if (!el) return;
+  if (!state) { el.innerHTML = ''; return; }
+  el.innerHTML = '<div class="gifts-status-bar ' + state + '">' +
+    '<div class="gifts-status-dot"></div>' + escapeHtml(text) + '</div>';
 }
 
 async function loadRealGifts() {
+  setGiftsStatusBar('', '⏳ Загружаем Telegram gifts...');
   try {
     var response = await fetch('/api/gifts');
+    if (!response.ok) throw new Error('HTTP ' + response.status);
     var data = await response.json();
-    if (data.success && data.gifts) {
+
+    if (data.success && data.gifts && data.gifts.length > 0) {
       realGiftsList = data.gifts;
+
+      // Preload первые 20 картинок немедленно
+      var toPreload = realGiftsList.slice(0, 20);
+      for (var i = 0; i < toPreload.length; i++) {
+        preloadGiftImage(toPreload[i]);
+      }
+      // Остальные — с задержкой чтобы не блокировать рендер
+      setTimeout(function() {
+        for (var j = 20; j < realGiftsList.length; j++) {
+          preloadGiftImage(realGiftsList[j]);
+        }
+      }, 1500);
+
+      var withImg = realGiftsList.filter(function(g) { return g.has_real_image; }).length;
+      if (withImg > 0) {
+        setGiftsStatusBar('ok', '✅ Загружено ' + realGiftsList.length + ' подарков, ' + withImg + ' с реальными картинками');
+        setTimeout(function() { setGiftsStatusBar('', ''); }, 4000);
+      } else {
+        setGiftsStatusBar('', '');
+      }
       updateAllUI();
       return true;
     }
-  } catch(e) {}
-  realGiftsList = REAL_TG_GIFTS;
-  updateAllUI();
-  return false;
+    throw new Error('No gifts in response');
+  } catch(e) {
+    console.warn('[loadRealGifts]', e);
+    realGiftsList = REAL_TG_GIFTS;
+    setGiftsStatusBar('err', '⚠️ Используем локальные данные');
+    setTimeout(function() { setGiftsStatusBar('', ''); }, 5000);
+    updateAllUI();
+    return false;
+  }
 }
 
 function getRarityByPrice(price) {
@@ -1904,16 +1143,15 @@ function getRealGiftById(id) {
 
 function getRandomGiftFromCase(casePrice) {
   if (!realGiftsList.length) return null;
-  var minPrice = casePrice * 0.5;
-  var maxPrice = casePrice * 2.5;
+  var minPrice = casePrice * 0.5, maxPrice = casePrice * 2.5;
   var available = realGiftsList.filter(function(g){ return g.price >= minPrice && g.price <= maxPrice; });
   if (!available.length) available = realGiftsList;
   return Object.assign({}, available[Math.floor(Math.random() * available.length)]);
 }
 
-/* ════════════════════════════════════════════════════
+/* ════════════════════════════════════════
    КЕЙСЫ
-════════════════════════════════════════════════════ */
+════════════════════════════════════════ */
 var CASES = [
   {id:"starter",   name:"СТАРТОВЫЙ",   price:12,  cls:"c-starter",   emoji:"🎀"},
   {id:"common",    name:"ОБЫЧНЫЙ",     price:25,  cls:"c-common",    emoji:"📦"},
@@ -1923,9 +1161,9 @@ var CASES = [
   {id:"mythic",    name:"МИФИЧЕСКИЙ",  price:990, cls:"c-mythic",    emoji:"💀"}
 ];
 
-/* ════════════════════════════════════════════════════
+/* ════════════════════════════════════════
    RATE LIMITING
-════════════════════════════════════════════════════ */
+════════════════════════════════════════ */
 var RL = {
   _m:{},
   check: function(k, max) {
@@ -1945,9 +1183,9 @@ var RL = {
   }
 };
 
-/* ════════════════════════════════════════════════════
+/* ════════════════════════════════════════
    ЗВУКИ
-════════════════════════════════════════════════════ */
+════════════════════════════════════════ */
 var SFX = {
   _c: null,
   _g: function(){ if(!this._c) this._c=new(window.AudioContext||window.webkitAudioContext)(); return this._c; },
@@ -1964,12 +1202,11 @@ var SFX = {
   almost:       function(){ this._t(900,0.05,0.06);setTimeout(function(){SFX._t(800,0.05,0.06)},80); },
   tick:         function(){ this._t(1200,0.03,0.08,'square'); }
 };
-
 function vibrate(p){ try{ navigator.vibrate && navigator.vibrate(p); }catch(e){} }
 
-/* ════════════════════════════════════════════════════
+/* ════════════════════════════════════════
    CONFETTI
-════════════════════════════════════════════════════ */
+════════════════════════════════════════ */
 var CF = (function(){
   var _cv=null,_cx=null,_ps=[],_af=null;
   function _init(){ if(!_cv){_cv=document.getElementById('cfv');if(_cv)_cx=_cv.getContext('2d');} }
@@ -1999,9 +1236,9 @@ var CF = (function(){
   return {burst:burst};
 })();
 
-/* ════════════════════════════════════════════════════
+/* ════════════════════════════════════════
    УТИЛИТЫ
-════════════════════════════════════════════════════ */
+════════════════════════════════════════ */
 function toast(m){
   var ts=document.querySelectorAll('.toast');
   for(var i=0;i<ts.length;i++) ts[i].remove();
@@ -2009,22 +1246,20 @@ function toast(m){
   document.body.appendChild(t);
   setTimeout(function(){ t.remove(); }, 2700);
 }
-
 function escapeHtml(s){
   if(!s) return '';
   return String(s).replace(/[&<>'"]/g,function(c){
     return c==='&'?'&amp;':c==='<'?'&lt;':c==='>'?'&gt;':c==='"'?'&quot;':"&#39;";
   });
 }
-
 function copyToClipboard(text){
   try{ navigator.clipboard.writeText(text); }
   catch(e){ var t=document.createElement('textarea');t.value=text;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove(); }
 }
 
-/* ════════════════════════════════════════════════════
+/* ════════════════════════════════════════
    SUPABASE
-════════════════════════════════════════════════════ */
+════════════════════════════════════════ */
 async function sb(path, method, body, h) {
   method = method||'GET'; h = h||{};
   try {
@@ -2109,7 +1344,6 @@ function setBal(v) {
   }
   saveUser();
 }
-
 function incLuck(n){ state.luck = Math.min(200, state.luck+(n||1)); updateLuckBar(); }
 function updateLuckBar(){
   var p = Math.min(100, state.luck/2);
@@ -2121,9 +1355,9 @@ function addHist(icon, action, result, pos){
   if(state.history.length > 60) state.history = state.history.slice(0,60);
 }
 
-/* ════════════════════════════════════════════════════
+/* ════════════════════════════════════════
    ИНВЕНТАРЬ
-════════════════════════════════════════════════════ */
+════════════════════════════════════════ */
 function renderInv(cid, withSell, mode) {
   var el = document.getElementById(cid);
   if(!el) return;
@@ -2136,7 +1370,7 @@ function renderInv(cid, withSell, mode) {
     var g = state.inventory[i];
     html += '<div class="inv-card" data-gi="'+i+'" data-mode="'+(mode||'')+'">'+
               '<div class="inv-dot r-'+(g.rarity||'common')+'"></div>'+
-              '<div class="inv-icon">'+getGiftIcon(g)+'</div>'+
+              '<div class="inv-icon">'+getGiftIcon(g, 'sm')+'</div>'+
               '<div class="inv-name">'+escapeHtml(g.name)+'</div>'+
               '<div class="inv-val">★ '+g.val+'</div>'+
               (withSell?'<button class="sell-chip" data-idx="'+i+'">Продать</button>':'')+
@@ -2202,14 +1436,12 @@ function updateStats(){
 }
 
 function isValidUrl(u){ try{ var x=new URL(u); return['http:','https:'].includes(x.protocol); }catch(e){ return false; } }
-
 function renderAvatar(){
   var el = document.getElementById('avatarDisplay'); if(!el) return;
   if(state.avatarUrl && isValidUrl(state.avatarUrl)) el.innerHTML='<img src="'+state.avatarUrl+'">';
   else if(tgUser && tgUser.photo_url && isValidUrl(tgUser.photo_url)) el.innerHTML='<img src="'+tgUser.photo_url+'">';
   else el.innerText='👤';
 }
-
 function renderHist(){
   var el = document.getElementById('histBody'); if(!el) return;
   if(!state.history.length){
@@ -2223,7 +1455,6 @@ function renderHist(){
   }
   el.innerHTML=html;
 }
-
 function updateAllUI(){
   document.getElementById('balVal').innerText = state.balance;
   renderAllInv();
@@ -2233,9 +1464,9 @@ function updateAllUI(){
   renderPvpLobby();
 }
 
-/* ════════════════════════════════════════════════════
+/* ════════════════════════════════════════
    РЕНДЕР КЕЙСОВ
-════════════════════════════════════════════════════ */
+════════════════════════════════════════ */
 function renderCases(){
   var g = document.getElementById('casesGrid'); if(!g) return;
   var html='';
@@ -2243,7 +1474,9 @@ function renderCases(){
     var c=CASES[i];
     html+='<div class="case-card '+c.cls+'">';
     html+='<div class="case-visual"><div class="case-image">';
-    html+='<img class="case-img" src="images/cases/'+c.id+'.png" alt="'+c.name+'" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'">';
+    // Картинка кейса с fallback
+    html+='<img class="case-img" src="images/cases/'+c.id+'.png" alt="'+c.name+'"' +
+          ' onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'">';
     html+='<div class="case-emoji" style="display:none">'+c.emoji+'</div>';
     html+='</div></div>';
     html+='<div class="case-body"><div class="case-name">'+c.name+'</div>';
@@ -2263,51 +1496,31 @@ function renderCases(){
   }
 }
 
-/* ════════════════════════════════════════════════════
+/* ════════════════════════════════════════
    ОТКРЫТИЕ КЕЙСА
-   Промт: встряска → энергетическая зарядка → рулетка
-   (ускорение → инерция → плавное замедление → снап)
-════════════════════════════════════════════════════ */
+════════════════════════════════════════ */
 function openCase(c){
   if(!RL.check('openCase',2)) return;
   if(state.balance < c.price){ toast('❌ Нужно '+c.price+' ★'); return; }
-
   setBal(state.balance - c.price);
   state.casesOpened = (state.casesOpened||0) + 1;
-
   var wonGift = getRandomGiftFromCase(c.price);
   if(!wonGift){ toast('❌ Ошибка загрузки подарков'); return; }
-
-  /* Визуальная встряска кнопки / кейса */
   var cardEl = document.querySelector('.case-card.'+c.cls);
-  if(cardEl){
-    cardEl.classList.add('case-shake');
-    setTimeout(function(){ cardEl.classList.remove('case-shake'); }, 600);
-  }
-
-  /* Формируем ленту */
+  if(cardEl){ cardEl.classList.add('case-shake'); setTimeout(function(){ cardEl.classList.remove('case-shake'); }, 600); }
   var strip = [];
   for(var j = 0; j < 64; j++) strip.push(getRandomGiftFromCase(c.price) || wonGift);
-  strip[50] = wonGift; /* выигрышный предмет на позиции 50 */
-
-  /* Запускаем рулетку */
+  strip[50] = wonGift;
   setTimeout(function(){
     showRouletteWithCharge(strip, 50, function(){
       var isRare = wonGift.price > 50;
-      if(isRare){
-        CF.burst(window.innerWidth/2, window.innerHeight*0.35, 110);
-        SFX.win();
-        vibrate([20,60,20]);
-      }
+      if(isRare){ CF.burst(window.innerWidth/2, window.innerHeight*0.35, 110); SFX.win(); vibrate([20,60,20]); }
       showResultModal(wonGift, null, isRare, function(action){
         if(action === 'keep'){
           state.inventory.push({
             id: wonGift.id, name: wonGift.name, icon: wonGift.icon,
-            file: wonGift.file, val: wonGift.price,
-            rarity: getRarityByPrice(wonGift.price),
-            collectible_id: wonGift.collectible_id,
-            sticker_file_id: wonGift.sticker_file_id,
-            image_url: wonGift.image_url
+            val: wonGift.price, rarity: getRarityByPrice(wonGift.price),
+            image_url: wonGift.image_url || null,
           });
           addHist(wonGift.icon||'🎁','Кейс: '+c.name,'+'+wonGift.name, true);
           toast('📦 '+wonGift.name);
@@ -2317,18 +1530,15 @@ function openCase(c){
           addHist(wonGift.icon||'🎁','Продан: '+wonGift.name,'+'+p+' ★', true);
           toast('💰 '+p+' ★');
         }
-        updateAllUI();
-        saveUser();
+        updateAllUI(); saveUser();
       });
     });
   }, 400);
 }
 
-/* ════════════════════════════════════════════════════
-   РУЛЕТКА — полная анимация
-   Промт: старт + встряска → ease-in ускорение →
-   длинная инерция → cubic-bezier(0.16,1,0.3,1) снап
-════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════
+   РУЛЕТКА
+════════════════════════════════════════ */
 function showRouletteWithCharge(strip, wonPos, cb){
   var ov = document.createElement('div');
   ov.className = 'roulette-overlay';
@@ -2344,11 +1554,8 @@ function showRouletteWithCharge(strip, wonPos, cb){
     '</div>'+
     '<div class="roulette-label" id="rlLabel">ОЖИДАНИЕ...</div>';
   document.body.appendChild(ov);
-
   var track = ov.querySelector('#rlTrack');
-  var ITEM  = 108;
-
-  /* Заполняем ленту */
+  var ITEM = 108;
   for(var si=0; si<strip.length; si++){
     var g = strip[si];
     var isObj = typeof g === 'object' && g !== null;
@@ -2356,98 +1563,85 @@ function showRouletteWithCharge(strip, wonPos, cb){
     el.className = 'roulette-item';
     if(si === wonPos) el.classList.add('winner');
     if(isObj){
-      el.innerHTML =
-        '<div style="display:flex;align-items:center;justify-content:center;width:48px;height:48px">'+getGiftIcon(g)+'</div>'+
+      // Используем реальную картинку если есть
+      var imgHtml;
+      if(g.image_url || IMG_CACHE.has(String(g.id||''))) {
+        var cachedSrc = IMG_CACHE.get(String(g.id||'')) || g.image_url;
+        if(cachedSrc) {
+          imgHtml = '<img class="ri-img" src="'+escapeHtml(cachedSrc)+'" alt="'+escapeHtml(g.name||'')+'"' +
+            ' onerror="this.style.display=\'none\';this.nextSibling.style.display=\'block\'">' +
+            '<span style="font-size:26px;display:none">'+(g.icon||'🎁')+'</span>';
+        } else {
+          imgHtml = '<span style="font-size:26px">'+(g.icon||'🎁')+'</span>';
+        }
+      } else {
+        imgHtml = '<span style="font-size:26px">'+(g.icon||'🎁')+'</span>';
+      }
+      el.innerHTML = imgHtml +
         '<div class="roulette-item-lbl">'+escapeHtml(g.name||'')+'</div>';
     } else {
       el.innerHTML = '<div style="font-size:30px">🎁</div><div class="roulette-item-lbl">'+escapeHtml(String(g))+'</div>';
     }
     track.appendChild(el);
   }
-
-  /* Зарядка */
   var fill  = document.getElementById('eFill');
   var label = document.getElementById('rlLabel');
   var wrap  = ov.querySelector('#eWrap');
   var pct   = 0;
-
   var chargeI = setInterval(function(){
     pct = Math.min(100, pct + 2.5);
     fill.style.width = pct + '%';
-
-    /* Спарклы */
     if(Math.random() > 0.55){
-      var sp = document.createElement('div');
-      sp.className = 'spark';
-      sp.style.left = (pct - 1) + '%';
-      sp.style.bottom = '0';
+      var sp = document.createElement('div'); sp.className = 'spark';
+      sp.style.left = (pct - 1) + '%'; sp.style.bottom = '0';
       sp.style.setProperty('--sx', (Math.random()*30-15)+'px');
       sp.style.setProperty('--sy', (-(Math.random()*20+10))+'px');
-      wrap.appendChild(sp);
-      setTimeout(function(){ sp.remove(); }, 800);
+      wrap.appendChild(sp); setTimeout(function(){ sp.remove(); }, 800);
     }
-    /* Частицы */
     if(Math.random() > 0.82){
-      var pt = document.createElement('div');
-      pt.className = 'particle';
+      var pt = document.createElement('div'); pt.className = 'particle';
       var sz = Math.random()*3+1;
       pt.style.cssText = 'width:'+sz+'px;height:'+sz+'px;left:'+Math.random()*100+'%;bottom:'+Math.random()*20+'px;--pd:'+(Math.random()*1.5+1)+'s';
-      wrap.appendChild(pt);
-      setTimeout(function(){ pt.remove(); }, 2000);
+      wrap.appendChild(pt); setTimeout(function(){ pt.remove(); }, 2000);
     }
-
     if(pct >= 100){
       clearInterval(chargeI);
       if(label) label.innerText = 'КРУТИМ...';
       vibrate([15]);
-
       var boxW  = ov.querySelector('#rlBox').offsetWidth || 400;
       var center = boxW/2 - ITEM/2;
-      /* Промт: финальный снап — cubic-bezier(0.16,1,0.3,1) */
       var finalX = -(wonPos * ITEM - center + Math.round((Math.random()-0.5)*20));
-      rouletteStartTime = performance.now();
-      rouletteDuration  = 5000; /* 5 секунд — долгое плавное движение */
-
+      rouletteStartTime = performance.now(); rouletteDuration = 5000;
       track.style.transform = 'translateX(0)';
       requestAnimationFrame(function(){
-        /* Промт: ease-in → инерция → cubic-bezier снап */
         track.style.transition = 'transform '+rouletteDuration+'ms cubic-bezier(0.08,0.82,0.17,1)';
         track.style.transform  = 'translateX('+finalX+'px)';
       });
-
-      /* Тики рулетки */
       var prevX = 0, prevTick = 0, totalDist = Math.abs(finalX);
       function tickLoop(now){
         if(now - rouletteStartTime > rouletteDuration - 200) return;
         var t = Math.min(1, (now - rouletteStartTime) / rouletteDuration);
-        /* ease curve для скорости */
-        var ease  = 1 - Math.pow(1-t, 3);
-        var curX  = ease * totalDist;
+        var ease = 1 - Math.pow(1-t, 3);
+        var curX = ease * totalDist;
         var speed = Math.abs(curX - prevX);
-        var minI  = 35, maxI = 350;
+        var minI = 35, maxI = 350;
         var tickI = speed > 5 ? minI : Math.min(maxI, minI + 250*(1 - speed/10));
         if(now - prevTick > tickI){ SFX.rouletteTick(); prevTick = now; }
-        prevX = curX;
-        requestAnimationFrame(tickLoop);
+        prevX = curX; requestAnimationFrame(tickLoop);
       }
       requestAnimationFrame(tickLoop);
-
-      /* После остановки */
       setTimeout(function(){
         if(label) label.innerText = '🎁 ГОТОВО!';
         vibrate([40]);
-        setTimeout(function(){
-          ov.remove();
-          if(cb) cb();
-        }, 600);
+        setTimeout(function(){ ov.remove(); if(cb) cb(); }, 600);
       }, rouletteDuration + 400);
     }
   }, 16);
 }
 
-/* ════════════════════════════════════════════════════
+/* ════════════════════════════════════════
    RESULT MODAL
-════════════════════════════════════════════════════ */
+════════════════════════════════════════ */
 var RARITY_LABELS = {common:'Обычный', rare:'Редкий', epic:'Эпический', legendary:'Легендарный'};
 var RARITY_COLORS = {common:'#666677', rare:'#5599DD', epic:'#9966EE', legendary:'#C8A96E'};
 
@@ -2456,8 +1650,18 @@ function showResultModal(gift, type, flash, cb){
   var isAlmost = type === 'almost';
   var ov = document.createElement('div');
   ov.className = 'result-overlay' + (flash ? ' win-flash' : '');
-  var iconHtml = getGiftIcon(gift);
   var rar = getRarityByPrice(gift.price || gift.val || 0);
+
+  // Иконка результата
+  var iconHtml;
+  if(gift.image_url || IMG_CACHE.has(String(gift.id||''))) {
+    var src = IMG_CACHE.get(String(gift.id||'')) || gift.image_url;
+    iconHtml = '<img src="'+escapeHtml(src)+'" alt="'+escapeHtml(gift.name)+'"' +
+      ' onerror="this.outerHTML=\'<span style=\\\'font-size:72px\\\'>\'+(\''+escapeHtml(gift.icon||'🎁')+'\')+'\'</span>\'">';
+  } else {
+    iconHtml = '<span style="font-size:72px">'+(gift.icon||'🎁')+'</span>';
+  }
+
   ov.innerHTML =
     '<div class="result-box">'+
       '<div class="result-icon">'+iconHtml+'</div>'+
@@ -2478,11 +1682,10 @@ function showResultModal(gift, type, flash, cb){
   if(sellBtn) sellBtn.onclick = function(){ ov.remove(); if(cb) cb('sell'); };
 }
 
-/* ════════════════════════════════════════════════════
-   UPGRADE (механика не изменена)
-════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════
+   UPGRADE
+════════════════════════════════════════ */
 function upgStakeClick(){ renderInv('invUpgrade',false,'upgrade'); toast('👇 Нажми на подарок чтобы поставить'); }
-
 function pickUpgStake(idx){
   var g = state.inventory[idx]; if(!g) return;
   if(upgStakeGift) state.inventory.push(upgStakeGift);
@@ -2490,7 +1693,6 @@ function pickUpgStake(idx){
   state.inventory.splice(idx, 1);
   renderUpgradeUI(); renderInv('invUpgrade',false,'upgrade'); SFX.click();
 }
-
 function renderUpgradeUI(){
   var sb2  = document.getElementById('upgStakeBox');
   var si   = document.getElementById('upgStakeIcon');
@@ -2501,9 +1703,8 @@ function renderUpgradeUI(){
   var ww   = document.getElementById('upgWheelWrap');
   var btn  = document.getElementById('upgradeDoBtn');
   if(!si) return;
-
   if(upgStakeGift){
-    si.innerHTML = getGiftIcon(upgStakeGift);
+    si.innerHTML = getGiftIcon(upgStakeGift, 'md');
     sn.innerText = upgStakeGift.name; sn.style.color = 'var(--tp)';
     sv.innerText = '★ '+(upgStakeGift.val||upgStakeGift.price);
     sb2.classList.add('filled');
@@ -2514,7 +1715,7 @@ function renderUpgradeUI(){
     for(var j=0;j<targets.length;j++){
       var tg = targets[j];
       tlHtml += '<div class="upg-target-item'+(upgTargetGift&&upgTargetGift.id===tg.id?' selected':'')+'" data-id="'+tg.id+'">'+
-                  '<div class="uti-icon">'+getGiftIcon(tg)+'</div>'+
+                  '<div class="uti-icon">'+getGiftIcon(tg,'sm')+'</div>'+
                   '<div class="uti-name">'+escapeHtml(tg.name)+'</div>'+
                   '<div class="uti-val">★ '+tg.price+'</div>'+
                 '</div>';
@@ -2546,7 +1747,6 @@ function renderUpgradeUI(){
     for(var r=0;r<rms.length;r++) rms[r].remove();
     return;
   }
-
   if(upgTargetGift && upgStakeGift){
     var stakeV = upgStakeGift.val || upgStakeGift.price || 0;
     var chance = Math.round((stakeV / upgTargetGift.price) * 100);
@@ -2555,7 +1755,6 @@ function renderUpgradeUI(){
   } else { ww.style.display='none'; btn.disabled=true; }
   renderUpgHistory();
 }
-
 function renderWheelSvg(chance){
   var svg=document.getElementById('upgSvg'); if(!svg) return;
   var r=90, cx=110, cy=110;
@@ -2576,7 +1775,6 @@ function renderWheelSvg(chance){
     '<circle cx="'+cx+'" cy="'+cy+'" r="28" fill="#0D0E14" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>'+
     lines;
 }
-
 function updateChanceDisplay(chance, stake, target){
   var cn=document.getElementById('upgChanceNum');
   var cd=document.getElementById('upgChanceDesc');
@@ -2585,7 +1783,6 @@ function updateChanceDisplay(chance, stake, target){
   cn.className='upg-chance-num '+(chance>=60?'high':(chance>=30?'med':'low'));
   if(cd) cd.innerText=(stake.val||stake.price)+' ★ → '+target.price+' ★ | шанс = '+(stake.val||stake.price)+'/'+target.price+'×100';
 }
-
 function spinArrowAndResult(chance, win){
   return new Promise(function(resolve){
     var arrow = document.getElementById('upgArrow'); if(!arrow) return resolve();
@@ -2610,7 +1807,6 @@ function spinArrowAndResult(chance, win){
     setTimeout(function(){ resolve(); }, 3200);
   });
 }
-
 async function doUpgrade(){
   if(!RL.check('upgrade',2)) return;
   if(!upgStakeGift || !upgTargetGift){ toast('Выбери подарок и цель'); return; }
@@ -2622,12 +1818,11 @@ async function doUpgrade(){
   document.getElementById('upgradeDoBtn').disabled=true;
   await spinArrowAndResult(chance, win);
   if(win){
-    state.inventory.push({id:targetSnap.id,name:targetSnap.name,icon:targetSnap.icon,file:targetSnap.file,val:targetSnap.price,rarity:getRarityByPrice(targetSnap.price),collectible_id:targetSnap.collectible_id,sticker_file_id:targetSnap.sticker_file_id,image_url:targetSnap.image_url});
+    state.inventory.push({id:targetSnap.id,name:targetSnap.name,icon:targetSnap.icon,val:targetSnap.price,rarity:getRarityByPrice(targetSnap.price),image_url:targetSnap.image_url||null});
     addHist(targetSnap.icon||'🎁','Апгрейд → '+targetSnap.name,'✅ Успех!',true);
     state.luck=Math.max(0,state.luck-10);
     upgHistory.unshift({from:stakeSnap,to:targetSnap,win:true,almost:false,ts:Date.now()});
-    CF.burst(window.innerWidth/2,window.innerHeight/2,90);
-    SFX.win(); vibrate([30,60,30]);
+    CF.burst(window.innerWidth/2,window.innerHeight/2,90); SFX.win(); vibrate([30,60,30]);
     showResultModal(targetSnap, true, true, function(){});
   } else {
     if(almost) SFX.almost(); else SFX.lose(); vibrate([50]); incLuck(4);
@@ -2645,7 +1840,6 @@ async function doUpgrade(){
     arrowInner.parentElement.style.transform='rotate(0deg)';
   }
 }
-
 function renderUpgHistory(){
   var box=document.getElementById('upgHistBox'), list=document.getElementById('upgHistList');
   if(!box||!list) return;
@@ -2655,7 +1849,7 @@ function renderUpgHistory(){
   for(var i=0;i<Math.min(8,upgHistory.length);i++){
     var h=upgHistory[i];
     html+='<div class="upg-hist-item">'+
-            '<div class="uhi-icons"><span style="font-size:16px;display:flex;align-items:center">'+getGiftIcon(h.from)+'</span><span class="uhi-arrow">→</span><span style="font-size:16px;display:flex;align-items:center;'+(h.win?'':'opacity:.35')+'">'+getGiftIcon(h.to)+'</span></div>'+
+            '<div class="uhi-icons"><span style="font-size:16px;display:flex;align-items:center">'+getGiftIcon(h.from,'sm')+'</span><span class="uhi-arrow">→</span><span style="font-size:16px;display:flex;align-items:center;'+(h.win?'':'opacity:.35')+'">'+getGiftIcon(h.to,'sm')+'</span></div>'+
             '<div class="uhi-info">'+escapeHtml(h.from.name)+' → '+escapeHtml(h.to.name)+'</div>'+
             '<div class="uhi-result '+(h.win?'uhi-win':'uhi-lose')+'">'+(h.win?'✅ WIN':'💀 LOSE')+(h.almost&&!h.win?'<span class="uhi-almost">🔥</span>':'')+'</div>'+
           '</div>';
@@ -2663,16 +1857,16 @@ function renderUpgHistory(){
   list.innerHTML=html;
 }
 
-/* ════════════════════════════════════════════════════
-   CRAFT (механика не изменена)
-════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════
+   CRAFT
+════════════════════════════════════════ */
 function renderCraftSlots(){
   for(var i=0;i<3;i++){
     var el=document.querySelector('.craft-slot[data-slot="'+i+'"]'); if(!el) continue;
     var g=craftSlots[i];
     if(g){
       el.classList.add('filled');
-      el.innerHTML='<div class="craft-slot-icon">'+getGiftIcon(g)+'</div><div class="craft-slot-name">'+escapeHtml(g.name)+'</div><div class="craft-slot-val">★ '+g.val+'</div>';
+      el.innerHTML='<div class="craft-slot-icon">'+getGiftIcon(g,'sm')+'</div><div class="craft-slot-name">'+escapeHtml(g.name)+'</div><div class="craft-slot-val">★ '+g.val+'</div>';
       el.onclick=(function(idx){ return function(){ state.inventory.push(craftSlots[idx]); craftSlots[idx]=null; renderCraftSlots(); renderInv('invCraft',false,'craft'); saveUser(); }; })(i);
     } else {
       el.classList.remove('filled');
@@ -2682,7 +1876,6 @@ function renderCraftSlots(){
   }
   updateCraftInfo();
 }
-
 function pickCraft(idx){
   var g=state.inventory[idx]; if(!g) return;
   var slot=-1;
@@ -2691,7 +1884,6 @@ function pickCraft(idx){
   craftSlots[slot]=g; state.inventory.splice(idx,1);
   renderCraftSlots(); renderInv('invCraft',false,'craft'); saveUser();
 }
-
 function updateCraftInfo(){
   var placed=[];
   for(var i=0;i<craftSlots.length;i++){ if(craftSlots[i]) placed.push(craftSlots[i]); }
@@ -2702,7 +1894,6 @@ function updateCraftInfo(){
   document.getElementById('craftLoseRange').innerText=Math.round(tot*0.5)+'–'+Math.round(tot*0.9)+' ★';
   document.getElementById('craftBtn').disabled=placed.length<3;
 }
-
 function doCraft(){
   if(!RL.check('craft',2)) return;
   var placed=[];
@@ -2722,7 +1913,7 @@ function doCraft(){
   var almost=!win&&!ultraRare&&Math.random()>0.75;
   craftSlots=[null,null,null];
   showCraftRoulette(resultGift, win, almost, function(){
-    state.inventory.push({id:resultGift.id,name:resultGift.name,icon:resultGift.icon,file:resultGift.file,val:resultGift.price,rarity:getRarityByPrice(resultGift.price),collectible_id:resultGift.collectible_id,sticker_file_id:resultGift.sticker_file_id,image_url:resultGift.image_url});
+    state.inventory.push({id:resultGift.id,name:resultGift.name,icon:resultGift.icon,val:resultGift.price,rarity:getRarityByPrice(resultGift.price),image_url:resultGift.image_url||null});
     addHist(resultGift.icon||'🎁','Крафт → '+resultGift.name,'★ '+resultGift.price, win);
     if(win||ultraRare){ CF.burst(window.innerWidth/2,window.innerHeight*0.4,90); SFX.craft(); vibrate([20,40,20]); }
     else { if(almost) SFX.almost(); else SFX.lose(); vibrate([40]); }
@@ -2730,7 +1921,6 @@ function doCraft(){
     renderCraftSlots(); renderAllInv(); updateStats(); saveUser();
   });
 }
-
 function showCraftRoulette(wonGift, win, almost, cb){
   var ov=document.createElement('div');
   ov.className='roulette-overlay';
@@ -2751,7 +1941,15 @@ function showCraftRoulette(wonGift, win, almost, cb){
     var g2=strip[si];
     var el=document.createElement('div');
     el.className='roulette-item'; el.style.cssText='width:88px;height:80px';
-    el.innerHTML='<div style="display:flex;align-items:center;justify-content:center;width:40px;height:40px">'+getGiftIcon(g2)+'</div><div class="roulette-item-lbl">'+escapeHtml(g2.name||'')+'</div>';
+    var iHtml;
+    var cachedSrc2 = IMG_CACHE.get(String(g2.id||'')) || (g2.image_url||null);
+    if(cachedSrc2){
+      iHtml='<img class="ri-img" src="'+escapeHtml(cachedSrc2)+'" style="width:40px;height:40px" onerror="this.style.display=\'none\';this.nextSibling.style.display=\'block\'">' +
+        '<span style="font-size:22px;display:none">'+(g2.icon||'🎁')+'</span>';
+    } else {
+      iHtml='<span style="font-size:22px">'+(g2.icon||'🎁')+'</span>';
+    }
+    el.innerHTML=iHtml+'<div class="roulette-item-lbl">'+escapeHtml(g2.name||'')+'</div>';
     if(si===30&&win) el.classList.add('winner');
     track.appendChild(el);
   }
@@ -2781,12 +1979,12 @@ function showCraftRoulette(wonGift, win, almost, cb){
   }, 18);
 }
 
-/* ════════════════════════════════════════════════════
-   PvP (механика не изменена)
-════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════
+   PvP
+════════════════════════════════════════ */
 function pickPvp(idx, mode){
   var g=state.inventory[idx]; if(!g) return;
-  var iconHtml=getGiftIcon(g);
+  var iconHtml=getGiftIcon(g,'sm');
   if(mode==='private'){
     pvpPrivStakeIdx=idx;
     document.getElementById('pvpPrivateStakeText').innerHTML=iconHtml+' '+escapeHtml(g.name);
@@ -2799,15 +1997,12 @@ function pickPvp(idx, mode){
     document.getElementById('createBattleBtn').disabled=false;
   }
 }
-
 function getAvHtml(b){
   var av=b.creator_avatar;
   var nm=(b.creator_name||'?').slice(0,6).toUpperCase();
   return '<div class="lc-av"><div class="lc-av-img">'+(av?'<img src="'+av+'">':'<span>'+escapeHtml(nm.charAt(0))+'</span>')+'</div><div class="lc-av-name">'+escapeHtml(nm)+'</div></div>';
 }
-
 function renderPvpLobby(){ if(pvpMode==='public') renderPubLobby(); else renderPrivLobby(); }
-
 function renderPubLobby(){
   var el=document.getElementById('pvpLobby'); if(!el) return;
   var now=Date.now();
@@ -2816,13 +2011,12 @@ function renderPubLobby(){
   var html='';
   for(var j=0;j<act.length;j++){
     var b=act[j]; var cg=safeJ(b.creator_gift,{});
-    var cgIconHtml=cg.file?getGiftIcon(cg):(cg.icon||'🎁');
+    var cgIconHtml=getGiftIcon(cg,'sm');
     var isOwn=b.creator_id===userId;
     html+='<div class="lobby-card">'+getAvHtml(b)+'<div class="lc-gift"><div class="lc-icon">'+cgIconHtml+'</div><div class="lc-gname">'+escapeHtml(cg.name||'?')+'</div><div class="lc-val">★ '+(cg.val||0)+'</div></div><div class="lc-mid"><div class="lc-vs">VS</div><div class="lc-status">Ожидание</div></div><div>'+(isOwn?'<button class="btn btn-danger btn-sm" onclick="cancelBattle(\''+b.id+'\')">Отменить</button>':'<button class="lc-join" onclick="joinBattle(\''+b.id+'\')">Войти</button>')+'</div></div>';
   }
   el.innerHTML=html;
 }
-
 function renderPrivLobby(){
   var el=document.getElementById('pvpPrivateLobby'); if(!el) return;
   var now=Date.now();
@@ -2830,20 +2024,19 @@ function renderPrivLobby(){
   if(!my.length){ el.innerHTML='<div class="no-battles">Нет приватных батлов.<br>Создай и отправь ссылку!</div>'; return; }
   var html='';
   for(var j=0;j<my.length;j++){
-    var b=my[j]; var cg=safeJ(b.creator_gift,{}); var cgIconHtml=cg.file?getGiftIcon(cg):(cg.icon||'🎁');
+    var b=my[j]; var cg=safeJ(b.creator_gift,{}); var cgIconHtml=getGiftIcon(cg,'sm');
     var link='https://t.me/Ruslan158bot?start=join_'+b.id;
     html+='<div class="lobby-card"><div class="lc-gift"><div class="lc-icon">'+cgIconHtml+'</div><div class="lc-gname">'+escapeHtml(cg.name||'?')+'</div><div class="lc-val">★ '+(cg.val||0)+'</div></div><div class="lc-mid"><div class="lc-vs">VS</div><div class="lc-status">Ожидание</div><div class="lc-priv">🔒 Приватный</div></div><div style="display:flex;flex-direction:column;gap:5px"><button class="lc-join" onclick="copyToClipboard(\''+link+'\');toast(\'🔗 Ссылка скопирована!\')">🔗 Ссылка</button><button class="btn btn-danger btn-sm" onclick="cancelBattle(\''+b.id+'\')">Отменить</button></div></div>';
   }
   el.innerHTML=html;
 }
-
 async function createBattle(){
   if(!RL.check('cb',1)) return;
   if(pvpStakeIdx===null||!state.inventory[pvpStakeIdx]){ toast('Выбери подарок!'); return; }
   var g=Object.assign({},state.inventory[pvpStakeIdx]);
   state.inventory.splice(pvpStakeIdx,1); pvpStakeIdx=null;
   var id='b_'+Date.now()+'_'+Math.random().toString(36).slice(2,6);
-  var b={id:id,creator_id:userId,creator_name:state.displayName||'Игрок',creator_username:(tgUser&&tgUser.username)||'',creator_avatar:state.avatarUrl||(tgUser&&tgUser.photo_url)||null,creator_gift:JSON.stringify({name:g.name,val:g.val,icon:g.icon,file:g.file,collectible_id:g.collectible_id,sticker_file_id:g.sticker_file_id}),opponent_id:null,opponent_gift:null,status:'waiting',winner_id:null,is_private:false,created_at:new Date().toISOString()};
+  var b={id:id,creator_id:userId,creator_name:state.displayName||'Игрок',creator_username:(tgUser&&tgUser.username)||'',creator_avatar:state.avatarUrl||(tgUser&&tgUser.photo_url)||null,creator_gift:JSON.stringify({name:g.name,val:g.val,icon:g.icon,image_url:g.image_url||null}),opponent_id:null,opponent_gift:null,status:'waiting',winner_id:null,is_private:false,created_at:new Date().toISOString()};
   battles.unshift(b); renderPvpLobby(); saveUser();
   document.getElementById('pvpStakeText').innerHTML='Нажми на подарок в инвентаре';
   document.getElementById('pvpStakeVal').innerText='';
@@ -2851,14 +2044,13 @@ async function createBattle(){
   await saveBattle(b); toast('⚔️ Публичный батл создан!');
   addHist(g.icon||'🎁','PvP ставка','★ '+g.val,false);
 }
-
 async function createPrivateBattle(){
   if(!RL.check('cb',1)) return;
   if(pvpPrivStakeIdx===null||!state.inventory[pvpPrivStakeIdx]){ toast('Выбери подарок!'); return; }
   var g=Object.assign({},state.inventory[pvpPrivStakeIdx]);
   state.inventory.splice(pvpPrivStakeIdx,1); pvpPrivStakeIdx=null;
   var id='pb_'+Date.now()+'_'+Math.random().toString(36).slice(2,6);
-  var b={id:id,creator_id:userId,creator_name:state.displayName||'Игрок',creator_username:(tgUser&&tgUser.username)||'',creator_avatar:state.avatarUrl||(tgUser&&tgUser.photo_url)||null,creator_gift:JSON.stringify({name:g.name,val:g.val,icon:g.icon,file:g.file,collectible_id:g.collectible_id,sticker_file_id:g.sticker_file_id}),opponent_id:null,opponent_gift:null,status:'waiting',winner_id:null,is_private:true,created_at:new Date().toISOString()};
+  var b={id:id,creator_id:userId,creator_name:state.displayName||'Игрок',creator_username:(tgUser&&tgUser.username)||'',creator_avatar:state.avatarUrl||(tgUser&&tgUser.photo_url)||null,creator_gift:JSON.stringify({name:g.name,val:g.val,icon:g.icon,image_url:g.image_url||null}),opponent_id:null,opponent_gift:null,status:'waiting',winner_id:null,is_private:true,created_at:new Date().toISOString()};
   privateBattles.unshift(b); renderPvpLobby(); saveUser();
   document.getElementById('pvpPrivateStakeText').innerHTML='Нажми на подарок в инвентаре';
   document.getElementById('pvpPrivateStakeVal').innerText='';
@@ -2870,7 +2062,6 @@ async function createPrivateBattle(){
   toast('🔒 Приватный батл создан!');
   addHist(g.icon||'🎁','Приватный батл','★ '+g.val,false);
 }
-
 async function joinBattle(bid){
   if(!RL.check('jb',2)) return;
   if(!dataLoaded){ toast('⏳ Загрузка...'); return; }
@@ -2883,38 +2074,35 @@ async function joinBattle(bid){
   if(!state.inventory.length){ toast('📭 Нет подарков'); return; }
   var myG=Object.assign({},state.inventory[0]);
   state.inventory.splice(0,1); activeCoinBid=bid;
-  await updateBattle(bid,{status:'fighting',opponent_id:userId,opponent_gift:JSON.stringify({name:myG.name,val:myG.val,icon:myG.icon,file:myG.file,collectible_id:myG.collectible_id,sticker_file_id:myG.sticker_file_id})});
+  await updateBattle(bid,{status:'fighting',opponent_id:userId,opponent_gift:JSON.stringify({name:myG.name,val:myG.val,icon:myG.icon,image_url:myG.image_url||null})});
   battles=battles.filter(function(x){return x.id!==bid;});
   privateBattles=privateBattles.filter(function(x){return x.id!==bid;});
   saveUser(); renderPvpLobby();
-  setTimeout(function(){ if(!coinRunning&&activeCoinBid===bid) showCoinFlip(safeJ(b.creator_gift,{}),{name:myG.name,val:myG.val,icon:myG.icon,file:myG.file,collectible_id:myG.collectible_id},b,b.creator_id); }, 600);
+  setTimeout(function(){ if(!coinRunning&&activeCoinBid===bid) showCoinFlip(safeJ(b.creator_gift,{}),{name:myG.name,val:myG.val,icon:myG.icon,image_url:myG.image_url||null},b,b.creator_id); }, 600);
 }
-
 async function cancelBattle(bid){
   var b=null;
   for(var i=0;i<battles.length;i++){ if(battles[i].id===bid){b=battles[i];break;} }
   if(!b){ for(var j=0;j<privateBattles.length;j++){ if(privateBattles[j].id===bid){b=privateBattles[j];break;} } }
   if(!b||b.creator_id!==userId) return;
   var g=safeJ(b.creator_gift,{});
-  state.inventory.push({name:g.name,icon:g.icon||'🎁',file:g.file,val:g.val,collectible_id:g.collectible_id,sticker_file_id:g.sticker_file_id});
+  state.inventory.push({name:g.name,icon:g.icon||'🎁',val:g.val,image_url:g.image_url||null});
   battles=battles.filter(function(x){return x.id!==bid;});
   privateBattles=privateBattles.filter(function(x){return x.id!==bid;});
   await updateBattle(bid,{status:'cancelled'});
   saveUser(); renderPvpLobby(); toast('Батл отменён');
 }
-
 function detWinner(bid,g1,g2){
   var s=0;
   for(var i=0;i<bid.length;i++){ s=(s*31+bid.charCodeAt(i))%1000000; }
   function rng(){ s=(s*9301+49297)%233280; return s/233280; }
   return (g1.val||50)*0.1+rng()*(g1.val||50)*0.9>=(g2.val||50)*0.1+rng()*(g2.val||50)*0.9?'creator':'opponent';
 }
-
 function showCoinFlip(gift1,gift2,battle,creatorId){
   if(document.querySelector('.coin-overlay')) return;
   if(coinRunning) return;
   coinRunning=true;
-  var icon1=getGiftIcon(gift1), icon2=getGiftIcon(gift2);
+  var icon1=getGiftIcon(gift1,'lg'), icon2=getGiftIcon(gift2,'lg');
   var ov=document.createElement('div'); ov.className='coin-overlay';
   ov.innerHTML=
     '<div style="text-align:center"><div style="font-family:var(--font-d);font-size:22px;color:var(--accentL);letter-spacing:2px">⚔️ БИТВА ⚔️</div><div style="font-size:10px;color:var(--tm);margin-top:3px">Бросаем монету...</div></div>'+
@@ -2937,13 +2125,13 @@ function showCoinFlip(gift1,gift2,battle,creatorId){
     if(iWon){
       area.innerHTML='<div class="coin-result-banner" style="color:var(--accentL)">🏆 ПОБЕДА!</div><div class="coin-result-sub">Ты забираешь оба подарка!</div>'+
         '<div style="display:flex;justify-content:center;gap:16px;margin-top:12px">'+
-          '<div style="text-align:center"><div style="font-size:28px">'+icon1+'</div><div style="font-size:9px;color:var(--ts)">+'+(gift1.val||0)+' ★</div></div>'+
-          '<div style="text-align:center"><div style="font-size:28px">'+icon2+'</div><div style="font-size:9px;color:var(--ts)">+'+(gift2.val||0)+' ★</div></div>'+
+          '<div style="text-align:center"><div>'+getGiftIcon(gift1,'sm')+'</div><div style="font-size:9px;color:var(--ts)">+'+(gift1.val||0)+' ★</div></div>'+
+          '<div style="text-align:center"><div>'+getGiftIcon(gift2,'sm')+'</div><div style="font-size:9px;color:var(--ts)">+'+(gift2.val||0)+' ★</div></div>'+
         '</div>';
       CF.burst(window.innerWidth/2,window.innerHeight*0.5,100);
       SFX.win(); vibrate([50,100,50]);
-      state.inventory.push({name:gift1.name,icon:gift1.icon||'🎁',file:gift1.file,val:gift1.val,collectible_id:gift1.collectible_id,sticker_file_id:gift1.sticker_file_id});
-      state.inventory.push({name:gift2.name,icon:gift2.icon||'🎁',file:gift2.file,val:gift2.val,collectible_id:gift2.collectible_id,sticker_file_id:gift2.sticker_file_id});
+      state.inventory.push({name:gift1.name,icon:gift1.icon||'🎁',val:gift1.val,image_url:gift1.image_url||null});
+      state.inventory.push({name:gift2.name,icon:gift2.icon||'🎁',val:gift2.val,image_url:gift2.image_url||null});
       state.pvpWins=(state.pvpWins||0)+1;
       addHist(iAmCreator?(gift1.icon||'🎁'):(gift2.icon||'🎁'),'PvP Победа!','+'+(gift1.val||0)+(gift2.val||0)+' ★',true);
     } else {
@@ -2958,7 +2146,6 @@ function showCoinFlip(gift1,gift2,battle,creatorId){
     cb.onclick=function(){ ov.remove(); }; area.appendChild(cb);
   }, 3500);
 }
-
 async function saveBattle(b){ return await sb('/rest/v1/battles','POST',b,{'Prefer':'resolution=merge-duplicates,return=representation'}); }
 async function updateBattle(id,data){ return await sb('/rest/v1/battles?id=eq.'+id,'PATCH',data); }
 async function loadBattles(){
@@ -2971,9 +2158,9 @@ async function loadBattles(){
   renderPvpLobby();
 }
 
-/* ════════════════════════════════════════════════════
+/* ════════════════════════════════════════
    REALTIME WebSocket
-════════════════════════════════════════════════════ */
+════════════════════════════════════════ */
 function initRT(){
   if(wsRT) try{wsRT.close();}catch(e){}
   if(wsHB) clearInterval(wsHB);
@@ -2989,7 +2176,6 @@ function initRT(){
     wsRT.onerror=function(){ wsRT.close(); setTimeout(initRT,3000); };
   }catch(e){ setTimeout(initRT,5000); }
 }
-
 function handleRT(msg){
   if(['phx_reply','phx_error','phx_close'].includes(msg.event)) return;
   var row=msg.payload&&(msg.payload.record||msg.payload.new||msg.payload.data);
@@ -3016,10 +2202,9 @@ function handleRT(msg){
 }
 setInterval(function(){ if(!wsRT||wsRT.readyState!==1||Date.now()-lastWsActivity>15000) loadBattles(); }, 10000);
 
-/* ════════════════════════════════════════════════════
+/* ════════════════════════════════════════
    ОПЛАТА ЧЕРЕЗ TELEGRAM STARS
-   Внедрена функция doDeposit из промта
-════════════════════════════════════════════════════ */
+════════════════════════════════════════ */
 var DEP_AMTS = [
   {stars:50,  price:1},
   {stars:150, price:2},
@@ -3028,7 +2213,6 @@ var DEP_AMTS = [
   {stars:2500,price:25},
   {stars:5000,price:50}
 ];
-
 function openDepositModal(){
   var el = document.getElementById('depAmounts'); if(!el) return;
   selectedDepAmt = null;
@@ -3051,20 +2235,11 @@ function openDepositModal(){
   document.getElementById('depositModal').classList.add('show');
   initModalSwipe('depositSheet','depositModal','depositHandle');
 }
-
-/**
- * doDeposit — оплата через Telegram Stars (из промта пользователя).
- * Получает сумму из кастомного поля или выбранного пресета,
- * создаёт invoice через Bot API и открывает его в Mini App.
- */
 function doDeposit(){
   var customInp = document.getElementById('dep-custom-input');
   var amount = parseInt(customInp&&customInp.value) || (selectedDepAmt&&selectedDepAmt.stars);
   if(!amount || amount < 1){ toast('Введи сумму'); return; }
-
   var tgApp = window.Telegram && window.Telegram.WebApp;
-
-  /* Если нет Telegram Mini App — демо-режим */
   if(!tgApp || !tgApp.openInvoice){
     var bonus = state.firstDeposit ? Math.floor(amount * 0.15) : 0;
     state.balance += amount + bonus;
@@ -3076,8 +2251,6 @@ function doDeposit(){
     document.getElementById('depositModal').classList.remove('show');
     return;
   }
-
-  /* Создаём invoice через Bot API */
   var payload = JSON.stringify({user_id: userId, amount: amount, ts: Date.now()});
   fetch('https://api.telegram.org/bot' + BOT_TOKEN + '/createInvoiceLink', {
     method: 'POST',
@@ -3111,13 +2284,10 @@ function doDeposit(){
           toast('❌ Ошибка оплаты');
         }
       });
-    } else {
-      toast('Ошибка создания платежа');
-    }
+    } else { toast('Ошибка создания платежа'); }
   })
   .catch(function(){ toast('Ошибка соединения'); });
 }
-
 document.getElementById('depCancelBtn').onclick  = function(){ document.getElementById('depositModal').classList.remove('show'); };
 document.getElementById('depConfirmBtn').onclick = doDeposit;
 
@@ -3130,7 +2300,7 @@ function openWithdrawModal(){
   var html = '';
   for(var i=0;i<state.inventory.length;i++){
     var g=state.inventory[i];
-    html+='<div class="inv-card" data-wi="'+i+'"><div class="inv-dot r-'+(g.rarity||'common')+'"></div><div class="inv-icon">'+getGiftIcon(g)+'</div><div class="inv-name">'+escapeHtml(g.name)+'</div><div class="inv-val">★ '+g.val+'</div></div>';
+    html+='<div class="inv-card" data-wi="'+i+'"><div class="inv-dot r-'+(g.rarity||'common')+'"></div><div class="inv-icon">'+getGiftIcon(g,'sm')+'</div><div class="inv-name">'+escapeHtml(g.name)+'</div><div class="inv-val">★ '+g.val+'</div></div>';
   }
   grid.innerHTML=html;
   var cards=grid.querySelectorAll('.inv-card');
@@ -3160,9 +2330,9 @@ document.getElementById('withdrawConfirmBtn').onclick=async function(){
   } else { toast('💡 Вывод доступен только через Telegram Mini App'); }
 };
 
-/* ════════════════════════════════════════════════════
+/* ════════════════════════════════════════
    MODAL SWIPE
-════════════════════════════════════════════════════ */
+════════════════════════════════════════ */
 function initModalSwipe(sheetId, modalId, handleId){
   var sheet=document.getElementById(sheetId);
   var modal=document.getElementById(modalId);
@@ -3197,9 +2367,9 @@ function initModalSwipe(sheetId, modalId, handleId){
   modal.addEventListener('click',function(e){ if(e.target===modal) modal.classList.remove('show'); });
 }
 
-/* ════════════════════════════════════════════════════
+/* ════════════════════════════════════════
    НАВИГАЦИЯ
-════════════════════════════════════════════════════ */
+════════════════════════════════════════ */
 document.querySelectorAll('.pvp-tab').forEach(function(btn){
   btn.onclick=function(){
     document.querySelectorAll('.pvp-tab').forEach(function(b){ b.classList.remove('active'); });
@@ -3213,7 +2383,6 @@ document.querySelectorAll('.pvp-tab').forEach(function(btn){
     renderPvpLobby(); SFX.click();
   };
 });
-
 document.querySelectorAll('.tab').forEach(function(btn){
   btn.onclick=function(){
     if(!RL.check('tab',10)) return;
@@ -3229,9 +2398,9 @@ document.querySelectorAll('.tab').forEach(function(btn){
   };
 });
 
-/* ════════════════════════════════════════════════════
+/* ════════════════════════════════════════
    EVENT HANDLERS
-════════════════════════════════════════════════════ */
+════════════════════════════════════════ */
 document.getElementById('addBtn').onclick=function(){
   if(!RL.check('add',3)) return;
   setBal(state.balance+100);
@@ -3277,9 +2446,9 @@ document.getElementById('bsSkip').onclick=function(){
 function upOnline(){ document.getElementById('onlineCount').innerText=140+Math.round((Math.random()-0.5)*30); }
 setInterval(upOnline, 6000); upOnline();
 
-/* ════════════════════════════════════════════════════
+/* ════════════════════════════════════════
    TELEGRAM INIT
-════════════════════════════════════════════════════ */
+════════════════════════════════════════ */
 function initTG(){
   var tgApp=window.Telegram&&window.Telegram.WebApp;
   if(tgApp&&tgApp.initDataUnsafe&&tgApp.initDataUnsafe.user){
@@ -3307,9 +2476,9 @@ function initTG(){
   return false;
 }
 
-/* ════════════════════════════════════════════════════
+/* ════════════════════════════════════════
    РЕФЕРАЛЬНАЯ / AUTO-JOIN
-════════════════════════════════════════════════════ */
+════════════════════════════════════════ */
 function checkReferral(){
   var p=new URLSearchParams(window.location.search);
   var ref=p.get('ref');
@@ -3332,8 +2501,6 @@ function checkReferral(){
     setTimeout(function(){ clearInterval(wait); },10000);
   }
 }
-
-/* Auto-join из URL */
 var urlParams=new URLSearchParams(window.location.search);
 var autoJoinId=urlParams.get('join');
 if(autoJoinId&&!autoJoinProcessed){
@@ -3349,12 +2516,11 @@ if(autoJoinId&&!autoJoinProcessed){
   setTimeout(function(){ clearInterval(checkInterval); },10000);
 }
 
-/* ════════════════════════════════════════════════════
+/* ════════════════════════════════════════
    ИНИЦИАЛИЗАЦИЯ
-════════════════════════════════════════════════════ */
+════════════════════════════════════════ */
 async function init(){
   initTG();
-  /* Восстановить из localStorage */
   try{
     var loc=localStorage.getItem('gc_state');
     if(loc){
@@ -3364,10 +2530,16 @@ async function init(){
     }
   }catch(e){}
 
-  await loadRealGifts();
+  // Рендерим кейсы сразу
   renderCases();
   updateAllUI();
-  await loadUser();
+
+  // Параллельно загружаем пользователя и подарки
+  await Promise.all([
+    loadRealGifts(),
+    loadUser(),
+  ]);
+
   updateAllUI();
   loadBattles();
   initRT();
