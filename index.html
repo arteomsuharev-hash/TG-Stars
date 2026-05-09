@@ -1652,14 +1652,10 @@ function showResultModal(gift, type, flash, cb){
   ov.className = 'result-overlay' + (flash ? ' win-flash' : '');
   var rar = getRarityByPrice(gift.price || gift.val || 0);
 
-  // Иконка результата
-  var iconHtml;
+  var iconHtml = '<span style="font-size:72px">' + (gift.icon || '🎁') + '</span>';
   if(gift.image_url || IMG_CACHE.has(String(gift.id||''))) {
     var src = IMG_CACHE.get(String(gift.id||'')) || gift.image_url;
-    iconHtml = '<img src="'+escapeHtml(src)+'" alt="'+escapeHtml(gift.name)+'"' +
-      ' onerror="this.outerHTML=\'<span style=\\\'font-size:72px\\\'>\'+(\''+escapeHtml(gift.icon||'🎁')+'\')+'\'</span>\'">';
-  } else {
-    iconHtml = '<span style="font-size:72px">'+(gift.icon||'🎁')+'</span>';
+    iconHtml = '<img src="'+escapeHtml(src)+'" style="width:90px;height:90px;object-fit:contain" alt="'+escapeHtml(gift.name)+'">';
   }
 
   ov.innerHTML =
@@ -1681,7 +1677,6 @@ function showResultModal(gift, type, flash, cb){
   var sellBtn = document.getElementById('rSell');
   if(sellBtn) sellBtn.onclick = function(){ ov.remove(); if(cb) cb('sell'); };
 }
-
 /* ════════════════════════════════════════
    UPGRADE
 ════════════════════════════════════════ */
